@@ -1,0 +1,48 @@
+<ion-content ng-controller="travelDatePickerController as tdp" ng-init="tdp.init(1474992000000, 1482854400000)" class="content has-header">
+
+    <div class="list tdp-center">
+
+        <div class="row">
+            <div class="col col-14 positive">
+                日
+            </div>
+            <div class="col col-14">
+                一
+            </div>
+            <div class="col col-14">
+                二
+            </div>
+            <div class="col col-14">
+                三
+            </div>
+            <div class="col col-14">
+                四
+            </div>
+            <div class="col col-14">
+                五
+            </div>
+            <div class="col col-14 positive">
+                六
+            </div>
+        </div>
+        
+        <div ng-repeat="m in tdp.dates">
+
+            <div class="item item-divider">
+                {{m.month | date:'yyyy年M月'}}
+            </div>
+            
+            <ul class="list tdp-d-list">
+                {{m.dates}}
+                <li ng-repeat="w in m.weeks track by $index" class="item tdp-d-item">
+                  <div class="row tdp-d-row">
+                    <div ng-repeat="d in w track by $index" ng-class="{'tdp-disable': tdp.dDisable(d)}" class="col col-14">
+                        {{d | date:'d'}}
+                    </div>
+                  </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</ion-content>

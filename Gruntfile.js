@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                             'src/modules/services.js',
                             'src/modules/filters.js'
                         ],
-                        dest: "dist/modules/app.min.js"
+                        dest: "dist/js/app.min.js"
                     }
                 ]
             }

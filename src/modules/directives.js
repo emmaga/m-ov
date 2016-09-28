@@ -6,7 +6,7 @@
   .directive("travelDatePicker", function () {
     return {
       restrict: 'EA',
-      templateUrl: 'drt_pages/travel-date-picker.html',
+      templateUrl: 'pages/drt/travel-date-picker.html',
       replace: true
     }
   })

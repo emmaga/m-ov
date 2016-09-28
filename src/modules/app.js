@@ -15,7 +15,7 @@
       var lang = navigator.language||'en';
       $translateProvider.preferredLanguage(lang);
       $translateProvider.useStaticFilesLoader({
-          prefix: '../i18n/',
+          prefix: 'i18n/',
           suffix: '.json'
       });
   }])
