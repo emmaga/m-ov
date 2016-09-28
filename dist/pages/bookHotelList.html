@@ -1,0 +1,8 @@
+<div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
+    bookHotelList {{'100001'|translate}}
+    <a ui-sref="bookHotelSearch">back</a>
+    <a ng-click="root.showMainMenu(true)">menu</a>
+    <div ng-repeat="hotel in bhl.hotels.lists">
+        {{hotel.name}}
+    </div>
+</div>    

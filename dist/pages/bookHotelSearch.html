@@ -1,0 +1,12 @@
+<div ng-controller="bookHotelSearchController as bhs" ng-init="bhs.init()">
+    bookHotelSearch {{'100001'|translate}}
+    <a ng-click="root.showMainMenu(true)">menu</a>
+    <a ui-sref="bookHotelList({sDate: 123, eDate: 456})">search</a>
+    <a ng-click="bhs.showDP(true)">date</a>
+    <div class="ab-container" ng-show="bhs.datePickerShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="bhs.showDP(false)">back</button>
+        </div>
+        <travel-date-picker></travel-date-picker>
+    </div>
+</div>    
