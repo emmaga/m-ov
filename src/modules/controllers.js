@@ -8,9 +8,9 @@
   .controller('RootController', 
     function() {
       var self = this;
-      self.mainMenuShow = false;
 
       self.init = function() {
+        self.mainMenuShow = false;
         self.showMainMenu(false);
       }
 
@@ -25,11 +25,9 @@
 
       var self = this;
 
-      // 显示／隐藏日期选择器参数初始化
-      self.datePickerShow = false;
-
       self.init = function() {
-        
+        // 显示／隐藏日期选择器参数初始化
+        self.datePickerShow = false;
       };
 
       // 显示／隐藏日期选择器
@@ -44,12 +42,11 @@
     function($scope, $location, $http, $stateParams, backendUrl) {
 
       var self = this;
-      self.hotels = {};
-      // 显示／隐藏日期选择器参数初始化
-      self.datePickerShow = false;
       console.log($stateParams.sDate + ', ' + $stateParams.eDate);
 
       self.init = function() {
+        self.datePickerShow = false;
+        self.hotels = {};
         self.search();
       }
 
@@ -57,7 +54,7 @@
       self.showDP = function(boo) {
         self.datePickerShow = boo ? boo : false;
       };
-      
+
       self.search = function() {
       $http.get(backendUrl('hotels'))
         .success(function(data, status, headers, config) {
