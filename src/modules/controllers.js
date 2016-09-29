@@ -48,7 +48,7 @@
         self.datePickerShow = false;
         self.hotels = {};
         self.checkin = 1475097892000;
-        self.checkout = 1475184292000;
+        self.checkout = 1477756800000;
         self.search();
       }
 
