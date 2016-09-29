@@ -47,6 +47,8 @@
       self.init = function() {
         self.datePickerShow = false;
         self.hotels = {};
+        self.checkIn = 1475097892000;
+        self.checkOut = 1475184292000;
         self.search();
       }
 

@@ -8,8 +8,13 @@
       restrict: 'EA',
       templateUrl: 'pages/drt/travel-date-picker.html',
       replace: true,
-      link: function(scope, element, attrs){
-        scope.tdp.init(1474992000000, 1512854400000)
+      link: function($scope, element, attrs){
+        var checkIn = Number(attrs.checkin);
+        var checkOut = Number(attrs.checkout);
+        //可选日期的起止范围:今天后的半年
+        var sDate = new Date().getTime();
+        var eDate = sDate + (30*3+31*3)*24*60*60*1000;
+        $scope.tdp.init(sDate, eDate);
       }
     }
   })
