@@ -45,12 +45,19 @@
 
       var self = this;
       self.hotels = {};
+      // 显示／隐藏日期选择器参数初始化
+      self.datePickerShow = false;
       console.log($stateParams.sDate + ', ' + $stateParams.eDate);
 
       self.init = function() {
         self.search();
       }
 
+      // 显示／隐藏日期选择器
+      self.showDP = function(boo) {
+        self.datePickerShow = boo ? boo : false;
+      };
+      
       self.search = function() {
       $http.get(backendUrl('hotels'))
         .success(function(data, status, headers, config) {

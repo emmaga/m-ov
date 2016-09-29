@@ -1,6 +1,13 @@
 <div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
     bookHotelList {{'100001'|translate}}
     <a ng-click="root.showMainMenu(true)">menu</a>
+    <a ng-click="bhl.showDP(true)">date</a>
+    <div class="ab-container" ng-show="bhl.datePickerShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="bhl.showDP(false)">back</button>
+        </div>
+        <travel-date-picker></travel-date-picker>
+    </div>
     <div ng-repeat="hotel in bhl.hotels.lists">
         {{hotel.name}}
     </div>
