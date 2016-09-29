@@ -57,6 +57,12 @@
         self.datePickerShow = boo ? boo : false;
       };
 
+      self.doAfterPickerDates = function(checkin, checkout) {
+        self.checkin = checkin;
+        self.checkout = checkout;
+        self.showDP(false);
+      }
+
       self.search = function() {
       $http.get(backendUrl('hotels'))
         .success(function(data, status, headers, config) {

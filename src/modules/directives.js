@@ -7,15 +7,7 @@
     return {
       restrict: 'EA',
       templateUrl: 'pages/drt/travel-date-picker.html',
-      replace: true,
-      link: function(scope, element, attrs){
-        var checkin = Number(attrs.checkin);
-        var checkout = Number(attrs.checkout);
-        //可选日期的起止范围:今天后的半年
-        var sDate = new Date().getTime();
-        var eDate = sDate + (30*3+31*3)*24*60*60*1000;
-        scope.tdp.init(sDate, eDate, checkin, checkout);
-      }
+      replace: true
     }
   })
 
@@ -24,15 +16,17 @@
       var self = this;
 
       // st: 开始日期, et: 结束日期; 均为时间戳
-      self.init = function(st, et, checkin, checkout) {
-        self.st = st;
-        self.et = et;
+      self.init = function(checkin, checkout, st, et, callback) {
+        self.st = st ? st : new Date().getTime();
+        //可选日期结束日期默认:今天后的半年
+        self.et = et ? et: self.st + (30*3+31*3)*24*60*60*1000;
         self.checkin = checkin;
         self.checkout = checkout;
         self.dates = [];
+        self.callback = callback;
 
         // 月份数量＝结束日期的所在月份总数－开始..＋1
-        var mC = getMonCnt(et) - getMonCnt(st) + 1;
+        var mC = getMonCnt(self.et) - getMonCnt(self.st) + 1;
         var st = new Date(self.st);
         
         for(var i = 0; i < mC; i++) {
@@ -114,12 +108,13 @@
             // 把当前点击的日期设为checkout
             self.checkout = date;
             // 返回选中的2个日期，关闭日期选择器
-            // todo
-
+            self.callback(self.checkin, self.checkout);
           }
         }
-        // 如果checkin和checkout都为空，todo，暂时用不到 
-      
+        // 如果checkin和checkout都为空，暂时用不到 
+        else{
+          self.checkin = date;
+        }
       }
 
       // 如果d比今天早，就返回true，反之返回false
