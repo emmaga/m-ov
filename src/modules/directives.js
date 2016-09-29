@@ -8,28 +8,28 @@
       restrict: 'EA',
       templateUrl: 'pages/drt/travel-date-picker.html',
       replace: true,
-      link: function($scope, element, attrs){
+      link: function(scope, element, attrs){
         var checkIn = Number(attrs.checkin);
         var checkOut = Number(attrs.checkout);
         //可选日期的起止范围:今天后的半年
         var sDate = new Date().getTime();
         var eDate = sDate + (30*3+31*3)*24*60*60*1000;
-        $scope.tdp.init(sDate, eDate);
+        scope.tdp.init(sDate, eDate, checkIn, checkOut);
       }
     }
   })
 
-  .controller('travelDatePickerController', 
-    function() {
+  .controller('travelDatePickerController', ['$scope', 
+    function($scope) {
       var self = this;
-      self.st, self.et;
-
-      self.dates = [];
 
       // st: 开始日期, et: 结束日期; 均为时间戳
-      self.init = function(st, et) {
+      self.init = function(st, et, checkin, checkout) {
         self.st = st;
         self.et = et;
+        self.checkin = checkin;
+        self.checkout = checkout;
+        self.dates = [];
 
         // 月份数量＝结束日期的所在月份总数－开始..＋1
         var mC = getMonCnt(et) - getMonCnt(st) + 1;
@@ -73,7 +73,6 @@
               } 
             }
           }
-          
 
           // 递增一个月
           addMon(st);
@@ -93,14 +92,77 @@
       ]*/
       }
 
+      // 日期点击
+      self.clickDate = function(date) {
+        // 如果当前点击的日期为不可点击的日期 || 当前点击的和当前已选中的所有日期为同一个日期: 不理睬
+        if(self.dDisable(date) || sameDay(date, self.checkin) || sameDay(date, self.checkout)) {return false;}
+        // 如果checkin和checkout都不为空
+        if(self.checkin && self.checkout) {
+          // 将当前点击的日期设为checkin（把checkout清空）
+          self.checkin = date;
+          self.checkout = null;
+        }
+        // 如果checkin不为空 && checkout为空
+        else if(self.checkin && !self.checkout) {
+          // 如果当前点击的日期 早于 checkin
+          if(date < self.checkin) {
+            // 把当前点击的日期 覆盖掉 现有checkin
+            self.checkin = date;
+          }
+          // 否则
+          else {
+            // 把当前点击的日期设为checkout
+            self.checkout = date;
+            // 返回选中的2个日期，关闭日期选择器
+            // todo
+
+          }
+        }
+        // 如果checkin和checkout都为空，todo，暂时用不到 
+      
+      }
+
       // 如果d比今天早，就返回true，反之返回false
-      // todo，超出有效日期范围的要返回true，同上
+      // 超出有效日期范围的要返回true，同上
       self.dDisable = function(d) {
         var t = new Date().getTime();
-        if( getDayStamp(t) > getDayStamp(d) || getDayStamp(d) < getDayStamp(self.st) || getDayStamp(d) > getDayStamp(self.et)) {
+        if (getDayStamp(t) > getDayStamp(d) || getDayStamp(d) < getDayStamp(self.st) || getDayStamp(d) > getDayStamp(self.et)) {
           return true;
         }
         else {
+          return false;
+        }
+      }
+
+      // 返回是否是checkin day
+      self.isCheckin = function(d) {
+        if(self.checkin && sameDay(self.checkin, d)){
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+
+      // 返回是否是checkout day
+      self.isCheckout = function(d) {
+        if(self.checkout && sameDay(self.checkout, d)){
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+
+      // 判断是否为同一天
+      // a,b 时间戳
+      function sameDay(a, b) {
+        var x = new Date(a);
+        var y = new Date(b);
+        if(x.getFullYear() === y.getFullYear() && x.getMonth() == y.getMonth() && x.getDate() == y.getDate()) {
+          return true;
+        }
+        else{
           return false;
         }
       }
@@ -179,6 +241,6 @@
         return (y % 4 == 0) && (y % 400 == 0 || y % 100 != 0);  
       }
 
-  })
+  }])
 
 })();
