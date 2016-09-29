@@ -7,7 +7,10 @@
     return {
       restrict: 'EA',
       templateUrl: 'pages/drt/travel-date-picker.html',
-      replace: true
+      replace: true,
+      link: function(scope, element, attrs){
+        scope.tdp.init(1474992000000, 1512854400000)
+      }
     }
   })
 
