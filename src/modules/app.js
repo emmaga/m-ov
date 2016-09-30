@@ -12,7 +12,8 @@
   ])
 
   .config(['$translateProvider',function($translateProvider){
-      var lang = navigator.language||'en';
+    alert(navigator.language)
+      var lang = navigator.language == 'zh-CN' ? navigator.language : 'en-US';
       $translateProvider.preferredLanguage(lang);
       $translateProvider.useStaticFilesLoader({
           prefix: 'i18n/',

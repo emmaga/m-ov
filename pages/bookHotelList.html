@@ -1,5 +1,5 @@
 <div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
-    bookHotelList {{'100001'|translate}}
+    bookHotelList 
     <a ng-click="root.showMainMenu(true)">menu</a>
     <a ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickerDates);">{{bhl.checkin | date:'yyyy-MM-dd'}}至{{bhl.checkout | date:'yyyy-MM-dd'}}</a>
     <div class="ab-container" ng-show="bhl.datePickerShow">
