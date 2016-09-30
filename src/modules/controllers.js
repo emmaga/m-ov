@@ -5,20 +5,23 @@
 
   app
 
-  .controller('RootController', 
-    function() {
+.controller('RootController', ['$scope', '$ionicModal',
+    function($scope, $ionicModal) {
       var self = this;
 
       self.init = function() {
-        self.mainMenuShow = false;
-        self.showMainMenu(false);
       }
-
-      self.showMainMenu = function(boo) {
-        self.mainMenuShow = boo ? boo : false;
+      // menu modal 弹出
+      $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
+        scope: $scope,
+        animation: 'slide-in-left'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+      self.showMainMenu = function() {
+         $scope.modal.show();
       }
-
-  })
+  }])
 
   .controller('bookHotelSearchController', ['$scope', '$location', '$http', 
     function($scope, $location, $http) {
