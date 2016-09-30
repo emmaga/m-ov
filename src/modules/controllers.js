@@ -77,6 +77,25 @@
 
       }
     }
-  ]);
+  ])
+
+  .controller('userOrderController', ['$scope', '$ionicModal',
+    function($scope, $ionicModal) {
+      var self = this;
+
+      self.init = function() {
+      }
+      // menu modal 弹出
+      $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
+        scope: $scope,
+        animation: 'slide-in-left'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+      self.showMainMenu = function() {
+         $scope.modal.show();
+      }
+  }])
+  
 
 })();
