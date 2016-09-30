@@ -42,7 +42,15 @@
             templateUrl: 'pages/bookHotelList.html'
           }
         }
-      })  
+      })
+      .state('userOrder', {
+        url: '/userOrder',
+        views: {
+          '': {
+            templateUrl: 'pages/userOrder.html'
+          }
+        }
+      })
   }])
 
   .constant('BACKEND_CONFIG', {
