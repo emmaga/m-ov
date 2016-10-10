@@ -71,8 +71,8 @@
       self.init = function() {
         self.datePickerShow = false;
         self.hotels = {};
-        self.checkin = 1475097892000;
-        self.checkout = 1477756800000;
+        self.checkin = new Date().getTime();
+        self.checkout = new Date().getTime() + 24*60*60*1000;
         self.search();
       }
 
