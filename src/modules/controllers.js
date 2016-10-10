@@ -5,12 +5,33 @@
 
   app
 
-.controller('RootController', ['$scope', '$ionicModal',
-    function($scope, $ionicModal) {
+.controller('RootController', ['$scope', '$window', '$http', '$ionicModal', 'backendUrl',
+    function($scope, $window, $http, $ionicModal, backendUrl) {
       var self = this;
 
       self.init = function() {
+        var qString = $window.location.search.substring(1);
+        var qParts = qString.parseQuerystring();
+        var authCode = qParts.auth_code;
+        self.getWxAccessToken(authCode);
       }
+
+      self.getWxAccessToken = function(authCode) {
+
+        var data = {"auth_code": authCode};
+        console.log(data);
+        data = JSON.stringify(data);
+        console.log(data);
+
+        $http.post('http://openvod.cleartv.cn/backend_wx/v1/page_token', data)
+          .success(function(data, status, headers, config) {
+             console.log(data)
+          })
+          .error(function(data, status, headers, config) {
+             alert(status)
+          })
+      }
+
       // menu modal 弹出
       $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
         scope: $scope,
@@ -67,13 +88,13 @@
       }
 
       self.search = function() {
-      $http.get(backendUrl('hotels'))
-        .success(function(data, status, headers, config) {
-           self.hotels = data;
-        })
-        .error(function(data, status, headers, config) {
-           alert(status)
-        });
+        $http.get(backendUrl('hotels'))
+          .success(function(data, status, headers, config) {
+             self.hotels = data;
+          })
+          .error(function(data, status, headers, config) {
+             alert(status)
+          });
 
       }
     }

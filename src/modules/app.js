@@ -54,7 +54,7 @@
   }])
 
   .constant('BACKEND_CONFIG', {
-    baseUrl: '/m-ov/src/api/',
+    baseUrl: 'src/api/',
     extesion: '.json'
   })
 })();
