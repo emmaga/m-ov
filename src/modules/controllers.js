@@ -1,15 +1,14 @@
 'use strict';
 
 (function() {
-  var app = angular.module('app.controllers', ['ngCookies']);
-
-  app
-
-.controller('RootController', ['$scope', '$window', '$http', '$ionicModal', 'backendUrl',
+  var app = angular.module('app.controllers', ['ngCookies'])
+  
+  .controller('RootController', ['$scope', '$window', '$http', '$ionicModal', 'backendUrl',
     function($scope, $window, $http, $ionicModal, backendUrl) {
       var self = this;
 
       self.init = function() {
+        // http://openvod.cleartv.cn/index.html?auth_code=xxx&expires_in=600
         var qString = $window.location.search.substring(1);
         var qParts = qString.parseQuerystring();
         var authCode = qParts.auth_code;
@@ -23,7 +22,7 @@
         data = JSON.stringify(data);
         console.log(data);
 
-        $http.post('http://openvod.cleartv.cn/backend_wx/v1/page_token', data)
+        $http.post(backendUrl('page_token', 'server'), data)
           .success(function(data, status, headers, config) {
              console.log(data)
           })
@@ -88,7 +87,7 @@
       }
 
       self.search = function() {
-        $http.get(backendUrl('hotels'))
+        $http.post(backendUrl('hotels'))
           .success(function(data, status, headers, config) {
              self.hotels = data;
           })
