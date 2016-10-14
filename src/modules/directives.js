@@ -3,6 +3,32 @@
 (function() {
   var app = angular.module('app.directive', [ ])
 
+  .directive("cityPicker", function () {
+    return {
+      restrict: 'EA',
+      templateUrl: 'pages/drt/city-picker.html',
+      replace: true
+    }
+  })
+
+  .controller('cityPickerController', ['$scope', 
+    function($scope) {
+      var self = this;
+
+      self.init = function(callback) {
+        self.callback = callback;
+      }
+
+      self.goto = function(pos) {
+        var offset = document.getElementById(pos).offsetTop;
+        console.log(offset);
+        document.getElementById('city-list').scrollTop = offset;
+      }
+
+  }])
+
+  // ===============================================================
+
   .directive("travelDatePicker", function () {
     return {
       restrict: 'EA',

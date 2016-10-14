@@ -12,7 +12,7 @@
         var qString = $window.location.search.substring(1);
         var qParts = qString.parseQuerystring();
         var authCode = qParts.auth_code;
-        self.getWxAccessToken(authCode);
+        // self.getWxAccessToken(authCode);
       }
 
       self.getWxAccessToken = function(authCode) {
@@ -78,6 +78,11 @@
       // 显示／隐藏日期选择器
       self.showDP = function(boo) {
         self.datePickerShow = boo ? boo : false;
+      };
+
+      // 显示／隐藏城市选择器
+      self.showCP = function(boo) {
+        self.cityPickerShow = boo ? boo : false;
       };
 
       self.doAfterPickerDates = function(checkin, checkout) {

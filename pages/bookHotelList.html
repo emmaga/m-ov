@@ -2,12 +2,26 @@
     bookHotelList 
     <a ng-click="root.showMainMenu(true)">menu</a>
     <a ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickerDates);">{{bhl.checkin | date:'yyyy-MM-dd'}}至{{bhl.checkout | date:'yyyy-MM-dd'}}</a>
+    <a ng-click="bhl.showCP(true);">city</a>
+
+    <!-- date picker start-->
     <div class="ab-container" ng-show="bhl.datePickerShow">
         <div class="bar bar-header">
             <button class="button button-clear button-positive" ng-click="bhl.showDP(false)">back</button>
         </div>
         <travel-date-picker></travel-date-picker>
     </div>
+    <!-- date picker start-->
+
+    <!-- city picker start-->
+    <div class="ab-container" ng-show="bhl.cityPickerShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="bhl.showCP(false)">back</button>
+        </div>
+        <city-picker></city-picker>
+    </div>
+    <!-- city picker end-->
+
     <div ng-repeat="hotel in bhl.hotels.lists">
         {{hotel.name}}
     </div>
