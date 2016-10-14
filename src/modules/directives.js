@@ -11,8 +11,8 @@
     }
   })
 
-  .controller('cityPickerController', ['$scope', 
-    function($scope) {
+  .controller('cityPickerController', ['$scope', '$ionicScrollDelegate', 
+    function($scope, $ionicScrollDelegate) {
       var self = this;
 
       self.init = function(callback) {
@@ -21,8 +21,9 @@
 
       self.goto = function(pos) {
         var offset = document.getElementById(pos).offsetTop;
-        console.log(offset);
-        document.getElementById('city-list').scrollTop = offset;
+        /*console.log(offset);
+        document.getElementById('cp-city-list').scrollTop = offset;*/
+        $ionicScrollDelegate.$getByHandle('cityList').scrollTo(0, offset, true);
       }
 
   }])
