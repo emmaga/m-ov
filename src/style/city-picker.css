@@ -1,0 +1,48 @@
+.cp-list {
+  margin-bottom: 0;
+}
+.cp-list .item{
+  padding: 0;
+}
+
+.cp-row .col{
+  padding: 0 0 0 16px;
+  height: 40px;
+  line-height: 40px;
+}
+.cp-item .row{
+  padding: 0;
+}
+
+.cp-item-divider {
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.cp-side {
+  height:100%;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+  right: 0;
+}
+
+.cp-wrapper {
+  display: table;
+}
+
+.cp-cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#cp-city-list {
+  overflow-x: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

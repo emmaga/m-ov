@@ -3,6 +3,33 @@
 (function() {
   var app = angular.module('app.directive', [ ])
 
+  .directive("cityPicker", function () {
+    return {
+      restrict: 'EA',
+      templateUrl: 'pages/drt/city-picker.html',
+      replace: true
+    }
+  })
+
+  .controller('cityPickerController', ['$scope', '$ionicScrollDelegate', 
+    function($scope, $ionicScrollDelegate) {
+      var self = this;
+
+      self.init = function(callback) {
+        self.callback = callback;
+      }
+
+      self.goto = function(pos) {
+        var offset = document.getElementById(pos).offsetTop;
+        /*console.log(offset);
+        document.getElementById('cp-city-list').scrollTop = offset;*/
+        $ionicScrollDelegate.$getByHandle('cityList').scrollTo(0, offset, true);
+      }
+
+  }])
+
+  // ===============================================================
+
   .directive("travelDatePicker", function () {
     return {
       restrict: 'EA',

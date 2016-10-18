@@ -54,7 +54,9 @@
   }])
 
   .constant('BACKEND_CONFIG', {
-    baseUrl: 'src/api/',
-    extesion: '.json'
+    serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
+    testUrl       : 'src/api/',
+    testExtesion  : '.json',
+    test          : true
   })
 })();
