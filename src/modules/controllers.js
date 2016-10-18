@@ -12,7 +12,7 @@
         var qString = $window.location.search.substring(1);
         var qParts = qString.parseQuerystring();
         var authCode = qParts.auth_code;
-        // self.getWxAccessToken(authCode);
+        self.getWxAccessToken(authCode);
       }
 
       self.getWxAccessToken = function(authCode) {
