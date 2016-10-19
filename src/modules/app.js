@@ -27,11 +27,11 @@
         url: '/index',
         templateUrl: 'pages/bookHotelList.html'
       })
-      .state('bookHotelSearch', {
-        url: '/bookHotelSearch',
+      .state('bookRoomList', {
+        url: '/bookRoomList',
         views: {
           '': {
-            templateUrl: 'pages/bookHotelSearch.html'
+            templateUrl: 'pages/bookRoomList.html'
           }
         }
       })
@@ -43,11 +43,83 @@
           }
         }
       })
-      .state('userOrder', {
-        url: '/userOrder',
+      .state('hotelInfo', {
+        url: '/hotelInfo',
         views: {
           '': {
-            templateUrl: 'pages/userOrder.html'
+            templateUrl: 'pages/hotelInfo.html'
+          }
+        }
+      })
+      .state('bookInfo', {
+        url: '/bookInfo',
+        views: {
+          '': {
+            templateUrl: 'pages/bookInfo.html'
+          }
+        }
+      })
+      .state('bookResult', {
+        url: '/bookResult',
+        views: {
+          '': {
+            templateUrl: 'pages/bookResult.html'
+          }
+        }
+      })
+      .state('bookRoomSoldOut', {
+        url: '/bookRoomSoldOut',
+        views: {
+          '': {
+            templateUrl: 'pages/bookRoomSoldOut.html'
+          }
+        }
+      })
+      .state('memberHome', {
+        url: '/memberHome',
+        views: {
+          '': {
+            templateUrl: 'pages/memberHome.html'
+          }
+        }
+      })
+      .state('memberLogin', {
+        url: '/memberLogin',
+        views: {
+          '': {
+            templateUrl: 'pages/memberLogin.html'
+          }
+        }
+      })
+      .state('memberRegister', {
+        url: '/memberRegister',
+        views: {
+          '': {
+            templateUrl: 'pages/memberRegister.html'
+          }
+        }
+      })
+      .state('memberInfoEdit', {
+        url: '/memberInfoEdit',
+        views: {
+          '': {
+            templateUrl: 'pages/memberInfoEdit.html'
+          }
+        }
+      })
+      .state('memberResetPW', {
+        url: '/memberResetPW',
+        views: {
+          '': {
+            templateUrl: 'pages/memberResetPW.html'
+          }
+        }
+      })
+      .state('memberOrderList', {
+        url: '/memberOrderList',
+        views: {
+          '': {
+            templateUrl: 'pages/memberOrderList.html'
           }
         }
       })
@@ -55,7 +127,7 @@
 
   .constant('BACKEND_CONFIG', {
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
-    testUrl       : 'src/api/',
+    testUrl       : 'api/',
     testExtesion  : '.json',
     test          : true
   })

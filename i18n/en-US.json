@@ -1,1 +1,4 @@
-{"myOrders":"My Orders","xx":"xx"}
+{
+  "myOrders": "myOrders",
+  "serverError": "oops! Sorry it looks like something went wrong."
+}

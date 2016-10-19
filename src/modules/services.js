@@ -10,9 +10,9 @@
      * @testType 测试接口时，有些接口只有服务端有效，此时设置为：server，其他设置为local，默认为local
      */
 
-    return function(url, testTpye) {
+    return function(url, testType) {
       if(BACKEND_CONFIG.test) {
-        if(testTpye == 'server') {
+        if(testType == 'server') {
           return BACKEND_CONFIG.serverUrl + url;
         }
         else {
