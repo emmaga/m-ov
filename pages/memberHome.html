@@ -3,4 +3,6 @@
     <a ng-click="root.showMainMenu(true)">menu</a>
     <a ui-sref="memberLogin">登录</a>
     <a ui-sref="memberResetPW">找回密码</a>
+    <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
+    {{root.getParams('wxUserInfo').nickname}}
 </div>

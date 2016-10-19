@@ -10,6 +10,20 @@
       // root全局变量：
       self.params = {};
       // self.params.appid
+      /* self.params.wxUserInfo
+      {    
+       "openid":" OPENID",  
+       " nickname": NICKNAME,   
+       "sex":"1",   
+       "province":"PROVINCE"   
+       "city":"CITY",   
+       "country":"COUNTRY",    
+       "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
+      4eMsv84eavHiaiceqxibJxCfHe/46",  
+      "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
+       "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
+      } 
+      */
 
 
       self.init = function() {
@@ -18,9 +32,13 @@
         var qString = $window.location.search.substring(1);
         var qParts = qString.parseQuerystring();
         var code = qParts.code;
+        var appid = qParts.appid;
 
         // 将 appid 记在 root params 缓存里
-        self.setParams('appid', qParts.appid);
+        self.setParams('appid', appid);
+
+        // 获取cleartoken（clear_session）和openid
+        self.getUserID(code, appid);
 
         // wx注册
         self.wxConfigJSSDK();
@@ -33,6 +51,46 @@
 
       self.getParams = function(name) {
         return self.params[name];
+      }
+
+      self.getUserID = function(code, appid) {
+        var data = {
+          "appid": appid,
+          "code": code
+        };
+        data = JSON.stringify(data);
+        $http.post(backendUrl('buildsession', 'server'), data)
+          .success(function(data, status, headers, config) {
+            if(data.rescode == '200') {
+              self.getWxUserInfo(access_token, data.openid);
+            }
+            else {
+              // todo use ionic alert style
+              alert($filter('translate')('serverError') + data.rescode);
+            }
+          })
+          .error(function(data, status, headers, config) {
+            // todo use ionic alert style
+            alert($filter('translate')('serverError') + status);
+          })
+      }
+
+      self.getWxUserInfo = function(access_token, openid) {
+        var data = {
+          "access_token": access_token,
+          "openid": openid,
+          "lang": "zh_CN" // todo
+        };
+        data = JSON.stringify(data);
+        $http.get('https://api.weixin.qq.com/sns/userinfo', data)
+          .success(function(data, status, headers, config) {
+            // 将 wxUserInfo 记在 root params 缓存里
+            self.setParams('wxUserInfo', data);
+          })
+          .error(function(data, status, headers, config) {
+            // todo use ionic alert style
+            alert($filter('translate')('serverError') + status);
+          })
       }
 
       self.wxConfigJSSDK = function() {
