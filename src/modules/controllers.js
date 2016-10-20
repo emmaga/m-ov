@@ -61,13 +61,7 @@
         data = JSON.stringify(data);
         $http.post(backendUrl('buildsession', 'server'), data)
           .success(function(data, status, headers, config) {
-            if(data.rescode == '200') {
-              self.getWxUserInfo(access_token, data.openid);
-            }
-            else {
-              // todo use ionic alert style
-              alert($filter('translate')('serverError') + data.rescode);
-            }
+            self.getWxUserInfo(data.access_token, data.openid);
           })
           .error(function(data, status, headers, config) {
             // todo use ionic alert style
@@ -76,13 +70,14 @@
       }
 
       self.getWxUserInfo = function(access_token, openid) {
+        // todo lang
         var data = {
           "access_token": access_token,
           "openid": openid,
-          "lang": "zh_CN" // todo
+          "lang": "zh_CN"
         };
-        data = JSON.stringify(data);
-        $http.get('https://api.weixin.qq.com/sns/userinfo', data)
+        
+        $http.post(backendUrl('wxuserinfo', 'server'), data)
           .success(function(data, status, headers, config) {
             // 将 wxUserInfo 记在 root params 缓存里
             self.setParams('wxUserInfo', data);
@@ -142,8 +137,8 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$location', '$http', '$stateParams', 'backendUrl',
-    function($scope, $location, $http, $stateParams, backendUrl) {
+  .controller('bookHotelListController', ['$scope', '$filter', '$location', '$http', '$stateParams', 'backendUrl',
+    function($scope, $filter, $location, $http, $stateParams, backendUrl) {
 
       var self = this;
       console.log($stateParams.sDate + ', ' + $stateParams.eDate);
@@ -173,13 +168,14 @@
       }
 
       self.search = function() {
-        $http.post(backendUrl('hotels'))
-          .success(function(data, status, headers, config) {
-             self.hotels = data;
-          })
-          .error(function(data, status, headers, config) {
-             alert(status)
-          });
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('hotels')
+        }).then(function successCallback(data, status, headers, config) {
+            self.hotels = data;
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });  
 
       }
     }

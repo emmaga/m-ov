@@ -3,9 +3,10 @@
 (function() {
   var app = angular.module('app.filters', [])
 
-  .filter("xx", ['', function() {
-    return function(xx) {
-        return xx;
+  .filter("ajaxMethod", ['BACKEND_CONFIG', function(BACKEND_CONFIG) {
+    return function() {
+        var method = BACKEND_CONFIG.test ? 'GET' : 'POST';
+        return method;
     };
   }]);
 
