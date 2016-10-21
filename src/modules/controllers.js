@@ -170,9 +170,11 @@
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('hotels')
+          url: backendUrl('bookHotelList')
         }).then(function successCallback(data, status, headers, config) {
-            self.hotels = data;
+            console.log(data)
+            self.hotels = data.data.lists;
+            console.log(self.hotels)
           }, function errorCallback(data, status, headers, config) {
             alert(status)
           });  
