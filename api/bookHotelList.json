@@ -15,9 +15,9 @@
         },
         {
         "hotelId":"2",
-        "hotelName":"酒店名字一",
+        "hotelName":"酒店名字二",
         "hotelImg":"http://otatest.cleartv.cn/demo/demo/u1ca-url.svg",
-        "hotelAddress":"酒店地址一",
+        "hotelAddress":"酒店地址二",
         "hotelFeatures": [
             {"name": "wifi", "icon": "xxxxxx"},
             {"name": "wifi", "icon": "xxxxxx"}

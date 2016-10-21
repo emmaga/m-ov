@@ -1,8 +1,8 @@
 <div ng-controller="memberHomeController as memberHome" ng-init="memberHome.init()">
     memberHome
     <a ng-click="root.showMainMenu(true)">menu</a>
-    <a ui-sref="memberLogin">登录</a>
-    <a ui-sref="memberResetPW">找回密码</a>
+memberInfo
+    <a ui-sref="memberInfoEdit">编辑</a>
     <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
     {{root.getParams('wxUserInfo').nickname}}
     {会员等级}{积分}<br />

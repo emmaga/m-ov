@@ -29,10 +29,11 @@
     {酒店标签}
    
     <ion-list>
-      <ion-item ng-repeat="hotel in bhl.hotels" >
-        {{hotel.hotelAddress}}
-        <img ng-src="{{hotel.hotelImgSrc}}"> 
-        {{hotel.hotelAveragePri}}
+      <ion-item ng-repeat="hotel in bhl.hotels" href="#/item/{{hotel.hotelId}}">
+        {{hotel.hotelAddress}}<br />
+        <img ng-src="{{hotel.hotelImgSrc}}"> <br />
+        {{hotel.hotelAveragePri}}<br />
+        酒店标签：<span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span>
       </ion-item>
     </ion-list>
 

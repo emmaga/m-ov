@@ -1,0 +1,27 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "rooms": {
+        "lists": [{
+            "roomId": "1",
+            "roomName": "酒店名字一",
+            "roomImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+            "roomAddress": "酒店地址一",
+            "roomFeatures": [
+                { "name": "  wifi  ", "icon": "  classnamewifi" },
+                { "name": "  parking  ", "icon": "  classnameparking" }
+            ],
+            "roomAveragePri": "1000"
+        }, {
+            "roomId": "2",
+            "roomName": "酒店名字二",
+            "roomImg": "http://otatest.cleartv.cn/demo/demo/u1ca-url.svg",
+            "roomAddress": "酒店地址二",
+            "roomFeatures": [
+                { "name": "wifi", "icon": "xxxxxx" },
+                { "name": "wifi", "icon": "xxxxxx" }
+            ],
+            "roomAveragePri": "1000"
+        }]
+    }
+}

@@ -183,12 +183,25 @@
     }
   ])
 
-  .controller('bookRoomListController', ['$http', 
-    function($http) {
+  .controller('bookRoomListController', ['$http', '$filter',
+    function($http,$filter) {
       var self = this;
 
       self.init = function() {
         
+      }
+      self.search = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('bookRoomList')
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+            self.hotels = data.data.lists;
+            console.log(self.hotels)
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });  
+
       }
     }
   ])
