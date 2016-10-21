@@ -13,7 +13,7 @@
               </div>
               
               <ul class="list cp-list">
-                  <li ng-repeat="city in cities.lists track by $index" ng-click="cp.callback(city.cityId)" class="item cp-item">
+                  <li ng-repeat="city in cities.lists track by $index" ng-click="cp.callback(city.cityId, city.cityName)" class="item cp-item">
                     <div class="row cp-row">
                       <div class="col col-14">
                           {{city.cityName}}

@@ -15,92 +15,9 @@
     function($scope, $ionicScrollDelegate) {
       var self = this;
 
-      self.init = function(callback) {
+      self.init = function(cityLists, callback) {
         self.callback = callback;
-        self.cityLists = [
-          {
-            "initials": "全部",
-            "lists": [
-              {
-                "cityName": "全部",
-                "cityId": "0"
-              }
-            ]
-          },
-          {
-            "initials": "A",
-            "lists": [
-              {
-                "cityName": "阿尔山",
-                "cityId": "1"
-              },
-              {
-                "cityName": "阿克苏",
-                "cityId": "2"
-              },
-              {
-                "cityName": "澳门",
-                "cityId": "3"
-              }
-            ]
-          },
-          {
-            "initials": "B",
-            "lists": [
-              {
-                "cityName": "北京",
-                "cityId": "4"
-              }
-            ]
-          },
-          {
-            "initials": "H",
-            "lists": [
-              {
-                "cityName": "海口",
-                "cityId": "5"
-              },
-              {
-                "cityName": "杭州",
-                "cityId": "6"
-              }
-            ]
-          },
-          {
-            "initials": "L",
-            "lists": [
-              {
-                "cityName": "丽江",
-                "cityId": "7"
-              }
-            ]
-          },
-          {
-            "initials": "S",
-            "lists": [
-              {
-                "cityName": "上海",
-                "cityId": "8"
-              },
-              {
-                "cityName": "三亚",
-                "cityId": "9"
-              },
-              {
-                "cityName": "沈阳",
-                "cityId": "10"
-              },
-              {
-                "cityName": "石家庄",
-                "cityId": "11"
-              },
-              {
-                "cityName": "苏州",
-                "cityId": "12"
-              }
-            ]
-          }
-        ];
+        self.cityLists = cityLists;
       }
 
       self.scrollTo = function(pos) {

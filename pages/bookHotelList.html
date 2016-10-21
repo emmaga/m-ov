@@ -1,8 +1,8 @@
 <div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
     bookHotelList 
     <a ng-click="root.showMainMenu(true)">menu</a>
-    <a ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickerDates);">{{bhl.checkin | date:'yyyy-MM-dd'}}至{{bhl.checkout | date:'yyyy-MM-dd'}}</a>
-    <a ng-click="bhl.showCP(true);">city</a>
+    <a ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">{{bhl.checkin | date:'yyyy-MM-dd'}}至{{bhl.checkout | date:'yyyy-MM-dd'}}</a>
+    <a ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)">{{bhl.cityInfo.name}}</a>
     
     <!-- date picker start-->
     <div class="ab-container" ng-show="bhl.datePickerShow">
