@@ -262,7 +262,6 @@
           method: $filter('ajaxMethod')(),
           url: backendUrl('bookHotelList')
         }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
             self.hotels = data.data.lists;
             console.log(self.hotels)
           }, function errorCallback(data, status, headers, config) {
@@ -273,45 +272,99 @@
     }
   ])
 
-  .controller('bookRoomListController', ['$http', '$filter',
-    function($http,$filter) {
+  .controller('bookRoomListController', ['$http', '$filter', '$stateParams', 'backendUrl',
+    function($http,$filter,$stateParams,backendUrl) {
+      console.log("bookRoomListController")
       var self = this;
-
+      self.hotelId = $stateParams.hotelId;
+      console.log(self.hotelId)
       self.init = function() {
-        
+        self.search();
+      }
+      
+
+
+
+      self.search = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('bookRomeList'),
+          data:{
+            hotelId:self.hotelId
+          }
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+            self.rooms = data.data.rooms;
+            self.hotel = data.data.hotel;
+            console.log(self.rooms)
+            console.log(self.hotel)
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });  
+
+      }
+
+    }
+  ])
+
+  .controller('hotelInfoController', ['$http', '$filter', '$stateParams', 'backendUrl',
+    function($http,$filter,$stateParams,backendUrl) {
+      console.log("hotelInfoController")
+      var self = this;
+      
+      console.log($stateParams)
+      self.init = function() {
+        self.search();
       }
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('bookRoomList')
+          url: backendUrl('hotelInfo'),
+          data:{
+            hotelId:$stateParams.hotelId,
+            roomId:$stateParams.roomId,
+          }
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
-            self.hotels = data.data.lists;
-            console.log(self.hotels)
+            self.room = data.data.room;
+            self.hotel = data.data.hotel;
+            self.roomOrderLists = data.data.roomOrderLists;
+            console.log(self.room)
+            console.log(self.hotel)
           }, function errorCallback(data, status, headers, config) {
             alert(status)
           });  
-
       }
     }
   ])
 
-  .controller('hotelInfoController', ['$http', 
-    function($http) {
+  .controller('bookInfoController', ['$http', '$filter', '$stateParams', 'backendUrl',
+    function($http,$filter,$stateParams,backendUrl) {
+      console.log("bookInfoController")
       var self = this;
       
       self.init = function() {
-        
+        self.search();
       }
-    }
-  ])
-
-  .controller('bookInfoController', ['$http', 
-    function($http) {
-      var self = this;
-      
-      self.init = function() {
-        
+      debugger;
+      self.search = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('bookInfo'),
+          data:{
+            hotelId:$stateParams.hotelId,
+            roomId:$stateParams.roomId,
+          }
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+            self.room = data.data.room;
+            self.hotel = data.data.hotel;
+            self.roomOrder = data.data.roomOrder;
+            console.log(self.room)
+            console.log(self.hotel)
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });  
       }
     }
   ])

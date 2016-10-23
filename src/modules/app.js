@@ -28,7 +28,7 @@
         templateUrl: 'pages/bookHotelList.html'
       })
       .state('bookRoomList', {
-        url: '/bookRoomList',
+        url: '/bookRoomList/:hotelId',
         views: {
           '': {
             templateUrl: 'pages/bookRoomList.html'
@@ -44,7 +44,7 @@
         }
       })
       .state('hotelInfo', {
-        url: '/hotelInfo',
+        url: '/hotelInfo/?roomId&hotelId',
         views: {
           '': {
             templateUrl: 'pages/hotelInfo.html'

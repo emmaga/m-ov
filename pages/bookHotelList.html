@@ -1,4 +1,4 @@
-<div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
+<ion-content ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
     bookHotelList 
     <a ng-click="root.showMainMenu(true)">menu</a>
     <a ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">{{bhl.checkin | date:'yyyy-MM-dd'}}至{{bhl.checkout | date:'yyyy-MM-dd'}}</a>
@@ -29,22 +29,13 @@
     {酒店标签}
    
     <ion-list>
-      <ion-item ng-repeat="hotel in bhl.hotels" href="#/item/{{hotel.hotelId}}">
+      <ion-item ng-repeat="hotel in bhl.hotels" ui-sref="bookRoomList({hotelId:hotel.hotelId})">
         {{hotel.hotelAddress}}<br />
         <img ng-src="{{hotel.hotelImgSrc}}"> <br />
         {{hotel.hotelAveragePri}}<br />
         酒店标签：<span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span>
       </ion-item>
     </ion-list>
-
-
-
-
-
-
-
-
-
     <a ui-sref="bookRoomList">
         酒店1
     </a><br />
@@ -55,4 +46,4 @@
         酒店3
     </a><br />
    
-</div>    
+</ion-content>    

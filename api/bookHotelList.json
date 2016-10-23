@@ -1,28 +1,25 @@
 {
-    "rescode": "200", 
-    "errInfo": "", 
-    "lists": [
-    	{
-        "hotelId":"1",
-        "hotelName":"酒店名字一",
-        "hotelImgSrc":"http://otatest.cleartv.cn/demo/demo/uca-url.svg",
-        "hotelAddress":"酒店地址一",
+    "rescode": "200",
+    "errInfo": "",
+    "lists": [{
+        "hotelId": "1",
+        "hotelName": "酒店名字一",
+        "hotelImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+        "hotelAddress": "酒店地址一",
         "hotelFeatures": [
-        	{"name": "  wifi  ", "icon": "  classnamewifi"},
-        	{"name": "  parking  ", "icon": "  classnameparking"}
+            { "name": "  wifi  ", "icon": "  classnamewifi" },
+            { "name": "  parking  ", "icon": "  classnameparking" }
         ],
-        "hotelAveragePri":"1000"
-        },
-        {
-        "hotelId":"2",
-        "hotelName":"酒店名字二",
-        "hotelImg":"http://otatest.cleartv.cn/demo/demo/u1ca-url.svg",
-        "hotelAddress":"酒店地址二",
+        "hotelAveragePri": "1000"
+    }, {
+        "hotelId": "2",
+        "hotelName": "酒店名字二",
+        "hotelImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+        "hotelAddress": "酒店地址二",
         "hotelFeatures": [
-            {"name": "wifi", "icon": "xxxxxx"},
-            {"name": "wifi", "icon": "xxxxxx"}
+            { "name": "wifi", "icon": "xxxxxx" },
+            { "name": "wifi", "icon": "xxxxxx" }
         ],
-        "hotelAveragePri":"1000"
-        }
-]
+        "hotelAveragePri": "1000"
+    }]
 }
