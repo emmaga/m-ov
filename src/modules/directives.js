@@ -157,6 +157,17 @@
         }
       }
 
+      // 返回是否是checkin和checkout之间的日期
+      self.isDuring = function(d) {
+        var ret = false;
+        if(self.checkin && self.checkout) {
+          if (d > self.checkin && d < self.checkout) {
+            ret = true;
+          }
+        }
+        return ret;
+      }
+
       // 返回是否是checkin day
       self.isCheckin = function(d) {
         if(self.checkin && sameDay(self.checkin, d)){

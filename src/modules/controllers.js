@@ -137,8 +137,8 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$filter', '$location', '$http', '$stateParams', 'backendUrl',
-    function($scope, $filter, $location, $http, $stateParams, backendUrl) {
+  .controller('bookHotelListController', ['$scope', '$timeout', '$filter', '$location', '$http', '$stateParams', 'backendUrl',
+    function($scope, $timeout, $filter, $location, $http, $stateParams, backendUrl) {
 
       var self = this;
       console.log($stateParams.sDate + ', ' + $stateParams.eDate);
@@ -249,7 +249,8 @@
       self.doAfterPickDates = function(checkin, checkout) {
         self.checkin = checkin;
         self.checkout = checkout;
-        self.showDP(false);
+        // 延时半秒隐藏
+        $timeout(function() {self.showDP(false);}, 500);
       };
 
       self.doAfterPickCity = function(cityId, cityName) {
