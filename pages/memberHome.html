@@ -1,6 +1,9 @@
 <div ng-controller="memberHomeController as memberHome" ng-init="memberHome.init()">
-    memberHome
-    <a ng-click="root.showMainMenu(true)">menu</a>
+	<div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">会员中心</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+    </div>
+<br><br><br><br><br><br><br><br><br><br>
 memberInfo
     <a ui-sref="memberInfoEdit">编辑</a>
     <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
