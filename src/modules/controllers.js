@@ -148,6 +148,91 @@
         self.hotels = {};
         self.checkin = new Date().getTime();
         self.checkout = new Date().getTime() + 24*60*60*1000;
+        self.cityLists = [
+          {
+            "initials": "全部",
+            "lists": [
+              {
+                "cityName": "全部",
+                "cityId": "0"
+              }
+            ]
+          },
+          {
+            "initials": "A",
+            "lists": [
+              {
+                "cityName": "阿尔山",
+                "cityId": "1"
+              },
+              {
+                "cityName": "阿克苏",
+                "cityId": "2"
+              },
+              {
+                "cityName": "澳门",
+                "cityId": "3"
+              }
+            ]
+          },
+          {
+            "initials": "B",
+            "lists": [
+              {
+                "cityName": "北京",
+                "cityId": "4"
+              }
+            ]
+          },
+          {
+            "initials": "H",
+            "lists": [
+              {
+                "cityName": "海口",
+                "cityId": "5"
+              },
+              {
+                "cityName": "杭州",
+                "cityId": "6"
+              }
+            ]
+          },
+          {
+            "initials": "L",
+            "lists": [
+              {
+                "cityName": "丽江",
+                "cityId": "7"
+              }
+            ]
+          },
+          {
+            "initials": "S",
+            "lists": [
+              {
+                "cityName": "上海",
+                "cityId": "8"
+              },
+              {
+                "cityName": "三亚",
+                "cityId": "9"
+              },
+              {
+                "cityName": "沈阳",
+                "cityId": "10"
+              },
+              {
+                "cityName": "石家庄",
+                "cityId": "11"
+              },
+              {
+                "cityName": "苏州",
+                "cityId": "12"
+              }
+            ]
+          }
+        ];
+        self.cityInfo = {id: '0', name: '全部'};
         self.search();
       }
 
@@ -161,11 +246,16 @@
         self.cityPickerShow = boo ? boo : false;
       };
 
-      self.doAfterPickerDates = function(checkin, checkout) {
+      self.doAfterPickDates = function(checkin, checkout) {
         self.checkin = checkin;
         self.checkout = checkout;
         self.showDP(false);
-      }
+      };
+
+      self.doAfterPickCity = function(cityId, cityName) {
+        self.cityInfo = {id: cityId, name: cityName};
+        self.showCP(false);
+      };
 
       self.search = function() {
         $http({

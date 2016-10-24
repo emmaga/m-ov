@@ -15,11 +15,12 @@
     function($scope, $ionicScrollDelegate) {
       var self = this;
 
-      self.init = function(callback) {
+      self.init = function(cityLists, callback) {
         self.callback = callback;
+        self.cityLists = cityLists;
       }
 
-      self.goto = function(pos) {
+      self.scrollTo = function(pos) {
         var offset = document.getElementById(pos).offsetTop;
         /*console.log(offset);
         document.getElementById('cp-city-list').scrollTop = offset;*/
