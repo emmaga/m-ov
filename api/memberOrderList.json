@@ -1,0 +1,24 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "orderLists": [{
+        "orderId": "1",
+        "paymentStatus": 1,
+        "hotelName": "酒店名字一",
+        "roomName": "房型名字一",
+        "roomNumber": 3,
+        "bookStartDate": "1288323623006",
+        "bookEndDate": "1288323623006",
+        "orderTotalPri": 123123123
+    }, {
+        "orderId": "1",
+        "paymentStatus": 1,
+        "hotelName": "酒店名字一",
+        "roomName": "房型名字一",
+        "roomNumber": 3,
+        "bookStartDate": "1288323623006",
+        "bookEndDate": "1288323623006",
+        "orderTotalPri": 123123123
+    }]
+
+}

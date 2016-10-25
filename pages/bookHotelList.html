@@ -4,6 +4,8 @@
     <a ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">{{bhl.checkin | date:'yyyy-MM-dd'}}至{{bhl.checkout | date:'yyyy-MM-dd'}}</a>
     <a ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)">{{bhl.cityInfo.name}}</a>
     
+    <br />{{bhl.projectInfo.hotelName}}<br />
+    <img ng-src="{{bhl.projectInfo.hotelPicSrc}}"> <br />
     <!-- date picker start-->
     <div class="ab-container" ng-show="bhl.datePickerShow">
         <div class="bar bar-header">
@@ -21,12 +23,11 @@
         <city-picker></city-picker>
     </div>
     <!-- city picker end-->
-    {标题-订酒店}
-    {酒店图片}
+    
+    
+    
     <!-- 列表 -->
-    {酒店地址}
-    {酒店名字}
-    {酒店标签}
+   
    
     <ion-list>
       <ion-item ng-repeat="hotel in bhl.hotels" ui-sref="bookRoomList({hotelId:hotel.hotelId})">
@@ -35,15 +36,5 @@
         {{hotel.hotelAveragePri}}<br />
         酒店标签：<span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span>
       </ion-item>
-    </ion-list>
-    <a ui-sref="bookRoomList">
-        酒店1
-    </a><br />
-    <a ui-sref="bookRoomList">
-        酒店2
-    </a><br />
-    <a ui-sref="bookRoomList">
-        酒店3
-    </a><br />
-   
+    </ion-list>   
 </ion-content>    

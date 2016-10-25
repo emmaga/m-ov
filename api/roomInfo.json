@@ -1,20 +1,23 @@
 {
     "rescode": "200",
     "errInfo": "",
-    "hotel":{
-        "hotelId": "1",
-        "hotelName": "酒店名字一",
-        "hotelImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
-        "hotelImgGallery":[{
+    "room":{
+        "roomId": "1",
+        "roomName": "房型名字一",
+        "roomImgGallery":[{
             "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
         },{
             "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
         }] ,
-        "hotelFeatures": [
+        "roomFeatures": [
             { "name": "  wifi  ", "icon": "  classnamewifi" },
             { "name": "  parking  ", "icon": "  classnameparking" }
         ],
         "bookStartDate": "1288323623006",
         "bookEndDate": "1288323623006"
+    },
+    "hotel":{
+        "hotelId": "1",
+        "hotelName": "酒店名字一"
     } 
 }

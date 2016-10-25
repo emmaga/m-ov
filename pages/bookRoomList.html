@@ -11,7 +11,7 @@
     <!-- 列表 -->
 
     <ion-list>
-      <ion-item ng-repeat="room in brl.rooms.lists" ui-sref="hotelInfo({roomId:room.roomId,hotelId:brl.hotelId})">
+      <ion-item ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId})">
         
         <img ng-src="{{room.roomImgSrc}}"> <br />
         均价会员价    {{room.roomAveragePri}}<br />

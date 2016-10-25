@@ -1,16 +1,6 @@
 {
     "rescode": "200",
     "errInfo": "",
-    "hotel": {
-        "hotelId": "1",
-        "hotelName": "酒店名字一",
-        "hotelImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
-        "hotelAddress": "酒店地址一",
-        "hotelFeatures": [
-            { "name": "  wifi  ", "icon": "  classnamewifi" },
-            { "name": "  parking  ", "icon": "  classnameparking" }
-        ]
-    },
     "rooms": {
         "lists": [{
             "roomId": "1",

@@ -1,0 +1,41 @@
+<ion-content ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.init()">
+    roomInfo
+    <a ui-sref="bookResult">支付返回页面</a><br/>
+    {{roomInfo.room.roomName}} <br/>
+    {图片 轮播图}<br/>
+    <span ng-repeat="feature in roomInfo.room.roomFeatures">{{feature.name}}{{feature.icon}}</span><br/>
+
+    {{roomInfo.room.roomName}} <br/>
+    
+    {{roomInfo.room.bookStartDate |date}}--{{roomInfo.room.bookStartDate|date}}{天数}<br/>
+    
+    表单输入：
+    <form novalidate class="simple-form" name="orderDetail">
+        <label class="item item-input">
+          <span class="input-label" ng-model="roomInfo.roomNumber">房间数:</span>
+          <input type="number">
+        </label>
+        <label class="item item-input">
+          <span class="input-label" ng-model="roomInfo.contactName">联系人姓名:</span>
+          <input type="text">
+        </label>
+        <label class="item item-input">
+          <span class="input-label" ng-model="roomInfo.mobile">手机号:</span>
+          <input type="number">
+          
+        </label>
+        <button>接收验证码</button>
+        <label class="item item-input">
+          <span class="input-label" ng-model="roomInfo.authCode">验证码</span>
+          <input type="number">
+        </label>
+    </form>
+    列表：
+    <ion-list>
+      <ion-item ng-repeat="room in roomInfo.roomOrderLists" >
+        <p>日期：{{room.date |date}} 当日单价：{{room.price | currency}}</p>  
+      </ion-item>
+    </ion-list>
+    退改协议：<br/>{{roomInfo.room.changeDeal}}<br/>
+    <button ng-click="">确认支付</button>
+</ion-content>

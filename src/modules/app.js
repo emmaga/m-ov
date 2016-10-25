@@ -43,11 +43,11 @@
           }
         }
       })
-      .state('hotelInfo', {
-        url: '/hotelInfo/?roomId&hotelId',
+      .state('roomInfo', {
+        url: '/roomInfo/?roomId&hotelId',
         views: {
           '': {
-            templateUrl: 'pages/hotelInfo.html'
+            templateUrl: 'pages/roomInfo.html'
           }
         }
       })

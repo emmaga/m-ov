@@ -23,7 +23,5 @@
         return BACKEND_CONFIG.serverUrl + url;
       }
     };
-  }]);
-
-
+  }])
 })();
