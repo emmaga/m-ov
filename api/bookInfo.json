@@ -28,11 +28,7 @@
         "dealTime": "1288323623006",
         "orderTotalPri":123123123,
         "roomNumber":3,
-        "customerName":"张三",
-        "customerPhone":"张三",
-        "customerName":"张三",
-        "customerName":"张三"
+        "contactName":"张三",
+        "mobile":13783476981
     }
-        
-
 }

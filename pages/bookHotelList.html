@@ -5,7 +5,7 @@
     <a ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)">{{bhl.cityInfo.name}}</a>
     
     <br />{{bhl.projectInfo.hotelName}}<br />
-    <img ng-src="{{bhl.projectInfo.hotelPicSrc}}"> <br />
+    <img ng-src="{{bhl.projectInfo.hotelImgSrc}}"> <br />
     <!-- date picker start-->
     <div class="ab-container" ng-show="bhl.datePickerShow">
         <div class="bar bar-header">
@@ -30,7 +30,7 @@
    
    
     <ion-list>
-      <ion-item ng-repeat="hotel in bhl.hotels" ui-sref="bookRoomList({hotelId:hotel.hotelId})">
+      <ion-item ng-repeat="hotel in bhl.hotels" ui-sref="bookRoomList({hotelId:hotel.hotelId,checkIn:bhl.checkin,checkOut:bhl.checkout})">
         {{hotel.hotelAddress}}<br />
         <img ng-src="{{hotel.hotelImgSrc}}"> <br />
         {{hotel.hotelAveragePri}}<br />

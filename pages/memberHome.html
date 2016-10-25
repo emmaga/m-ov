@@ -2,10 +2,10 @@
     memberHome
     <a ng-click="root.showMainMenu(true)">menu</a>
 memberInfo
-    <a ui-sref="memberInfoEdit">编辑</a><br>
+    <a ui-sref="memberInfoEdit({memberId:memberHome.member.memberId})">编辑</a><br>
     <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
-    {{root.getParams('wxUserInfo').nickname}}<br>
-    {{memberHome.member.memberLevel}}<br />
-    {{memberHome.member.memberScore}}<br />
+    昵称：{{root.getParams('wxUserInfo').nickname}}<br>
+    {{memberHome.member.level}}<br />
+    {{memberHome.member.score}}<br />
     <a ui-sref="memberOrderList">订单列表</a>
 </div>

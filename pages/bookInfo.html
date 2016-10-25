@@ -16,8 +16,10 @@
 
     {{bookInfo.hotel.bookStartDate | date}}--{{bookInfo.hotel.bookStartDate|date}}{天数}<br/>
     
-    
-    
-  
+    联系信息：
+    {{bookInfo.roomOrder.contactName}} <br/>
+    {{bookInfo.roomOrder.mobile}} <br/>
+    {{bookInfo.room.paymentMethod}} <br/>
+    支付状态：{{bookInfo.room.paymentStatus}} <br/>
     <button ng-click="">确认支付</button>
 </div>    

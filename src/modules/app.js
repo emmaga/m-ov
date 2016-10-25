@@ -28,7 +28,7 @@
         templateUrl: 'pages/bookHotelList.html'
       })
       .state('bookRoomList', {
-        url: '/bookRoomList/:hotelId',
+        url: '/bookRoomList/?hotelId&checkIn&checkOut',
         views: {
           '': {
             templateUrl: 'pages/bookRoomList.html'
@@ -44,7 +44,7 @@
         }
       })
       .state('roomInfo', {
-        url: '/roomInfo/?roomId&hotelId',
+        url: '/roomInfo/?roomId&hotelId&checkIn&checkOut',
         views: {
           '': {
             templateUrl: 'pages/roomInfo.html'
@@ -100,7 +100,7 @@
         }
       })
       .state('memberInfoEdit', {
-        url: '/memberInfoEdit',
+        url: '/memberInfoEdit/?memberId',
         views: {
           '': {
             templateUrl: 'pages/memberInfoEdit.html'

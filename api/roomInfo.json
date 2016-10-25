@@ -12,9 +12,7 @@
         "roomFeatures": [
             { "name": "  wifi  ", "icon": "  classnamewifi" },
             { "name": "  parking  ", "icon": "  classnameparking" }
-        ],
-        "bookStartDate": "1288323623006",
-        "bookEndDate": "1288323623006"
+        ]
     },
     "hotel":{
         "hotelId": "1",
