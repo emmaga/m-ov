@@ -1,4 +1,6 @@
 {
   "myOrders": "我的订单",
-  "serverError": "哎哟，出错了"
+  "serverError": "哎哟，出错了",
+  "plsSelACheckInDate" : "请选择入住日期",
+  "plsSelACheckOutDate" : "请选择离店日期"
 }

@@ -2,7 +2,7 @@
   color:#aaa;
 }
 .tdp-header {
-  position: fixed;
+  position: relative;
 }
 .tdp-content {
   top: 85px;
@@ -59,4 +59,17 @@
 }
 .tdp-d-list .item{
   padding: 0;
+}
+.tdp-msg {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  left: 15px;
+  right:15px;
+  background: rgb(61, 61, 61); /* Fallback for older browsers without RGBA-support */
+  background: rgba(61, 61, 61, 0.8);
+  color: white;
+  z-index: 3;
+  font-size: 16px;
+  padding: 5px;
 }

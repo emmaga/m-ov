@@ -1,37 +1,39 @@
 <div ng-controller="travelDatePickerController as tdp">
 
-<div class="row tdp-center has-header tdp-header">
-    <div class="col col-14 positive">日</div>
-    <div class="col col-14">一</div>
-    <div class="col col-14">二</div>
-    <div class="col col-14">三</div>
-    <div class="col col-14">四</div>
-    <div class="col col-14">五</div>
-    <div class="col col-14 positive">六</div>
-</div>
-
-<ion-content class="content tdp-content">
-
-    <div class="list tdp-center">
-        
-        <div ng-repeat="m in tdp.dates">
-
-            <div class="item item-divider">
-                {{m.month | date:'yyyy年M月'}}
-            </div>
-            
-            <ul class="list tdp-d-list">
-                <li ng-repeat="w in m.weeks track by $index" class="item tdp-d-item">
-                  <div class="row tdp-d-row">
-                    <div ng-repeat="d in w track by $index" ng-click="tdp.clickDate(d)" ng-class="{'tdp-disable': tdp.dDisable(d), 'tdp-d-during': tdp.isDuring(d), 'tdp-d-checkin': tdp.isCheckin(d), 'tdp-d-checkout': tdp.isCheckout(d)}" class="col col-14">
-                        {{d | date:'d'}}
-                    </div>
-                  </div>
-                </li>
-            </ul>
-
-        </div>
+    <div class="row tdp-center has-header tdp-header">
+        <div class="col col-14 positive">日</div>
+        <div class="col col-14">一</div>
+        <div class="col col-14">二</div>
+        <div class="col col-14">三</div>
+        <div class="col col-14">四</div>
+        <div class="col col-14">五</div>
+        <div class="col col-14 positive">六</div>
     </div>
-</ion-content>
+    
+    <div class="tdp-msg" ng-show="tdp.msgShow">{{tdp.msg}}</div>
+
+    <ion-content class="content tdp-content">
+
+        <div class="list tdp-center">
+            
+            <div ng-repeat="m in tdp.dates">
+
+                <div class="item item-divider">
+                    {{m.month | date:'yyyy年M月'}}
+                </div>
+                
+                <ul class="list tdp-d-list">
+                    <li ng-repeat="w in m.weeks track by $index" class="item tdp-d-item">
+                      <div class="row tdp-d-row">
+                        <div ng-repeat="d in w track by $index" ng-click="tdp.clickDate(d)" ng-class="{'tdp-disable': tdp.dDisable(d), 'tdp-d-during': tdp.isDuring(d), 'tdp-d-checkin': tdp.isCheckin(d), 'tdp-d-checkout': tdp.isCheckout(d)}" class="col col-14">
+                            {{d | date:'d'}}
+                        </div>
+                      </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </ion-content>
 
 </div>
