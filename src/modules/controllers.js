@@ -3,8 +3,8 @@
 (function() {
   var app = angular.module('app.controllers', ['ngCookies'])
   
-  .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', 'backendUrl', 
-    function($scope, $window, $http, $filter, $ionicModal, backendUrl) {
+  .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 
+    function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl) {
       var self = this;
       
       // root全局变量：
@@ -27,7 +27,6 @@
 
 
       self.init = function() {
-
         // 获取 code 和 appid
         var qString = $window.location.search.substring(1);
         var qParts = qString.parseQuerystring();
@@ -70,13 +69,16 @@
       }
 
       self.getWxUserInfo = function(access_token, openid) {
-        // todo lang
+        
+        var lang = $translate.proposedLanguage() || $translate.use();
+        lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
         var data = {
           "access_token": access_token,
           "openid": openid,
-          "lang": "zh_CN"
+          "lang": lang
         };
-        
+        data = JSON.stringify(data);
+
         $http.post(backendUrl('wxuserinfo', 'server'), data)
           .success(function(data, status, headers, config) {
             // 将 wxUserInfo 记在 root params 缓存里
