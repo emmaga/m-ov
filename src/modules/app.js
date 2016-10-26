@@ -83,35 +83,11 @@
           }
         }
       })
-      .state('memberLogin', {
-        url: '/memberLogin',
-        views: {
-          '': {
-            templateUrl: 'pages/memberLogin.html'
-          }
-        }
-      })
-      .state('memberRegister', {
-        url: '/memberRegister',
-        views: {
-          '': {
-            templateUrl: 'pages/memberRegister.html'
-          }
-        }
-      })
       .state('memberInfoEdit', {
         url: '/memberInfoEdit/?memberId',
         views: {
           '': {
             templateUrl: 'pages/memberInfoEdit.html'
-          }
-        }
-      })
-      .state('memberResetPW', {
-        url: '/memberResetPW',
-        views: {
-          '': {
-            templateUrl: 'pages/memberResetPW.html'
           }
         }
       })
