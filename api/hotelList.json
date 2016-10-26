@@ -5,7 +5,7 @@
         "hotelLists": [{
             "hotelId": "1",
             "hotelName": "酒店名字一",
-            "hotelImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+            "hotelImgSrc": "api/img/a.jpg",
             "hotelAddress": "酒店地址一",
             "hotelFeatures": [
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
