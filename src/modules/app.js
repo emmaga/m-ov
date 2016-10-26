@@ -12,7 +12,7 @@
   ])
 
   .config(['$translateProvider',function($translateProvider){
-      var lang = navigator.language == 'zh-CN' ? navigator.language : 'en-US';
+      var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
       $translateProvider.preferredLanguage(lang);
       $translateProvider.useStaticFilesLoader({
           prefix: 'i18n/',
