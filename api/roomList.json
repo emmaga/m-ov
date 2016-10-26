@@ -4,8 +4,8 @@
     "data": {
         "lists": [{
             "roomId": "1",
-            "roomName": "房型名字二",
-            "roomImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+            "roomName": "海景公寓房",
+            "roomImgSrc": "api/img/room1.jpg",
             "roomAddress": "房型地址一",
             "roomFeatures": [
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
@@ -17,8 +17,8 @@
             "roomRemain":"0"
         }, {
             "roomId": "2",
-            "roomName": "房型名字二",
-            "roomImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+            "roomName": "沙滩独栋小屋",
+            "roomImgSrc": "api/img/room2.jpg",
             "roomAddress": "房型地址二",
             "roomFeatures": [
                 { "name": "wifi", "icon": "xxxxxx" },
@@ -28,6 +28,19 @@
             "roomMemberPri":"1700",
             "roomAveragePri": "1000",
             "roomRemain":"1"
-        }]
+        } , {
+            "roomId": "3",
+            "roomName": "漂浮小屋",
+            "roomImgSrc": "api/img/room3.jpg",
+            "roomAddress": "房型地址二",
+            "roomFeatures": [
+                { "name": "wifi", "icon": "xxxxxx" },
+                { "name": "wifi", "icon": "xxxxxx" }
+            ],
+            "roomPri":"2000",
+            "roomMemberPri":"1700",
+            "roomAveragePri": "1000",
+            "roomRemain":"1"
+        } ]
     }
 }

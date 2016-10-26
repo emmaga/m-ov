@@ -79,7 +79,7 @@ img.mod-radius{
 		height: 34px;
 		padding: 2px 8px 3px 0px;
 		line-height: 31px;
-		opacity: 0.5
+		/*opacity: 0.5*/
 	}
 
 
@@ -129,8 +129,6 @@ img.mod-radius{
 .mod-text-indent{
 	text-indent: 0.5em;
 }
-
-
 .mod-sticky-bar{
 	top: 50px;
 	left: 0;
@@ -138,6 +136,9 @@ img.mod-radius{
 	height: 157px;
 	background: rgba(255,0,0,.5)
 }
+.mod-color-theme{
+	color: rgb(20,140,230) !important;
+} 
 
 
 
