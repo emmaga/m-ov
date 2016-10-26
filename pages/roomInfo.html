@@ -6,7 +6,15 @@
     <span ng-repeat="feature in roomInfo.room.roomFeatures">{{feature.name}}{{feature.icon}}</span><br/>
 
     {{roomInfo.room.roomName}} <br/>
-    
+    <a ng-click="roomInfo.showDP(true); tdp.init(roomInfo.checkin, roomInfo.checkout,null , null, roomInfo.doAfterPickDates);">{{roomInfo.checkin | date:'yyyy-MM-dd'}}至{{roomInfo.checkout | date:'yyyy-MM-dd'}}</a><br>
+    <!-- date picker start-->
+    <div class="ab-container" ng-show="roomInfo.datePickerShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="roomInfo.showDP(false)">back</button>
+        </div>
+        <travel-date-picker></travel-date-picker>
+    </div>
+    <!-- date picker start-->
     {{roomInfo.room.bookStartDate |date}}--{{roomInfo.room.bookStartDate|date}}{天数}<br/>
     
     表单输入：

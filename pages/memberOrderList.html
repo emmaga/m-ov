@@ -6,13 +6,13 @@
     订单列表：
     <ion-list>
       <ion-item ng-repeat="order in mol.orderLists" >
-        订单号：{{order.orderId}}<br />
-        支付状态：{{order.paymentStatus}}<br />
-        酒店名字：{{order.hotelName}}<br />
-        客房名字：{{order.roomName}}<br />
-        房间数：{{order.roomNumber}}<br />
-        入住时间：{{order.bookStartDate | date}}离店时间：{{order.bookEndDate | date}}<br />
-        总价：{{order.orderTotalPri}}<br />
+        订单号：{{mol.orderId}}<br />
+        支付状态：{{mol.paymentStatus}}<br />
+        酒店名字：{{mol.hotelName}}<br />
+        客房名字：{{mol.roomName}}<br />
+        房间数：{{mol.roomNumber}}<br />
+        入住时间：{{mol.bookStartDate | date}}离店时间：{{mol.bookEndDate | date}}<br />
+        总价：{{mol.orderTotalPri}}<br />
         <a ui-sref="bookInfo" ng-show="order.paymentStatus==0">立即支付</a>
       </ion-item>
     </ion-list>   

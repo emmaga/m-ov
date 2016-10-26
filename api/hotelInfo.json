@@ -1,10 +1,10 @@
 {
     "rescode": "200",
     "errInfo": "",
-    "hotel":{
+    "data":{
+        "hotel":{
         "hotelId": "1",
         "hotelName": "酒店名字一",
-        "hotelImgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg",
         "hotelImgGallery":[{
             "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
         },{
@@ -16,4 +16,6 @@
         ]
         
     } 
+    }
+    
 }
