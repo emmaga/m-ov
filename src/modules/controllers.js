@@ -300,48 +300,55 @@
     function($scope,$http,$filter,$stateParams,$timeout,$ionicLoading,backendUrl) {
       console.log("bookRoomListController")
       var self = this;
-      self.hotelId = $stateParams.hotelId;
-      self.checkIn = $stateParams.checkIn;
-      self.checkOut = $stateParams.checkOut;
+      var aaa = $scope;
+      
        // 遮罩层 bool
-      self.showLoadingBool = {};
-      self.showLoadingBool.searchHotelInfoBool = false;
-      self.showLoadingBool.searchRoomListBool = false;
-
+      $scope.showLoadingBool = {};
+      $scope.showLoadingBool.searchHotelInfoBool = false;
+      $scope.showLoadingBool.searchRoomListBool = false;
       self.init = function() {
+        self.hotelId = $stateParams.hotelId;
+        self.checkIn = $stateParams.checkIn;
+        self.checkOut = $stateParams.checkOut;
+        
+
         self.searchHotelInfo();
-        self.searchRoomList();
+        // self.searchRoomList();
       }
-      self.showLoading = function(bool1,bool2){
-        if (bool1 && bool2) {
-             $ionicLoading.hide();
-         } else {
-           $ionicLoading.show({
-                template: 'Loading...'
-              })   
-        }
-      };
-      $scope.$watch(self.showLoadingBool, function(newVal, oldVal) {
+      // self.showLoading = function(bool1,bool2){
+      //   if (bool1 && bool2) {
+      //        $ionicLoading.hide();
+      //    } else {
+      //      $ionicLoading.show({
+      //           template: 'Loading...'
+      //         })   
+      //   }
+      // };
+      $scope.$watch('showLoadingBool', function(newVal, oldVal) {
         console.log("改变一次")
-        self.showLoading(self.showLoadingBool.searchHotelInfoBool,self.showLoadingBool.searchRoomListBool);
+        // self.showLoading(self.showLoadingBool.searchHotelInfoBool,self.showLoadingBool.searchRoomListBool);
+        
       },true);
+      // $timeout(function() {
+      //   $scope.showLoadingBool.searchHotelInfoBool = true;
+      // }, 1);
+       
       self.searchHotelInfo = function() {
-        
-        $timeout(function(){
-             $http({
-               method: $filter('ajaxMethod')(),
-               url: backendUrl('hotelInfo'),
-               data:{
-                 hotelId:self.hotelId
-               }
-             }).then(function successCallback(data, status, headers, config) {
-                 self.hotel = data.data.hotel;
-                 self.showLoadingBool.searchHotelInfoBool = true;
-               }, function errorCallback(data, status, headers, config) {
-                 alert(status)
-               });   
-          },1000);
-        
+         $http({
+           method: $filter('ajaxMethod')(),
+           url: backendUrl('hotelInfo'),
+           data:{
+             hotelId:self.hotelId
+           }
+         }).then(function successCallback(data, status, headers, config) {
+             self.hotel = data.data.hotel;
+             $timeout(function() {
+               $scope.showLoadingBool.searchHotelInfoBool = true;
+             }, 1);
+             console.log("searchHotelInfoBool")
+           }, function errorCallback(data, status, headers, config) {
+             alert(status)
+           });   
       }
       self.searchRoomList = function() {
         $http({
@@ -353,6 +360,7 @@
         }).then(function successCallback(data, status, headers, config) {
             self.rooms = data.data.rooms;
             self.showLoadingBool.searchRoomListBool = true;
+            console.log("searchRoomListBool")
           }, function errorCallback(data, status, headers, config) {
             alert(status)
           });  
