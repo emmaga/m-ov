@@ -1,17 +1,14 @@
 <div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
 
-
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">订酒店</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
 
-
     <div class=" padding">
         <!-- doodle/海报 -->
         <div class="mod-doodle">
-            <br><br><br><br>
-            {酒店图片}
+            <img ng-src="{{bhl.projectInfo.hotelImgSrc}}"> 
         </div>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
@@ -30,7 +27,7 @@
         <h3 class="mod-font-light mod-text-indent">为您找到10个酒店</h3>
 
 
-        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels" href="#/item/{{hotel.hotelId}}">
+        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.hotelId,checkIn:bhl.checkin,checkOut:bhl.checkout})">
             <div class="item mod-no-border">
                 <p>
                     <i class="icon ion-ios-location"></i>
@@ -47,7 +44,6 @@
 
 
     </div>
-
 
 
     <!-- date picker start-->
@@ -67,17 +63,5 @@
         <city-picker></city-picker>
     </div>
     <!-- city picker end-->
-
-
-
-    <a ui-sref="bookRoomList">
-        酒店1
-    </a><br />
-    <a ui-sref="bookRoomList">
-        酒店2
-    </a><br />
-    <a ui-sref="bookRoomList">
-        酒店3
-    </a><br />
    
 </div>    

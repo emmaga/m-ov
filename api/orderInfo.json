@@ -1,0 +1,33 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "data":{
+        "hotel":{
+            "hotelId": "1",
+            "hotelName": "酒店名字一",
+            "bookStartDate": "1288323623006",
+            "bookEndDate": "1288323623006"
+        },
+        "room":{
+            "roomId": "1",
+            "roomName": "房型名字一",
+            "roomImgSrc":"http://otatest.cleartv.cn/demo/demo/uca-url.svg",
+            "changeDeal": "请不要退房或改签",
+            "roomFeatures": [
+                { "name": "  wifi  ", "icon": "  classnamewifi" },
+                { "name": "  parking  ", "icon": "  classnameparking" }
+            ],
+            "paymentStatus": "1" ,
+            "paymentMethod":"wechat"
+        },
+        "roomOrder" : {
+            "orderId": "111111111111111",
+            "dealTime": "1288323623006",
+            "orderTotalPri":"123123123",
+            "roomNumber":"3",
+            "contactName":"张三",
+            "mobile":"13783476981"
+        }
+    }
+   
+}

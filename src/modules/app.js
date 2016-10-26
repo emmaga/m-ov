@@ -28,7 +28,7 @@
         templateUrl: 'pages/bookHotelList.html'
       })
       .state('bookRoomList', {
-        url: '/bookRoomList',
+        url: '/bookRoomList/?hotelId&checkIn&checkOut',
         views: {
           '': {
             templateUrl: 'pages/bookRoomList.html'
@@ -43,27 +43,19 @@
           }
         }
       })
-      .state('hotelInfo', {
-        url: '/hotelInfo',
+      .state('roomInfo', {
+        url: '/roomInfo/?roomId&hotelId&checkIn&checkOut',
         views: {
           '': {
-            templateUrl: 'pages/hotelInfo.html'
+            templateUrl: 'pages/roomInfo.html'
           }
         }
       })
-      .state('bookInfo', {
-        url: '/bookInfo',
+      .state('orderInfo', {
+        url: '/orderInfo',
         views: {
           '': {
-            templateUrl: 'pages/bookInfo.html'
-          }
-        }
-      })
-      .state('bookResult', {
-        url: '/bookResult',
-        views: {
-          '': {
-            templateUrl: 'pages/bookResult.html'
+            templateUrl: 'pages/orderInfo.html'
           }
         }
       })
@@ -100,7 +92,7 @@
         }
       })
       .state('memberInfoEdit', {
-        url: '/memberInfoEdit',
+        url: '/memberInfoEdit/?memberId',
         views: {
           '': {
             templateUrl: 'pages/memberInfoEdit.html'

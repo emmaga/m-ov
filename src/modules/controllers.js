@@ -83,7 +83,6 @@
             });
           }, 1000);
         };
-
       }
 
       self.setParams = function(name, val) {
@@ -181,110 +180,33 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$timeout', '$filter', '$location', '$http', '$stateParams', 'backendUrl',
-    function($scope, $timeout, $filter, $location, $http, $stateParams, backendUrl) {
-
+  .controller('bookHotelListController', ['$scope', '$timeout', '$filter', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl',
+    function($scope, $filter, $timeout, $location, $http, $stateParams, loadingService, backendUrl) {
       var self = this;
-      console.log($stateParams.sDate + ', ' + $stateParams.eDate);
 
+      // console.log($stateParams.sDate + ', ' + $stateParams.eDate);
       self.init = function() {
-        
+
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
 
+        // 遮罩层 bool
+        self.showLoadingBool = {};
+        self.showLoadingBool.searchProjectInfoBool =false;
+        self.showLoadingBool.searchCityListsBool =false;
+        self.showLoadingBool.searchHotelListBool =false;
+        loadingService(self.showLoadingBool);
         self.datePickerShow = false;
         self.hotels = {};
         self.checkin = new Date().getTime();
         self.checkout = new Date().getTime() + 24*60*60*1000;
-        self.cityLists = [
-          {
-            "initials": "全部",
-            "lists": [
-              {
-                "cityName": "全部",
-                "cityId": "0"
-              }
-            ]
-          },
-          {
-            "initials": "A",
-            "lists": [
-              {
-                "cityName": "阿尔山",
-                "cityId": "1"
-              },
-              {
-                "cityName": "阿克苏",
-                "cityId": "2"
-              },
-              {
-                "cityName": "澳门",
-                "cityId": "3"
-              }
-            ]
-          },
-          {
-            "initials": "B",
-            "lists": [
-              {
-                "cityName": "北京",
-                "cityId": "4"
-              }
-            ]
-          },
-          {
-            "initials": "H",
-            "lists": [
-              {
-                "cityName": "海口",
-                "cityId": "5"
-              },
-              {
-                "cityName": "杭州",
-                "cityId": "6"
-              }
-            ]
-          },
-          {
-            "initials": "L",
-            "lists": [
-              {
-                "cityName": "丽江",
-                "cityId": "7"
-              }
-            ]
-          },
-          {
-            "initials": "S",
-            "lists": [
-              {
-                "cityName": "上海",
-                "cityId": "8"
-              },
-              {
-                "cityName": "三亚",
-                "cityId": "9"
-              },
-              {
-                "cityName": "沈阳",
-                "cityId": "10"
-              },
-              {
-                "cityName": "石家庄",
-                "cityId": "11"
-              },
-              {
-                "cityName": "苏州",
-                "cityId": "12"
-              }
-            ]
-          }
-        ];
         self.cityInfo = {id: '0', name: '全部'};
-        self.search();
+        self.searchProjectInfo();
+        self.searchHotelList();
+        self.searchCityLists();
+       
+        
       }
-
-      // 显示／隐藏日期选择器
       self.showDP = function(boo) {
         self.datePickerShow = boo ? boo : false;
       };
@@ -305,80 +227,217 @@
         self.cityInfo = {id: cityId, name: cityName};
         self.showCP(false);
       };
+      // 项目信息
+      self.searchProjectInfo = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('projectInfo')
+        }).then(function successCallback(data, status, headers, config) {
+            self.projectInfo = data.data.projectInfo;
+            self.showLoadingBool.searchProjectInfoBool =true; 
+            loadingService(self.showLoadingBool);
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchProjectInfoBool =true; 
+            loadingService(self.showLoadingBool);
+            alert(status)
+          });  
+      }
 
+      // 获取城市
+      self.searchCityLists = function() {
+        
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('cityLists')
+        }).then(function successCallback(data, status, headers, config) {
+            self.cityLists = data.data.data.cityLists;
+            self.showLoadingBool.searchCityListsBool =true;
+            loadingService(self.showLoadingBool);
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchCityListsBool =true;
+            loadingService(self.showLoadingBool);
+            alert(status)
+          });  
+      }
+
+      self.searchHotelList = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('hotelList')
+        }).then(function successCallback(data, status, headers, config) {
+            self.hotels = data.data.data.hotelLists;
+            self.showLoadingBool.searchHotelListBool =true;
+            loadingService(self.showLoadingBool);
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchHotelListBool =true;
+            loadingService(self.showLoadingBool);
+            alert(status)
+          });  
+      }
+  }])
+
+  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
+      var self = this;
+
+      self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
+        self.hotelId = $stateParams.hotelId;
+        self.checkIn = $stateParams.checkIn;
+        self.checkOut = $stateParams.checkOut;
+
+        // 遮罩层 bool
+        self.showLoadingBool = {};
+        self.showLoadingBool.searchHotelInfoBool =false; 
+        self.showLoadingBool.searchRoomListBool = false;
+        loadingService(self.showLoadingBool);
+
+        self.searchHotelInfo();
+        self.searchRoomList();
+      }
+      
+      self.searchHotelInfo = function() {
+        
+        $timeout(function(){
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('hotelInfo'),
+            data:{
+              hotelId:self.hotelId
+            }
+          }).then(function successCallback(data, status, headers, config) {
+              self.hotel = data.data.data.hotel;
+              self.showLoadingBool.searchHotelInfoBool =true; 
+              loadingService(self.showLoadingBool);
+              console.log("searchHotelInfoBool")
+            }, function errorCallback(data, status, headers, config) {
+              self.showLoadingBool.searchHotelInfoBool =true; 
+              loadingService(self.showLoadingBool);
+              alert(status)
+            });  
+        },500)
+      }
+
+      self.searchRoomList = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('roomList'),
+          data:{
+            hotelId:self.hotelId
+          }
+        }).then(function successCallback(data, status, headers, config) {
+            self.rooms = data.data.data;
+            self.showLoadingBool.searchRoomListBool = true;
+            loadingService(self.showLoadingBool);
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchHotelInfoBool =true; 
+            loadingService(self.showLoadingBool);
+            alert(status)
+          });  
+      }
+
+    }
+  ])
+
+
+  .controller('roomInfoController', ['$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+    function($http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
+      console.log("roomInfoController")
+      console.log($stateParams)
+
+      var self = this;
+      self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
+        // 遮罩层 bool
+        self.showLoadingBool = {};
+        self.showLoadingBool.searchBool =false; 
+        loadingService(self.showLoadingBool);
+        
+        self.checkin = $stateParams.checkIn;
+        self.checkout = $stateParams.checkOut;
+        self.search();
+      }
+      
+      self.showDP = function(boo) {
+        self.datePickerShow = boo ? boo : false;
+      };
+      self.doAfterPickDates = function(checkin, checkout) {
+        self.checkin = checkin;
+        self.checkout = checkout;
+        self.showDP(false);
+      };
+      self.search = function() {
+       $timeout(function(){
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('roomInfo'),
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+            self.room = data.data.data.room;
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool);
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool);
+            alert(status)
+          }); 
+       },500)
+         
+      }
+      self.getAuthCode = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('authCode')
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });
+      }
+    }
+  ])
+
+  .controller('orderInfoController', ['$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http,$filter,$stateParams,loadingService,backendUrl) {
+      console.log("bookInfoController")
+      var self = this;
+      
+      self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
+        // 遮罩层 bool
+        self.showLoadingBool = {};
+        self.showLoadingBool.searchBool =false;
+        loadingService(self.showLoadingBool);
+
+        self.search();
+      }
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('bookHotelList')
+          url: backendUrl('orderInfo')
         }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
-            self.hotels = data.data.lists;
-            console.log(self.hotels)
+            self.room = data.data.data.room;
+            self.hotel = data.data.data.hotel;
+            self.roomOrder = data.data.data.roomOrder;
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool);
             alert(status)
-          });  
-
-      }
-    }
-  ])
-
-  .controller('bookRoomListController', ['$http', '$filter', '$scope',
-    function($http, $filter, $scope) {
-      var self = this;
-
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
-      }
-      self.search = function() {
-        $http({
-          method: $filter('ajaxMethod')(),
-          url: backendUrl('bookRoomList')
-        }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
-            self.hotels = data.data.lists;
-            console.log(self.hotels)
-          }, function errorCallback(data, status, headers, config) {
-            alert(status)
-          });  
-
-      }
-    }
-  ])
-
-  .controller('hotelInfoController', ['$http', '$scope',
-    function($http, $scope) {
-      var self = this;
-      
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
-      }
-    }
-  ])
-
-  .controller('bookInfoController', ['$http', '$scope',
-    function($http, $scope) {
-      var self = this;
-      
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
-      }
-    }
-  ])
-
-  .controller('bookResultController', ['$http', '$scope',
-    function($http, $scope) {
-      var self = this;
-      
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
-      }
-    }
-  ])
-
+          }); 
+      } 
+  }])
+  
   .controller('bookRoomSoldOutController', ['$http', '$scope',
     function($http, $scope) {
       var self = this;
@@ -390,12 +449,39 @@
     }
   ])
   
-  .controller('memberHomeController', ['$http', '$scope',
-    function($http, $scope) {
+  .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+      console.log("memberHomeController")
+
       var self = this;
-      
       self.init = function() {
-        $scope.root.wxShare();
+
+          // 注册微信分享朋友和朋友圈
+          $scope.root.wxShare();
+
+          // 遮罩层 bool
+          self.showLoadingBool = {};
+          self.showLoadingBool.searchBool =false; 
+          self.showLoading(self.showLoadingBool.searchBool)
+
+          self.search();
+      }
+      self.search = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('memberInfo')
+          
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+            self.member = data.data.data.member;
+            console.log(self.member)
+            self.showLoadingBool.searchBool =true; 
+            self.showLoading(self.showLoadingBool.searchBool)
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchBool =true; 
+            self.showLoading(self.showLoadingBool.searchBool)
+            alert(status)
+          });
       }
     }
   ])
@@ -422,13 +508,53 @@
     }
   ])
 
-  .controller('memberInfoEditController', ['$http', '$scope',
-    function($http, $scope) {
+  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+      console.log("memberInfoEditController");
       var self = this;
-      
+      self.memberId = $stateParams.memberId;
       self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
+
+          // 注册微信分享朋友和朋友圈
+          $scope.root.wxShare();
+
+          // 遮罩层 bool
+          self.showLoadingBool = {};
+          self.showLoadingBool.searchBool =false; 
+          loadingService(self.showLoadingBool);
+
+          self.search();
+      }
+      
+      self.search = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('memberInfo'),
+          data:{
+            hotelId:$stateParams.hotelId,
+            roomId:$stateParams.roomId,
+          }
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+            self.member = data.data.data.member;
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool);
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool);
+            alert(status)
+          });  
+      }
+
+      self.getAuthCode = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('authCode')
+        }).then(function successCallback(data, status, headers, config) {
+            console.log(data)
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });
       }
     }
   ])
@@ -444,13 +570,35 @@
     }
   ])
 
-  .controller('memberOrderListController', ['$scope',
-    function($scope) {
+  .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
       var self = this;
 
       self.init = function() {
+        
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
+
+        // 遮罩层 bool
+        self.showLoadingBool = {};
+        self.showLoadingBool.searchBool =false; 
+        loadingService(self.showLoadingBool)
+        self.search();
+      }
+      self.search = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('orderList')
+        }).then(function successCallback(data, status, headers, config) {
+           console.log(data)
+            self.orderLists = data.data.data.orderLists;
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool)
+          }, function errorCallback(data, status, headers, config) {
+            self.showLoadingBool.searchBool =true; 
+            loadingService(self.showLoadingBool)
+            alert(status)
+          });
       }
   }])
 

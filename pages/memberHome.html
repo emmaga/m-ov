@@ -5,9 +5,10 @@
     </div>
 <br><br><br><br><br><br><br><br><br><br>
 memberInfo
-    <a ui-sref="memberInfoEdit">编辑</a>
+    <a ui-sref="memberInfoEdit({memberId:memberHome.member.memberId})">编辑</a><br>
     <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
-    {{root.getParams('wxUserInfo').nickname}}
-    {会员等级}{积分}<br />
+    昵称：{{root.getParams('wxUserInfo').nickname}}<br>
+    {{memberHome.member.level}}<br />
+    {{memberHome.member.score}}<br />
     <a ui-sref="memberOrderList">订单列表</a>
 </div>

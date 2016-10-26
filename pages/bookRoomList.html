@@ -1,25 +1,17 @@
 <div ng-controller="bookRoomListController as brl" ng-init="brl.init()">
+
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">{酒店名}</h1>
+        <h1 class="title">{{brl.hotel.hotelName}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-    
+
     <!-- 内容 -->
     <div class="padding mod-has-header">
         
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide>
-               <h1>{图片 轮播图}</h1>
-            </ion-slide>
-            <ion-slide>
-               <h1>{图片 轮播图}</h1>
-            </ion-slide>
-            <ion-slide>
-               <h1>{图片 轮播图}</h1>
-            </ion-slide>
-            <ion-slide>
-               <h1>{图片 轮播图}</h1>
+            <ion-slide >
+               <img ng-src="{{brl.hotel.hotelImgSrc}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
@@ -30,12 +22,11 @@
                 {地址}
             </a>
             <a class="item" ui-sref="hotelInfo">
-                {酒店标签}
+                <span ng-repeat="feature in brl.hotel.hotelFeatures">{{feature.name}}{{feature.icon}}
+                </span>
             </a>
             <div class="mod-split-line mod-break-2padding"></div>
         </div>
-
-
         <!-- 查询 -->
         <div class="list padding mod-inset-forms">
             <a class="item" ui-sref="hotelInfo">
@@ -45,18 +36,16 @@
 
 
         <!-- 客房列表 -->
-        <div class="card mod-flat" ui-sref="bookInfo">
+        <div class="card mod-flat" ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId,checkIn:brl.checkIn,checkOut:brl.checkOut})">
             <div class="item mod-no-border">
-                <img class="full-image mod-radius" alt="{img src}">
-                <h2>{非会员均价}</h2>
-                <h2>{会员均价}</h2>
-                <h2>{预定按钮/已定完}</h2>
-                <h2>{客房标签}</h2>
+                <img class="full-image mod-radius" ng-src="{{room.roomImgSrc}}">
+                均价会员价    {{room.roomAveragePri}}<br />
+                {预订按钮/已定完}<br/>
+                房型名字：   {{room.roomName}}<br />
+                房型标签：<span ng-repeat="feature in room.roomFeatures">{{feature.name}}{{feature.icon}}</span>
             </div>
             <div class="mod-split-line mod-15shorter"></div>
         </div>
-        
-
         
 
     </div>

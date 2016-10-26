@@ -23,7 +23,25 @@
         return BACKEND_CONFIG.serverUrl + url;
       }
     };
-  }]);
-
-
+  }])
+  // 页面加载数据时 遮罩层
+  .service('loadingService',['$ionicLoading',function($ionicLoading){
+    return function(obj){
+        var flag = 0, num = 0;
+        for (var key in obj) {
+          ++flag;
+          if (obj[key] == true){
+          ++num;
+          }
+        }
+        if (flag == num) {
+          $ionicLoading.hide();
+        } else {
+          $ionicLoading.show({
+               template: 'Loading...'
+             })  
+        }
+    }
+    
+  }])
 })();
