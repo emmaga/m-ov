@@ -19,6 +19,13 @@
 
 
 
+/*content*/
+.mod-has-header{
+	margin-top: 44px;
+}
+
+
+
 /*bar*/
 .bar.mod-fixed{
 	position: fixed !important;
@@ -147,4 +154,11 @@ img.mod-radius{
 }
 .bar.bar-light{
 	background-color: rgba(255,255,255,.95) !important;
+}
+/*改小slider标记点*/
+.slider-pager .slider-pager-page{
+	width: 10px !important;
+}
+.ion-record:before{
+    transform: scale(0.5);
 }
