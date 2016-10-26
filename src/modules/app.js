@@ -35,6 +35,14 @@
           }
         }
       })
+      .state('hotelInfo', {
+        url: '/hotelInfo/?hotelId',
+        views: {
+          '': {
+            templateUrl: 'pages/hotelInfo.html'
+          }
+        }
+      })
       .state('bookHotelList', {
         url: '/bookHotelList:?sDate&eDate',
         views: {

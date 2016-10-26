@@ -180,7 +180,7 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$timeout', '$filter', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl',
+  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl',
     function($scope, $filter, $timeout, $location, $http, $stateParams, loadingService, backendUrl) {
       var self = this;
 
@@ -342,9 +342,19 @@
     }
   ])
 
-
-  .controller('roomInfoController', ['$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-    function($http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
+  .controller('hotelInfoController', ['$http', '$scope',
+    function($http, $scope) {
+      var self = this;
+      
+      self.init = function() {
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+      }
+    }
+  ])
+  
+  .controller('roomInfoController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
       console.log("roomInfoController")
       console.log($stateParams)
 
@@ -403,8 +413,8 @@
     }
   ])
 
-  .controller('orderInfoController', ['$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http,$filter,$stateParams,loadingService,backendUrl) {
+  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($scope,$http,$filter,$stateParams,loadingService,backendUrl) {
       console.log("bookInfoController")
       var self = this;
       
@@ -462,7 +472,7 @@
           // 遮罩层 bool
           self.showLoadingBool = {};
           self.showLoadingBool.searchBool =false; 
-          self.showLoading(self.showLoadingBool.searchBool)
+          loadingService(self.showLoadingBool.searchBool)
 
           self.search();
       }
@@ -476,10 +486,10 @@
             self.member = data.data.data.member;
             console.log(self.member)
             self.showLoadingBool.searchBool =true; 
-            self.showLoading(self.showLoadingBool.searchBool)
+            loadingService(self.showLoadingBool.searchBool)
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
-            self.showLoading(self.showLoadingBool.searchBool)
+            loadingService(self.showLoadingBool.searchBool)
             alert(status)
           });
       }
@@ -601,5 +611,6 @@
           });
       }
   }])
+
 
 })();

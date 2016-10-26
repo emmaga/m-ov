@@ -1,7 +1,6 @@
 <ion-content ng-controller="memberOrderListController as mol" ng-init="mol.init()">
     memberOrderList
     <a ui-sref="bookRoomSoldOut">不存在的订单</a>
-    <a ui-sref="bookResult">订单详情</a>
     <!-- 列表 -->
     订单列表：
     <ion-list>
@@ -13,7 +12,7 @@
         房间数：{{mol.roomNumber}}<br />
         入住时间：{{mol.bookStartDate | date}}离店时间：{{mol.bookEndDate | date}}<br />
         总价：{{mol.orderTotalPri}}<br />
-        <a ui-sref="bookInfo" ng-show="order.paymentStatus==0">立即支付</a>
+        <a ui-sref="orderInfo" >订单详情</a>
       </ion-item>
     </ion-list>   
 </ion-content>

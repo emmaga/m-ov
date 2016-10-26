@@ -3,13 +3,13 @@
     "errInfo": "",
     "data":{
         "member": {
-        "memberId": "123321123312",
-        "level": "钻石会员",
-        "score": "100",
-        "realName":"LiSi",
-        "mobile": "13783476981",
-        "idCardNumber": "410181999200000000",
-        "birthday": "100",
+            "memberId": "123321123312",
+            "level": "钻石会员",
+            "score": "100",
+            "realName":"LiSi",
+            "mobile": "13783476981",
+            "idCardNumber": "410181999200000000",
+            "birthday": "100"
          }
     }
     
