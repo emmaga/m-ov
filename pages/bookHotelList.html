@@ -16,11 +16,11 @@
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
         <div class="list padding mod-inset-forms">
-            <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true);">
+            <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)">
                 <span class="input-label">目的地</span>
-                <p class="mod-select-input">当前位置：上海</p>
+                <p class="mod-select-input">当前位置：{{bhl.cityInfo.name}}</p>
             </div>
-            <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickerDates);">
+            <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">
                 <span class="input-label">日期</span>
                 <p class="mod-select-input">{{bhl.checkin | date:'MM月dd日'}}入住 > {{bhl.checkout | date:'MM月dd日'}}离店</p>
             </div>
