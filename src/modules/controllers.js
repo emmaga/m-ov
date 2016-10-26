@@ -3,8 +3,8 @@
 (function() {
   var app = angular.module('app.controllers', ['ngCookies'])
   
-  .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', 'backendUrl', 
-    function($scope, $window, $http, $filter, $ionicModal, backendUrl) {
+  .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 
+    function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl) {
       var self = this;
       
       // root全局变量：
@@ -42,6 +42,47 @@
 
         // wx注册
         self.wxConfigJSSDK();
+
+        // wx share
+        self.wxShare = function() {
+          // 1秒后再获取link，不然还是上一个页面的link
+          setTimeout(function() {
+            // 分享给朋友
+            wx.onMenuShareAppMessage({
+              title: '', // 分享标题
+              desc: '', // 分享描述
+              link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+
+              self.getParams('appid')+'&redirect_uri='+ 
+              encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash)+
+              '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
+              imgUrl: '', // 分享图标
+              type: '', // 分享类型,music、video或link，不填默认为link
+              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+              success: function () { 
+                  // 用户确认分享后执行的回调函数
+              },
+              cancel: function () { 
+                  // 用户取消分享后执行的回调函数
+              }
+            });
+
+            // 分享到朋友圈
+            wx.onMenuShareTimeline({
+              title: '', // 分享标题
+              link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+
+              self.getParams('appid')+'&redirect_uri='+ 
+              encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash)+
+              '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
+              imgUrl: '', // 分享图标
+              success: function () { 
+                  // 用户确认分享后执行的回调函数
+              },
+              cancel: function () { 
+                  // 用户取消分享后执行的回调函数
+              }
+            });
+          }, 1000);
+        };
       }
 
       self.setParams = function(name, val) {
@@ -69,13 +110,16 @@
       }
 
       self.getWxUserInfo = function(access_token, openid) {
-        // todo lang
+        
+        var lang = $translate.proposedLanguage() || $translate.use();
+        lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
         var data = {
           "access_token": access_token,
           "openid": openid,
-          "lang": "zh_CN"
+          "lang": lang
         };
-        
+        data = JSON.stringify(data);
+
         $http.post(backendUrl('wxuserinfo', 'server'), data)
           .success(function(data, status, headers, config) {
             // 将 wxUserInfo 记在 root params 缓存里
@@ -110,7 +154,7 @@
                 timestamp: self.timestamp, // 必填，生成签名的时间戳
                 nonceStr: self.noncestr, // 必填，生成签名的随机串
                 signature: data.signature,// 必填，签名，见附录1
-                jsApiList: ['getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
               });
             }
             else {
@@ -136,12 +180,16 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$filter', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl',
-    function($scope, $filter, $location, $http, $stateParams, loadingService, backendUrl) {
+  .controller('bookHotelListController', ['$scope', '$timeout', '$filter', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl',
+    function($scope, $filter, $timeout, $location, $http, $stateParams, loadingService, backendUrl) {
       var self = this;
 
       // console.log($stateParams.sDate + ', ' + $stateParams.eDate);
       self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
         // 遮罩层 bool
         self.showLoadingBool = {};
         self.showLoadingBool.searchProjectInfoBool =false;
@@ -171,7 +219,8 @@
       self.doAfterPickDates = function(checkin, checkout) {
         self.checkin = checkin;
         self.checkout = checkout;
-        self.showDP(false);
+        // 延时半秒隐藏
+        $timeout(function() {self.showDP(false);}, 500);
       };
 
       self.doAfterPickCity = function(cityId, cityName) {
@@ -193,6 +242,7 @@
             alert(status)
           });  
       }
+
       // 获取城市
       self.searchCityLists = function() {
         
@@ -209,6 +259,7 @@
             alert(status)
           });  
       }
+
       self.searchHotelList = function() {
         $http({
           method: $filter('ajaxMethod')(),
@@ -223,18 +274,17 @@
             alert(status)
           });  
       }
-    }
-  
-  ])
+  }])
 
   .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
     function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
-      console.log("bookRoomListController")
       var self = this;
-      
-      
 
       self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
         self.hotelId = $stateParams.hotelId;
         self.checkIn = $stateParams.checkIn;
         self.checkOut = $stateParams.checkOut;
@@ -269,8 +319,8 @@
               alert(status)
             });  
         },500)
-          
       }
+
       self.searchRoomList = function() {
         $http({
           method: $filter('ajaxMethod')(),
@@ -292,12 +342,18 @@
     }
   ])
 
+
   .controller('roomInfoController', ['$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
     function($http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
       console.log("roomInfoController")
       console.log($stateParams)
+
       var self = this;
       self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
         // 遮罩层 bool
         self.showLoadingBool = {};
         self.showLoadingBool.searchBool =false; 
@@ -342,7 +398,7 @@
             console.log(data)
           }, function errorCallback(data, status, headers, config) {
             alert(status)
-          });  
+          });
       }
     }
   ])
@@ -353,6 +409,10 @@
       var self = this;
       
       self.init = function() {
+
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
         // 遮罩层 bool
         self.showLoadingBool = {};
         self.showLoadingBool.searchBool =false;
@@ -374,27 +434,31 @@
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
             alert(status)
-          });  
-      }
-    }
-  ])
-
+          }); 
+      } 
+  }])
   
-  .controller('bookRoomSoldOutController', ['$http', 
-    function($http) {
+  .controller('bookRoomSoldOutController', ['$http', '$scope',
+    function($http, $scope) {
       var self = this;
       
       self.init = function() {
-        
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
       }
     }
   ])
   
-  .controller('memberHomeController', ['$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http,$filter,$stateParams,loadingService,backendUrl) {
+  .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
       console.log("memberHomeController")
+
       var self = this;
       self.init = function() {
+
+          // 注册微信分享朋友和朋友圈
+          $scope.root.wxShare();
+
           // 遮罩层 bool
           self.showLoadingBool = {};
           self.showLoadingBool.searchBool =false; 
@@ -417,37 +481,43 @@
             self.showLoadingBool.searchBool =true; 
             self.showLoading(self.showLoadingBool.searchBool)
             alert(status)
-          });  
+          });
       }
     }
   ])
 
-  .controller('memberLoginController', ['$http', 
-    function($http) {
+  .controller('memberLoginController', ['$http', '$scope',
+    function($http, $scope) {
       var self = this;
       
       self.init = function() {
-        
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
       }
     }
   ])
 
-  .controller('memberRegisterController', ['$http', 
-    function($http) {
+  .controller('memberRegisterController', ['$http', '$scope',
+    function($http, $scope) {
       var self = this;
       
       self.init = function() {
-        
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
       }
     }
   ])
 
-  .controller('memberInfoEditController', ['$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http,$filter,$stateParams,loadingService,backendUrl) {
-      console.log("memberInfoEditController")
+  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+      console.log("memberInfoEditController");
       var self = this;
       self.memberId = $stateParams.memberId;
       self.init = function() {
+
+          // 注册微信分享朋友和朋友圈
+          $scope.root.wxShare();
+
           // 遮罩层 bool
           self.showLoadingBool = {};
           self.showLoadingBool.searchBool =false; 
@@ -484,26 +554,31 @@
             console.log(data)
           }, function errorCallback(data, status, headers, config) {
             alert(status)
-          });  
+          });
       }
     }
   ])
 
-  .controller('memberResetPWController', ['$http', 
-    function($http) {
+  .controller('memberResetPWController', ['$http', '$scope',
+    function($http, $scope) {
       var self = this;
       
       self.init = function() {
-        
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
       }
     }
   ])
 
-  .controller('memberOrderListController', ['$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http,$filter,$stateParams,loadingService,backendUrl) {
+  .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
       var self = this;
 
       self.init = function() {
+        
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+
         // 遮罩层 bool
         self.showLoadingBool = {};
         self.showLoadingBool.searchBool =false; 
@@ -523,7 +598,7 @@
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool)
             alert(status)
-          });  
+          });
       }
   }])
 

@@ -59,14 +59,6 @@
           }
         }
       })
-      .state('bookResult', {
-        url: '/bookResult',
-        views: {
-          '': {
-            templateUrl: 'pages/bookResult.html'
-          }
-        }
-      })
       .state('bookRoomSoldOut', {
         url: '/bookRoomSoldOut',
         views: {

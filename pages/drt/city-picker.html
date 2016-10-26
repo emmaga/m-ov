@@ -1,4 +1,4 @@
-<div ng-controller="cityPickerController as cp" ng-init="cp.init()">
+<div ng-controller="cityPickerController as cp">
     <div class="cp-side cp-wrapper">
         <div class="cp-cell">
             <a ng-repeat="cities in cp.cityLists" ng-click="cp.scrollTo(cities.initials)">{{cities.initials}}<br /></a>
