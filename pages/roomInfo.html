@@ -11,8 +11,8 @@
     <div class="padding mod-has-header">
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide>
-               <h1>{图片 轮播图}</h1>
+            <ion-slide ng-repeat="room in roomInfo.room.roomImgGallery">
+               <img ng-src="{{room.imgSrc}}">  
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>

@@ -399,6 +399,7 @@
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
             self.room = data.data.data.room;
+            console.log(self.room)
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
