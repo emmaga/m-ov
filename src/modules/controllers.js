@@ -266,6 +266,7 @@
           url: backendUrl('hotelList')
         }).then(function successCallback(data, status, headers, config) {
             self.hotels = data.data.data.hotelLists;
+            self.hotelNum = data.data.data.hotelNum;
             self.showLoadingBool.searchHotelListBool =true;
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
@@ -288,7 +289,7 @@
         self.hotelId = $stateParams.hotelId;
         self.checkIn = $stateParams.checkIn;
         self.checkOut = $stateParams.checkOut;
-
+       console.log($stateParams)
         // 遮罩层 bool
         self.showLoadingBool = {};
         self.showLoadingBool.searchHotelInfoBool =false; 
@@ -298,7 +299,15 @@
         self.searchHotelInfo();
         self.searchRoomList();
       }
-      
+      self.showDP = function(boo) {
+        self.datePickerShow = boo ? boo : false;
+      };
+      self.doAfterPickDates = function(checkin, checkout) {
+        self.checkIn = checkin;
+        self.checkOut = checkout;
+        // 延时半秒隐藏
+        $timeout(function() {self.showDP(false);}, 500);
+      };
       self.searchHotelInfo = function() {
         
         $timeout(function(){
@@ -547,6 +556,7 @@
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
             self.member = data.data.data.member;
+            console.log(self.member)
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {

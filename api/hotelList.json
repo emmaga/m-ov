@@ -2,6 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
+        "hotelNum":"10",
         "hotelLists": [{
             "hotelId": "1",
             "hotelName": "酒店名字一",
@@ -11,6 +12,7 @@
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
                 { "name": "  parking  ", "icon": "  classnameparking" }
             ],
+            "hotelMemberPri":"800",
             "hotelAveragePri": "1000"
         }, {
             "hotelId": "2",
@@ -21,7 +23,8 @@
                 { "name": "wifi", "icon": "xxxxxx" },
                 { "name": "wifi", "icon": "xxxxxx" }
             ],
-            "hotelAveragePri": "1000"
+            "hotelMemberPri":"900",
+            "hotelAveragePri": "1200"
         }]
     }
     
