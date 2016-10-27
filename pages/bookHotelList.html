@@ -19,8 +19,8 @@
             </div>
             <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">
                 <span class="input-label">日期</span>
-                <p class="mod-select-input mod-color-theme">{{bhl.checkin | date:'MM月dd日'}}入住 > {{bhl.checkout | date:'MM月dd日'}}离店</p>
-                <p>共{{ ( bhl.checkout-bhl.checkin) | dayNumbers }}天</p>
+                <p class="mod-select-input mod-color-theme">{{bhl.checkin | date:'MM月dd日'}}入住 > {{bhl.checkout | date:'MM月dd日'}}离店 共{{ ( bhl.checkout-bhl.checkin) | dayNumbers }}天</p>
+                <p></p>
             </div>
             <div class="mod-split-line mod-break-2padding"></div>
         </div>
@@ -34,8 +34,8 @@
                     <i class="icon ion-ios-location"></i>
                     {{hotel.hotelAddress}}
                 </p>
-                {酒店名称}
-                <img class="full-image mod-radius" ng-src="{{hotel.hotelImgSrc}}"> <br />
+                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.hotelImgSrc}});"></div>
+                <h2>{酒店名称}</h2>
                 <h2>原价：￥{{hotel.hotelAveragePri}}</h2>
                 <h2>会员价：￥{{hotel.hotelMemberPri}}</h2>
             </div>

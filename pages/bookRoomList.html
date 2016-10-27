@@ -43,7 +43,7 @@
         <!-- 客房列表 -->
         <div class="card mod-flat" ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId,checkIn:brl.checkIn,checkOut:brl.checkOut})">
             <div class="item mod-no-border">
-                <img class="full-image mod-radius" ng-src="{{room.roomImgSrc}}">
+                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{room.roomImgSrc}})"></div>
                 均价会员价    {{room.roomAveragePri}}<br />
                 {预订按钮/已定完}<br/>
                 房型名字：   {{room.roomName}}<br />
