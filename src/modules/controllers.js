@@ -277,10 +277,11 @@
       }
   }])
 
-  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
+  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'BACKEND_CONFIG',
+    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl,BACKEND_CONFIG) {
       var self = this;
-
+      console.log('bookRoomListController')
+      console.log(BACKEND_CONFIG)
       self.init = function() {
 
         // 注册微信分享朋友和朋友圈
@@ -289,6 +290,8 @@
         self.hotelId = $stateParams.hotelId;
         self.checkIn = $stateParams.checkIn;
         self.checkOut = $stateParams.checkOut;
+
+
        console.log($stateParams)
         // 遮罩层 bool
         self.showLoadingBool = {};
@@ -320,6 +323,9 @@
           }).then(function successCallback(data, status, headers, config) {
               self.hotel = data.data.data.hotel;
               self.showLoadingBool.searchHotelInfoBool =true; 
+
+              // 酒店 地图 
+              self.locationHref = BACKEND_CONFIG.mapUrl + '?x='+self.hotel.hotelLocation.X +'&y=' +self.hotel.hotelLocation.Y;
               loadingService(self.showLoadingBool);
               console.log("searchHotelInfoBool")
             }, function errorCallback(data, status, headers, config) {
