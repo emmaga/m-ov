@@ -45,6 +45,13 @@
 
       // st: 开始日期, et: 结束日期; 均为时间戳
       self.init = function(checkin, checkout, st, et, callback) {
+
+        // 入住，离店 多语言设置
+        var s = document.createElement('style');
+        s.innerText =  '.tdp-d-checkin:after{content:\''+$filter('translate')('checkIn')+'\'}';
+        s.innerText += '.tdp-d-checkout:after{content:\''+$filter('translate')('checkOut')+'\'}';
+        document.body.appendChild(s);
+
         self.st = st ? st : new Date().getTime();
         //可选日期结束日期默认:今天后的半年
         self.et = et ? et: self.st + (30*3+31*3)*24*60*60*1000;
