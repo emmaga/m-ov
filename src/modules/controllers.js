@@ -378,8 +378,8 @@
         self.showLoadingBool.searchBool =false; 
         loadingService(self.showLoadingBool);
         
-        self.checkin = $stateParams.checkIn;
-        self.checkout = $stateParams.checkOut;
+        self.checkIn = $stateParams.checkIn;
+        self.checkOut = $stateParams.checkOut;
         self.search();
       }
       

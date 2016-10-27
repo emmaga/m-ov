@@ -27,7 +27,8 @@
 
     </div>
 <!-- date picker start-->
-    {{roomInfo.room.bookStartDate |date}}--{{roomInfo.room.bookStartDate|date}}{天数}<br/>
+    {{roomInfo.checkIn |date}}--{{roomInfo.checkOut|date}}{天数}<br/>
+    <p>共{{roomInfo.checkOut-roomInfo.checkIn| dayNumbers}}天</p>
     
     表单输入：
     <form novalidate class="simple-form" name="orderDetail">
