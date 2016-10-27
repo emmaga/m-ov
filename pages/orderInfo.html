@@ -7,7 +7,6 @@
     {{orderInfo.room.roomName}}<br/>
     <span ng-repeat="feature in orderInfo.room.roomFeatures">{{feature.name}}{{feature.icon}}</span><br/>
     
-
     订单：
     {{orderInfo.roomOrder.orderId}} <br/>
     {{orderInfo.roomOrder.dealTime | date}}<br>
@@ -20,5 +19,6 @@
     {{orderInfo.roomOrder.mobile}} <br/>
     {{orderInfo.room.paymentMethod}} <br/>
     支付状态：{{orderInfo.room.paymentStatus}} <br/>
-    <button ng-click="">确认支付</button>
+    <button ng-click="">去支付</button>
+    <a ui-sref="bookHotelList">继续支付</a>
 </div>    
