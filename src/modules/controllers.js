@@ -149,12 +149,12 @@
           .success(function(data, status, headers, config) {
             if(data.rescode == '200') {
               wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: self.getParams('appid'), // 必填，公众号的唯一标识
                 timestamp: self.timestamp, // 必填，生成签名的时间戳
                 nonceStr: self.noncestr, // 必填，生成签名的随机串
                 signature: data.signature,// 必填，签名，见附录1
-                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
               });
             }
             else {
@@ -380,6 +380,7 @@
         
         self.checkIn = $stateParams.checkIn;
         self.checkOut = $stateParams.checkOut;
+        self.roomId = $stateParams.roomId;
         self.search();
       }
       
@@ -419,6 +420,55 @@
           }, function errorCallback(data, status, headers, config) {
             alert(status)
           });
+      }
+      self.newOrder = function() {
+        var data = {
+          "wxappid"       : self.getParams('appid'),             // 公众ID
+          "openid"        : self.getParams('wxUserInfo').openid,    
+          "orderType"     : "Room",                              // Room/Shop
+          "goodsID"       : self.roomId,                         // 商品ID
+          
+          // todo, self.params.projectName
+          "goodsName"     : "清鹤酒店连锁",                        // 商品名称
+          "goodsDetail"   : self.room.roomName,                  // 商品详情
+          
+          // todo
+          "goodsExtraInfo": "钻石会员",                            // 商品额外信息
+          
+          // todo
+          "goodsPrice"    : 1,                                   // 整型，单位分
+          
+          // todo
+          "clientIP"      : "1.1.1.1"                            // 客户端ip
+        };
+        data = JSON.stringify(data);
+        $http.post(backendUrl('neworder', 'server'), data)
+          .success(function(data, status, headers, config) {
+            if(data.rescode == '200') {
+              self.wxPay(data.nonceStr, data.sign, data.prepay_id);
+            }
+            else {
+              // todo use ionic alert style
+              alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+            }
+          })
+          .error(function(data, status, headers, config) {
+            // todo use ionic alert style
+            alert($filter('translate')('serverError') + status);
+          })
+      }
+
+      self.wxPay = function(nonceStr, paySign, prepay_id) {
+        wx.chooseWXPay({
+          timestamp: new Date.getTime(), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+          nonceStr: nonceStr, // 支付签名随机串，不长于 32 位
+          package: 'prepay_id='+prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+          signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+          paySign: paySign, // 支付签名
+          success: function (res) {
+              // 支付成功后的回调函数
+          }
+        });
       }
     }
   ])
