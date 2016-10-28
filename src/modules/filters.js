@@ -9,11 +9,6 @@
         return method;
     };
   }])
-  // 多少天
-  .filter("dayNumbers", function() {
-    return function(seconds) {
-       return Math.round(seconds/(24*60*60*1000))
-    };
-  })
+  
 
 })();

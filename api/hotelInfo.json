@@ -3,17 +3,21 @@
     "errInfo": "",
     "data":{
         "hotel":{
-        "hotelId": "1",
-        "hotelName": "酒店名字一",
-        "hotelImgGallery":[{
-            "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
-        },{
-            "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
-        }] ,
-        "hotelFeatures": [
-            { "name": "  wifi  ", "icon": "  classnamewifi" },
-            { "name": "  parking  ", "icon": "  classnameparking" }
-        ]
+            "hotelId": "1",
+            "hotelName": "酒店名字一",
+            "hotelLocation":{
+                "X":"121.632901",
+                "Y":"31.218352"
+            },
+            "hotelImgGallery":[{
+                "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
+            },{
+                "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
+            }] ,
+            "hotelFeatures": [
+                { "name": "  wifi  ", "icon": "  classnamewifi" },
+                { "name": "  parking  ", "icon": "  classnameparking" }
+            ]
         
     } 
     }

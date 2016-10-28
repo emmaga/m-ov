@@ -10,13 +10,13 @@
      * @testType 测试接口时，有些接口只有服务端有效，此时设置为：server，其他设置为local，默认为local
      */
 
-    return function(url, testType) {
+    return function(url, testUrl, testType) {
       if(BACKEND_CONFIG.test) {
         if(testType == 'server') {
           return BACKEND_CONFIG.serverUrl + url;
         }
         else {
-          return BACKEND_CONFIG.testUrl + url + BACKEND_CONFIG.testExtesion;
+          return BACKEND_CONFIG.testUrl + testUrl + BACKEND_CONFIG.testExtesion;
         }
       }
       else {
@@ -44,4 +44,19 @@
     }
     
   }])
+  .factory('util',function(){
+    // 时间戳 去掉 时分秒
+    function getDayStamp(d) {
+        var d = new Date(d);
+        d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        return d.getTime();
+      }
+      
+    return{
+      // 住酒店天数
+      'countDay': function(ms1,ms2){
+        return (getDayStamp(ms2)-getDayStamp(ms1))/(24*60*60*1000)
+      }
+    }
+  })
 })();

@@ -99,7 +99,7 @@
           "code": code
         };
         data = JSON.stringify(data);
-        $http.post(backendUrl('buildsession', 'server'), data)
+        $http.post(backendUrl('buildsession', '', 'server'), data)
           .success(function(data, status, headers, config) {
             self.getWxUserInfo(data.access_token, data.openid);
           })
@@ -110,7 +110,7 @@
       }
 
       self.getWxUserInfo = function(access_token, openid) {
-        
+
         var lang = $translate.proposedLanguage() || $translate.use();
         lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
         var data = {
@@ -119,8 +119,7 @@
           "lang": lang
         };
         data = JSON.stringify(data);
-
-        $http.post(backendUrl('wxuserinfo', 'server'), data)
+        $http.post(backendUrl('wxuserinfo', '', 'server'), data)
           .success(function(data, status, headers, config) {
             // 将 wxUserInfo 记在 root params 缓存里
             self.setParams('wxUserInfo', data);
@@ -145,7 +144,7 @@
         };
         data = JSON.stringify(data);
 
-        $http.post(backendUrl('jssign', 'server'), data)
+        $http.post(backendUrl('jssign', '', 'server'), data)
           .success(function(data, status, headers, config) {
             if(data.rescode == '200') {
               wx.config({
@@ -180,11 +179,10 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl',
-    function($scope, $filter, $timeout, $location, $http, $stateParams, loadingService, backendUrl) {
+  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl', 'util',
+    function($scope, $filter, $timeout, $location, $http, $stateParams, loadingService, backendUrl,util) {
       var self = this;
 
-      // console.log($stateParams.sDate + ', ' + $stateParams.eDate);
       self.init = function() {
 
         // 注册微信分享朋友和朋友圈
@@ -199,13 +197,15 @@
         self.datePickerShow = false;
         self.hotels = {};
         self.checkin = new Date().getTime();
-        self.checkout = new Date().getTime() + 24*60*60*1000;
+        self.checkout = self.checkin + 24*60*60*1000;
+
+        // 酒店天数
+        self.stayDays = util.countDay(self.checkin,self.checkout);
+
         self.cityInfo = {id: '0', name: '全部'};
         self.searchProjectInfo();
         self.searchHotelList();
         self.searchCityLists();
-       
-        
       }
       self.showDP = function(boo) {
         self.datePickerShow = boo ? boo : false;
@@ -219,6 +219,8 @@
       self.doAfterPickDates = function(checkin, checkout) {
         self.checkin = checkin;
         self.checkout = checkout;
+
+        self.stayDays = util.countDay(self.checkin,self.checkout);
         // 延时半秒隐藏
         $timeout(function() {self.showDP(false);}, 500);
       };
@@ -227,13 +229,17 @@
         self.cityInfo = {id: cityId, name: cityName};
         self.showCP(false);
       };
+
+      console.log(backendUrl('project','projectInfo'))
+      console.log(backendUrl('project','cityLists'))
       // 项目信息
       self.searchProjectInfo = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('projectInfo')
+          url: backendUrl('project','projectInfo')
         }).then(function successCallback(data, status, headers, config) {
-            self.projectInfo = data.data.projectInfo;
+           console.log(data)
+            self.projectInfo = data.data.data;
             self.showLoadingBool.searchProjectInfoBool =true; 
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
@@ -248,7 +254,7 @@
         
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('cityLists')
+          url: backendUrl('project','cityLists')
         }).then(function successCallback(data, status, headers, config) {
             self.cityLists = data.data.data.cityLists;
             self.showLoadingBool.searchCityListsBool =true;
@@ -263,7 +269,7 @@
       self.searchHotelList = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('hotelList')
+          url: backendUrl('bookHotel','hotelList')
         }).then(function successCallback(data, status, headers, config) {
             self.hotels = data.data.data.hotelLists;
             self.hotelNum = data.data.data.hotelNum;
@@ -277,19 +283,23 @@
       }
   }])
 
-  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
+  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl,BACKEND_CONFIG,util) {
+      console.log('bookRoomListController')
       var self = this;
-
+      console.log(util.countDay(1,2))
       self.init = function() {
 
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
 
-        self.hotelId = $stateParams.hotelId;
-        self.checkIn = $stateParams.checkIn;
-        self.checkOut = $stateParams.checkOut;
-       console.log($stateParams)
+        self.hotelId = $stateParams.hotelId ;
+        self.checkIn = $stateParams.checkIn -0;
+        self.checkOut = $stateParams.checkOut -0;
+
+        // 酒店天数
+        self.stayDays = util.countDay(self.checkIn,self.checkOut);
+
         // 遮罩层 bool
         self.showLoadingBool = {};
         self.showLoadingBool.searchHotelInfoBool =false; 
@@ -305,21 +315,25 @@
       self.doAfterPickDates = function(checkin, checkout) {
         self.checkIn = checkin;
         self.checkOut = checkout;
+
+        self.stayDays = util.countDay(self.checkIn,self.checkOut);
         // 延时半秒隐藏
         $timeout(function() {self.showDP(false);}, 500);
       };
+      // 住酒店 天数
+      // self.day
       self.searchHotelInfo = function() {
         
         $timeout(function(){
           $http({
             method: $filter('ajaxMethod')(),
-            url: backendUrl('hotelInfo'),
-            data:{
-              hotelId:self.hotelId
-            }
+            url: backendUrl('bookHotel','hotelInfo')
           }).then(function successCallback(data, status, headers, config) {
               self.hotel = data.data.data.hotel;
               self.showLoadingBool.searchHotelInfoBool =true; 
+
+              // 酒店 地图 
+              self.locationHref = BACKEND_CONFIG.mapUrl + '?x='+self.hotel.hotelLocation.X +'&y=' +self.hotel.hotelLocation.Y;
               loadingService(self.showLoadingBool);
               console.log("searchHotelInfoBool")
             }, function errorCallback(data, status, headers, config) {
@@ -327,16 +341,14 @@
               loadingService(self.showLoadingBool);
               alert(status)
             });  
-        },500)
+        },300)
       }
 
       self.searchRoomList = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('roomList'),
-          data:{
-            hotelId:self.hotelId
-          }
+          url: backendUrl('bookHotel','roomList')
+          
         }).then(function successCallback(data, status, headers, config) {
             self.rooms = data.data.data;
             self.showLoadingBool.searchRoomListBool = true;
@@ -362,11 +374,10 @@
     }
   ])
   
-  .controller('roomInfoController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl) {
+  .controller('roomInfoController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util',
+    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl,util) {
       console.log("roomInfoController")
       console.log($stateParams)
-
       var self = this;
       self.init = function() {
 
@@ -378,25 +389,20 @@
         self.showLoadingBool.searchBool =false; 
         loadingService(self.showLoadingBool);
         
-        self.checkIn = $stateParams.checkIn;
-        self.checkOut = $stateParams.checkOut;
+        self.checkIn = $stateParams.checkIn - 0;
+        self.checkOut = $stateParams.checkOut - 0;
         self.roomId = $stateParams.roomId;
+        
+        self.stayDays = util.countDay(self.checkIn,self.checkOut);
         self.search();
       }
       
-      self.showDP = function(boo) {
-        self.datePickerShow = boo ? boo : false;
-      };
-      self.doAfterPickDates = function(checkin, checkout) {
-        self.checkin = checkin;
-        self.checkout = checkout;
-        self.showDP(false);
-      };
+     
       self.search = function() {
        $timeout(function(){
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('roomInfo'),
+          url: backendUrl('bookHotel','roomInfo'),
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
             self.room = data.data.data.room;
@@ -493,7 +499,7 @@
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('orderInfo')
+          url: backendUrl('order','orderInfo')
         }).then(function successCallback(data, status, headers, config) {
             self.room = data.data.data.room;
             self.hotel = data.data.data.hotel;
@@ -539,7 +545,7 @@
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('memberInfo')
+          url: backendUrl('member','memberInfo')
           
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
@@ -552,28 +558,6 @@
             loadingService(self.showLoadingBool.searchBool)
             alert(status)
           });
-      }
-    }
-  ])
-
-  .controller('memberLoginController', ['$http', '$scope',
-    function($http, $scope) {
-      var self = this;
-      
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
-      }
-    }
-  ])
-
-  .controller('memberRegisterController', ['$http', '$scope',
-    function($http, $scope) {
-      var self = this;
-      
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
       }
     }
   ])
@@ -599,7 +583,7 @@
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('memberInfo'),
+          url: backendUrl('member','memberInfo'),
           data:{
             hotelId:$stateParams.hotelId,
             roomId:$stateParams.roomId,
@@ -630,17 +614,6 @@
     }
   ])
 
-  .controller('memberResetPWController', ['$http', '$scope',
-    function($http, $scope) {
-      var self = this;
-      
-      self.init = function() {
-        // 注册微信分享朋友和朋友圈
-        $scope.root.wxShare();
-      }
-    }
-  ])
-
   .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
     function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
       var self = this;
@@ -659,7 +632,7 @@
       self.search = function() {
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('orderList')
+          url: backendUrl('member','orderList')
         }).then(function successCallback(data, status, headers, config) {
            console.log(data)
             self.orderLists = data.data.data.orderLists;

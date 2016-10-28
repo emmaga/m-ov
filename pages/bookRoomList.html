@@ -18,8 +18,8 @@
         
         <!-- info -->
         <div class="list padding mod-inset-forms">
-            <a class="item" href="">
-                {地址}
+            <a class="item" href="{{brl.locationHref}}">
+                地址
             </a>
             <a class="item" ui-sref="hotelInfo">
                 <span ng-repeat="feature in brl.hotel.hotelFeatures">{{feature.name}}{{feature.icon}}
@@ -31,14 +31,14 @@
       
         <div class="list padding mod-inset-forms">
             
-            <div class="item item-input item-stacked-label mod-no-ativated" ng-click="brl.showDP(true); tdp.init(brl.checkin, brl.checkout,null , null, brl.doAfterPickDates);">
+            <div class="item item-input item-stacked-label mod-no-ativated" ng-click="brl.showDP(true); tdp.init(brl.checkIn, brl.checkOut,null , null, brl.doAfterPickDates);">
                 <span class="input-label">日期</span>
                 <p class="mod-select-input mod-color-theme">{{brl.checkIn | date:'MM月dd日'}}入住 > {{brl.checkOut | date:'MM月dd日'}}离店</p>
-                <p>共{{ ( brl.checkOut-brl.checkIn) | dayNumbers }}天</p>
+                <p>共{{brl.stayDays}}天</p> 
             </div>
             <div class="mod-split-line mod-break-2padding"></div>
         </div>
-
+        
 
         <!-- 客房列表 -->
         <div class="card mod-flat" ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId,checkIn:brl.checkIn,checkOut:brl.checkOut})">
