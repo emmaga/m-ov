@@ -23,6 +23,12 @@
       "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
        "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
       } 
+
+      * self.params.projectInfo
+      {
+        "projectName": "项目-酒店名字",
+        "projectImgSrc": "api/img/doodle.html"
+      }
       */
 
 
@@ -427,7 +433,8 @@
       }
       self.newOrder = function() {
 
-        $state.go('orderInfo({orderId:1})')
+        //先不用wx支付，假跳转
+        $state.go('orderInfo', {orderId:orderId})
         return;
 
         var data = {
@@ -435,9 +442,7 @@
           "openid"        : self.getParams('wxUserInfo').openid,    
           "orderType"     : "Room",                              // Room/Shop
           "goodsID"       : self.roomId,                         // 商品ID
-          
-          // todo, self.params.projectName
-          "goodsName"     : "清鹤酒店连锁",                        // 商品名称
+          "goodsName"     : self.getParams('projectInfo').projectName, // 商品名称
           "goodsDetail"   : self.room.roomName,                  // 商品详情
           
           // todo
@@ -475,7 +480,7 @@
           paySign: paySign, // 支付签名
           success: function (res) {
               // 支付成功后的回调函数
-              $location.path('/orderInfo/'+orderId);
+              $state.go('orderInfo', {orderId:orderId})
           }
         });
       }
