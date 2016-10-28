@@ -60,7 +60,7 @@
         }
       })
       .state('orderInfo', {
-        url: '/orderInfo',
+        url: '/orderInfo/?orderId',
         views: {
           '': {
             templateUrl: 'pages/orderInfo.html'

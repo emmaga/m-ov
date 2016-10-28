@@ -83,6 +83,8 @@
             });
           }, 1000);
         };
+
+        self.searchProjectInfo();
       }
 
       self.setParams = function(name, val) {
@@ -92,7 +94,7 @@
       self.getParams = function(name) {
         return self.params[name];
       }
-
+     
       self.getUserID = function(code, appid) {
         var data = {
           "appid": appid,
@@ -166,7 +168,20 @@
             alert($filter('translate')('serverError') + status);
           })
       }
-
+      
+      // 项目信息
+      self.searchProjectInfo = function() {
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('project','projectInfo')
+        }).then(function successCallback(data, status, headers, config) {
+           console.log(data)
+            self.projectInfo = data.data.data;
+            self.setParams('projectInfo',self.projectInfo);
+          }, function errorCallback(data, status, headers, config) {
+            alert(status)
+          });  
+      }
       // menu modal 弹出
       $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
         scope: $scope,
@@ -190,7 +205,6 @@
 
         // 遮罩层 bool
         self.showLoadingBool = {};
-        self.showLoadingBool.searchProjectInfoBool =false;
         self.showLoadingBool.searchCityListsBool =false;
         self.showLoadingBool.searchHotelListBool =false;
         loadingService(self.showLoadingBool);
@@ -203,7 +217,6 @@
         self.stayDays = util.countDay(self.checkin,self.checkout);
 
         self.cityInfo = {id: '0', name: '全部'};
-        self.searchProjectInfo();
         self.searchHotelList();
         self.searchCityLists();
       }
@@ -232,22 +245,7 @@
 
       console.log(backendUrl('project','projectInfo'))
       console.log(backendUrl('project','cityLists'))
-      // 项目信息
-      self.searchProjectInfo = function() {
-        $http({
-          method: $filter('ajaxMethod')(),
-          url: backendUrl('project','projectInfo')
-        }).then(function successCallback(data, status, headers, config) {
-           console.log(data)
-            self.projectInfo = data.data.data;
-            self.showLoadingBool.searchProjectInfoBool =true; 
-            loadingService(self.showLoadingBool);
-          }, function errorCallback(data, status, headers, config) {
-            self.showLoadingBool.searchProjectInfoBool =true; 
-            loadingService(self.showLoadingBool);
-            alert(status)
-          });  
-      }
+     
 
       // 获取城市
       self.searchCityLists = function() {
@@ -616,6 +614,7 @@
 
   .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
     function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+      console.log('memberOrderListController')
       var self = this;
 
       self.init = function() {

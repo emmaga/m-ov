@@ -8,7 +8,7 @@
     <div class=" padding">
         <!-- doodle/海报 -->
         
-        <iframe class="mod-doodle" ng-src="{{bhl.projectInfo.projectImgSrc}}"> </iframe>
+        <iframe class="mod-doodle" ng-src="{{root.params.projectInfo.projectImgSrc}}"> </iframe>
         
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
@@ -36,7 +36,7 @@
                     {{hotel.hotelAddress}}
                 </p>
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.hotelImgSrc}});"></div>
-                <h2>{酒店名称}</h2>
+                <h2>{{hotel.hotelName}}</h2>
                 <h2>原价：￥{{hotel.hotelAveragePri}}</h2>
                 <h2>会员价：￥{{hotel.hotelMemberPri}}</h2>
             </div>

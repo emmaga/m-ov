@@ -8,23 +8,31 @@
             "hotelName": "酒店名字一",
             "hotelImgSrc": "api/img/cover4x3.jpg",
             "hotelAddress": "上海 · 浦东新区 · 祖冲之路2277弄",
+            "hotelLocation":{
+                "X":"121.632901",
+                "Y":"31.218352"
+            },
             "hotelFeatures": [
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
                 { "name": "  parking  ", "icon": "  classnameparking" }
             ],
             "hotelMemberPri":"800",
-            "hotelAveragePri": "1000"
+            "hotelPri": "1000" 
         }, {
             "hotelId": "2",
-            "hotelName": "苏州 · 沧浪区 · 新市路282号",
+            "hotelName": "酒店地址二",
             "hotelImgSrc": "api/img/cover2.jpg",
-            "hotelAddress": "酒店地址二",
+            "hotelAddress": "苏州 · 沧浪区 · 新市路282号",
+            "hotelLocation":{
+                "X":"121.632901",
+                "Y":"31.218352"
+            },
             "hotelFeatures": [
                 { "name": "wifi", "icon": "xxxxxx" },
                 { "name": "wifi", "icon": "xxxxxx" }
             ],
             "hotelMemberPri":"900",
-            "hotelAveragePri": "1200"
+            "hotelPri": "1200"
         }]
     }
     
