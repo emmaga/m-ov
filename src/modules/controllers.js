@@ -372,8 +372,8 @@
     }
   ])
   
-  .controller('roomInfoController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util',
-    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl,util) {
+  .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util',
+    function($location,$scope,$http,$filter,$state,$stateParams,$timeout,loadingService,backendUrl,util) {
       console.log("roomInfoController")
       console.log($stateParams)
       var self = this;
@@ -426,6 +426,10 @@
           });
       }
       self.newOrder = function() {
+
+        $state.go('orderInfo({orderId:1})')
+        return;
+
         var data = {
           "wxappid"       : self.getParams('appid'),             // 公众ID
           "openid"        : self.getParams('wxUserInfo').openid,    
@@ -449,7 +453,7 @@
         $http.post(backendUrl('neworder', 'server'), data)
           .success(function(data, status, headers, config) {
             if(data.rescode == '200') {
-              self.wxPay(data.nonceStr, data.sign, data.prepay_id);
+              self.wxPay(data.nonceStr, data.sign, data.prepay_id, data.orderID);
             }
             else {
               // todo use ionic alert style
@@ -462,7 +466,7 @@
           })
       }
 
-      self.wxPay = function(nonceStr, paySign, prepay_id) {
+      self.wxPay = function(nonceStr, paySign, prepay_id, orderId) {
         wx.chooseWXPay({
           timestamp: new Date.getTime(), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
           nonceStr: nonceStr, // 支付签名随机串，不长于 32 位
@@ -471,6 +475,7 @@
           paySign: paySign, // 支付签名
           success: function (res) {
               // 支付成功后的回调函数
+              $location.path('/orderInfo/'+orderId);
           }
         });
       }
