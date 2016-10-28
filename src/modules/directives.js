@@ -132,8 +132,10 @@
 
       // 日期点击
       self.clickDate = function(date) {
-        // 如果当前点击的日期为不可点击的日期 || 当前点击的和当前已选中的所有日期为同一个日期: 不理睬
-        if(self.dDisable(date) || sameDay(date, self.checkin) || sameDay(date, self.checkout)) {return false;}
+        /*// 如果当前点击的日期为不可点击的日期 || 当前点击的和当前已选中的所有日期为同一个日期: 不理睬
+        if(self.dDisable(date) || sameDay(date, self.checkin) || sameDay(date, self.checkout)) {return false;}*/
+        // 如果当前点击的日期为不可点击的日期 不理睬
+        if(self.dDisable(date)) {return false;}
         // 如果checkin和checkout都不为空
         if(self.checkin && self.checkout) {
           // 将当前点击的日期设为checkin（把checkout清空）
