@@ -42,7 +42,6 @@
   .controller('travelDatePickerController', ['$scope', '$filter',
     function($scope, $filter) {
       var self = this;
-
       // st: 开始日期, et: 结束日期; 均为时间戳
       self.init = function(checkin, checkout, st, et, callback) {
         self.st = st ? st : new Date().getTime();
