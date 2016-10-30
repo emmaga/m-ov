@@ -8,8 +8,8 @@
             "roomImgSrc": "api/img/room1.jpg",
             "roomAddress": "房型地址一",
             "roomFeatures": [
-                { "name": "  wifi  ", "icon": "  classnamewifi" },
-                { "name": "  parking  ", "icon": "  classnameparking" }
+                { "name": "  WIFI  ", "icon": "  ion-wifi" },
+                { "name": "  叫早  ", "icon": "  ion-android-alarm-clock" }
             ],
             "roomPri":"1000",
             "roomMemberPri":"800",
@@ -21,8 +21,8 @@
             "roomImgSrc": "api/img/room2.jpg",
             "roomAddress": "房型地址二",
             "roomFeatures": [
-                { "name": "wifi", "icon": "xxxxxx" },
-                { "name": "wifi", "icon": "xxxxxx" }
+                { "name": "  WIFI  ", "icon": "  ion-wifi" },
+                { "name": "  叫早  ", "icon": "  ion-android-alarm-clock" }
             ],
             "roomPri":"2000",
             "roomMemberPri":"1700",
@@ -34,8 +34,8 @@
             "roomImgSrc": "api/img/room3.jpg",
             "roomAddress": "房型地址二",
             "roomFeatures": [
-                { "name": "wifi", "icon": "xxxxxx" },
-                { "name": "wifi", "icon": "xxxxxx" }
+                { "name": "  WIFI  ", "icon": "  ion-wifi" },
+                { "name": "  叫早  ", "icon": "  ion-android-alarm-clock" }
             ],
             "roomPri":"2000",
             "roomMemberPri":"1700",

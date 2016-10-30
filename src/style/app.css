@@ -18,11 +18,29 @@
 
 
 
+.mod-tag{
+	position: relative;
+	margin-right: 10px;
+}
+
+
+
+
+/*icon*/
+.mod-icon{
+	border: solid 0.5px rgb(151,151,151);
+	border-radius: 25px;
+	padding: 3px 6px;
+}
+
+
+
 
 /*content*/
 .mod-has-header{
 	margin-top: 44px;
 }
+
 
 
 
@@ -44,8 +62,18 @@
 
 /*item*/
 .item.mod-no-border{
+	padding-top: 0 !important;
 	border: none !important;
 }
+.item.mod-no-side-border{
+	/*padding-top: 0 !important;*/
+	border-left: none !important;
+	border-right: none !important;
+}
+.item.mod-no-side-border:nth-of-type(1){
+	border-top: none !important;
+}
+
 
 
 
@@ -100,6 +128,15 @@
 
 
 
+/*特殊类*/
+
+/*会员*/
+.mod-member0{
+
+}
+
+
+
 
 /*doodle 涂鸦*/
 .mod-doodle{
@@ -118,22 +155,60 @@
 	position: relative;
 	border-bottom: solid 1px rgba(0,0,0,0.125);
 }
-	.mod-split-line.mod-15shorter{
-		margin-left: 15px;
-		margin-right: 15px;
-	}
+.mod-split-line.mod-15shorter{
+	margin-left: 15px;
+	margin-right: 15px;
+}
 
-	.mod-split-line.mod-break-padding{
-		margin-left: -10px;
-		margin-right: -10px;
-	}
-	.mod-split-line.mod-break-2padding{
-		margin-left: -20px;
-		margin-right: -20px;
-	}
-	.mod-split-line.mod-thin{
-		transform: scaleY(0.5);
-	}
+.mod-split-line.mod-break-padding{
+	margin-left: -10px;
+	margin-right: -10px;
+}
+.mod-split-line.mod-break-2padding{
+	margin-left: -20px;
+	margin-right: -20px;
+}
+.mod-split-line.mod-thin{
+	transform: scaleY(0.5);
+}
+
+
+
+
+/*价格*/
+.mod-member-price{
+	display: inline-block;
+	font-size: 20px !important;
+}
+.mod-original-price{
+	display: inline-block;
+	font-size: 12px;
+	/*opacity: 0.5;*/
+	text-decoration: line-through;
+}
+.mod-price-tag{ 
+	position: relative;
+	left: 7px;
+	top: -4px;
+	transform: scale(0.625) translateY(14px);
+	transform-origin: left top;
+	padding: 4px 7px 4px 0px;
+	margin-bottom:0px !important;
+	display: inline-block;
+	font-size: 12px;
+	border: solid 1px rgb(151,151,151);
+	border-left: none;
+	overflow: visible !important;
+}
+.mod-price-tag:before{
+	content: ' ';
+	position: absolute;
+	transform: rotate(-45deg) translate(-7px,-7px);
+	height: 20px;
+	width: 20px;
+	border-top: solid 1px rgb(151,151,151);
+	border-left: solid 1px rgb(151,151,151);
+}
 
 
 
@@ -159,10 +234,18 @@
 
 
 
+/*display*/
+.mod-display-inlineblock{
+	display: inline-block !important;
+}
+
+
+
 /*对ionic原写法覆盖*/
 html,body{
 	overflow: auto !important; 
 	overflow-y: auto !important;
+	color: rgb(51,51,51) !important;
 }
 .item{ background-color: transparent !important; }
 .button{

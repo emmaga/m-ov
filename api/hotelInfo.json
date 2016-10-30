@@ -15,8 +15,8 @@
                 "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
             }] ,
             "hotelFeatures": [
-                { "name": "  wifi  ", "icon": "  classnamewifi" },
-                { "name": "  parking  ", "icon": "  classnameparking" }
+                { "name": "  WIFI  ", "icon": "  ion-wifi" },
+                { "name": "  购物  ", "icon": "  ion-bag" }
             ]
         
     } 
