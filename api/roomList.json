@@ -2,6 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data": {
+        "memberLevelScore":"9",
         "lists": [{
             "roomId": "1",
             "roomName": "海景公寓房",

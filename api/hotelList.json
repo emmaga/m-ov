@@ -3,6 +3,7 @@
     "errInfo": "",
     "data":{
         "hotelNum":"10",
+        "memberLevelScore":"9",
         "hotelLists": [{
             "hotelId": "1",
             "hotelName": "酒店名字一",
