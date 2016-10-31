@@ -2,12 +2,12 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
-        "hotelNum":"2",
+        "hotelNum":"10",
         "hotelLists": [{
             "hotelId": "1",
             "hotelName": "酒店名字一",
             "hotelImgSrc": "api/img/cover4x3.jpg",
-            "hotelAddress": "上海浦东新区祖冲之路2277弄",
+            "hotelAddress": "上海 · 浦东新区 · 祖冲之路2277弄",
             "hotelLocation":{
                 "X":"121.632901",
                 "Y":"31.218352"
@@ -16,13 +16,12 @@
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
                 { "name": "  parking  ", "icon": "  classnameparking" }
             ],
-            "hotelMemberPri":"800",
-            "hotelPri": "1000" 
+            "hotelMemberPri":"800"
         }, {
             "hotelId": "2",
             "hotelName": "酒店地址二",
             "hotelImgSrc": "api/img/cover2.jpg",
-            "hotelAddress": "苏州沧浪区",
+            "hotelAddress": "苏州 · 沧浪区 · 新市路282号",
             "hotelLocation":{
                 "X":"121.632901",
                 "Y":"31.218352"
@@ -31,8 +30,7 @@
                 { "name": "wifi", "icon": "xxxxxx" },
                 { "name": "wifi", "icon": "xxxxxx" }
             ],
-            "hotelMemberPri":"900",
-            "hotelPri": "1200"
+            "hotelMemberPri":"900"
         }]
     }
     

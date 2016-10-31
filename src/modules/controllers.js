@@ -200,8 +200,8 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', 'loadingService', 'backendUrl', 'util',
-    function($scope, $filter, $timeout, $location, $http, $stateParams, loadingService, backendUrl,util) {
+  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl', 'util',
+    function($scope, $filter, $timeout, $location, $http, $stateParams, $ionicPopup, loadingService, backendUrl,util) {
       var self = this;
 
       self.init = function() {
@@ -249,8 +249,6 @@
         self.showCP(false);
       };
 
-      console.log(backendUrl('project','projectInfo'))
-      console.log(backendUrl('project','cityLists'))
      
 
       // 获取城市
@@ -266,7 +264,10 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchCityListsBool =true;
             loadingService(self.showLoadingBool);
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });  
       }
 
@@ -282,13 +283,16 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchHotelListBool =true;
             loadingService(self.showLoadingBool);
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });  
       }
   }])
 
-  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
-    function($scope,$http,$filter,$stateParams,$timeout,loadingService,backendUrl,BACKEND_CONFIG,util) {
+  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', '$ionicPopup', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+    function($scope,$http,$filter,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl,BACKEND_CONFIG,util) {
       console.log('bookRoomListController')
       var self = this;
       console.log(util.countDay(1,2))
@@ -343,7 +347,10 @@
             }, function errorCallback(data, status, headers, config) {
               self.showLoadingBool.searchHotelInfoBool =true; 
               loadingService(self.showLoadingBool);
-              alert(status)
+              $ionicPopup.alert({
+                   // title: 'Don\'t eat that!',
+                   template: status
+              });
             });  
         },300)
       }
@@ -360,7 +367,10 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchHotelInfoBool =true; 
             loadingService(self.showLoadingBool);
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });  
       }
 
@@ -378,8 +388,8 @@
     }
   ])
   
-  .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util',
-    function($location,$scope,$http,$filter,$state,$stateParams,$timeout,loadingService,backendUrl,util) {
+  .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$ionicPopup', 'loadingService', 'backendUrl', 'util',
+    function($location,$scope,$http,$filter,$state,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl,util) {
       console.log("roomInfoController")
       console.log($stateParams)
       var self = this;
@@ -408,15 +418,18 @@
           method: $filter('ajaxMethod')(),
           url: backendUrl('bookHotel','roomInfo'),
         }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
+            
             self.room = data.data.data.room;
-            console.log(self.room)
+            
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           }); 
        },500)
          
@@ -434,7 +447,7 @@
       self.newOrder = function() {
 
         //先不用wx支付，假跳转
-        $state.go('orderInfo', {orderId:orderId})
+        // $state.go('orderInfo', {orderId:orderId})
         return;
 
         var data = {
@@ -487,8 +500,8 @@
     }
   ])
 
-  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($scope,$http,$filter,$stateParams,loadingService,backendUrl) {
+  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
+    function($scope,$http,$filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
       console.log("bookInfoController")
       var self = this;
       
@@ -517,7 +530,10 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           }); 
       } 
   }])
@@ -533,8 +549,8 @@
     }
   ])
   
-  .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+  .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
       console.log("memberHomeController")
 
       var self = this;
@@ -564,14 +580,17 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool.searchBool)
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });
       }
     }
   ])
 
-  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
       console.log("memberInfoEditController");
       var self = this;
       self.memberId = $stateParams.memberId;
@@ -605,7 +624,10 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool);
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });  
       }
 
@@ -622,8 +644,8 @@
     }
   ])
 
-  .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', 'loadingService', 'backendUrl',
-    function($http, $scope, $filter,$stateParams,loadingService,backendUrl) {
+  .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
       console.log('memberOrderListController')
       var self = this;
 
@@ -650,7 +672,10 @@
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool)
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });
       }
   }])
