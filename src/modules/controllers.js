@@ -177,9 +177,21 @@
       
       // 项目信息
       self.searchProjectInfo = function() {
+
+        var data = {
+          "action": "GetProjectInfo",
+          "appid": self.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": self.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use()
+        };
+        data = JSON.stringify(data);
+
         $http({
+          // method : 'POST',
           method: $filter('ajaxMethod')(),
-          url: backendUrl('project','projectInfo')
+          url: backendUrl('project','projectInfo'),
+          data:data
         }).then(function successCallback(data, status, headers, config) {
            console.log(data)
             self.projectInfo = data.data.data;
@@ -200,8 +212,8 @@
       }
   }])
 
-  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl', 'util',
-    function($scope, $filter, $timeout, $location, $http, $stateParams, $ionicPopup, loadingService, backendUrl,util) {
+  .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
+    function($scope, $filter, $timeout, $location, $http, $stateParams, $ionicPopup, $translate, loadingService, backendUrl,util) {
       var self = this;
 
       self.init = function() {
@@ -242,11 +254,15 @@
         self.stayDays = util.countDay(self.checkin,self.checkout);
         // 延时半秒隐藏
         $timeout(function() {self.showDP(false);}, 500);
+        self.searchHotelList();
+        console.log('日期')
       };
 
       self.doAfterPickCity = function(cityId, cityName) {
         self.cityInfo = {id: cityId, name: cityName};
         self.showCP(false);
+        self.searchHotelList();
+        console.log('chengshi')
       };
 
      
@@ -254,9 +270,19 @@
       // 获取城市
       self.searchCityLists = function() {
         
+        var data = {
+          "action": "GetCityLists",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use()
+        };
+        data = JSON.stringify(data);
+
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('project','cityLists')
+          url: backendUrl('project','cityLists'),
+          data: data
         }).then(function successCallback(data, status, headers, config) {
             self.cityLists = data.data.data.cityLists;
             self.showLoadingBool.searchCityListsBool =true;
@@ -272,9 +298,24 @@
       }
 
       self.searchHotelList = function() {
+
+        var data = {
+          "action": "GetHotelList",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use(),
+          "bookCity": self.cityInfo.cityId, //0: all, 城市ID
+          "bookStartDate": self.checkin,
+          "bookEndDate": self.checkout
+        };
+        data = JSON.stringify(data);
+
+
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('bookHotel','hotelList')
+          url: backendUrl('bookHotel','hotelList'),
+          data: data
         }).then(function successCallback(data, status, headers, config) {
             self.hotels = data.data.data.hotelLists;
             self.hotelNum = data.data.data.hotelNum;
@@ -291,11 +332,10 @@
       }
   }])
 
-  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', '$ionicPopup', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
-    function($scope,$http,$filter,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl,BACKEND_CONFIG,util) {
+  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+    function($scope,$http,$filter,$stateParams,$timeout,$ionicPopup,$translate,loadingService,backendUrl,BACKEND_CONFIG,util) {
       console.log('bookRoomListController')
       var self = this;
-      console.log(util.countDay(1,2))
       self.init = function() {
 
         // 注册微信分享朋友和朋友圈
@@ -331,11 +371,22 @@
       // 住酒店 天数
       // self.day
       self.searchHotelInfo = function() {
-        
+
+        var data = {
+          "action": "GetHotelInfo",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use(),
+          "hotelId": self.hotelId
+        };
+        data = JSON.stringify(data);
+
         $timeout(function(){
           $http({
             method: $filter('ajaxMethod')(),
-            url: backendUrl('bookHotel','hotelInfo')
+            url: backendUrl('bookHotel','hotelInfo'),
+            data: data
           }).then(function successCallback(data, status, headers, config) {
               self.hotel = data.data.data.hotel;
               self.showLoadingBool.searchHotelInfoBool =true; 
@@ -356,9 +407,24 @@
       }
 
       self.searchRoomList = function() {
+
+        var data = {
+          "action": "GetRoomList",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use(),
+
+          "hotelId": self.hotelId,
+          "bookStartDate": self.checkIn,
+          "bookEndDate": self.checkOut
+        };
+        data = JSON.stringify(data);
+
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('bookHotel','roomList')
+          url: backendUrl('bookHotel','roomList'),
+          data: data
           
         }).then(function successCallback(data, status, headers, config) {
             self.rooms = data.data.data;
@@ -388,8 +454,8 @@
     }
   ])
   
-  .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$ionicPopup', 'loadingService', 'backendUrl', 'util',
-    function($location,$scope,$http,$filter,$state,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl,util) {
+  .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicPopup', 'loadingService', 'backendUrl', 'util',
+    function($location,$scope,$http,$filter,$state,$translate,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl,util) {
       console.log("roomInfoController")
       console.log($stateParams)
       var self = this;
@@ -406,7 +472,8 @@
         self.checkIn = $stateParams.checkIn - 0;
         self.checkOut = $stateParams.checkOut - 0;
         self.roomId = $stateParams.roomId;
-        
+        self.hotelId = $stateParams.hotelId;
+
         self.stayDays = util.countDay(self.checkIn,self.checkOut);
         self.search();
         //  验证码 倒计时
@@ -416,10 +483,25 @@
       
      
       self.search = function() {
+        var data = {
+          "action": "GetRoomInfo",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use(),
+
+          "roomId": self.roomId,
+          "hotelId": self.hotelId,
+          "bookStartDate": self.checkIn,
+          "bookEndDate": self.checkOut
+        };
+        data = JSON.stringify(data);
+
        $timeout(function(){
         $http({
           method: $filter('ajaxMethod')(),
           url: backendUrl('bookHotel','roomInfo'),
+          data: data
         }).then(function successCallback(data, status, headers, config) {
             
             self.room = data.data.data.room;
@@ -437,39 +519,49 @@
        },500)
          
       }
-      self.countSecond = function(){
-         self.countAbility = true;
-         self.countSeconds = 30;
-         self.showTip = false;
+      // 验证码 倒计时
+      // self.countSecond = function(){
+      //    self.countAbility = true;
+      //    self.countSeconds = 30;
+      //    self.showTip = false;
 
-         self.settime = function(){
-          --self.countSeconds;
-          $timeout(function() {
-              if (self.countSeconds==0) {
-                 self.countAbility = false;
-                 self.countSeconds = 30;
-                 self.showTip = true;
-              } else {
-                self.settime()
-              }
-          }, 1000)
+      //    self.settime = function(){
+      //     --self.countSeconds;
+      //     $timeout(function() {
+      //         if (self.countSeconds==0) {
+      //            self.countAbility = false;
+      //            self.countSeconds = 30;
+      //            self.showTip = true;
+      //         } else {
+      //           self.settime()
+      //         }
+      //     }, 1000)
 
-         }
-         self.settime();
-      }
+      //    }
+      //    self.settime();
+      // }
 
-      
-      self.getAuthCode = function() {
-        self.countSecond();
-        $http({
-          method: $filter('ajaxMethod')(),
-          url: backendUrl('dxAuthCode','authCode')
-        }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
-          }, function errorCallback(data, status, headers, config) {
-            alert(status)
-          });
-      }
+      // emma 要求，先去掉验证码，(T_T)
+      // self.getAuthCode = function() {
+      //   // self.countSecond();
+      //   var data = {
+      //     "action": "GetDxAuthCode",
+      //     "appid": $scope.root.getParams('appid'),
+      //     "clear_session": "xxxx",
+      //     "openid": $scope.root.getParams('openid'),
+      //     "lang": $translate.proposedLanguage() || $translate.use(),
+      //     "mobile": "13783476666"
+      //   };
+      //   data = JSON.stringify(data);
+      //   $http({
+      //     method: $filter('ajaxMethod')(),
+      //     url: backendUrl('dxAuthCode','authCode')
+      //   }).then(function successCallback(data, status, headers, config) {
+      //       console.log(data)
+      //     }, function errorCallback(data, status, headers, config) {
+      //       alert(status)
+      //     });
+      // }
       self.newOrder = function() {
 
         //先不用wx支付，假跳转
@@ -526,11 +618,11 @@
     }
   ])
 
-  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
-    function($scope,$http,$filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
+  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
+    function($scope,$http,$filter,$stateParams,$ionicPopup,$translate,loadingService,backendUrl) {
       console.log("bookInfoController")
       var self = this;
-      
+      console.log($stateParams)
       self.init = function() {
 
         // 注册微信分享朋友和朋友圈
@@ -544,9 +636,20 @@
         self.search();
       }
       self.search = function() {
+
+        var data = {
+          "action": "GetRoomOrderDetail",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use(),
+          "orderId": $stateParams.orderId
+        };
+        data = JSON.stringify(data);
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('order','orderInfo')
+          url: backendUrl('order','orderInfo'),
+          data: data
         }).then(function successCallback(data, status, headers, config) {
             self.room = data.data.data.room;
             self.hotel = data.data.data.hotel;
@@ -575,8 +678,8 @@
     }
   ])
   
-  .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
-    function($http, $scope, $filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
+  .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', '$translate', '$ionicPopup', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$translate,$ionicPopup,loadingService,backendUrl) {
       console.log("memberHomeController")
 
       var self = this;
@@ -593,14 +696,22 @@
           self.search();
       }
       self.search = function() {
+        var data = {
+          "action": "GetMemberInfo",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use()
+        };
+        data = JSON.stringify(data);
+
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('member','memberInfo')
+          url: backendUrl('member','memberInfo'),
+          data: data
           
         }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
             self.member = data.data.data.member;
-            console.log(self.member)
             self.showLoadingBool.searchBool =true; 
             loadingService(self.showLoadingBool.searchBool)
           }, function errorCallback(data, status, headers, config) {
@@ -615,8 +726,8 @@
     }
   ])
 
-  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$timeout','$ionicPopup', 'loadingService', 'backendUrl',
-    function($http, $scope, $filter,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl) {
+  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$timeout','$ionicPopup', '$translate', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$timeout,$ionicPopup,$translate,loadingService,backendUrl) {
       console.log("memberInfoEditController");
       var self = this;
       self.memberId = $stateParams.memberId;
@@ -631,20 +742,26 @@
           loadingService(self.showLoadingBool);
 
           self.search();
-          // 验证码 倒计时
-          self.countAbility = false;
-          self.countSeconds = 30;
-          self.showTip = true;
+          // // 验证码 倒计时
+          // self.countAbility = false;
+          // self.countSeconds = 30;
+          // self.showTip = true;
       }
       
       self.search = function() {
+        var data = {
+          "action": "GetMemberInfo",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use()
+        };
+        data = JSON.stringify(data);
+
         $http({
           method: $filter('ajaxMethod')(),
           url: backendUrl('member','memberInfo'),
-          data:{
-            hotelId:$stateParams.hotelId,
-            roomId:$stateParams.roomId,
-          }
+          data: data
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
             self.member = data.data.data.member;
@@ -660,38 +777,70 @@
             });
           });  
       }
+      self.updataMemberInfo = function(){
+         var data = {
+           "action": "modifyMemberInfo",
+           "appid": $scope.root.getParams('appid'),
+           "clear_session": "xxxx",
+           "openid": $scope.root.getParams('openid'),
+           "lang": $translate.proposedLanguage() || $translate.use(),
+           "memberInfo":  {
+               "realName":self.member.realName,
+               "mobile": self.member.idCardNumber,
+               "idCardNumber": self.member.mobile
+           }
+         };
+         data = JSON.stringify(data);
+
+         $http({
+           method: $filter('ajaxMethod')(),
+           url: backendUrl('member','memberInfo'),
+           data: data
+         }).then(function successCallback(data, status, headers, config) {
+             
+             loadingService(self.showLoadingBool);
+           }, function errorCallback(data, status, headers, config) {
+             
+             $ionicPopup.alert({
+                  // title: 'Don\'t eat that!',
+                  template: status
+             });
+           });  
+      }
+
+
        // 验证码 倒计时
-      self.countSecond = function(){
-         self.countAbility = true;
-         self.showTip = false;
+      // self.countSecond = function(){
+      //    self.countAbility = true;
+      //    self.showTip = false;
 
-         self.settime = function(){
-          --self.countSeconds;
-          $timeout(function() {
-              if (self.countSeconds==0) {
-                 self.countAbility = false;
-                 self.countSeconds = 30;
-                 self.showTip = true;
-              } else {
-                self.settime()
-              }
-          }, 1000)
+      //    self.settime = function(){
+      //     --self.countSeconds;
+      //     $timeout(function() {
+      //         if (self.countSeconds==0) {
+      //            self.countAbility = false;
+      //            self.countSeconds = 30;
+      //            self.showTip = true;
+      //         } else {
+      //           self.settime()
+      //         }
+      //     }, 1000)
 
-         }
-         self.settime();
-      }
+      //    }
+      //    self.settime();
+      // }
 
-      self.getAuthCode = function() {
-        self.countSecond();
-        $http({
-          method: $filter('ajaxMethod')(),
-          url: backendUrl('dxAuthCode','authCode')
-        }).then(function successCallback(data, status, headers, config) {
-            console.log(data)
-          }, function errorCallback(data, status, headers, config) {
-            alert(status)
-          });
-      }
+      // self.getAuthCode = function() {
+      //   self.countSecond();
+      //   $http({
+      //     method: $filter('ajaxMethod')(),
+      //     url: backendUrl('dxAuthCode','authCode')
+      //   }).then(function successCallback(data, status, headers, config) {
+      //       console.log(data)
+      //     }, function errorCallback(data, status, headers, config) {
+      //       alert(status)
+      //     });
+      // }
     }
   ])
 
