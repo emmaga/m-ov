@@ -103,6 +103,10 @@
 
 
 /*form/list/item/input*/
+.mod-list{
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;	
+}
 .mod-inset-forms>.item{
 	border-top: none !important;
 	border-left: none !important;
@@ -125,6 +129,8 @@
 		line-height: 31px;
 		/*opacity: 0.5*/
 	}
+
+
 
 
 
