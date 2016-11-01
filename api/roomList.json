@@ -14,7 +14,7 @@
             ],
             "roomPri":"1000",
             "roomMemberPri":"800",
-            "roomAveragePri": "1000",
+            "roomAveragePri": "237",
             "roomRemain":"0"
         }, {
             "roomId": "2",
@@ -27,7 +27,7 @@
             ],
             "roomPri":"2000",
             "roomMemberPri":"1700",
-            "roomAveragePri": "1000",
+            "roomAveragePri": "599",
             "roomRemain":"1"
         } , {
             "roomId": "3",
@@ -40,7 +40,7 @@
             ],
             "roomPri":"2000",
             "roomMemberPri":"1700",
-            "roomAveragePri": "1000",
+            "roomAveragePri": "1200",
             "roomRemain":"1"
         } ]
     }
