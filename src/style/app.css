@@ -288,6 +288,9 @@ html,body{
 .button-small{
 	line-height: 21px !important;
 }
+small{
+	font-size: 12px !important; 
+}
 
 
 
