@@ -20,25 +20,24 @@
       
       <!-- info -->
       <div class="list padding mod-inset-forms">
-          <a class="item">
+          <div class="item">
               <span class="mod-tag" ng-repeat="feature in roomInfo.room.roomFeatures">
                 <i class="icon mod-icon {{feature.icon}}"></i>
                 {{feature.name}}
               </span>
-          </a>
+          </div>
+          
           <div class="mod-split-line mod-break-2padding"></div>
       </div>
 
     </div>
-
-
-
-
-    {{roomInfo.checkIn | date:'MM月dd日'}}入住--{{roomInfo.checkOut| date:'MM月dd日'}}离店<br/>
-    <p>共{{roomInfo.stayDays}}天</p>
-    
-    表单输入：
-    <form novalidate class="simple-form" name="orderDetail">
+    <div class="item item-divider">
+      填写订单
+    </div>
+    <form novalidate class="mod-inset-forms list padding" name="orderDetail">
+        <div class="item">
+            <p>{{roomInfo.checkIn | date:'MM月dd日'}}入住--{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天</p>
+        </div>
         <label class="item item-input">
           <span class="input-label" ng-model="roomInfo.roomNumber">房间数:</span>
           <input type="number">

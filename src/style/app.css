@@ -247,7 +247,7 @@ html,body{
 	overflow-y: auto !important;
 	color: rgb(51,51,51) !important;
 }
-.item{ background-color: transparent !important; }
+.item:not(.item-divider){ background-color: transparent !important; }
 .button{
 	border-width: 0.5px !important;
 	transition-duration: 250ms;
