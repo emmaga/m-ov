@@ -53,7 +53,7 @@
         <!-- 客房列表 -->
         <div class="list mod-inset-forms">
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId,checkIn:brl.checkIn,checkOut:brl.checkOut})">
-                <img class="full-image mod-cover mod-radius" ng-src="{{room.roomImgSrc}}"/>
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.roomImgSrc}});"></div>
                 <h2>{{room.roomName}}</h2>
                 <h2 class="mod-member-price">￥{{room.roomAveragePri}}</h2>
                 <span class="item-note" >
@@ -63,8 +63,7 @@
                 </span>
                 <br>
                 <span  class="mod-tag" ng-repeat="feature in room.roomFeatures">
-                    <i class="icon mod-icon {{feature.icon}}"></i>
-                    {{feature.name}}
+                    <i class="icon {{feature.icon}}"></i>
                 </span>  
             </a>
         </div>
