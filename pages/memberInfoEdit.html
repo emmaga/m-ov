@@ -13,7 +13,7 @@
           <input type="number" placeholder="{{mie.member.mobile}}" ng-model="mie.member.mobile">
           
         </label>
-        <button ng-click="mie.getAuthCode()">接收验证码</button>
+        <button ng-click="mie.getAuthCode()" ng-disabled="mie.countAbility"><span ng-show="mie.showTip">免费获取验证码</span> <span ng-show="!mie.showTip">{{mie.countSeconds}}s 后重新发送</span></button>
         <label class="item item-input">
           <span class="input-label" ng-model="mie.authCode">验证码</span>
           <input type="number">

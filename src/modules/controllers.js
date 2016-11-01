@@ -409,6 +409,9 @@
         
         self.stayDays = util.countDay(self.checkIn,self.checkOut);
         self.search();
+        //  验证码 倒计时
+        self.countSeconds = 30;
+        self.showTip = true;
       }
       
      
@@ -434,10 +437,33 @@
        },500)
          
       }
+      self.countSecond = function(){
+         self.countAbility = true;
+         self.countSeconds = 30;
+         self.showTip = false;
+
+         self.settime = function(){
+          --self.countSeconds;
+          $timeout(function() {
+              if (self.countSeconds==0) {
+                 self.countAbility = false;
+                 self.countSeconds = 30;
+                 self.showTip = true;
+              } else {
+                self.settime()
+              }
+          }, 1000)
+
+         }
+         self.settime();
+      }
+
+      
       self.getAuthCode = function() {
+        self.countSecond();
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('authCode')
+          url: backendUrl('dxAuthCode','authCode')
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
           }, function errorCallback(data, status, headers, config) {
@@ -589,8 +615,8 @@
     }
   ])
 
-  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
-    function($http, $scope, $filter,$stateParams,$ionicPopup,loadingService,backendUrl) {
+  .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$timeout','$ionicPopup', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl) {
       console.log("memberInfoEditController");
       var self = this;
       self.memberId = $stateParams.memberId;
@@ -605,6 +631,10 @@
           loadingService(self.showLoadingBool);
 
           self.search();
+          // 验证码 倒计时
+          self.countAbility = false;
+          self.countSeconds = 30;
+          self.showTip = true;
       }
       
       self.search = function() {
@@ -630,11 +660,32 @@
             });
           });  
       }
+       // 验证码 倒计时
+      self.countSecond = function(){
+         self.countAbility = true;
+         self.showTip = false;
+
+         self.settime = function(){
+          --self.countSeconds;
+          $timeout(function() {
+              if (self.countSeconds==0) {
+                 self.countAbility = false;
+                 self.countSeconds = 30;
+                 self.showTip = true;
+              } else {
+                self.settime()
+              }
+          }, 1000)
+
+         }
+         self.settime();
+      }
 
       self.getAuthCode = function() {
+        self.countSecond();
         $http({
           method: $filter('ajaxMethod')(),
-          url: backendUrl('authCode')
+          url: backendUrl('dxAuthCode','authCode')
         }).then(function successCallback(data, status, headers, config) {
             console.log(data)
           }, function errorCallback(data, status, headers, config) {
