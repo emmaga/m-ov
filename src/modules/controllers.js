@@ -662,8 +662,8 @@
     }
   ])
 
-  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
-    function($scope,$http,$filter,$stateParams,$ionicPopup,$translate,loadingService,backendUrl) {
+  .controller('orderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
+    function($scope,$http,$filter,$stateParams,$ionicPopup,$translate,loadingService,backendUrl,util) {
       console.log("bookInfoController")
       var self = this;
       console.log($stateParams)
@@ -696,9 +696,13 @@
           data: data
         }).then(function successCallback(data, status, headers, config) {
             self.room = data.data.data.room;
+            console.log(self.room)
             self.hotel = data.data.data.hotel;
             self.roomOrder = data.data.data.roomOrder;
             self.showLoadingBool.searchBool =true; 
+
+            // 酒店天数
+            self.stayDays = util.countDay(self.hotel.bookStartDate,self.hotel.bookEndDate);
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 

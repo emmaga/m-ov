@@ -10,7 +10,7 @@
         酒店名字：{{order.hotelName}}<br />
         客房名字：{{order.roomName}}<br />
         房间数：{{order.roomNumber}}<br />
-        入住时间：{{order.bookStartDate |  date:'YY年MM月dd日'}}离店时间：{{order.bookEndDate |  date:'YY年MM月dd日'}}<br />
+        入住时间：{{order.bookStartDate |  date:'yyyy年MM月dd日'}}离店时间：{{order.bookEndDate |  date:'yyyy年MM月dd日'}}<br />
         总价：{{order.orderTotalPri}}<br />
         <a ui-sref="orderInfo({orderId:order.orderId})" >订单详情</a>
       </ion-item>
