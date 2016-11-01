@@ -223,6 +223,9 @@
 .mod-font-light{
 	font-weight: 300 !important;
 }
+.mod-font-bold{
+	font-weight: 500 !important;
+}
 .mod-text-indent{
 	text-indent: 0.5em;
 }
@@ -236,13 +239,23 @@
 .mod-color-theme{
 	color: rgb(20,140,230) !important;
 } 
-
+.mod-color-excited{
+	color: rgb(250,40,0) !important;
+} 
 
 
 
 /*display*/
 .mod-display-inlineblock{
 	display: inline-block !important;
+}
+
+
+
+
+/*util*/
+.mod-no-margin-top{
+	margin-top: 0 !important
 }
 
 
@@ -271,6 +284,9 @@ html,body{
 }
 .ion-record:before{
     transform: scale(0.5);
+}
+.button-small{
+	line-height: 21px !important;
 }
 
 

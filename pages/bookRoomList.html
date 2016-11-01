@@ -1,21 +1,17 @@
 <div ng-controller="bookRoomListController as brl" ng-init="brl.init()">
-
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{brl.hotel.hotelName}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-
     <!-- 内容 -->
-    <div class="padding mod-has-header" delegate-handle="mainScroll">
-        
+    <div class="padding mod-has-header">
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
             <ion-slide ng-repeat="room in brl.rooms.lists">
-               <img ng-src="{{room.roomImgSrc}}">
+                <img ng-src="{{room.roomImgSrc}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
-        
         <!-- info -->
         <div class="list mod-inset-forms">
             <a class="item" ui-sref="hotelInfo">
@@ -29,42 +25,46 @@
                 </span>
             </a>
             <a class="item" href="{{brl.locationHref}}">
-                <i class="icon ion-ios-location-outline"></i>
-                上海市· 浦东新区· 祖冲之路2277弄
+                <i class="icon ion-ios-location-outline"></i> 上海市· 浦东新区· 祖冲之路2277弄
                 <span class="item-note">
                     地图
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>
             </a>
             <div class="mod-split-line mod-break-padding"></div>
-        
-        <!-- 查询 -->
-      
-        <!-- <div class="list padding mod-inset-forms"> -->
-            
+            <!-- 查询 -->
+            <!-- <div class="list padding mod-inset-forms"> -->
             <div class="item item-input item-stacked-label mod-no-ativated" ng-click="brl.showDP(true); tdp.init(brl.checkIn, brl.checkOut,null , null, brl.doAfterPickDates);">
                 <span class="input-label">日期</span>
-                <p class="mod-select-input mod-color-theme">{{brl.checkIn | date:'MM月dd日'}}入住 > {{brl.checkOut | date:'MM月dd日'}}离店&nbsp·&nbsp共{{brl.stayDays}}天</p> 
+                <p class="mod-select-input mod-color-theme">{{brl.checkIn | date:'MM月dd日'}}入住 > {{brl.checkOut | date:'MM月dd日'}}离店&nbsp·&nbsp共{{brl.stayDays}}天</p>
             </div>
             <div class="mod-split-line mod-break-padding"></div>
         </div>
-        
-
         <!-- 客房列表 -->
         <div class="list mod-inset-forms">
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId,checkIn:brl.checkIn,checkOut:brl.checkOut})">
+
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.roomImgSrc}});"></div>
-                <h2>{{room.roomName}}</h2>
-                <h2 class="mod-member-price">￥{{room.roomAveragePri}}</h2>
-                <span class="item-note" >
-                    <span ng-show="room.roomRemain==0">已定完</span> 
-                    <span ng-show="!(room.roomRemain==0)">预订</span>
-                    <i class="icon ion-ios-arrow-right"></i>
+
+                <span class="item-note">
+                    <h2 class="mod-member-price mod-color-excited">￥{{room.roomAveragePri}}</h2>
+                    <button class="button button-small button-stable button-block mod-no-margin-top" ng-show="room.roomRemain==0">
+                        已订完
+                    </button>
+                    <button class="button button-small button-assertive button-block mod-no-margin-top" ng-show="!(room.roomRemain==0)">
+                        预订
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </button>
                 </span>
-                <br>
-                <span  class="mod-tag" ng-repeat="feature in room.roomFeatures">
-                    <i class="icon {{feature.icon}}"></i>
-                </span>  
+                <h2>{{room.roomName}}</h2>
+                <p>{文字介绍}</p>
+                <p>
+                    <span class="mod-tag" ng-repeat="feature in room.roomFeatures">
+                        <i class="icon {{feature.icon}}"></i>
+                    </span>
+                </p>
+
+
             </a>
         </div>
         <!-- date picker start-->
@@ -75,7 +75,5 @@
             <travel-date-picker></travel-date-picker>
         </div>
         <!-- date picker start-->
-
-       
     </div>
 </div>
