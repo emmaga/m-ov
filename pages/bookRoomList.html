@@ -52,12 +52,12 @@
 
         <!-- 客房列表 -->
         <div class="list mod-inset-forms">
-            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms.lists" ui-sref="roomInfo({roomId:room.roomId,hotelId:brl.hotelId,checkIn:brl.checkIn,checkOut:brl.checkOut})">
+            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms.lists" ng-click="brl.nextState(room.roomId,brl.hotelId,brl.checkIn,brl.checkOut,room.roomRemain)">
                 <img class="full-image mod-cover mod-radius" ng-src="{{room.roomImgSrc}}"/>
                 <h2>{{room.roomName}}</h2>
                 <h2 class="mod-member-price">￥{{room.roomAveragePri}}</h2>
                 <span class="item-note" >
-                    <span ng-show="room.roomRemain==0">已定完</span> 
+                    <span ng-show="room.roomRemain==0" >已定完</span> 
                     <span ng-show="!(room.roomRemain==0)">预订</span>
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>

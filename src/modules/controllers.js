@@ -3,8 +3,8 @@
 (function() {
   var app = angular.module('app.controllers', ['ngCookies'])
   
-  .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 
-    function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl) {
+  .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicPopup', '$ionicModal', '$translate', 'backendUrl', 
+    function($scope, $window, $http, $filter, $ionicPopup, $ionicModal, $translate, backendUrl) {
       var self = this;
       
       // root全局变量：
@@ -91,6 +91,7 @@
         };
 
         self.searchProjectInfo();
+        self.searchMemberInfo();
       }
 
       self.setParams = function(name, val) {
@@ -197,9 +198,39 @@
             self.projectInfo = data.data.data;
             self.setParams('projectInfo',self.projectInfo);
           }, function errorCallback(data, status, headers, config) {
-            alert(status)
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
           });  
       }
+      // 会员信息
+      self.searchMemberInfo = function() {
+        var data = {
+          "action": "GetMemberInfo",
+          "appid": $scope.root.getParams('appid'),
+          "clear_session": "xxxx",
+          "openid": $scope.root.getParams('openid'),
+          "lang": $translate.proposedLanguage() || $translate.use()
+        };
+        data = JSON.stringify(data);
+
+        $http({
+          method: $filter('ajaxMethod')(),
+          url: backendUrl('member','memberInfo'),
+          data: data
+          
+        }).then(function successCallback(data, status, headers, config) {
+            self.memberInfo = data.data.data.member;
+            self.setParams('memberInfo',self.memberInfo);
+          }, function errorCallback(data, status, headers, config) {
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: status
+            });
+          });
+      }
+
       // menu modal 弹出
       $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
         scope: $scope,
@@ -214,8 +245,9 @@
 
   .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
     function($scope, $filter, $timeout, $location, $http, $stateParams, $ionicPopup, $translate, loadingService, backendUrl,util) {
+      console.log('bookHotelListController');
       var self = this;
-
+      console.log($scope.root.params);
       self.init = function() {
 
         // 注册微信分享朋友和朋友圈
@@ -332,8 +364,8 @@
       }
   }])
 
-  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
-    function($scope,$http,$filter,$stateParams,$timeout,$ionicPopup,$translate,loadingService,backendUrl,BACKEND_CONFIG,util) {
+  .controller('bookRoomListController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+    function($scope,$http,$filter,$state,$stateParams,$timeout,$ionicPopup,$translate,loadingService,backendUrl,BACKEND_CONFIG,util) {
       console.log('bookRoomListController')
       var self = this;
       self.init = function() {
@@ -368,6 +400,13 @@
         // 延时半秒隐藏
         $timeout(function() {self.showDP(false);}, 500);
       };
+      // 可以预订 才跳转
+      self.nextState = function(roomId,hotelId,checkIn,checkOut,roomRemain){
+        if (!(roomRemain == 0)) {
+          $state.go('roomInfo',{roomId:roomId,hotelId:hotelId,checkIn:checkIn,checkOut:checkOut})
+        }
+
+      }
       // 住酒店 天数
       // self.day
       self.searchHotelInfo = function() {
@@ -458,6 +497,7 @@
     function($location,$scope,$http,$filter,$state,$translate,$stateParams,$timeout,$ionicPopup,loadingService,backendUrl,util) {
       console.log("roomInfoController")
       console.log($stateParams)
+      console.log($scope.root.params)
       var self = this;
       self.init = function() {
 
@@ -476,9 +516,13 @@
 
         self.stayDays = util.countDay(self.checkIn,self.checkOut);
         self.search();
-        //  验证码 倒计时
-        self.countSeconds = 30;
-        self.showTip = true;
+        // //  验证码 倒计时
+        // self.countSeconds = 30;
+        // self.showTip = true;
+
+        // params 会员信息
+        self.memberInfo = $scope.root.params.memberInfo;
+        self.memberInfo.mobile = self.memberInfo.mobile -0;
       }
       
      

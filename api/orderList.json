@@ -4,7 +4,7 @@
     "data":{
         "orderLists": [{
             "orderId": "1",
-            "paymentStatus": "1",
+            "orderStatus": "1",
             "hotelName": "酒店名字一",
             "roomName": "房型名字一",
             "roomNumber": "3",
@@ -13,7 +13,7 @@
             "orderTotalPri": "123123123"
         }, {
             "orderId": "1",
-            "paymentStatus": "0",
+            "orderStatus": "0",
             "hotelName": "酒店名字一",
             "roomName": "房型名字一",
             "roomNumber": "3",

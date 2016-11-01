@@ -3,7 +3,7 @@
     "errInfo": "",
     "data":{
         "hotelNum":"10",
-        "memberLevelScore":"9",
+        "memberLevel":"微信会员",
         "hotelLists": [{
             "hotelId": "1",
             "hotelName": "酒店名字一",

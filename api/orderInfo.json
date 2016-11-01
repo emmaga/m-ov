@@ -2,6 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
+        "memberLevel":"微信会员",
         "hotel":{
             "hotelId": "1",
             "hotelName": "酒店名字一",
