@@ -433,32 +433,28 @@
       }
       self.newOrder = function() {
 
-        //先不用wx支付，假跳转
-        $state.go('orderInfo', {orderId:orderId})
-        return;
-
         var data = {
-          "wxappid"       : self.getParams('appid'),             // 公众ID
-          "openid"        : self.getParams('wxUserInfo').openid,    
-          "orderType"     : "Room",                              // Room/Shop
-          "goodsID"       : self.roomId,                         // 商品ID
-          "goodsName"     : self.getParams('projectInfo').projectName, // 商品名称
-          "goodsDetail"   : self.room.roomName,                  // 商品详情
-          
+          "wxappid"       : $scope.root.getParams('appid'), // 公众ID
+          "openid"        : $scope.root.getParams('wxUserInfo').openid,    
+          "orderType"     : "Room", // Room/Shop
+          "goodsID"       : self.roomId, // 商品ID
           // todo
-          "goodsExtraInfo": "钻石会员",                            // 商品额外信息
-          
+          "goodsName"     : "酒店名称", // 商品名称
+          "goodsDetail"   : self.room.roomName, // 商品详情
           // todo
-          "goodsPrice"    : 1,                                   // 整型，单位分
-          
+          "goodsExtraInfo": "钻石会员", // 商品额外信息
           // todo
-          "clientIP"      : "1.1.1.1"                            // 客户端ip
+          "goodsPrice"    : 1, // 整型，单位分
+          // todo
+          "clientIP"      : "1.1.1.1", // 客户端ip
+          // todo
+          "userid"        : 1
         };
         data = JSON.stringify(data);
-        $http.post(backendUrl('neworder', 'server'), data)
+        $http.post(backendUrl('neworder', '', 'server'), data)
           .success(function(data, status, headers, config) {
             if(data.rescode == '200') {
-              self.wxPay(data.nonceStr, data.sign, data.prepay_id, data.orderID);
+              self.wxPay(data.nonce_str, data.sign, data.prepay_id, data.orderNum);
             }
             else {
               // todo use ionic alert style
@@ -472,8 +468,9 @@
       }
 
       self.wxPay = function(nonceStr, paySign, prepay_id, orderId) {
+        var orderId = orderId;
         wx.chooseWXPay({
-          timestamp: new Date.getTime(), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+          timeStamp: Math.floor(new Date().getTime()/1000), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
           nonceStr: nonceStr, // 支付签名随机串，不长于 32 位
           package: 'prepay_id='+prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
           signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
