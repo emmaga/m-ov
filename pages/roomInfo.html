@@ -30,20 +30,19 @@
     <p>共{{roomInfo.stayDays}}天</p>
     <p>会员等级：{{roomInfo.memberInfo.memberlevel}}</p>
     
-    表单输入：
+    表单输入：<button ng-click="roomInfo.modifyRoomNum(-1)">减少</button><button ng-click="roomInfo.modifyRoomNum(1)">增加</button>
     <form novalidate class="simple-form" name="orderDetail">
         <label class="item item-input">
           <span class="input-label"  >房间数:</span>
-          <input type="number" ng-model="roomInfo.roomNumber">
+          <input type="number" ng-model="roomInfo.roomNumber" name="input"  required>
         </label>
         <label class="item item-input">
           <span class="input-label" >联系人姓名:</span>
-          <input type="text" ng-model="roomInfo.memberInfo.realName">
+           <input type="text" ng-model="roomInfo.memberInfo.realName">
         </label>
         <label class="item item-input">
           <span class="input-label" >手机号:</span>
           <input type="number" ng-model="roomInfo.memberInfo.mobile">
-          
         </label>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
         <label class="item item-input">

@@ -523,6 +523,9 @@
         // params 会员信息
         self.memberInfo = $scope.root.params.memberInfo;
         self.memberInfo.mobile = self.memberInfo.mobile -0;
+
+        // 默认选中房间数为1
+        self.roomNumber = 1;
       }
       
      
@@ -547,10 +550,10 @@
           url: backendUrl('bookHotel','roomInfo'),
           data: data
         }).then(function successCallback(data, status, headers, config) {
-            
             self.room = data.data.data.room;
-            
             self.showLoadingBool.searchBool =true; 
+            // 房间数 最多 可选
+            self.roomMax = Math.min(self.room.roomRemain,self.room.purchaseAbility)
             loadingService(self.showLoadingBool);
           }, function errorCallback(data, status, headers, config) {
             self.showLoadingBool.searchBool =true; 
@@ -562,6 +565,18 @@
           }); 
        },500)
          
+      }
+
+      // 更改房间数
+      self.modifyRoomNum = function(num){
+          num = num-0;
+          if (self.roomNumber == 1) {
+            return;
+          } else if(self.roomNumber == self.roomMax) {
+            return;
+          } else {
+            self.roomNumber=self.roomNumber+num;
+          }
       }
       // 验证码 倒计时
       // self.countSecond = function(){
