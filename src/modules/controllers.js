@@ -551,6 +551,7 @@
           data: data
         }).then(function successCallback(data, status, headers, config) {
             self.room = data.data.data.room;
+            console.log(self.room)
             self.showLoadingBool.searchBool =true; 
             // 房间数 最多 可选
             self.roomMax = Math.min(self.room.roomRemain,self.room.purchaseAbility)
@@ -569,14 +570,28 @@
 
       // 更改房间数
       self.modifyRoomNum = function(num){
-          num = num-0;
-          if (self.roomNumber == 1) {
-            return;
-          } else if(self.roomNumber == self.roomMax) {
-            return;
+          if (num < 0) {
+            if (self.roomNumber == 1) {
+              return;
+            } else {
+              self.roomNumber -=1;
+            }
           } else {
-            self.roomNumber=self.roomNumber+num;
+            if (self.roomNumber == self.roomMax) {
+              return;
+            } else {
+              self.roomNumber +=1;
+            }
           }
+          
+
+          // if (self.roomNumber == 1) {
+          //   return;
+          // } else if(self.roomNumber == self.roomMax) {
+          //   return;
+          // } else {
+          //   self.roomNumber=self.roomNumber+num;
+          // }
       }
       // 验证码 倒计时
       // self.countSecond = function(){
