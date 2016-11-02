@@ -1,25 +1,30 @@
 <div ng-controller="orderInfoController as orderInfo" ng-init="orderInfo.init()">
-    orderInfo<br/>
-    订单状态{{orderInfo.room.orderStatus}} <br/>
 
-    <img ng-src="{{orderInfo.room.roomImgSrc}}">
-    {{orderInfo.hotel.hotelName}}<br/>
-    {{orderInfo.room.roomName}}<br/>
-    <span ng-repeat="feature in orderInfo.room.roomFeatures">{{feature.name}}{{feature.icon}}</span><br/>
-    
-    订单：
-    {{orderInfo.roomOrder.orderId}} <br/>
-    成交时间：{{orderInfo.roomOrder.dealTime | date:'yyyy年MM月dd日H时m分'}}<br>
-    {{orderInfo.roomOrder.orderTotalPri | currency}} <br/>
 
-    住店时间：{{orderInfo.hotel.bookStartDate | date:'yyyy年MM月dd日'}}-离店时间：{{orderInfo.hotel.bookEndDate | date:'yyyy年MM月dd日'}} 共{{orderInfo.stayDays}}天<br/>
-   
-    
-    联系信息：
-    {{orderInfo.roomOrder.contactName}} <br/>
-    {{orderInfo.roomOrder.mobile}} <br/>
-    {{orderInfo.room.paymentMethod}} <br/>
-    订单状态：{{orderInfo.room.orderStatus}} <br/>
-    <button ng-click="">去支付</button>
-    <a ui-sref="bookHotelList">继续支付</a>
-</div>    
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">{{orderInfo.room.paymentStatus}}</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+    </div>
+    <div class="padding mod-has-header">
+        <div class="list mod-inset-forms">
+            <div class="item item-thumbnail-left mod-no-side-border">
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{orderInfo.room.roomImgSrc}});"></div>
+                <h2>{{orderInfo.hotel.hotelName}}</h2>
+            </div>
+        </div>
+        <br/>
+        <span ng-repeat="feature in orderInfo.room.roomFeatures">{{feature.name}}{{feature.icon}}</span>
+        <br/> 订单： {{orderInfo.roomOrder.orderId}}
+        <br/> {{orderInfo.roomOrder.dealTime | date}}
+        <br> {{orderInfo.roomOrder.orderTotalPri | currency}}
+        <br/> {{orderInfo.hotel.orderStartDate | date}}--{{orderInfo.hotel.orderStartDate|date}}{天数}
+        <br/> 联系信息： {{orderInfo.roomOrder.contactName}}
+        <br/> {{orderInfo.roomOrder.mobile}}
+        <br/> {{orderInfo.room.paymentMethod}}
+        <br/> 支付状态：{{orderInfo.room.paymentStatus}}
+        <br/>
+        <button ng-click="">去支付</button>
+        <a ui-sref="bookHotelList">继续支付</a>
+    </div>
+</div>
+

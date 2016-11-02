@@ -5,7 +5,7 @@
         "memberLevel":"微信会员",
         "room":{
             "roomId": "1",
-            "roomName": "房型名字一",
+            "roomName": "海景公寓",
             "roomRemain":"10",
             "purchaseAbility":"5",
             "roomImgGallery":[{
@@ -14,8 +14,8 @@
                 "imgSrc": "api/img/room2.jpg"
             }] ,
             "roomFeatures": [
-                { "name": "  wifi  ", "icon": "  classnamewifi" },
-                { "name": "  parking  ", "icon": "  classnameparking" }
+                { "name": "  WIFI  ", "icon": "  ion-wifi" },
+                { "name": "  叫早  ", "icon": "  ion-android-alarm-clock" }
             ]
         },
         "hotel":{

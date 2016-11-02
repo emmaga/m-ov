@@ -103,6 +103,10 @@
 
 
 /*form/list/item/input*/
+.mod-list{
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;	
+}
 .mod-inset-forms>.item{
 	border-top: none !important;
 	border-left: none !important;
@@ -125,6 +129,8 @@
 		line-height: 31px;
 		/*opacity: 0.5*/
 	}
+
+
 
 
 
@@ -217,6 +223,9 @@
 .mod-font-light{
 	font-weight: 300 !important;
 }
+.mod-font-bold{
+	font-weight: 500 !important;
+}
 .mod-text-indent{
 	text-indent: 0.5em;
 }
@@ -230,7 +239,9 @@
 .mod-color-theme{
 	color: rgb(20,140,230) !important;
 } 
-
+.mod-color-excited{
+	color: rgb(250,40,0) !important;
+} 
 
 
 
@@ -241,13 +252,21 @@
 
 
 
+
+/*util*/
+.mod-no-margin-top{
+	margin-top: 0 !important
+}
+
+
+
 /*对ionic原写法覆盖*/
 html,body{
 	overflow: auto !important; 
 	overflow-y: auto !important;
 	color: rgb(51,51,51) !important;
 }
-.item{ background-color: transparent !important; }
+.item:not(.item-divider){ background-color: transparent !important; }
 .button{
 	border-width: 0.5px !important;
 	transition-duration: 250ms;
@@ -265,4 +284,23 @@ html,body{
 }
 .ion-record:before{
     transform: scale(0.5);
+}
+.button-small{
+	line-height: 21px !important;
+}
+small{
+	font-size: 12px !important; 
+}
+
+
+
+/*hack*/
+.mod-img-in-thumbnail{
+	position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 80px;
+    max-height: 80px;
+    width: 100%;
+    height: 100%;
 }

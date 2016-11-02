@@ -1,65 +1,85 @@
 <div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.init()">
-
-
     <!-- 头部 -->
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{roomInfo.room.roomName}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-    
     <!-- 内容 -->
-    <div class="padding mod-has-header">
+    <div class="padding mod-has-header" style="padding-bottom: 0">
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
             <ion-slide ng-repeat="room in roomInfo.room.roomImgGallery">
-               <img ng-src="{{room.imgSrc}}">  
+                <img ng-src="{{room.imgSrc}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
-        
         <!-- info -->
-        <div class="list padding mod-inset-forms">
-            <a class="item">
-                <span ng-repeat="feature in roomInfo.room.roomFeatures">{{feature.name}}{{feature.icon}}</span>
-            </a>
-            <div class="mod-split-line mod-break-2padding"></div>
+        <div class="list padding mod-inset-forms mod-list">
+            <div class="item">
+                <span class="mod-tag" ng-repeat="feature in roomInfo.room.roomFeatures">
+                <i class="icon mod-icon {{feature.icon}}"></i>
+                {{feature.name}}
+              </span>
+            </div>
+            <div class="item">
+                {一段介绍}
+            </div>
+            <!-- <div class="mod-split-line mod-break-2padding"></div> -->
         </div>
-
     </div>
-    {{roomInfo.checkIn | date:'MM月dd日'}}入住--{{roomInfo.checkOut| date:'MM月dd日'}}离店<br/>
-    <p>共{{roomInfo.stayDays}}天</p>
     <p>会员等级：{{roomInfo.memberInfo.memberlevel}}</p>
-    
-    表单输入：<button ng-click="roomInfo.modifyRoomNum(-1)">减少</button><button ng-click="roomInfo.modifyRoomNum(1)">增加</button>
-    <form novalidate class="simple-form" name="orderDetail">
-        <label class="item item-input">
-          <span class="input-label"  >房间数:</span>
-          <input type="number" ng-model="roomInfo.roomNumber" name="input"  required>
-        </label>
-        <label class="item item-input">
-          <span class="input-label" >联系人姓名:</span>
-           <input type="text" ng-model="roomInfo.memberInfo.realName">
-        </label>
-        <label class="item item-input">
-          <span class="input-label" >手机号:</span>
-          <input type="number" ng-model="roomInfo.memberInfo.mobile">
-        </label>
+    <div class="item item-divider">
+        填写订单
+    </div>
+    <div novalidate class="mod-inset-forms list mod-list padding" name="orderDetail">
+        <div class="item">
+            {{roomInfo.room.roomName}}
+        </div>
+        <div class="item">
+            {{roomInfo.checkIn | date:'MM月dd日'}}入住--{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
+        </div>
+        <div class="item item-input">
+            <span class="input-label" ng-model="roomInfo.mobile">房间数:</span>
+            <input type="number">
+            表单输入：<button ng-click="roomInfo.modifyRoomNum(-1)">减少</button><button ng-click="roomInfo.modifyRoomNum(1)">增加</button>
+        </div>
+        <div class="item item-input">
+            <span class="input-label" ng-model="roomInfo.contactName">联系人姓名:</span>
+            <input type="text">
+        </div>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
         <label class="item item-input">
           <span class="input-label" ng-model="roomInfo.authCode">验证码</span>
           <input type="number">
         </label> -->
-    </form>
-    列表：
-    <ion-list>
-      <ion-item ng-repeat="room in roomInfo.roomOrderLists" >
-        <p>日期：{{room.date |date}} 当日单价：{{room.price | currency}}</p>  
-      </ion-item>
-    </ion-list>
-    退改协议：<br/>{{roomInfo.room.changeDeal}}<br/>
-    <button ng-click="">确认支付</button>
+        <div class="item item-input">
+            <span class="input-label" ng-model="roomInfo.mobile">手机号:</span>
+            <input type="number">
+        </div>
+    </div>
+    <div class="item item-divider">
+        价格明细
+    </div>
+    <div class="list padding mod-list">
+        {价格明细}
+        
+    </div>
+    <div class="item item-divider">
+        退改说明
+    </div>
+    <div class="list padding mod-list">
+        {退改说明}
+        
+        <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">提交订单</a>
+    </div>
 
 
-    <a ui-sref="orderInfo">orderInfo</a>
-    <a ng-click="roomInfo.newOrder()">提交订单</a>
+    
+    
+    
+   
+    
+
+
+ 
 </div>    

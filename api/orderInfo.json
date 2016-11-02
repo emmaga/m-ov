@@ -12,7 +12,7 @@
         "room":{
             "roomId": "1",
             "roomName": "房型名字一",
-            "roomImgSrc":"api/img/room2.jpg",
+            "roomImgSrc":"api/img/room1.jpg",
             "changeDeal": "请不要退房或改签",
             "roomFeatures": [
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
