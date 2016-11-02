@@ -47,6 +47,8 @@
   .factory('util',function(){
     // 时间戳 去掉 时分秒
     function getDayStamp(d) {
+         // 兼容一下，字符串的先转化为数字
+        var d = d-0;
         var d = new Date(d);
         d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
         return d.getTime();

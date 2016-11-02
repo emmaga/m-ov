@@ -3,23 +3,24 @@
     "errInfo": "",
     "data":{
         "orderLists": [{
-            "orderId": "1",
-            "paymentStatus": "1",
+            "orderId": "1002",
+            "orderStatus": "1",
             "hotelName": "酒店名字一",
-            "roomName": "房型名字一",
+            "roomName": "海景公寓房",
             "roomNumber": "3",
             "bookStartDate": "1288323623006",
             "bookEndDate": "1288323623006",
-            "orderTotalPri": "123123123"
+            "orderTotalPri": "1920"
         }, {
-            "orderId": "1",
-            "paymentStatus": "0",
+
+            "orderId": "1001",
+            "orderStatus": "0",
             "hotelName": "酒店名字一",
-            "roomName": "房型名字一",
+            "roomName": "漂浮小屋",
             "roomNumber": "3",
             "bookStartDate": "1288323623006",
             "bookEndDate": "1288323623006",
-            "orderTotalPri": "123123123"
+            "orderTotalPri": "2080"
         }]
     }
     

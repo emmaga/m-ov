@@ -3,6 +3,7 @@
     "errInfo": "",
     "data":{
         "hotelNum":"10",
+        "memberLevel":"微信会员",
         "hotelLists": [{
             "hotelId": "1",
             "hotelName": "酒店名字一",
@@ -16,8 +17,7 @@
                 { "name": "  wifi  ", "icon": "  classnamewifi" },
                 { "name": "  parking  ", "icon": "  classnameparking" }
             ],
-            "hotelMemberPri":"800",
-            "hotelPri": "1000" 
+            "hotelMemberPri":"800"
         }, {
             "hotelId": "2",
             "hotelName": "酒店地址二",
@@ -31,8 +31,7 @@
                 { "name": "wifi", "icon": "xxxxxx" },
                 { "name": "wifi", "icon": "xxxxxx" }
             ],
-            "hotelMemberPri":"900",
-            "hotelPri": "1200"
+            "hotelMemberPri":"900"
         }]
     }
     

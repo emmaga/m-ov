@@ -44,7 +44,7 @@
         }
       })
       .state('bookHotelList', {
-        url: '/bookHotelList:?sDate&eDate',
+        url: '/bookHotelList',
         views: {
           '': {
             templateUrl: 'pages/bookHotelList.html'
