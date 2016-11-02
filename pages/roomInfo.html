@@ -27,21 +27,24 @@
             <!-- <div class="mod-split-line mod-break-2padding"></div> -->
         </div>
     </div>
-    <p>会员等级：{{roomInfo.memberInfo.memberlevel}}</p>
+    
     <div class="item item-divider">
-        填写订单
+        <p>填写订单</p>
     </div>
     <div novalidate class="mod-inset-forms list mod-list padding" name="orderDetail">
         <div class="item">
             {{roomInfo.room.roomName}}
         </div>
         <div class="item">
-            {{roomInfo.checkIn | date:'MM月dd日'}}入住--{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
+            {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
             <span class="input-label" >房间数:</span>
-            <button ng-click="roomInfo.modifyRoomNum(-1)">减少</button><input type="number" ng-model="roomInfo.roomNumber">
-            <button ng-click="roomInfo.modifyRoomNum(1)">增加</button>
+            <button ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light">-</button>
+            <span>
+                <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number">
+            </span>
+            <button ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light">+</button>
         </div>
         <div class="item item-input">
             <span class="input-label" >联系人姓名:</span>
@@ -58,23 +61,33 @@
         </div>
     </div>
     <div class="item item-divider">
-        {价格明细：}
-        <p ng-repeat="price in roomInfo.priceList">
-            日期：{{price.date | date:'yyyy年MM月dd日'}}  价格：{{price.price}}*{{roomInfo.roomNumber}}<br>
-        </p>
-        <p>总价：{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}</p>
+        <p>价格明细</p>
     </div>
-    <div class="list padding mod-list">
-        {价格明细}
-        
+    <div class="list padding mod-list mod-inset-forms">
+        <div class="item">
+            <p ng-repeat="price in roomInfo.priceList">
+                {{price.date | date:'yyyy年MM月dd日'}}  ￥{{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}<br>
+            </p>
+        </div>
+        <div class="item">
+            总价：{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
+            <p class="mod-price-tag mod-member0">{{roomInfo.memberInfo.memberlevel}}价</p>
+        </div>
     </div>
+    
     <div class="item item-divider">
-        退改说明
+        <p>退改说明</p>
     </div>
-    <div class="list padding mod-list">
-        {退改说明}
+    <div class="list  mod-list">
+        <div class="item">
+            
+        {退改说明}  
+        </div>
         
-        <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">提交订单</a>
+    </div>
+    <div class="item item-divider padding">
+            
+            <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">提交订单</a>
     </div>
 
 

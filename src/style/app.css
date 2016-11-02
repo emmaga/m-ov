@@ -18,6 +18,19 @@
 
 
 
+/*input*/
+.mod-input-number{
+	width: 100px !important;
+	text-align: center;
+	padding: 0 !important
+}
+
+
+
+
+
+
+/*tag*/
 .mod-tag{
 	position: relative;
 	margin-right: 10px;
@@ -275,6 +288,10 @@ html,body{
 	/*will-change: transform;*/
 	transition-duration: 0ms;
 }
+.button.button-light{
+	border-color: #ddd !important;
+}
+
 .bar.bar-light{
 	background-color: rgba(255,255,255,.95) !important;
 }
