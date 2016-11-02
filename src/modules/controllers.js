@@ -310,27 +310,31 @@
           "lang": $translate.proposedLanguage() || $translate.use()
         };
         data = JSON.stringify(data);
-
-        $http({
-          method: $filter('ajaxMethod')(),
-          url: backendUrl('project','cityLists'),
-          data: data
-        }).then(function successCallback(data, status, headers, config) {
-            self.cityLists = data.data.data.cityLists;
-            self.showLoadingBool.searchCityListsBool =true;
-            loadingService(self.showLoadingBool);
-          }, function errorCallback(data, status, headers, config) {
-            self.showLoadingBool.searchCityListsBool =true;
-            loadingService(self.showLoadingBool);
-            $ionicPopup.alert({
-                 // title: 'Don\'t eat that!',
-                 template: status
-            });
-          });  
+        
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('project','cityLists'),
+            data: data
+          }).then(function successCallback(data, status, headers, config) {
+              self.cityLists = data.data.data.cityLists;
+              self.showLoadingBool.searchCityListsBool =true;
+              loadingService(self.showLoadingBool);
+            }, function errorCallback(data, status, headers, config) {
+              self.showLoadingBool.searchCityListsBool =true;
+              loadingService(self.showLoadingBool);
+              $ionicPopup.alert({
+                   // title: 'Don\'t eat that!',
+                   template: status
+              });
+            });  
+        
+       
       }
 
       self.searchHotelList = function() {
-
+        // 每次 请求，都要添加loading
+        self.showLoadingBool.searchHotelListBool =false; 
+        loadingService(self.showLoadingBool);
         var data = {
           "action": "GetHotelList",
           "appid": $scope.root.getParams('appid'),
@@ -343,7 +347,7 @@
         };
         data = JSON.stringify(data);
 
-
+        $timeout(function(){
         $http({
           method: $filter('ajaxMethod')(),
           url: backendUrl('bookHotel','hotelList'),
@@ -360,7 +364,8 @@
                  // title: 'Don\'t eat that!',
                  template: status
             });
-          });  
+          }); 
+          },500) 
       }
   }])
 
@@ -446,7 +451,7 @@
       }
 
       self.searchRoomList = function() {
-
+        
         var data = {
           "action": "GetRoomList",
           "appid": $scope.root.getParams('appid'),
@@ -551,8 +556,10 @@
           data: data
         }).then(function successCallback(data, status, headers, config) {
             self.room = data.data.data.room;
-            console.log(self.room)
+            self.priceList = data.data.data.priceList;
             self.showLoadingBool.searchBool =true; 
+            // 单价
+            self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
             // 房间数 最多 可选
             self.roomMax = Math.min(self.room.roomRemain,self.room.purchaseAbility)
             loadingService(self.showLoadingBool);
@@ -567,7 +574,15 @@
        },500)
          
       }
-
+      // 计算客房总价
+      self.roomBookPrcFun = function(array){
+          var length = array.length,
+              totalPri =0;
+          for (var i = 0; i < length; i++) {
+            totalPri += Number(array[i]["price"]);
+          }
+          return totalPri;
+      }
       // 更改房间数
       self.modifyRoomNum = function(num){
           if (num < 0) {
