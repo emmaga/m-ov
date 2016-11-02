@@ -39,8 +39,8 @@
             {{roomInfo.checkIn | date:'MM月dd日'}}入住--{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
-            <span class="input-label" ng-model="roomInfo.roomNumber">房间数:</span>
-            <button ng-click="roomInfo.modifyRoomNum(-1)">减少</button><input type="number" >
+            <span class="input-label" >房间数:</span>
+            <button ng-click="roomInfo.modifyRoomNum(-1)">减少</button><input type="number" ng-model="roomInfo.roomNumber">
             <button ng-click="roomInfo.modifyRoomNum(1)">增加</button>
         </div>
         <div class="item item-input">
