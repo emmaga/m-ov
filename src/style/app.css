@@ -277,6 +277,7 @@
 html,body{
 	overflow: auto !important; 
 	overflow-y: auto !important;
+	overflow-x: hidden !important;
 	color: rgb(51,51,51) !important;
 }
 .item:not(.item-divider){ background-color: transparent !important; }
@@ -308,7 +309,11 @@ html,body{
 small{
 	font-size: 12px !important; 
 }
+.item.item-divider{
+	border-left: none !important;
+	border-right: none !important;
 
+}
 
 
 /*hack*/

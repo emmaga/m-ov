@@ -39,15 +39,15 @@
             {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
-            <span class="input-label" >房间数:</span>
+            <div class="input-label" >房间数:</div>
             <button ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light">-</button>
-            <span>
+            <div>
                 <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number">
-            </span>
+            </div>
             <button ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light">+</button>
         </div>
         <div class="item item-input">
-            <span class="input-label" >联系人姓名:</span>
+            <div class="input-label" >联系人姓名:</div>
             <input type="text" ng-model="roomInfo.memberInfo.realName">
         </div>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
@@ -56,7 +56,7 @@
           <input type="number">
         </label> -->
         <div class="item item-input">
-            <span class="input-label" >手机号:</span>
+            <div class="input-label" >手机号:</div>
             <input type="number" ng-model="roomInfo.memberInfo.mobile">
         </div>
     </div>
