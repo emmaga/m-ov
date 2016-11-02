@@ -41,8 +41,9 @@
         <div class="item item-input">
             <span class="input-label" >房间数:</span>
             <button ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light">-</button>
-            <span>
-                <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number">
+            <span class="mod-input-number">
+                <!-- <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number"> -->
+                {{roomInfo.roomNumber}}
             </span>
             <button ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light">+</button>
         </div>
