@@ -9,7 +9,7 @@
 </head>
 
 <body ng-app="m-ov" ng-controller="RootController as root" ng-init="root.init()">
-    <div ui-view=""></div>
+    <div ui-view="" style="overflow: hidden;"></div>
     <div ng-include="'pages/mainMenu.html'" ng-show="root.mainMenuShow"></div>
     <script src="lib/ionic.bundle.min.js" ></script>
     <script src="lib/angular-ui-router.js" ></script>
