@@ -11,7 +11,7 @@
             <div class="item item-thumbnail-left mod-no-side-border" ui-sref="orderInfo({orderId:order.orderId})">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.roomImgSrc}});"></div>
                 <span class="item-note">
-                    <p>支付状态：{{order.paymentStatus}}</p>
+                    <p>{订单状态}{{order.paymentStatus}}</p>
                 </span>
                 <h2>{{order.roomName}}×{{order.roomNumber}}</h2>
                 <p>{{order.hotelName}}</p>
@@ -20,22 +20,6 @@
             </div>
         </div>
     </div>
-    <a ui-sref="bookRoomSoldOut">不存在的订单</a>
-
-    <!-- 列表 -->
-    订单列表：
-    <ion-list>
-      <ion-item ng-repeat="order in mol.orderLists" >
-        订单号：{{order.orderId}}<br />
-        订单状态：{{order.orderStatus}}<br />
-        酒店名字：{{order.hotelName}}<br />
-        客房名字：{{order.roomName}}<br />
-        房间数：{{order.roomNumber}}<br />
-        入住时间：{{order.bookStartDate |  date:'yyyy年MM月dd日'}}离店时间：{{order.bookEndDate |  date:'yyyy年MM月dd日'}}<br />
-        总价：{{order.orderTotalPri}}<br />
-        <a ui-sref="orderInfo({orderId:order.orderId})" >订单详情</a>
-      </ion-item>
-    </ion-list>   
 
 
 </div>

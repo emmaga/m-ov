@@ -15,10 +15,10 @@
             "roomImgSrc": "api/img/room1.jpg",
             "changeDeal": "请不要退房或改签",
             "roomFeatures": [
-                { "name": "  wifi  ", "icon": "  classnamewifi" },
-                { "name": "  parking  ", "icon": "  classnameparking" }
+                { "name": "  wifi  ", "icon": "  ion-wifi" },
+                { "name": "  parking  ", "icon": "  ion-android-alarm-clock" }
             ],
-            "orderStatus": "1",
+            "orderStatus": "已支付",
             "paymentMethod": "wechat"
         },
         "roomOrder": {
