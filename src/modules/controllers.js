@@ -654,7 +654,6 @@
       self.newOrder = function() {
         var data = {
           "wxappid"       : $scope.root.getParams('appid'), // 公众ID
-          "openid"        : $scope.root.getParams('wxUserInfo').openid,    
           "orderType"     : "Room", // Room/Shop
           "goodsID"       : self.roomId, // 商品ID
           // todo
