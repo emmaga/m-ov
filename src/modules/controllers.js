@@ -975,15 +975,41 @@
           });
       }
   }])
-
-  .controller('shopHomeController', ['$http', '$scope',
-    function($http, $scope) {
+  .controller('shopHomeController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$ionicPopup,$timeout,loadingService,backendUrl) {
+     
       console.log('shopHomeController')
       var self = this;
       
       self.init = function() {
+        self.showLoadingBool = {};
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
+        self.search();
+
+      }
+      self.search = function() {
+        self.showLoadingBool.searchBool =false; 
+        loadingService(self.showLoadingBool);
+        $timeout(function(){
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('product','productList')
+          }).then(function successCallback(data, status, headers, config) {
+             console.log(data)
+              self.productCategory = data.data.data.productCategory;
+              self.showLoadingBool.searchBool =true; 
+              loadingService(self.showLoadingBool);
+            }, function errorCallback(data, status, headers, config) {
+              self.showLoadingBool.searchBool =true; 
+              loadingService(self.showLoadingBool)
+              $ionicPopup.alert({
+                   // title: 'Don\'t eat that!',
+                   template: status
+              });
+            });
+        },500)
+        
       }
     }
   ])
