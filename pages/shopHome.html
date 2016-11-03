@@ -1,5 +1,6 @@
 <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()">
     <div class="bar bar-header bar-light mod-fixed">
+
         <h1 class="title">商城首页-商品列表</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
@@ -19,6 +20,27 @@
 
 
 
+        <h1 class="title">商城</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+    </div>
+    <!-- 分类 -->
+    <div class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
+        <div class="tabs">
+            <a class="tab-item active">
+	        {分类}
+	      </a>
+            <a class="tab-item">
+	        {分类}
+	      </a>
+            <a class="tab-item">
+	        {分类}
+	      </a>
+        </div>
+    </div>
+
+
+    <div class="list padding mod-has-tabs-top">
+
 
 
 
@@ -29,3 +51,19 @@
    
 </div>
 
+
+        <div class="card mod-flat">
+            <div class="item mod-no-border">
+                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url('api/img/goods1.jpg');"></div>
+            </div>
+	        <div class="item mod-no-border ">
+	        	<h2>阳澄湖大闸蟹2只装</h2>
+	            <h2 class="mod-member-price assertive">￥288</h2>
+	        </div>
+        </div>
+    </div>
+
+
+
+    <a ui-sref="shopProductDetail">商品详情</a>
+</div>
