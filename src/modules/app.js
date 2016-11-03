@@ -59,11 +59,11 @@
           }
         }
       })
-      .state('orderInfo', {
-        url: '/orderInfo/?orderId',
+      .state('bookOrderInfo', {
+        url: '/bookOrderInfo/?orderId',
         views: {
           '': {
-            templateUrl: 'pages/orderInfo.html'
+            templateUrl: 'pages/bookOrderInfo.html'
           }
         }
       })

@@ -1,0 +1,62 @@
+<div ng-controller="bookbookOrderInfoController as bookOrderInfo" ng-init="bookOrderInfo.init()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">订单详情</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+    </div>
+    <div class=" mod-has-header">
+     
+        <div class="item mod-no-border-top">
+            <div class="row">
+                <p class="col mod-no-padding">订单号:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderId}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">下单时间:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.dealTime | date:'yyyy年MM月dd日HH时mm分'}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">总价:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderTotalPri | currency}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">支付方式:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.paymentMethod}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">订单状态:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.orderStatus}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="item item-divider"></div>
+    <div class="list padding mod-inset-forms mod-no-margin-bottom mod-list">
+
+        
+        <a class="item item-thumbnail-left mod-no-side-border">
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{bookOrderInfo.room.roomImgSrc}});"></div>
+            <h2>{{bookOrderInfo.room.roomName}}</h2>
+            <p>{{bookOrderInfo.hotel.hotelName}}</p>
+            <p>{文字介绍}</p>
+            <p>
+                <span class="mod-tag" ng-repeat="feature in bookOrderInfo.room.roomFeatures">
+                    <i class="icon {{feature.icon}}"></i>
+                </span>
+            </p>
+        </a>
+        <div class="item">
+            <div class="row">
+                <p class="col mod-no-padding">入住时间:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.bookStartDate | date:'yyyy年MM月dd日'}}~{{bookOrderInfo.hotel.bookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{{bookOrderInfo.stayDays}}天</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">房间数:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">联系人:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">手机号:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="item item-divider">
+        <a class="button button-block button-balanced" ng-click="">去支付</a>
+        <a class="button button-block button-positive" ui-sref="bookHotelList">继续预订</a>
+    </div>
+</div>
