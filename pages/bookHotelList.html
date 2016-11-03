@@ -1,7 +1,7 @@
 <div ng-controller="bookHotelListController as bhl" ng-init="bhl.init()">
 
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">订酒店</h1>
+        <h1 class="title">{{'bookHotel'|translate}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
 
@@ -14,18 +14,18 @@
         <!-- 筛选/查询 -->
         <div class="list padding mod-inset-forms">
             <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)">
-                <span class="input-label">目的地</span>
+                <span class="input-label">{{'placeToGo'|translate}}</span>
                 <p class="mod-select-input  mod-color-theme">{{bhl.cityInfo.name}}</p>
             </div>
             <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">
-                <span class="input-label">日期</span>
-                <p class="mod-select-input mod-color-theme">{{bhl.checkin | date:'MM月dd日'}}入住 > {{bhl.checkout | date:'MM月dd日'}}离店&nbsp·&nbsp共{{bhl.stayDays}}天</p> 
+                <span class="input-label">{{'date'|translate}}</span>
+                <p class="mod-select-input mod-color-theme">{{bhl.checkin | date:'MM月dd日'}}{{'checkIn'|translate}} > {{bhl.checkout | date:'MM月dd日'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{bhl.stayDays}}{{'days'|translate}}</p> 
                 
             </div>
             <div class="mod-split-line mod-break-2padding"></div>
         </div>
         <!-- 搜索结果 -->
-        <h3 class="mod-font-light mod-text-indent">为您找到{{bhl.hotelNum}}个门店</h3>
+        <h3 class="mod-font-light mod-text-indent">{{'searchResultA'|translate}}{{bhl.hotelNum}}{{'searchResultB'|translate}}</h3>
 
 
         <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.hotelId,checkIn:bhl.checkin,checkOut:bhl.checkout})">
@@ -37,7 +37,7 @@
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.hotelImgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <h2 class="mod-member-price">￥{{hotel.hotelMemberPri}}起</h2>
+                <h2 class="mod-member-price">￥{{hotel.hotelMemberPri}}{{'minPrice'|translate}}</h2>
                 <p class="mod-price-tag mod-member0">微信会员价</p>
                 <br>
                 <p class="mod-display-inlineblock">{{hotel.hotelName}}</p>
@@ -53,7 +53,7 @@
     <!-- date picker start-->
     <div class="ab-container" ng-show="bhl.datePickerShow">
         <div class="bar bar-header">
-            <button class="button button-clear button-positive" ng-click="bhl.showDP(false)">back</button>
+            <button class="button button-clear button-positive" ng-click="bhl.showDP(false)">{{'back'|translate}}</button>
         </div>
         <travel-date-picker></travel-date-picker>
     </div>
@@ -62,7 +62,7 @@
     <!-- city picker start-->
     <div class="ab-container" ng-show="bhl.cityPickerShow">
         <div class="bar bar-header">
-            <button class="button button-clear button-positive" ng-click="bhl.showCP(false)">back</button>
+            <button class="button button-clear button-positive" ng-click="bhl.showCP(false)">{{'back'|translate}}</button>
         </div>
         <city-picker></city-picker>
     </div>

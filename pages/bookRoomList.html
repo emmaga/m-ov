@@ -20,14 +20,14 @@
                     {{feature.name}}
                 </span>
                 <span class="item-note">
-                    详情
+                    {{'detail'|translate}}
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>
             </a>
             <a class="item" href="{{brl.locationHref}}">
                 <i class="icon ion-ios-location-outline"></i> 上海市· 浦东新区· 祖冲之路2277弄
                 <span class="item-note">
-                    地图
+                    {{'map'|translate}}
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>
             </a>
@@ -35,8 +35,8 @@
             <!-- 查询 -->
             <!-- <div class="list padding mod-inset-forms"> -->
             <div class="item item-input item-stacked-label mod-no-ativated" ng-click="brl.showDP(true); tdp.init(brl.checkIn, brl.checkOut,null , null, brl.doAfterPickDates);">
-                <span class="input-label">日期</span>
-                <p class="mod-select-input mod-color-theme">{{brl.checkIn | date:'MM月dd日'}}入住 > {{brl.checkOut | date:'MM月dd日'}}离店&nbsp·&nbsp共{{brl.stayDays}}天</p>
+                <span class="input-label">{{'date'|translate}}</span>
+                <p class="mod-select-input mod-color-theme">{{brl.checkIn | date:'MM月dd日'}}{{'checkIn'|translate}} > {{brl.checkOut | date:'MM月dd日'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{brl.stayDays}}{{'days'|translate}}</p>
             </div>
             <div class="mod-split-line mod-break-padding"></div>
         </div>
@@ -47,12 +47,12 @@
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms.lists" ng-click="brl.nextState(room.roomId,brl.hotelId,brl.checkIn,brl.checkOut,room.roomRemain)">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.roomImgSrc}});"></div>
                 <span class="item-note">
-                    <h2 class="mod-member-price mod-color-excited">￥{{room.roomAveragePri}}<small>/天</small></h2>
+                    <h2 class="mod-member-price mod-color-excited">￥{{room.roomAveragePri}}<small>/{{'days'|translate}}</small></h2>
                     <button class="button button-small button-stable button-block mod-no-margin-top" ng-show="room.roomRemain==0">
-                        已订完
+                        {{'bookSoldOut'|translate}}
                     </button>
                     <button class="button button-small button-assertive button-block mod-no-margin-top" ng-show="!(room.roomRemain==0)">
-                        预订
+                        {{'booking'|translate}}
                         <i class="icon ion-ios-arrow-right"></i>
                     </button>
                 </span>
@@ -72,7 +72,7 @@
         <!-- date picker start-->
         <div class="ab-container" ng-show="brl.datePickerShow">
             <div class="bar bar-header">
-                <button class="button button-clear button-positive" ng-click="brl.showDP(false)">back</button>
+                <button class="button button-clear button-positive" ng-click="brl.showDP(false)">{{'back'|translate}}</button>
             </div>
             <travel-date-picker></travel-date-picker>
         </div>

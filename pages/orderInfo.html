@@ -1,25 +1,25 @@
 <div ng-controller="orderInfoController as orderInfo" ng-init="orderInfo.init()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">订单详情</h1>
+        <h1 class="title">{{'orderDetail'|translate}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <div class=" mod-has-header">
      
         <div class="item mod-no-border-top">
             <div class="row">
-                <p class="col mod-no-padding">订单号:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.orderId}}</p>
+                <p class="col mod-no-padding">{{'orderID'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.orderId}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">下单时间:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.dealTime | date}}</p>
+                <p class="col mod-no-padding">{{'orderDate'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.dealTime | date}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">总价:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.orderTotalPri | currency}}</p>
+                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.orderTotalPri | currency}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">支付方式:</p><p class="col mod-no-padding col-75">{{orderInfo.room.paymentMethod}}</p>
+                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.room.paymentMethod}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">订单状态:</p><p class="col mod-no-padding col-75">{{orderInfo.room.orderStatus}}</p>
+                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.room.orderStatus}}</p>
             </div>
         </div>
     </div>
@@ -41,22 +41,22 @@
         </a>
         <div class="item">
             <div class="row">
-                <p class="col mod-no-padding">入住时间:</p><p class="col mod-no-padding col-75">{{orderInfo.hotel.bookStartDate | date}}~{{orderInfo.hotel.bookEndDate|date}}&nbsp·&nbsp{天数}</p>
+                <p class="col mod-no-padding">{{'checkInDate'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.hotel.bookStartDate | date}}~{{orderInfo.hotel.bookEndDate|date}}&nbsp·&nbsp{天数}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">房间数:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.roomNumber}}</p>
+                <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.roomNumber}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">联系人:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.contactName}}</p>
+                <p class="col mod-no-padding">{{'contactName'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.contactName}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">手机号:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.mobile}}</p>
+                <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.mobile}}</p>
             </div>
         </div>
 
     </div>
     <div class="item item-divider">
-        <a class="button button-block button-balanced" ng-click="">去支付</a>
-        <a class="button button-block button-positive" ui-sref="bookHotelList">继续预订</a>
+        <a class="button button-block button-balanced" ng-click="">{{'payNow'|translate}}</a>
+        <a class="button button-block button-positive" ui-sref="bookHotelList">{{'goOnBooking'|translate}}</a>
     </div>
 </div>
