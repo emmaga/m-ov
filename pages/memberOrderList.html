@@ -1,12 +1,12 @@
 <div ng-controller="memberOrderListController as mol" ng-init="mol.init()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">我的订单</h1>
+        <h1 class="title">{{'myOrders'|translate}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <div class="list mod-has-header">
         <div ng-repeat="order in mol.orderLists" >
             <div class="item item-divider">
-                <p>订单号 #{{order.orderId}}</p>
+                <p>{{'orderID'|translate}} #{{order.orderId}}</p>
             </div>
             <div class="item item-thumbnail-left mod-no-side-border" ui-sref="bookOrderInfo({orderId:order.orderId})">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.roomImgSrc}});"></div>
@@ -15,8 +15,8 @@
                 </span>
                 <h2>{{order.roomName}}×{{order.roomNumber}}</h2>
                 <p>{{order.hotelName}}</p>
-                <p>{{order.bookStartDate | date:'MM月dd日'}}入住~{{order.bookEndDate | date:'MM月dd日'}}离店</p>
-                <p>总价￥{{order.orderTotalPri}}</p>
+                <p>{{order.bookStartDate | date:'MM月dd日'}}{{'checkIn'|translate}}~{{order.bookEndDate | date:'MM月dd日'}}{{'checkOut'|translate}}</p>
+                <p>{{'totalPrice'|translate}}{{order.orderTotalPri}}</p>
             </div>
         </div>
     </div>

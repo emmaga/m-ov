@@ -29,7 +29,7 @@
     </div>
     
     <div class="item item-divider">
-        <p>填写订单</p>
+        <p>{{'fillInOrder'|translate}}</p>
     </div>
     <div novalidate class="mod-inset-forms list mod-list padding" name="orderDetail">
         <div class="item">
@@ -39,7 +39,7 @@
             {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
-            <div class="input-label" >房间数:</div>
+            <div class="input-label" >{{'roomQuantity'|translate}}:</div>
             <button ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light">-</button>
             <span class="mod-input-number">
                 <!-- <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number"> -->
@@ -53,7 +53,7 @@
             <button ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light">+</button>
         </div>
         <div class="item item-input">
-            <div class="input-label" >联系人姓名:</div>
+            <div class="input-label" >{{'contackName'|translate}}:</div>
             <input type="text" ng-model="roomInfo.memberInfo.realName">
         </div>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
@@ -62,27 +62,27 @@
           <input type="number">
         </label> -->
         <div class="item item-input">
-            <div class="input-label" >手机号:</div>
+            <div class="input-label" >{{'phoneNumber'|translate}}:</div>
             <input type="number" ng-model="roomInfo.memberInfo.mobile">
         </div>
     </div>
     <div class="item item-divider">
-        <p>价格明细</p>
+        <p>{{'priceDetail'|translate}}</p>
     </div>
     <div class="list padding mod-list mod-inset-forms">
         <div class="item">
             <p ng-repeat="price in roomInfo.priceList">
-                {{price.date | date:'yyyy年MM月dd日'}}  ￥{{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}<br>
+                {{price.date | date:'yyyy年MM月dd日'}}  {{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}<br>
             </p>
         </div>
         <div class="item">
-            总价：{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
-            <p class="mod-price-tag mod-member0">{{roomInfo.memberInfo.memberlevel}}价</p>
+            {{'totalPrice'|translate}}:{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
+            <p class="mod-price-tag mod-member0">{{roomInfo.memberInfo.memberlevel}}</p>
         </div>
     </div>
     
     <div class="item item-divider">
-        <p>退改说明</p>
+        <p>{{'refundDoc'|translate}}</p>
     </div>
     <div class="list  mod-list">
         <div class="item">
@@ -93,7 +93,7 @@
     </div>
     <div class="item item-divider padding">
             
-            <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">提交订单</a>
+            <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
     </div>
 
 
