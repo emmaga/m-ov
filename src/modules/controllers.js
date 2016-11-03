@@ -977,5 +977,50 @@
       }
   }])
 
+  .controller('shopHomeController', ['$http', '$scope',
+    function($http, $scope) {
+      console.log('shopHomeController')
+      var self = this;
+      
+      self.init = function() {
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+      }
+    }
+  ])
+  .controller('shopProductDetailController', ['$http', '$scope',
+    function($http, $scope) {
+      console.log('shopProductDetailController')
+      var self = this;
+      
+      self.init = function() {
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+      }
+    }
+  ])
+  .controller('shopCartController', ['$http', '$scope',
+    function($http, $scope) {
+      console.log('shopCartController')
+      var self = this;
+      
+      self.init = function() {
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+      }
+    }
+  ])
+  .controller('shopOrderInfoController', ['$http', '$scope',
+    function($http, $scope) {
+      console.log('shopOrderInfoController')
+      var self = this;
+      
+      self.init = function() {
+        // 注册微信分享朋友和朋友圈
+        $scope.root.wxShare();
+      }
+    }
+  ])
+
 
 })();

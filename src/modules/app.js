@@ -99,6 +99,46 @@
           }
         }
       })
+      .state('shopHome', {
+        url: '/shopHome',
+        views: {
+          '': {
+            templateUrl: 'pages/shopHome.html'
+          }
+        }
+      })
+      .state('shopProductDetail', {
+        url: '/shopProductDetail',
+        views: {
+          '': {
+            templateUrl: 'pages/shopProductDetail.html'
+          }
+        }
+      })
+      .state('shopCart', {
+        url: '/shopCart',
+        views: {
+          '': {
+            templateUrl: 'pages/shopCart.html'
+          }
+        }
+      })
+      .state('shopOrderConfirm', {
+        url: '/shopOrderConfirm',
+        views: {
+          '': {
+            templateUrl: 'pages/shopOrderConfirm.html'
+          }
+        }
+      })
+      .state('shopOrderInfo', {
+        url: '/shopOrderInfo',
+        views: {
+          '': {
+            templateUrl: 'pages/shopOrderInfo.html'
+          }
+        }
+      })
   }])
 
   .constant('BACKEND_CONFIG', {
