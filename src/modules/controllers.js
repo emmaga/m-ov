@@ -114,7 +114,11 @@
           })
           .error(function(data, status, headers, config) {
             // todo use ionic alert style
-            alert($filter('translate')('serverError') + status);
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: ($filter('translate')('serverError') + status)
+            });
+            // alert($filter('translate')('serverError') + status);
           })
       }
 
@@ -135,7 +139,11 @@
           })
           .error(function(data, status, headers, config) {
             // todo use ionic alert style
-            alert($filter('translate')('serverError') + status);
+            $ionicPopup.alert({
+                 // title: 'Don\'t eat that!',
+                 template: ($filter('translate')('serverError') + status)
+            });
+            // alert($filter('translate')('serverError') + status);
           })
       }
 
