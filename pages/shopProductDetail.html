@@ -4,8 +4,11 @@
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <br><br><br><br><br>
-    
-    <a ui-sref="shopCart">购物车</a>
-
+    <img ng-src="{{shopProductDetail.product.imgSrc}}" style="width:100px;height:80px;"><br>
+    价格：{{shopProductDetail.product.price}}<br/>
+    商品名：{{shopProductDetail.product.name}}<br/>
+    简介：{{shopProductDetail.product.intro}}<br/>
+    <a ui-sref="shopCart">立即购买</a>
+    <a >加入购物车</a>
 
 </div>

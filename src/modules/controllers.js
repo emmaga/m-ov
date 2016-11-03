@@ -1019,14 +1019,42 @@
       }
     }
   ])
-  .controller('shopProductDetailController', ['$http', '$scope',
-    function($http, $scope) {
+  .controller('shopProductDetailController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
+    function($http, $scope, $filter,$stateParams,$ionicPopup,$timeout,loadingService,backendUrl) {
+ 
       console.log('shopProductDetailController')
       var self = this;
       
       self.init = function() {
+        self.showLoadingBool = {};
+        
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
+        self.search();
+      }
+
+      self.search = function() {
+        self.showLoadingBool.searchBool =false; 
+        loadingService(self.showLoadingBool);
+        $timeout(function(){
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('product','productDetail')
+          }).then(function successCallback(data, status, headers, config) {
+             console.log(data)
+              self.product = data.data.data.product;
+              self.showLoadingBool.searchBool =true; 
+              loadingService(self.showLoadingBool);
+            }, function errorCallback(data, status, headers, config) {
+              self.showLoadingBool.searchBool =true; 
+              loadingService(self.showLoadingBool)
+              $ionicPopup.alert({
+                   // title: 'Don\'t eat that!',
+                   template: status
+              });
+            });
+        },500)
+        
       }
     }
   ])
@@ -1039,6 +1067,8 @@
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
       }
+
+      
     }
   ])
   .controller('shopOrderInfoController', ['$http', '$scope',
