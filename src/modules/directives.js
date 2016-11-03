@@ -147,8 +147,12 @@
         }
         // 如果checkin不为空 && checkout为空
         else if(self.checkin && !self.checkout) {
+          // 如果当前点击的日期 等于 checkin 不理睬
+          if(sameDay(date, self.checkin)) {
+            return;
+          }
           // 如果当前点击的日期 早于 checkin
-          if(date < self.checkin) {
+          else if(date < self.checkin) {
             // 把当前点击的日期 覆盖掉 现有checkin
             self.checkin = date;
           }
