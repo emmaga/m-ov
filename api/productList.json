@@ -1,0 +1,48 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "data":{
+        "productCategory": [{
+            "categoryName":"分类一",
+            "productList":[{
+                "name":"阳澄湖大闸蟹礼盒·2只装",
+                "price":"1000",
+                "intro":"商品简介商品简介商品简介商品简介商品简介",
+                "imgSrc":"api/img/goods1.jpg"
+            },{
+                "name":"阳澄湖大闸蟹礼盒·2只装",
+                "price":"2000",
+                "intro":"商品简介商品简介商品简介商品简介商品简介",
+                "imgSrc":"api/img/goods1.jpg"
+            }]
+        },{
+            "categoryName":"分类二",
+            "productList":[{
+                "name":"产品二",
+                "price":"1000",
+                "intro":"商品简介商品简介商品简介商品简介商品简介",
+                "imgSrc":"api/img/goods1.jpg"
+            },{
+                "name":"产品二",
+                "price":"2000",
+                "intro":"商品简介商品简介商品简介商品简介商品简介",
+                "imgSrc":"api/img/goods1.jpg"
+            }]
+        },{
+            "categoryName":"分类三",
+            "productList":[{
+                "name":"产品三",
+                "price":"1000",
+                "intro":"商品简介商品简介商品简介商品简介商品简介",
+                "imgSrc":"api/img/goods1.jpg"
+            },{
+                "name":"产品三",
+                "price":"2000",
+                "intro":"商品简介商品简介商品简介商品简介商品简介",
+                "imgSrc":"api/img/goods1.jpg"
+            }]
+        }
+           ]
+    }
+    
+}
