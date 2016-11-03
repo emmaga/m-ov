@@ -1,12 +1,31 @@
 <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">商城首页</h1>
+        <h1 class="title">商城</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-    <br><br><br><br><br>
+    <!-- 分类 -->
+    <div class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
+        <div class="tabs">
+            <a class="tab-item active">
+	        {分类}
+	      </a>
+            <a class="tab-item">
+	        {分类}
+	      </a>
+            <a class="tab-item">
+	        {分类}
+	      </a>
+        </div>
+    </div>
+
+    <div class="list padding">
+    	
+    	<div>
+    		
+    	</div>
+
+    </div>
+
     
     <a ui-sref="shopProductDetail">商品详情</a>
-
-
 </div>
-
