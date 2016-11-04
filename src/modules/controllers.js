@@ -961,75 +961,76 @@
         }
     ])
 
-    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'loadingService', 'backendUrl',
-            function($http, $scope, $filter, $stateParams, $ionicPopup, loadingService, backendUrl) {
-                console.log('memberOrderListController')
-                var self = this;
+    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $timeout, $ionicPopup, $translate, loadingService, backendUrl) {
+            console.log('memberOrderListController')
+            var self = this;
 
-                self.init = function() {
+            self.init = function() {
 
-                    // 注册微信分享朋友和朋友圈
-                    $scope.root.wxShare();
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
 
-                    // 遮罩层 bool
-                    self.showLoadingBool = {};
-                    self.showLoadingBool.searchBool = false;
-                    loadingService(self.showLoadingBool)
-                    self.search();
-                }
-                self.search = function() {
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('member', 'orderList')
-                    }).then(function successCallback(data, status, headers, config) {
-                        console.log(data)
-                        self.orderLists = data.data.data.orderLists;
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                    }, function errorCallback(data, status, headers, config) {
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
-                    });
-                }
+                // 遮罩层 bool
+                self.showLoadingBool = {};
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool)
+                self.search();
             }
-        ])
-        .controller('shopHomeController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
-            function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
-
-                console.log('shopHomeController')
-                var self = this;
-
-                self.init = function() {
-                    self.showLoadingBool = {};
-                    // 注册微信分享朋友和朋友圈
-                    $scope.root.wxShare();
-                    self.searchCategory();
-                    // 默认不显示 loadingIcon
-                    self.showLoadingIcon = false;
-                    // 商品数组
-                    self.productList = [];
-                }
-                self.searchCategory = function() {
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('product', 'productCategory')
-                    }).then(function successCallback(data, status, headers, config) {
-                        self.categoryList = data.data.data.categoryList;
-                        // 默认加载第一个分类
-                        self.searchProductList(self.categoryList["0"]["id"])
-                    }, function errorCallback(data, status, headers, config) {
-
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
+            self.search = function() {
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('member', 'orderList')
+                }).then(function successCallback(data, status, headers, config) {
+                    console.log(data)
+                    self.orderLists = data.data.data.orderLists;
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool)
+                }, function errorCallback(data, status, headers, config) {
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool)
+                    $ionicPopup.alert({
+                        // title: 'Don\'t eat that!',
+                        template: status
                     });
-                }
-                self.searchProductList = function(id) {
+                });
+            }
+        }
+    ])
+
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+
+            console.log('shopHomeController')
+            var self = this;
+
+            self.init = function() {
+                self.showLoadingBool = {};
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
+                self.searchCategory();
+                // 默认不显示 loadingIcon
+                self.showLoadingIcon = false;
+                // 商品数组
+                self.productList = [];
+            }
+            self.searchCategory = function() {
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('product', 'productCategory')
+                }).then(function successCallback(data, status, headers, config) {
+                    self.categoryList = data.data.data.categoryList;
+                    // 默认加载第一个分类
+                    self.searchProductList(self.categoryList["0"]["id"])
+                }, function errorCallback(data, status, headers, config) {
+
+                    $ionicPopup.alert({
+                        // title: 'Don\'t eat that!',
+                        template: status
+                    });
+                });
+            }
+            self.searchProductList = function(id) {
                     console.log(id);
 
                     $http({
@@ -1047,127 +1048,174 @@
                     });
                 }
                 // 更多商品   loading 图标
-                self.moreProduct = function() {
+            self.moreProduct = function() {
 
-                    self.showLoadingIcon = true;
-                    self.searchProductList();
-                }
+                self.showLoadingIcon = true;
+                self.searchProductList();
             }
-        ])
-        .controller('shopProductDetailController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
-            function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+        }
+    ])
 
-                console.log('shopProductDetailController')
-                var self = this;
+    .controller('shopProductDetailController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
 
-                self.init = function() {
-                    self.showLoadingBool = {};
-
-                    // 注册微信分享朋友和朋友圈
-                    $scope.root.wxShare();
-                    self.search();
-                }
-
-                self.search = function() {
-                    self.showLoadingBool.searchBool = false;
-                    loadingService(self.showLoadingBool);
-                    $timeout(function() {
-                        $http({
-                            method: $filter('ajaxMethod')(),
-                            url: backendUrl('product', 'productDetail')
-                        }).then(function successCallback(data, status, headers, config) {
-                            console.log(data)
-                            self.product = data.data.data.product;
-                            self.showLoadingBool.searchBool = true;
-                            loadingService(self.showLoadingBool);
-                        }, function errorCallback(data, status, headers, config) {
-                            self.showLoadingBool.searchBool = true;
-                            loadingService(self.showLoadingBool)
-                            $ionicPopup.alert({
-                                // title: 'Don\'t eat that!',
-                                template: status
-                            });
-                        });
-                    }, 500)
-
-                }
-            }
-        ])
-        .controller('shopCartController', ['$http', '$scope', '$filter', 'backendUrl',
-          function($http, $scope, $filter, backendUrl) {
-            console.log('shopCartController')
+            console.log('shopProductDetailController')
             var self = this;
-            
+
             self.init = function() {
-              // 注册微信分享朋友和朋友圈
-              $scope.root.wxShare();
+                self.showLoadingBool = {};
 
-              // 初始化
-              self.loadingShopCartInfo = false;
-              self.countTotalPrice();
-
-              //获取 购物车信息
-              self.loadShopCartInfo();
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
+                self.search();
             }
 
-            self.plusOne = function(index) {
-              self.shopCartList[index].count += 1;
-              self.countTotalPrice();
-            }
-
-            self.delete = function(index) {
-              self.shopCartList.splice(index, 1);
-              self.countTotalPrice();
-            }
-
-            self.minusOne = function(index) {
-              if(self.shopCartList[index].count >= 2){
-                self.shopCartList[index].count -= 1;
-                self.countTotalPrice();
-              }
-            }
-
-            self.countTotalPrice = function() {
-              self.totalPrice = 0;
-              if(self.shopCartList) {
-                for (var i = 0; i < self.shopCartList.length; i++) {
-                  self.totalPrice += self.shopCartList[i].price * self.shopCartList[i].count;
-                } 
-              }
-            }
-
-            self.loadShopCartInfo = function() {
-              self.loadingShopCartInfo = true;
-              $http({
-                  method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart','shopCartList')
-                }).then(function successCallback(data, status, headers, config) {
-                    self.loadingShopCartInfo = false;
-                    self.shopCartList = data.data.data.list;
-                    self.countTotalPrice();
-                  }, function errorCallback(data, status, headers, config) {
-                    self.loadingShopCartInfo = false;
-                    $ionicPopup.alert({
-                         // title: 'Don\'t eat that!',
-                         template: ($filter('translate')('serverError') + status)
+            self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
+                $timeout(function() {
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('product', 'productDetail')
+                    }).then(function successCallback(data, status, headers, config) {
+                        console.log(data)
+                        self.product = data.data.data.product;
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                        $ionicPopup.alert({
+                            // title: 'Don\'t eat that!',
+                            template: status
+                        });
                     });
-                  });
-            }
+                }, 500)
 
-            
+            }
+        }
+    ])
+
+    .controller('shopCartController', ['$http', '$scope', '$filter', 'backendUrl',
+      function($http, $scope, $filter, backendUrl) {
+        console.log('shopCartController')
+        var self = this;
+        
+        self.init = function() {
+          // 注册微信分享朋友和朋友圈
+          $scope.root.wxShare();
+
+          // 初始化
+          self.loadingShopCartInfo = false;
+          self.countTotalPrice();
+
+          //获取 购物车信息
+          self.loadShopCartInfo();
+        }
+
+        self.plusOne = function(index) {
+          self.shopCartList[index].count += 1;
+          self.countTotalPrice();
+        }
+
+        self.delete = function(index) {
+          self.shopCartList.splice(index, 1);
+          self.countTotalPrice();
+        }
+
+        self.minusOne = function(index) {
+          if(self.shopCartList[index].count >= 2){
+            self.shopCartList[index].count -= 1;
+            self.countTotalPrice();
           }
-        ])
-        .controller('shopOrderInfoController', ['$http', '$scope',
-            function($http, $scope) {
-                console.log('shopOrderInfoController')
-                var self = this;
+        }
 
-                self.init = function() {
-                    // 注册微信分享朋友和朋友圈
-                    $scope.root.wxShare();
-                }
+        self.countTotalPrice = function() {
+          self.totalPrice = 0;
+          if(self.shopCartList) {
+            for (var i = 0; i < self.shopCartList.length; i++) {
+              self.totalPrice += self.shopCartList[i].price * self.shopCartList[i].count;
+            } 
+          }
+        }
+
+        self.loadShopCartInfo = function() {
+          self.loadingShopCartInfo = true;
+          $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shopCart','shopCartList')
+            }).then(function successCallback(data, status, headers, config) {
+                self.loadingShopCartInfo = false;
+                self.shopCartList = data.data.data.list;
+                self.countTotalPrice();
+              }, function errorCallback(data, status, headers, config) {
+                self.loadingShopCartInfo = false;
+                $ionicPopup.alert({
+                     // title: 'Don\'t eat that!',
+                     template: ($filter('translate')('serverError') + status)
+                });
+              });
+        }
+
+        
+      }
+    ])
+    
+    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+            console.log('shopOrderConfirmController')
+            var self = this;
+
+            self.init = function() {
+                self.showLoadingBool = {};
+
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
+                self.search();
             }
-        ])
+
+            self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
+                $timeout(function() {
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('product', 'productDetail')
+                    }).then(function successCallback(data, status, headers, config) {
+                        console.log(data)
+                        self.product = data.data.data.product;
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                        $ionicPopup.alert({
+                            // title: 'Don\'t eat that!',
+                            template: status
+                        });
+                    });
+                }, 500)
+
+            }
+
+        }
+    ])
+
+       
+      
+
+        
+    .controller('shopOrderInfoController', ['$http', '$scope',
+        function($http, $scope) {
+            console.log('shopOrderInfoController')
+            var self = this;
+
+            self.init = function() {
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
+            }
+        }
+    ])
 
 
 })();
