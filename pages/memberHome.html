@@ -1,14 +1,18 @@
 <div ng-controller="memberHomeController as memberHome" ng-init="memberHome.init()">
-	<div class="bar bar-header bar-light mod-fixed">
+    <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">会员中心</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-<br><br><br><br><br><br><br><br><br><br>
-memberInfo
-    <a ui-sref="memberInfoEdit({memberId:memberHome.member.memberId})">编辑</a><br>
-    <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
-    昵称：{{root.getParams('wxUserInfo').nickname}}<br>
-    {{memberHome.member.level}}<br />
-    {{memberHome.member.score}}<br />
-    <a ui-sref="memberOrderList">订单列表</a>
+    <div class="list padding mod-has-header mod-inset-forms mod-list">
+        <div class="item item-avatar">
+            <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
+            <h2>会员名{{root.getParams('wxUserInfo').nickname}}</h2>
+            <p>{{memberHome.member.level}} {{memberHome.member.score}}</p>
+        </div>
+        <a class="item" ui-sref="memberInfoEdit({memberId:memberHome.member.memberId})">编辑资料</a>
+    </div>
+    <div class="item item-divider"></div>
+    <div class="list mod-inset-forms">
+        <a class="item" ui-sref="memberOrderList">订单列表</a>
+    </div>
 </div>
