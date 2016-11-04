@@ -9,33 +9,33 @@
     <!-- 分类 -->
     <div class="tabs-striped tabs-top tabs-background-light tabs-color-assertive">
         <div class="tabs">
-            <a class="tab-item active" ng-repeat="category in shopHome.productCategory">
-	        {{category.categoryName}}
+            <a class="tab-item active" ng-repeat="category in shopHome.categoryList" ng-click="shopHome.searchProductList(category.id)">
+	        {{category.name}}
 	      </a>
         </div>
     </div>
 
 
-	<div ng-repeat="category in shopHome.productCategory" class="list padding mod-has-tabs-top">
    
-	    <div class="card mod-flat" ng-repeat='product in category.productList'>
-	        <div class="item mod-no-border">
-	            <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
-	        </div>
-	        <div class="item mod-no-border ">
-	        	<h2>{{product.name}}</h2>
-	        	<p>{{product.intro}}</p>
-	            <h2 class="mod-member-price assertive">￥{{product.price}}</h2>
-	        </div>
-	    </div>
-
+    <div class="card mod-flat" ng-repeat='product in shopHome.productList'>
+        <div class="item mod-no-border">
+            <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
+        </div>
+        <div class="item mod-no-border ">
+        	<h2>{{product.name}}</h2>
+        	<p>{{product.intro}}</p>
+            <h2 class="mod-member-price assertive">￥{{product.price}}</h2>
+        </div>
     </div>
 
 
+    
+
+
+
 
 
    
-</div>
 
 
   

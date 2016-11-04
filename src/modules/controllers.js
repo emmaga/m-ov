@@ -991,31 +991,39 @@
         self.showLoadingBool = {};
         // 注册微信分享朋友和朋友圈
         $scope.root.wxShare();
-        self.search();
-
+        self.searchCategory();
+        
       }
-      self.search = function() {
-        self.showLoadingBool.searchBool =false; 
-        loadingService(self.showLoadingBool);
-        $timeout(function(){
+      self.searchCategory = function() {
           $http({
             method: $filter('ajaxMethod')(),
-            url: backendUrl('product','productList')
+            url: backendUrl('product','productCategory')
           }).then(function successCallback(data, status, headers, config) {
-             console.log(data)
-              self.productCategory = data.data.data.productCategory;
-              self.showLoadingBool.searchBool =true; 
-              loadingService(self.showLoadingBool);
+              self.categoryList = data.data.data.categoryList;
+              // 默认加载第一个分类
+              self.searchProductList(self.categoryList["0"]["id"])
             }, function errorCallback(data, status, headers, config) {
-              self.showLoadingBool.searchBool =true; 
-              loadingService(self.showLoadingBool)
+              
               $ionicPopup.alert({
                    // title: 'Don\'t eat that!',
                    template: status
               });
             });
-        },500)
-        
+      }
+      self.searchProductList = function(id) {
+          console.log(id);
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('product','productList')
+          }).then(function successCallback(data, status, headers, config) {
+              self.productList = data.data.data.productList;
+              console.log(self.productList)
+            }, function errorCallback(data, status, headers, config) {
+              $ionicPopup.alert({
+                   // title: 'Don\'t eat that!',
+                   template: status
+              });
+            });
       }
     }
   ])
