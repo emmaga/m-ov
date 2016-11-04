@@ -1093,18 +1093,69 @@
                 }
             }
         ])
-        .controller('shopCartController', ['$http', '$scope',
-            function($http, $scope) {
-                console.log('shopCartController')
-                var self = this;
+        .controller('shopCartController', ['$http', '$scope', '$filter', 'backendUrl',
+          function($http, $scope, $filter, backendUrl) {
+            console.log('shopCartController')
+            var self = this;
+            
+            self.init = function() {
+              // 注册微信分享朋友和朋友圈
+              $scope.root.wxShare();
 
-                self.init = function() {
-                    // 注册微信分享朋友和朋友圈
-                    $scope.root.wxShare();
-                }
+              // 初始化
+              self.loadingShopCartInfo = false;
+              self.countTotalPrice();
 
-
+              //获取 购物车信息
+              self.loadShopCartInfo();
             }
+
+            self.plusOne = function(index) {
+              self.shopCartList[index].count += 1;
+              self.countTotalPrice();
+            }
+
+            self.delete = function(index) {
+              self.shopCartList.splice(index, 1);
+              self.countTotalPrice();
+            }
+
+            self.minusOne = function(index) {
+              if(self.shopCartList[index].count >= 2){
+                self.shopCartList[index].count -= 1;
+                self.countTotalPrice();
+              }
+            }
+
+            self.countTotalPrice = function() {
+              self.totalPrice = 0;
+              if(self.shopCartList) {
+                for (var i = 0; i < self.shopCartList.length; i++) {
+                  self.totalPrice += self.shopCartList[i].price * self.shopCartList[i].count;
+                } 
+              }
+            }
+
+            self.loadShopCartInfo = function() {
+              self.loadingShopCartInfo = true;
+              $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopCart','shopCartList')
+                }).then(function successCallback(data, status, headers, config) {
+                    self.loadingShopCartInfo = false;
+                    self.shopCartList = data.data.data.list;
+                    self.countTotalPrice();
+                  }, function errorCallback(data, status, headers, config) {
+                    self.loadingShopCartInfo = false;
+                    $ionicPopup.alert({
+                         // title: 'Don\'t eat that!',
+                         template: ($filter('translate')('serverError') + status)
+                    });
+                  });
+            }
+
+            
+          }
         ])
         .controller('shopOrderInfoController', ['$http', '$scope',
             function($http, $scope) {
