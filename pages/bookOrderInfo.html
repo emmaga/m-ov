@@ -1,4 +1,4 @@
-<div ng-controller="bookbookOrderInfoController as bookOrderInfo" ng-init="bookOrderInfo.init()">
+<div ng-controller="bookOrderInfoController as bookOrderInfo" ng-init="bookOrderInfo.init()">
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{'orderDetail'|translate}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
@@ -8,19 +8,19 @@
         <div class="item mod-no-border-top">
             <div class="row">
 
-                <p class="col mod-no-padding">{{'orderID'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.orderId}}</p>
+                <p class="col mod-no-padding">{{'orderID'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderId}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'orderDate'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.dealTime | date}}</p>
+                <p class="col mod-no-padding">{{'orderDate'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.dealTime | date}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.orderTotalPri | currency}}</p>
+                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderTotalPri | currency}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.room.paymentMethod}}</p>
+                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.paymentMethod}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.room.orderStatus}}</p>
+                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.orderStatus}}</p>
 
             </div>
         </div>
@@ -53,16 +53,15 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">手机号:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
-                <p class="col mod-no-padding">{{'checkInDate'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.hotel.bookStartDate | date}}~{{orderInfo.hotel.bookEndDate|date}}&nbsp·&nbsp{天数}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.roomNumber}}</p>
+                <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'contactName'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.contactName}}</p>
+                <p class="col mod-no-padding">{{'contactName'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p><p class="col mod-no-padding col-75">{{orderInfo.roomOrder.mobile}}</p>
+                <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
 
             </div>
         </div>

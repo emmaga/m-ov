@@ -17,7 +17,7 @@
 
 
    
-    <div class="card mod-flat" ng-repeat='product in shopHome.productList'>
+    <div class="card mod-flat" ng-repeat='product in shopHome.productList' ui-sref="shopProductDetail">
         <div class="item mod-no-border">
             <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
         </div>
@@ -30,7 +30,7 @@
 
 
     <a href="" ng-click="shopHome.moreProduct()">更多商品</a><ion-spinner icon="ripple" ng-show="shopHome.showLoadingIcon"></ion-spinner><br>
-
+    
 
 
 
@@ -42,5 +42,4 @@
 
 
 
-    <a ui-sref="shopProductDetail">商品详情</a>
 </div>
