@@ -3,9 +3,26 @@
         <h1 class="title">购物车</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-    <br><br><br><br><br>
-    <br>
-    <!-- <a ui-sref="">购物车</a> -->
-    购物车<br>
-    <a ui-sref="shopOrderConfirm">总价/结算</a>
+    
+
+    
+
+
+    <div ng-show="shopCart.loadingShopCartInfo">loading</div>
+    <div ng-repeat="item in shopCart.shopCartList track by $index">
+        <a ng-click="shopCart.minusOne($index)">-</a>{{item.count}}<a ng-click="shopCart.plusOne($index)">+</a>
+        {{item.thumbnailSrc}}         
+        {{item.productID}}       
+        {{item.price | fenToYuan}}      
+        {{item.productName}}      
+        {{item.status}}    <!--1正常 0下架-->
+        {{item.availableCount}}
+        <a ng-click="shopCart.delete($index)">删除</a>
+    </div>
+    
+
+
+
+
+    <a ui-sref="shopOrderConfirm">¥{{shopCart.totalPrice | fenToYuan}}/结算</a>
 </div>
