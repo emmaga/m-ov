@@ -1,0 +1,32 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "data":{
+        "detail":{
+            "orderId":"1322",
+            "orderStatus":"0",
+            "dealTime":"1288323623006",
+            "totalPri":"100",
+            "name":"WangWu",
+            "mobile":"13783476666",
+            "address":"上海张江",
+            "productList":[{
+                "imgSrc":"api/img/goods1.jpg",
+                "name":"商品一",
+                "unitPrice":"99",
+                "number":"5"
+            },{
+                "imgSrc":"api/img/goods1.jpg",
+                "name":"商品二",
+                "unitPrice":"99",
+                "number":"5"
+            },{
+                "imgSrc":"api/img/goods1.jpg",
+                "name":"商品三",
+                "unitPrice":"99",
+                "number":"5"
+            }]
+        }
+    }
+    
+}

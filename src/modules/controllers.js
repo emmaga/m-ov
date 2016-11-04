@@ -29,6 +29,22 @@
               "projectName": "项目-酒店名字",
               "projectImgSrc": "api/img/doodle.html"
             }
+             self.params.memberInfo 
+
+             {
+               "member": {
+                   "memberId": "123321123312",
+                   "memberLevel": {
+                     "name":"微信会员",
+                     "class":"class1"
+                   },
+                   "score": "100",
+                   "realName":"LiSi",
+                   "mobile": "13783476981",
+                   "idCardNumber": "410181999200000000",
+                   "birthday": "100"
+                }
+             }
             */
 
 
@@ -50,6 +66,7 @@
                 self.wxConfigJSSDK();
                 self.searchProjectInfo();
                 self.searchMemberInfo();
+                console.log(self.params)
             }
 
             self.setParams = function(name, val) {
@@ -1200,21 +1217,46 @@
         }
     ])
 
-       
-      
-
-        
-    .controller('shopOrderInfoController', ['$http', '$scope',
-        function($http, $scope) {
-            console.log('shopOrderInfoController')
+    .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+            console.log('shopOrderInfoController')    
+    
             var self = this;
-
+             
             self.init = function() {
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
+                self.showLoadingBool = {};
+                self.search();
+            }
+
+
+            self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
+                $timeout(function() {
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('product', 'shopOrderInfo')
+                    }).then(function successCallback(data, status, headers, config) {
+                        console.log(data)
+                        self.detail = data.data.data.detail;
+                        console.log(self.detail)
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                        $ionicPopup.alert({
+                            // title: 'Don\'t eat that!',
+                            template: status
+                        });
+                    });
+                }, 500)
+
             }
         }
     ])
-
+    
 
 })();
