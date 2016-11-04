@@ -9,7 +9,7 @@
 
 
     <div ng-show="shopCart.loadingShopCartInfo">loading</div>
-    <div ng-repeat="item in shopCart.shopCartList track by $index">
+    <div ng-repeat="item in shopCartList track by $index">
         <a ng-click="shopCart.minusOne($index)">-</a>{{item.count}}<a ng-click="shopCart.plusOne($index)">+</a>
         {{item.thumbnailSrc}}         
         {{item.productID}}       

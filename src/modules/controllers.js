@@ -48,48 +48,6 @@
 
                 // wx注册
                 self.wxConfigJSSDK();
-
-                // wx share
-                self.wxShare = function() {
-                    // 1秒后再获取link，不然还是上一个页面的link
-                    setTimeout(function() {
-                        // 分享给朋友
-                        wx.onMenuShareAppMessage({
-                            title: '', // 分享标题
-                            desc: '', // 分享描述
-                            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
-                                self.getParams('appid') + '&redirect_uri=' +
-                                encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
-                                '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
-                            imgUrl: '', // 分享图标
-                            type: '', // 分享类型,music、video或link，不填默认为link
-                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                            success: function() {
-                                // 用户确认分享后执行的回调函数
-                            },
-                            cancel: function() {
-                                // 用户取消分享后执行的回调函数
-                            }
-                        });
-
-                        // 分享到朋友圈
-                        wx.onMenuShareTimeline({
-                            title: '', // 分享标题
-                            link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
-                                self.getParams('appid') + '&redirect_uri=' +
-                                encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
-                                '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
-                            imgUrl: '', // 分享图标
-                            success: function() {
-                                // 用户确认分享后执行的回调函数
-                            },
-                            cancel: function() {
-                                // 用户取消分享后执行的回调函数
-                            }
-                        });
-                    }, 1000);
-                };
-
                 self.searchProjectInfo();
                 self.searchMemberInfo();
             }
@@ -188,6 +146,47 @@
                         });
                     })
             }
+
+            // wx share
+            self.wxShare = function() {
+                // 1秒后再获取link，不然还是上一个页面的link
+                setTimeout(function() {
+                    // 分享给朋友
+                    wx.onMenuShareAppMessage({
+                        title: '', // 分享标题
+                        desc: '', // 分享描述
+                        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
+                            self.getParams('appid') + '&redirect_uri=' +
+                            encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
+                            '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
+                        imgUrl: '', // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function() {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function() {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+
+                    // 分享到朋友圈
+                    wx.onMenuShareTimeline({
+                        title: '', // 分享标题
+                        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
+                            self.getParams('appid') + '&redirect_uri=' +
+                            encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
+                            '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
+                        imgUrl: '', // 分享图标
+                        success: function() {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function() {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                }, 1000);
+            };
 
             // 项目信息
             self.searchProjectInfo = function() {
@@ -1107,34 +1106,35 @@
 
           // 初始化
           self.loadingShopCartInfo = false;
-          self.countTotalPrice();
+
+          //test
+          $scope.$watch('shopCartList', function() { 
+            self.countTotalPrice();
+          }, true);
 
           //获取 购物车信息
           self.loadShopCartInfo();
         }
 
         self.plusOne = function(index) {
-          self.shopCartList[index].count += 1;
-          self.countTotalPrice();
+          $scope.shopCartList[index].count += 1;
         }
 
         self.delete = function(index) {
-          self.shopCartList.splice(index, 1);
-          self.countTotalPrice();
+          $scope.shopCartList.splice(index, 1);
         }
 
         self.minusOne = function(index) {
-          if(self.shopCartList[index].count >= 2){
-            self.shopCartList[index].count -= 1;
-            self.countTotalPrice();
+          if($scope.shopCartList[index].count >= 2){
+            $scope.shopCartList[index].count -= 1;
           }
         }
 
         self.countTotalPrice = function() {
           self.totalPrice = 0;
-          if(self.shopCartList) {
-            for (var i = 0; i < self.shopCartList.length; i++) {
-              self.totalPrice += self.shopCartList[i].price * self.shopCartList[i].count;
+          if($scope.shopCartList) {
+            for (var i = 0; i < $scope.shopCartList.length; i++) {
+              self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
             } 
           }
         }
@@ -1143,11 +1143,10 @@
           self.loadingShopCartInfo = true;
           $http({
               method: $filter('ajaxMethod')(),
-              url: backendUrl('shopCart','shopCartList')
+              url: backendUrl('shopCart', 'shopCartList')
             }).then(function successCallback(data, status, headers, config) {
                 self.loadingShopCartInfo = false;
-                self.shopCartList = data.data.data.list;
-                self.countTotalPrice();
+                $scope.shopCartList = data.data.data.list;
               }, function errorCallback(data, status, headers, config) {
                 self.loadingShopCartInfo = false;
                 $ionicPopup.alert({
