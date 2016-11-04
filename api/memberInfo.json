@@ -4,7 +4,10 @@
     "data":{
         "member": {
             "memberId": "123321123312",
-            "memberlevel": "微信会员",
+            "memberLevel": {
+              "name":"微信会员",
+              "class":"class1"
+            },
             "score": "100",
             "realName":"LiSi",
             "mobile": "13783476981",
@@ -14,3 +17,5 @@
     }
     
 }
+
+

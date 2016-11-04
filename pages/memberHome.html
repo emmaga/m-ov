@@ -8,6 +8,7 @@
             <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
             <h2>会员名{{root.getParams('wxUserInfo').nickname}}</h2>
             <p>{{memberHome.member.level}} {{memberHome.member.score}}</p>
+            <p>会员等级class：   {{memberHome.member.memberLevel.class}} </p>
         </div>
         <a class="item" ui-sref="memberInfoEdit({memberId:memberHome.member.memberId})">编辑资料</a>
     </div>
