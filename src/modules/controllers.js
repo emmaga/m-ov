@@ -731,7 +731,7 @@
         }
     ])
 
-    .controller('bookbookOrderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
+    .controller('bookOrderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
         function($scope, $http, $filter, $stateParams, $ionicPopup, $translate, loadingService, backendUrl, util) {
             console.log("bookInfoController")
             var self = this;
