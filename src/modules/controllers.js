@@ -1107,7 +1107,7 @@
           // 初始化
           self.loadingShopCartInfo = false;
 
-          //test
+          //watch shopCartList
           $scope.$watch('shopCartList', function() { 
             self.countTotalPrice();
           }, true);
@@ -1117,7 +1117,10 @@
         }
 
         self.plusOne = function(index) {
-          $scope.shopCartList[index].count += 1;
+          var item = $scope.shopCartList[index];
+          if(item.count < item.availableCount){
+            item.count += 1;
+          }
         }
 
         self.delete = function(index) {
@@ -1160,49 +1163,80 @@
       }
     ])
     
-    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'backendUrl', 
+        function($http, $scope, $filter, $stateParams, $ionicPopup, backendUrl) {
             console.log('shopOrderConfirmController')
             var self = this;
 
             self.init = function() {
-                self.showLoadingBool = {};
-
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
-                self.search();
+                
+                // init
+                self.loadingOrderInfo = false;
+                self.orderInfo = {};
+
+                // 加载要购买物品的信息及用户地址
+                self.loadOrderInfo();
             }
 
-            self.search = function() {
-                self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool);
-                $timeout(function() {
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('product', 'productDetail')
-                    }).then(function successCallback(data, status, headers, config) {
-                        console.log(data)
-                        self.product = data.data.data.product;
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool);
-                    }, function errorCallback(data, status, headers, config) {
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
-                    });
-                }, 500)
+            self.countTotalPrice = function() {
+              self.totalPrice = 0;
+              if(self.orderInfo.list) {
+                for (var i = 0; i < self.orderInfo.list.length; i++) {
+                  self.totalPrice += self.orderInfo.list[i].price * self.orderInfo.list[i].count;
+                } 
+              }
+            }
 
+            self.loadOrderInfo = function() {
+                self.loadingOrderInfo = true;
+                // loadCartInfo
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('', 'shopCartList')
+                })
+                .then(function successCallback(data, status, headers, config) {
+                    if(data.data.rescode == '200') {
+                        self.orderInfo.list = data.data.data.list;
+                        self.countTotalPrice();
+                        return true;
+                    }
+                    else {
+                        alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                    }
+                }, function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError') + status);
+                    self.loadingOrderInfo = false;
+                    return false;
+                })
+                // load address
+                .then(function(e) {
+                    if(!e) return;
+                    $http({
+                      method: $filter('ajaxMethod')(),
+                      url: backendUrl('', 'memberAddress')
+                    })
+                    .then(function successCallback(data, status, headers, config) {
+                        self.loadingOrderInfo = false;
+                        if(data.data.rescode == '200') {
+                            if(data.data.data.list.length > 0) {
+                              self.orderInfo.address = data.data.data.list[0]; 
+                            }
+                            return true;
+                        }
+                        else {
+                            alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                        }
+                    }, function errorCallback(data, status, headers, config) {
+                        alert($filter('translate')('serverError') + status);
+                        self.loadingOrderInfo = false;
+                    })
+                })
             }
 
         }
-    ])
-
-       
-      
-
+    ]) 
         
     .controller('shopOrderInfoController', ['$http', '$scope',
         function($http, $scope) {
