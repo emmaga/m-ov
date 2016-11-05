@@ -1190,7 +1190,6 @@
                 $scope.root.wxShare();
                 
                 // init
-                self.loadingOrderInfo = false;
                 self.orderInfo = {};
 
                 // 加载要购买物品的信息及用户地址
@@ -1224,7 +1223,6 @@
                     }
                 }, function errorCallback(data, status, headers, config) {
                     alert($filter('translate')('serverError') + status);
-                    self.loadingOrderInfo = false;
                     return false;
                 })
                 // load address
@@ -1235,7 +1233,6 @@
                       url: backendUrl('', 'memberAddress')
                     })
                     .then(function successCallback(data, status, headers, config) {
-                        self.loadingOrderInfo = false;
                         if(data.data.rescode == '200') {
                             if(data.data.data.list.length > 0) {
                               self.orderInfo.address = data.data.data.list[0]; 
@@ -1247,9 +1244,15 @@
                         }
                     }, function errorCallback(data, status, headers, config) {
                         alert($filter('translate')('serverError') + status);
-                        self.loadingOrderInfo = false;
                     })
                 })
+                .catch(function(e){
+                    console.log("catch");
+                    console.log(e);
+                })
+                .finally(function(value){
+                    self.loadingOrderInfo = false;
+                });
             }
 
         }
