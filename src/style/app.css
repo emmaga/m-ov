@@ -153,7 +153,16 @@
 
 
 
-/*特殊类*/
+/*特殊类SP*/
+/*会员卡*/
+.mod-member-card{
+	position: relative;
+	/*padding-top: 44px !important;*/
+}
+.mod-member-card:before{
+	content: ' ';
+
+}
 
 /*会员*/
 .mod-member0{
@@ -286,6 +295,22 @@
 .mod-no-border-top{
 	border-top: none !important
 }
+.mod-bg-transparent{
+	background: transparent !important;
+	background-color: transparent !important;
+	background: rgba(0,0,0,0) !important;
+	background-color: rgba(0,0,0,0) !important;
+}
+.mod-item-note{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+.mod-text-center{
+	text-align: center !important;
+}
+
+
 
 
 
