@@ -10,6 +10,28 @@
     'app.services',
     'pascalprecht.translate'
   ])
+  
+  .config(function ($httpProvider) {
+      $httpProvider.interceptors.push(function ($rootScope, $q) {
+          return {
+              request: function (config) {
+                  config.timeout = 1000;
+                  return config;
+              },
+              responseError: function (rejection) {
+                  switch (rejection.status){
+                      case 408 :
+                          console.log('connection timed out');
+                          break;
+                      case -1 :
+                          console.log('测试');
+                          break;
+                  }
+                  return $q.reject(rejection);
+              }
+          }
+      })
+  })
 
   .config(['$translateProvider',function($translateProvider){
       var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
@@ -140,6 +162,8 @@
         }
       })
   }])
+  
+  
 
   .constant('BACKEND_CONFIG', {
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',

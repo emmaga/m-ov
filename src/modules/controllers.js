@@ -81,6 +81,7 @@
                 };
                 data = JSON.stringify(data);
 
+
                 // buildsession
                 BACKEND_CONFIG.test&&console.log('buildsession');
 
@@ -133,6 +134,7 @@
                         alert($filter('translate')('serverError') + status);
                         return false;
                     })
+
                 })
                 // WXConfigJSSDK
                 .then(function(e) {
@@ -141,6 +143,7 @@
                     // http://www.cnblogs.com/sunshq/p/4171490.html
                     self.noncestr = Math.random().toString(36).substr(2);
                     self.timestamp = new Date().getTime() + '';
+
 
                     var data = {
                         "appid": self.getParams('appid'),
