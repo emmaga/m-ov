@@ -12,7 +12,7 @@
   ])
 
   .config(['$translateProvider',function($translateProvider){
-      var lang = navigator.language == 'zh-CN' ? navigator.language : 'en-US';
+      var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
       $translateProvider.preferredLanguage(lang);
       $translateProvider.useStaticFilesLoader({
           prefix: 'i18n/',
@@ -28,42 +28,42 @@
         templateUrl: 'pages/bookHotelList.html'
       })
       .state('bookRoomList', {
-        url: '/bookRoomList',
+        url: '/bookRoomList/?hotelId&checkIn&checkOut',
         views: {
           '': {
             templateUrl: 'pages/bookRoomList.html'
           }
         }
       })
-      .state('bookHotelList', {
-        url: '/bookHotelList:?sDate&eDate',
-        views: {
-          '': {
-            templateUrl: 'pages/bookHotelList.html'
-          }
-        }
-      })
       .state('hotelInfo', {
-        url: '/hotelInfo',
+        url: '/hotelInfo/?hotelId',
         views: {
           '': {
             templateUrl: 'pages/hotelInfo.html'
           }
         }
       })
-      .state('bookInfo', {
-        url: '/bookInfo',
+      .state('bookHotelList', {
+        url: '/bookHotelList',
         views: {
           '': {
-            templateUrl: 'pages/bookInfo.html'
+            templateUrl: 'pages/bookHotelList.html'
           }
         }
       })
-      .state('bookResult', {
-        url: '/bookResult',
+      .state('roomInfo', {
+        url: '/roomInfo/?roomId&hotelId&checkIn&checkOut',
         views: {
           '': {
-            templateUrl: 'pages/bookResult.html'
+            templateUrl: 'pages/roomInfo.html'
+          }
+        }
+      })
+      .state('bookOrderInfo', {
+        url: '/bookOrderInfo/?orderId',
+        views: {
+          '': {
+            templateUrl: 'pages/bookOrderInfo.html'
           }
         }
       })
@@ -83,35 +83,11 @@
           }
         }
       })
-      .state('memberLogin', {
-        url: '/memberLogin',
-        views: {
-          '': {
-            templateUrl: 'pages/memberLogin.html'
-          }
-        }
-      })
-      .state('memberRegister', {
-        url: '/memberRegister',
-        views: {
-          '': {
-            templateUrl: 'pages/memberRegister.html'
-          }
-        }
-      })
       .state('memberInfoEdit', {
-        url: '/memberInfoEdit',
+        url: '/memberInfoEdit/?memberId',
         views: {
           '': {
             templateUrl: 'pages/memberInfoEdit.html'
-          }
-        }
-      })
-      .state('memberResetPW', {
-        url: '/memberResetPW',
-        views: {
-          '': {
-            templateUrl: 'pages/memberResetPW.html'
           }
         }
       })
@@ -123,12 +99,53 @@
           }
         }
       })
+      .state('shopHome', {
+        url: '/shopHome',
+        views: {
+          '': {
+            templateUrl: 'pages/shopHome.html'
+          }
+        }
+      })
+      .state('shopProductDetail', {
+        url: '/shopProductDetail',
+        views: {
+          '': {
+            templateUrl: 'pages/shopProductDetail.html'
+          }
+        }
+      })
+      .state('shopCart', {
+        url: '/shopCart',
+        views: {
+          '': {
+            templateUrl: 'pages/shopCart.html'
+          }
+        }
+      })
+      .state('shopOrderConfirm', {
+        url: '/shopOrderConfirm',
+        views: {
+          '': {
+            templateUrl: 'pages/shopOrderConfirm.html'
+          }
+        }
+      })
+      .state('shopOrderInfo', {
+        url: '/shopOrderInfo',
+        views: {
+          '': {
+            templateUrl: 'pages/shopOrderInfo.html'
+          }
+        }
+      })
   }])
 
   .constant('BACKEND_CONFIG', {
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
     testUrl       : 'api/',
     testExtesion  : '.json',
-    test          : true
+    test          : true,
+    mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
   })
 })();

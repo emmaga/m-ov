@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>m-openvod</title>
+    <title>清鹤云酒店</title>
     <link rel="stylesheet" href="dist/style/app.min.css" />
 </head>
 
 <body ng-app="m-ov" ng-controller="RootController as root" ng-init="root.init()">
-    <div ui-view=""></div>
+    <div ui-view="" style="overflow: hidden;"></div>
     <div ng-include="'pages/mainMenu.html'" ng-show="root.mainMenuShow"></div>
     <script src="lib/ionic.bundle.min.js" ></script>
     <script src="lib/angular-ui-router.js" ></script>
@@ -17,12 +17,13 @@
     <script src="bower_components/angular-translate/angular-translate.min.js" ></script>
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js" ></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script src="dist/js/app.min.js" ></script>
-    <!-- <script src='src/modules/controllers.js'></script>
+    <!-- <script src="dist/js/app.min.js" ></script> -->
+    <script src="src/js/util.js" ></script>
+    <script src='src/modules/controllers.js'></script>
     <script src='src/modules/app.js'></script>
     <script src='src/modules/directives.js'></script>
     <script src='src/modules/services.js'></script>
-    <script src='src/modules/filters.js'></script> -->
+    <script src='src/modules/filters.js'></script>
 </body>
 
 </html>

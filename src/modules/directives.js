@@ -15,11 +15,12 @@
     function($scope, $ionicScrollDelegate) {
       var self = this;
 
-      self.init = function(callback) {
+      self.init = function(cityLists, callback) {
         self.callback = callback;
+        self.cityLists = cityLists;
       }
 
-      self.goto = function(pos) {
+      self.scrollTo = function(pos) {
         var offset = document.getElementById(pos).offsetTop;
         /*console.log(offset);
         document.getElementById('cp-city-list').scrollTop = offset;*/
@@ -38,12 +39,18 @@
     }
   })
 
-  .controller('travelDatePickerController', ['$scope', 
-    function($scope) {
+  .controller('travelDatePickerController', ['$scope', '$filter',
+    function($scope, $filter) {
       var self = this;
-
       // st: 开始日期, et: 结束日期; 均为时间戳
       self.init = function(checkin, checkout, st, et, callback) {
+
+        // 入住，离店 多语言设置
+        var s = document.createElement('style');
+        s.innerText =  '.tdp-d-checkin:after{content:\''+$filter('translate')('checkIn')+'\'}';
+        s.innerText += '.tdp-d-checkout:after{content:\''+$filter('translate')('checkOut')+'\'}';
+        document.body.appendChild(s);
+
         self.st = st ? st : new Date().getTime();
         //可选日期结束日期默认:今天后的半年
         self.et = et ? et: self.st + (30*3+31*3)*24*60*60*1000;
@@ -51,6 +58,28 @@
         self.checkout = checkout;
         self.dates = [];
         self.callback = callback;
+        
+        self.setDateData();
+
+        //set msg
+        self.msgShow = true;
+        self.msg = $filter('translate')('plsSelACheckInDate');
+      }
+
+      self.setDateData = function() {
+
+        /*self.dates = [
+        {
+          "month" : 1474813026000,
+          "weeks" : [
+            [null, null, 1472739426000, 1472825826000, 1472912226000, 1472998626000, 1473085026000],
+            [1473171426000, 1473257826000, 1473344226000, 1473430626000, 1473517026000, 1473603426000, 1473689826000],
+            [1473776226000, 1473862626000, 1473949026000, 1474035426000, 1474121826000, 1474208226000, 1474294626000], 
+            [1474381026000, 1474467426000, 1474553826000, 1474640226000, 1474726626000, 1474813026000, 1474899426000], 
+            [1474985826000, 1475072226000, 1475158626000, 1475245026000, null, null, null]
+          ]
+        }
+      ]*/
 
         // 月份数量＝结束日期的所在月份总数－开始..＋1
         var mC = getMonCnt(self.et) - getMonCnt(self.st) + 1;
@@ -98,35 +127,32 @@
           // 递增一个月
           addMon(st);
         }
-
-        /*self.dates = [
-        {
-          "month" : 1474813026000,
-          "weeks" : [
-            [null, null, 1472739426000, 1472825826000, 1472912226000, 1472998626000, 1473085026000],
-            [1473171426000, 1473257826000, 1473344226000, 1473430626000, 1473517026000, 1473603426000, 1473689826000],
-            [1473776226000, 1473862626000, 1473949026000, 1474035426000, 1474121826000, 1474208226000, 1474294626000], 
-            [1474381026000, 1474467426000, 1474553826000, 1474640226000, 1474726626000, 1474813026000, 1474899426000], 
-            [1474985826000, 1475072226000, 1475158626000, 1475245026000, null, null, null]
-          ]
-        }
-      ]*/
-      }
+      };
 
       // 日期点击
       self.clickDate = function(date) {
-        // 如果当前点击的日期为不可点击的日期 || 当前点击的和当前已选中的所有日期为同一个日期: 不理睬
-        if(self.dDisable(date) || sameDay(date, self.checkin) || sameDay(date, self.checkout)) {return false;}
+        /*// 如果当前点击的日期为不可点击的日期 || 当前点击的和当前已选中的所有日期为同一个日期: 不理睬
+        if(self.dDisable(date) || sameDay(date, self.checkin) || sameDay(date, self.checkout)) {return false;}*/
+        // 如果当前点击的日期为不可点击的日期 不理睬
+        if(self.dDisable(date)) {return false;}
         // 如果checkin和checkout都不为空
         if(self.checkin && self.checkout) {
           // 将当前点击的日期设为checkin（把checkout清空）
           self.checkin = date;
           self.checkout = null;
+
+          //set msg
+          self.msgShow = true;
+          self.msg = $filter('translate')('plsSelACheckOutDate');
         }
         // 如果checkin不为空 && checkout为空
         else if(self.checkin && !self.checkout) {
+          // 如果当前点击的日期 等于 checkin 不理睬
+          if(sameDay(date, self.checkin)) {
+            return;
+          }
           // 如果当前点击的日期 早于 checkin
-          if(date < self.checkin) {
+          else if(date < self.checkin) {
             // 把当前点击的日期 覆盖掉 现有checkin
             self.checkin = date;
           }
@@ -134,6 +160,11 @@
           else {
             // 把当前点击的日期设为checkout
             self.checkout = date;
+
+            //set msg
+            self.msgShow = false;
+            self.msg = '';
+
             // 返回选中的2个日期，关闭日期选择器
             self.callback(self.checkin, self.checkout);
           }
@@ -154,6 +185,17 @@
         else {
           return false;
         }
+      }
+
+      // 返回是否是checkin和checkout之间的日期
+      self.isDuring = function(d) {
+        var ret = false;
+        if(self.checkin && self.checkout) {
+          if (d > self.checkin && d < self.checkout) {
+            ret = true;
+          }
+        }
+        return ret;
       }
 
       // 返回是否是checkin day

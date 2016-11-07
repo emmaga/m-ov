@@ -1,0 +1,16 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "data": {
+        "categoryList":[{
+            "name":"分类一",
+            "id":"1"
+        },{
+            "name":"分类二",
+            "id":"2"
+        },{
+            "name":"分类三",
+            "id":"3"
+        }]
+    }
+}

@@ -1,4 +1,61 @@
 {
+  "back": "返回",
+  "booking": "预订",
+  "bookHotel": "订酒店",
+  "bookSoldOut": "已订完",
+  
+  "checkIn": "入住",
+  "checkInDate": "入住时间",
+  "checkOut": "离店",
+  "contackName": "联系人",
+
+
+  "days": "天",
+  "date": "日期",
+  "detail": "细节",
+
+  "fillInOrder": "填写订单",
+
+
+  "goOnBooking": "继续预定",
+
+
+
+  "map": "地图",
+  "minPrice": "起",
   "myOrders": "我的订单",
-  "serverError": "哎哟，出错了"
+  
+  "orderDetail": "订单详情",
+  "orderDate": "下单时间",
+  "orderID": "订单号",
+  "orderStatus": "订单状态",
+
+
+  "payMethod": "支付方式",
+  "payNow": "去支付",
+
+  "phoneNumber": "手机号",
+  "placeToGo": "目的地",
+  "plsSelACheckInDate" : "请选择入住日期",
+  "plsSelACheckOutDate" : "请选择离店日期",
+  "priceDetail" : "价格明细",
+
+
+
+  "refundDoc" : "退改说明",
+  "roomQuantity" : "房间数",
+
+
+
+  
+  "searchResultA": "为您找到",
+  "searchResultB": "个酒店",
+  "serverError": "哎哟，出错了",
+  "submitOrder": "提交订单",
+
+
+  "total": "共",
+  "totalPrice": "总价"
+
+
 }

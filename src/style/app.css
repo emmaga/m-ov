@@ -1,5 +1,5 @@
 .ab-container {
-  position: absolute;
+  position: fixed;
   left: 0px;
   top: 0px;
   width: 100%;
@@ -8,5 +8,361 @@
   background-color: white;
   overflow: auto;
 }
-
 .ab-container .bar-header {position: fixed;}
+/*↑emma*/
+
+
+
+
+/*mod(modified)*/
+
+
+
+/*input*/
+.mod-input-number{
+	width: 100px !important;
+	text-align: center;
+	padding: 0 !important
+}
+
+
+
+
+
+
+/*tag*/
+.mod-tag{
+	position: relative;
+	margin-right: 10px;
+}
+
+
+
+
+/*icon*/
+.mod-icon{
+	border: solid 0.5px rgb(151,151,151);
+	border-radius: 25px;
+	padding: 3px 6px;
+}
+
+
+
+
+/*content*/
+.mod-has-header{
+	margin-top: 44px;
+}
+.mod-has-tabs-top{
+	margin-top: 91px;
+}
+
+
+
+
+
+/*bar*/
+.bar.mod-fixed{
+	position: fixed !important;
+}
+
+
+
+
+/*card*/
+.card.mod-flat{
+	box-shadow: none !important;
+}
+
+
+
+
+/*item*/
+.item.mod-no-border{
+	padding-top: 0 !important;
+	border: none !important;
+}
+.item.mod-no-side-border{
+	/*padding-top: 0 !important;*/
+	border-left: none !important;
+	border-right: none !important;
+}
+.item.mod-no-side-border:nth-of-type(1){
+	border-top: none !important;
+}
+
+
+
+
+
+/*img*/
+.mod-radius{
+	border-radius: 3px;
+}
+.mod-4x3{
+	padding-bottom: 75%;
+
+}
+.mod-cover{
+	position: relative;
+	overflow:hidden;
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+.mod-cover:after{
+	content: ' ';
+	position: absolute;
+	left: 0; right: 0; top: 0; bottom: 0;
+	box-shadow: inset 0px 0px 4px 2px rgba(0,0,0,.12);
+}
+
+
+
+/*form/list/item/input*/
+.mod-list{
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;
+	padding-top: 0 !important;
+
+}
+.mod-inset-forms>.item{
+	border-top: none !important;
+	border-left: none !important;
+	border-right: none !important;
+	border-bottom-left-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+	.item.mod-no-ativated{
+		background-color: rgba(0,0,0,0) !important;
+		border-top-color: rgba(0,0,0,0) !important;
+		border-bottom-color: #ddd !important;
+	}
+.mod-item-input {
+	padding: 6px 0px 5px 16px;
+}
+	.mod-select-input {
+		display: block;
+		height: 34px;
+		padding: 2px 8px 3px 0px;
+		line-height: 31px;
+		/*opacity: 0.5*/
+	}
+
+
+
+
+
+/*特殊类SP*/
+/*会员卡*/
+.mod-member-card{
+	position: relative;
+	/*padding-top: 44px !important;*/
+}
+.mod-member-card:before{
+	content: ' ';
+
+}
+
+/*会员*/
+.mod-member0{
+
+}
+
+
+
+
+/*doodle 涂鸦*/
+.mod-doodle{
+	display: block;
+	margin: -10px;
+	width: 100vw;
+	height: 56.25vw;
+	overflow: hidden;
+}
+
+
+
+
+/*分割线 split line*/
+.mod-split-line{
+	position: relative;
+	border-bottom: solid 1px rgba(0,0,0,0.125);
+}
+.mod-split-line.mod-15shorter{
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.mod-split-line.mod-break-padding{
+	margin-left: -10px;
+	margin-right: -10px;
+}
+.mod-split-line.mod-break-2padding{
+	margin-left: -20px;
+	margin-right: -20px;
+}
+.mod-split-line.mod-thin{
+	transform: scaleY(0.5);
+}
+
+
+
+
+/*价格*/
+.mod-member-price{
+	display: inline-block;
+	font-size: 20px !important;
+}
+.mod-original-price{
+	display: inline-block;
+	font-size: 12px;
+	/*opacity: 0.5;*/
+	text-decoration: line-through;
+}
+.mod-price-tag{ 
+	position: relative;
+	left: 7px;
+	top: -4px;
+	transform: scale(0.625) translateY(14px);
+	transform-origin: left top;
+	padding: 4px 7px 4px 0px;
+	margin-bottom:0px !important;
+	display: inline-block;
+	font-size: 12px;
+	border: solid 1px rgb(151,151,151);
+	border-left: none;
+	overflow: visible !important;
+}
+.mod-price-tag:before{
+	content: ' ';
+	position: absolute;
+	transform: rotate(-45deg) translate(-7px,-7px);
+	height: 20px;
+	width: 20px;
+	border-top: solid 1px rgb(151,151,151);
+	border-left: solid 1px rgb(151,151,151);
+}
+
+
+
+
+/*字体*/
+.mod-font-light{
+	font-weight: 300 !important;
+}
+.mod-font-bold{
+	font-weight: 500 !important;
+}
+.mod-text-indent{
+	text-indent: 0.5em;
+}
+.mod-sticky-bar{
+	top: 50px;
+	left: 0;
+	right: 0;
+	height: 157px;
+	background: rgba(255,0,0,.5)
+}
+.mod-color-theme{
+	color: rgb(20,140,230) !important;
+} 
+.mod-color-excited{
+	color: rgb(250,40,0) !important;
+} 
+
+
+
+/*display*/
+.mod-display-inlineblock{
+	display: inline-block !important;
+}
+
+
+
+
+/*util*/
+.mod-no-margin-top{
+	margin-top: 0 !important
+}
+.mod-no-margin-bottom{
+	margin-bottom: 0 !important
+}
+
+.mod-no-padding{
+	padding: 0 !important
+}
+.mod-no-border-top{
+	border-top: none !important
+}
+.mod-bg-transparent{
+	background: transparent !important;
+	background-color: transparent !important;
+	background: rgba(0,0,0,0) !important;
+	background-color: rgba(0,0,0,0) !important;
+}
+.mod-item-note{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+.mod-text-center{
+	text-align: center !important;
+}
+
+
+
+
+
+/*对ionic原写法覆盖*/
+html,body{
+	overflow: auto !important; 
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+	color: rgb(51,51,51) !important;
+}
+.item:not(.item-divider){ background-color: transparent !important; }
+.button{
+	border-width: 0.5px !important;
+	transition-duration: 250ms;
+}
+.button.activated{
+	/*will-change: transform;*/
+	transition-duration: 0ms;
+}
+.button.button-light{
+	border-color: #ddd !important;
+}
+
+.bar.bar-light{
+	background-color: rgba(255,255,255,.95) !important;
+}
+/*改小slider标记点*/
+.slider-pager .slider-pager-page{
+	width: 10px !important;
+}
+.ion-record:before{
+    transform: scale(0.5);
+}
+.button-small{
+	line-height: 21px !important;
+}
+small{
+	font-size: 12px !important; 
+}
+.item.item-divider{
+	border-left: none !important;
+	border-right: none !important;
+}
+
+
+/*hack*/
+.mod-img-in-thumbnail{
+	position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 80px;
+    max-height: 80px;
+    width: 100%;
+    height: 100%;
+}

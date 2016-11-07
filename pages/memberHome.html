@@ -1,6 +1,28 @@
 <div ng-controller="memberHomeController as memberHome" ng-init="memberHome.init()">
-    memberHome
-    <a ng-click="root.showMainMenu(true)">menu</a>
-    <a ui-sref="memberLogin">登录</a>
-    <a ui-sref="memberResetPW">找回密码</a>
+    <div class="bar mod-bg-transparent">
+            <p class="item-note mod-item-note" ui-sref="memberInfoEdit({memberId:memberHome.member.memberId})">
+                编辑资料
+                &nbsp<i class="icon ion-ios-arrow-right"></i>
+            </p>
+    </div>
+    <div class="list padding mod-inset-forms mod-list mod-member-card {{memberHome.member.memberLevel.class}}">
+        <div class="item item-avatar ">
+            <!-- <img src="{{root.getParams('wxUserInfo').headimgurl}}" /> -->
+            <img src="api/img/avatar.jpg" />
+            <h2>会员名{{root.getParams('wxUserInfo').nickname}}</h2>
+            <p>{{memberHome.member.memberLevel.name}}</p>
+        </div>
+        <div class="item mod-text-center">
+            <h1><small>您已获得</small>{{memberHome.member.score}}<small>积分</small></h1>
+            
+        </div>
+    </div>
+
+
+
+    <!-- <div class="item item-divider"></div> -->
+    <div class="list mod-inset-forms">
+        <a class="item" ui-sref="memberOrderList">订单列表</a>
+    </div>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
 </div>

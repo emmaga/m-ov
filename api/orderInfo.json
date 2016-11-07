@@ -1,0 +1,45 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "data": {
+        "memberLevel": "微信会员",
+        "hotel": {
+            "hotelId": "1",
+            "hotelName": "酒店名字一",
+            "bookStartDate": "1288323623006",
+            "bookEndDate": "1288423623006"
+        },
+        "room": {
+            "roomId": "1",
+            "roomName": "房型名字一",
+            "roomImgSrc": "api/img/room1.jpg",
+            "changeDeal": "请不要退房或改签",
+            "roomFeatures": [
+                { "name": "  wifi  ", "icon": "  ion-wifi" },
+                { "name": "  parking  ", "icon": "  ion-android-alarm-clock" }
+            ],
+            "orderStatus": "已支付",
+            "paymentMethod": "wechat"
+        },
+        "roomOrder": {
+            "orderId": "111111111111111",
+            "dealTime": "1288323623006",
+            "orderTotalPri": "123123123",
+            "roomNumber": "3",
+            "contactName": "张三",
+            "mobile": "13783476981"
+        },
+        "orderLists": [{
+                "orderId": "111111111111111",
+                "orderId": "111111111111111",
+                "orderId": "111111111111111"
+                
+            }
+
+
+        ]
+
+
+    }
+
+}

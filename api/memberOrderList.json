@@ -1,0 +1,23 @@
+{
+    "rescode": "200",
+    "errInfo": "",
+    "orderLists": [{
+        "orderId": "1",
+        "paymentStatus": 1,
+        "hotelName": "酒店名字一",
+        "roomName": "沙滩独栋别墅",
+        "roomNumber": 3,
+        "bookStartDate": "1288323623006",
+        "bookEndDate": "1288323623006",
+        "orderTotalPri": 123123123
+    }, {
+        "orderId": "1",
+        "paymentStatus": 0,
+        "hotelName": "酒店名字一",
+        "roomName": "漂浮小屋",
+        "roomNumber": 3,
+        "bookStartDate": "1288323623006",
+        "bookEndDate": "1288323623006",
+        "orderTotalPri": 123123123
+    }]
+}

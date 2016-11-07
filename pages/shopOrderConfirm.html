@@ -1,0 +1,25 @@
+<div ng-controller="shopOrderConfirmController as soc" ng-init="soc.init()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">提交订单</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+    </div>
+    
+
+    <div ng-show="soc.loadingOrderInfo">loading</div>
+    <div ng-repeat="item in soc.orderInfo.list track by $index">
+        {{item.count}}      
+        {{item.productName}}
+    </div>
+
+    name: <input type="text" ng-model="soc.orderInfo.address.name" />
+    address: <input type="text" ng-model="soc.orderInfo.address.address" />
+    mobile: <input type="text" ng-model="soc.orderInfo.address.mobile" />
+
+
+    ¥{{soc.totalPrice | fenToYuan}}
+
+
+    
+    <a ui-sref="shopOrderInfo">提交订单</a><br>
+
+</div>
