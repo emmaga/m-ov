@@ -1037,7 +1037,7 @@
                 }).then(function successCallback(data, status, headers, config) {
                     self.categoryList = data.data.data.categoryList;
                     // 默认加载第一个分类
-                    self.searchProductList(self.categoryList["0"]["id"])
+                    self.searchProductList(self.categoryList["0"]["id"],true)
                 }, function errorCallback(data, status, headers, config) {
 
                     $ionicPopup.alert({
@@ -1046,12 +1046,17 @@
                     });
                 });
             }
-            self.searchProductList = function(id) {
+            self.searchProductList = function(id,bool) {
                     console.log(id);
-
+                    // 记录当前点击的商品分类的id
+                    self.searchProductId = id;
+                    if (bool == true) {
+                        self.productList = [];
+                    }
+                    // self.productList = [];
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('product', 'productList')
+                        url: backendUrl('product', 'productList'+id)
                     }).then(function successCallback(data, status, headers, config) {
                         self.productList = self.productList.concat(data.data.data.productList);
                         console.log(self.productList)
@@ -1067,7 +1072,8 @@
             self.moreProduct = function() {
 
                 self.showLoadingIcon = true;
-                self.searchProductList();
+                // 加载更多商品时，productList不清空，而是“拼接起来”
+                self.searchProductList(self.searchProductId,false);
             }
         }
     ])
