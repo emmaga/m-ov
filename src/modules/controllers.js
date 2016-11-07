@@ -3,52 +3,51 @@
 (function() {
     var app = angular.module('app.controllers', ['ngCookies'])
 
-    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicPopup', '$ionicModal', '$translate', 'backendUrl',
-        function($scope, $window, $http, $filter, $ionicPopup, $ionicModal, $translate, backendUrl) {
+    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading',
+        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading) {
             var self = this;
 
-            // root全局变量：
-            self.params = {};
-            // self.params.appid
-            /* self.params.wxUserInfo
-            {    
-             "openid":" OPENID",  
-             " nickname": NICKNAME,   
-             "sex":"1",   
-             "province":"PROVINCE"   
-             "city":"CITY",   
-             "country":"COUNTRY",    
-             "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
-            4eMsv84eavHiaiceqxibJxCfHe/46",  
-            "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
-             "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
-            } 
-
-            * self.params.projectInfo
-            {
-              "projectName": "项目-酒店名字",
-              "projectImgSrc": "api/img/doodle.html"
-            }
-             self.params.memberInfo 
-
-             {
-               "member": {
-                   "memberId": "123321123312",
-                   "memberLevel": {
-                     "name":"微信会员",
-                     "class":"class1"
-                   },
-                   "score": "100",
-                   "realName":"LiSi",
-                   "mobile": "13783476981",
-                   "idCardNumber": "410181999200000000",
-                   "birthday": "100"
-                }
-             }
-            */
-
-
             self.init = function() {
+
+                // root全局变量：
+                self.params = {};
+                // self.params.appid
+                /* self.params.wxUserInfo
+                {    
+                 "openid":" OPENID",  
+                 " nickname": NICKNAME,   
+                 "sex":"1",   
+                 "province":"PROVINCE"   
+                 "city":"CITY",   
+                 "country":"COUNTRY",    
+                 "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
+                4eMsv84eavHiaiceqxibJxCfHe/46",  
+                "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
+                 "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
+                } 
+
+                * self.params.projectInfo
+                {
+                  "projectName": "项目-酒店名字",
+                  "projectImgSrc": "api/img/doodle.html"
+                }
+                 self.params.memberInfo 
+
+                 {
+                   "member": {
+                       "memberId": "123321123312",
+                       "memberLevel": {
+                         "name":"微信会员",
+                         "class":"class1"
+                       },
+                       "score": "100",
+                       "realName":"LiSi",
+                       "mobile": "13783476981",
+                       "idCardNumber": "410181999200000000",
+                       "birthday": "100"
+                    }
+                 }
+                */
 
                 // 获取 code 和 appid
                 var qString = $window.location.search.substring(1);
@@ -59,14 +58,11 @@
                 // 将 appid 记在 root params 缓存里
                 self.setParams('appid', appid);
 
-                // 获取cleartoken（clear_session）和openid
-                self.getUserID(code, appid);
-
-                // wx注册
-                self.wxConfigJSSDK();
-                self.searchProjectInfo();
-                self.searchMemberInfo();
-                console.log(self.params)
+                /* 获取cleartoken（clear_session）和openid
+                 * wx注册
+                 * 获取项目及会员信息 
+                 */
+                self.connectServer(code, appid);
             }
 
             self.setParams = function(name, val) {
@@ -77,67 +73,88 @@
                 return self.params[name];
             }
 
-            self.getUserID = function(code, appid) {
+            self.connectServer = function(code, appid) {
+
                 var data = {
                     "appid": appid,
                     "code": code
                 };
                 data = JSON.stringify(data);
-                $http.post(backendUrl('buildsession', '', 'server'), data)
-                    .success(function(data, status, headers, config) {
-                        self.getWxUserInfo(data.access_token, data.openid);
-                    })
-                    .error(function(data, status, headers, config) {
-                        // todo use ionic alert style
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: ($filter('translate')('serverError') + status)
-                        });
-                        // alert($filter('translate')('serverError') + status);
-                    })
-            }
 
-            self.getWxUserInfo = function(access_token, openid) {
+                // buildsession
+                BACKEND_CONFIG.test&&console.log('buildsession');
 
-                var lang = $translate.proposedLanguage() || $translate.use();
-                lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
-                var data = {
-                    "access_token": access_token,
-                    "openid": openid,
-                    "lang": lang
-                };
-                data = JSON.stringify(data);
-                $http.post(backendUrl('wxuserinfo', '', 'server'), data)
-                    .success(function(data, status, headers, config) {
+                $ionicLoading.show({
+                  template: 'Loading...'
+                });
+
+                $http({
+                  method: 'POST',
+                  url: backendUrl('buildsession', '', 'server'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                    if(data.data.rescode == '200') {
+                        var rtn = {'data': [data.access_token, data.openid]};
+                        return rtn;
+                    }
+                    else {
+                        alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                    }
+                }, function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError') + status);
+                    return false;
+                })
+
+                // getWxUserInfo
+                .then(function(e) {
+                    if(!e) return;
+                    BACKEND_CONFIG.test&&console.log('getWxUserInfo');
+                    var access_token = e.data[0];
+                    var openid = e.data[1];
+                    var lang = $translate.proposedLanguage() || $translate.use();
+                    lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
+                    var data = {
+                        "access_token": access_token,
+                        "openid": openid,
+                        "lang": lang
+                    };
+                    data = JSON.stringify(data);
+                    $http({
+                      method: 'POST',
+                      url: backendUrl('wxuserinfo', '', 'server'),
+                      data: data
+                    })
+                    .then(function successCallback(data, status, headers, config) {
                         // 将 wxUserInfo 记在 root params 缓存里
                         self.setParams('wxUserInfo', data);
+                        return true;
+                    }, function errorCallback(data, status, headers, config) {
+                        alert($filter('translate')('serverError') + status);
+                        return false;
                     })
-                    .error(function(data, status, headers, config) {
-                        // todo use ionic alert style
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: ($filter('translate')('serverError') + status)
-                        });
-                        // alert($filter('translate')('serverError') + status);
+                })
+                // WXConfigJSSDK
+                .then(function(e) {
+                    if(!e) return;
+                    BACKEND_CONFIG.test&&console.log('WXConfigJSSDK');
+                    // http://www.cnblogs.com/sunshq/p/4171490.html
+                    self.noncestr = Math.random().toString(36).substr(2);
+                    self.timestamp = new Date().getTime() + '';
+
+                    var data = {
+                        "appid": self.getParams('appid'),
+                        "noncestr": self.noncestr,
+                        "timestamp": self.timestamp,
+                        "url": window.location.origin + window.location.pathname + window.location.search
+                    };
+                    data = JSON.stringify(data);
+                    $http({
+                      method: 'POST',
+                      url: backendUrl('jssign', '', 'server'),
+                      data: data
                     })
-            }
-
-            self.wxConfigJSSDK = function() {
-
-                // http://www.cnblogs.com/sunshq/p/4171490.html
-                self.noncestr = Math.random().toString(36).substr(2);
-                self.timestamp = new Date().getTime() + '';
-
-                var data = {
-                    "appid": self.getParams('appid'),
-                    "noncestr": self.noncestr,
-                    "timestamp": self.timestamp,
-                    "url": window.location.origin + window.location.pathname + window.location.search
-                };
-                data = JSON.stringify(data);
-
-                $http.post(backendUrl('jssign', '', 'server'), data)
-                    .success(function(data, status, headers, config) {
+                    .then(function successCallback(data, status, headers, config) {
                         if (data.rescode == '200') {
                             wx.config({
                                 debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -148,21 +165,49 @@
                                 jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                             });
                         } else {
-                            // todo use ionic alert style
-                            $ionicPopup.alert({
-                                // title: 'Don\'t eat that!',
-                                template: ($filter('translate')('serverError') + status)
-                            });
+                            alert($filter('translate')('serverError') + status);
                         }
+                        return true;
+                    }, function errorCallback(data, status, headers, config) {
+                        alert($filter('translate')('serverError') + status);
+                        return false;
                     })
-                    .error(function(data, status, headers, config) {
-                        // todo use ionic alert style
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: ($filter('translate')('serverError') + status)
-                        });
+                })
+
+                // 项目信息
+                .then(function(e) {
+                    if(!e) return;
+                    BACKEND_CONFIG.test&&console.log('项目信息');
+                    var data = {
+                        "action": "GetProjectInfo",
+                        "appid": self.getParams('appid'),
+                        "clear_session": "xxxx",
+                        "openid": self.getParams('openid'),
+                        "lang": $translate.proposedLanguage() || $translate.use()
+                    };
+                    data = JSON.stringify(data);
+                    $http({
+                      method: $filter('ajaxMethod')(),
+                      url: backendUrl('project', 'projectInfo'),
+                      data: data
                     })
-            }
+                    .then(function successCallback(data, status, headers, config) {
+                        self.projectInfo = data.data.data;
+                        self.setParams('projectInfo', self.projectInfo);
+                    }, function errorCallback(data, status, headers, config) {
+                        alert($filter('translate')('serverError') + status);
+                    })
+                })
+
+                .catch(function(e){
+                    console.log("catch");
+                    console.log(e);
+                })
+                .finally(function(value){
+                    $ionicLoading.hide();
+                });
+
+            };
 
             // wx share
             self.wxShare = function() {
@@ -205,61 +250,6 @@
                 }, 1000);
             };
 
-            // 项目信息
-            self.searchProjectInfo = function() {
-
-                    var data = {
-                        "action": "GetProjectInfo",
-                        "appid": self.getParams('appid'),
-                        "clear_session": "xxxx",
-                        "openid": self.getParams('openid'),
-                        "lang": $translate.proposedLanguage() || $translate.use()
-                    };
-                    data = JSON.stringify(data);
-
-                    $http({
-                        // method : 'POST',
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('project', 'projectInfo'),
-                        data: data
-                    }).then(function successCallback(data, status, headers, config) {
-                        console.log(data)
-                        self.projectInfo = data.data.data;
-                        self.setParams('projectInfo', self.projectInfo);
-                    }, function errorCallback(data, status, headers, config) {
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
-                    });
-                }
-                // 会员信息
-            self.searchMemberInfo = function() {
-                var data = {
-                    "action": "GetMemberInfo",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
-                    "lang": $translate.proposedLanguage() || $translate.use()
-                };
-                data = JSON.stringify(data);
-
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('member', 'memberInfo'),
-                    data: data
-
-                }).then(function successCallback(data, status, headers, config) {
-                    self.memberInfo = data.data.data.member;
-                    self.setParams('memberInfo', self.memberInfo);
-                }, function errorCallback(data, status, headers, config) {
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
-                });
-            }
-
             // menu modal 弹出
             $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
                 scope: $scope,
@@ -273,8 +263,8 @@
         }
     ])
 
-    .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
-        function($scope, $filter, $timeout, $location, $http, $stateParams, $ionicPopup, $translate, loadingService, backendUrl, util) {
+    .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
+        function($scope, $filter, $timeout, $location, $http, $stateParams, $translate, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
             var self = this;
             console.log($scope.root.params);
@@ -352,10 +342,7 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchCityListsBool = true;
                     loadingService(self.showLoadingBool);
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
 
 
@@ -390,18 +377,15 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchHotelListBool = true;
                         loadingService(self.showLoadingBool);
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
+                        alert(status);
                     });
                 }, 500)
             }
         }
     ])
 
-    .controller('bookRoomListController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
-        function($scope, $http, $filter, $state, $stateParams, $timeout, $ionicPopup, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
+    .controller('bookRoomListController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+        function($scope, $http, $filter, $state, $stateParams, $timeout, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
             console.log('bookRoomListController')
             var self = this;
             self.init = function() {
@@ -473,10 +457,7 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
+                        alert(status);
                     });
                 }, 300)
             }
@@ -508,10 +489,7 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchHotelInfoBool = true;
                     loadingService(self.showLoadingBool);
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
 
@@ -529,8 +507,8 @@
         }
     ])
 
-    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicPopup', 'loadingService', 'backendUrl', 'util',
-        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicPopup, loadingService, backendUrl, util) {
+    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util',
+        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, loadingService, backendUrl, util) {
             console.log("roomInfoController")
             console.log($stateParams)
             console.log($scope.root.params)
@@ -597,10 +575,7 @@
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchBool = true;
                             loadingService(self.showLoadingBool);
-                            $ionicPopup.alert({
-                                // title: 'Don\'t eat that!',
-                                template: status
-                            });
+                            alert(status);
                         });
                     }, 500)
 
@@ -705,21 +680,11 @@
                         if (data.rescode == '200') {
                             self.wxPay(data.JS_Pay_API, data.orderNum);
                         } else {
-                            // todo use ionic alert style
-                            $ionicPopup.alert({
-                                // title: 'Don\'t eat that!',
-                                template: ($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo)
-                            });
-                            // alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                            alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
                         }
                     })
                     .error(function(data, status, headers, config) {
-                        // todo use ionic alert style
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: ($filter('translate')('serverError') + status)
-                        });
-                        // alert($filter('translate')('serverError') + status);
+                        alert($filter('translate')('serverError') + status);
                     })
             }
 
@@ -747,8 +712,8 @@
         }
     ])
 
-    .controller('bookOrderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$ionicPopup', '$translate', 'loadingService', 'backendUrl', 'util',
-        function($scope, $http, $filter, $stateParams, $ionicPopup, $translate, loadingService, backendUrl, util) {
+    .controller('bookOrderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
+        function($scope, $http, $filter, $stateParams, $translate, loadingService, backendUrl, util) {
             console.log("bookInfoController")
             var self = this;
             console.log($stateParams)
@@ -791,10 +756,7 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchBool = true;
                     loadingService(self.showLoadingBool);
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
         }
@@ -811,8 +773,8 @@
         }
     ])
 
-    .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', '$translate', '$ionicPopup', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $translate, $ionicPopup, loadingService, backendUrl) {
+    .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
 
             var self = this;
@@ -850,17 +812,14 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchBool = true;
                     loadingService(self.showLoadingBool.searchBool)
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
         }
     ])
 
-    .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $timeout, $ionicPopup, $translate, loadingService, backendUrl) {
+    .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $timeout, $translate, loadingService, backendUrl) {
             console.log("memberInfoEditController");
             var self = this;
             self.memberId = $stateParams.memberId;
@@ -904,10 +863,7 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchBool = true;
                     loadingService(self.showLoadingBool);
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
             self.updataMemberInfo = function() {
@@ -934,10 +890,7 @@
                     loadingService(self.showLoadingBool);
                 }, function errorCallback(data, status, headers, config) {
 
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
 
@@ -977,8 +930,8 @@
         }
     ])
 
-    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $state, $timeout, $ionicPopup, $translate, loadingService, backendUrl) {
+    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
             console.log('memberOrderListController')
             var self = this;
 
@@ -1011,10 +964,7 @@
                     self.showLoadingBool.searchBool = true;
                     loadingService(self.showLoadingBool);
 
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
             self.nextState = function(id,type){
@@ -1027,8 +977,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1053,10 +1003,7 @@
                     self.searchProductList(self.categoryList["0"]["id"],true)
                 }, function errorCallback(data, status, headers, config) {
 
-                    $ionicPopup.alert({
-                        // title: 'Don\'t eat that!',
-                        template: status
-                    });
+                    alert(status);
                 });
             }
             self.searchProductList = function(id,bool) {
@@ -1075,10 +1022,7 @@
                         console.log(self.productList)
                         self.showLoadingIcon = false;
                     }, function errorCallback(data, status, headers, config) {
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
+                        alert(status);
                     });
                 }
                 // 更多商品   loading 图标
@@ -1091,8 +1035,8 @@
         }
     ])
 
-    .controller('shopProductDetailController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+    .controller('shopProductDetailController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
 
             console.log('shopProductDetailController')
             var self = this;
@@ -1120,10 +1064,7 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
+                        alert(status);
                     });
                 }, 500)
 
@@ -1188,10 +1129,7 @@
                 $scope.shopCartList = data.data.data.list;
               }, function errorCallback(data, status, headers, config) {
                 self.loadingShopCartInfo = false;
-                $ionicPopup.alert({
-                     // title: 'Don\'t eat that!',
-                     template: ($filter('translate')('serverError') + status)
-                });
+                alert($filter('translate')('serverError') + status);
               });
         }
 
@@ -1199,8 +1137,8 @@
       }
     ])
     
-    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', 'backendUrl', 
-        function($http, $scope, $filter, $stateParams, $ionicPopup, backendUrl) {
+    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', 'backendUrl', 
+        function($http, $scope, $filter, $stateParams, backendUrl) {
             console.log('shopOrderConfirmController')
             var self = this;
 
@@ -1277,8 +1215,8 @@
         }
     ]) 
 
-    .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$stateParams', '$ionicPopup', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $ionicPopup, $timeout, loadingService, backendUrl) {
+    .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
             console.log('shopOrderInfoController')    
     
             var self = this;
@@ -1307,10 +1245,7 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        $ionicPopup.alert({
-                            // title: 'Don\'t eat that!',
-                            template: status
-                        });
+                        alert(status);
                     });
                 }, 500)
 
