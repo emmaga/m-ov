@@ -977,8 +977,8 @@
         }
     ])
 
-    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $timeout, $ionicPopup, $translate, loadingService, backendUrl) {
+    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$ionicPopup', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $state, $timeout, $ionicPopup, $translate, loadingService, backendUrl) {
             console.log('memberOrderListController')
             var self = this;
 
@@ -989,27 +989,40 @@
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
-                self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool)
+                
                 self.search();
             }
             self.search = function() {
+                // 发送请求之前，遮罩层
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool)
+
                 $http({
                     method: $filter('ajaxMethod')(),
                     url: backendUrl('member', 'orderList')
                 }).then(function successCallback(data, status, headers, config) {
                     console.log(data)
                     self.orderLists = data.data.data.orderLists;
+
                     self.showLoadingBool.searchBool = true;
                     loadingService(self.showLoadingBool)
                 }, function errorCallback(data, status, headers, config) {
+
                     self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool)
+                    loadingService(self.showLoadingBool);
+
                     $ionicPopup.alert({
                         // title: 'Don\'t eat that!',
                         template: status
                     });
                 });
+            }
+            self.nextState = function(id,type){
+                if (type == "Room") {
+                     $state.go('bookOrderInfo')
+                } else {
+                     $state.go('shopOrderInfo')
+                }
             }
         }
     ])
@@ -1050,10 +1063,10 @@
                     console.log(id);
                     // 记录当前点击的商品分类的id
                     self.searchProductId = id;
+                    // 点击“分类”时，清空productList数组
                     if (bool == true) {
                         self.productList = [];
                     }
-                    // self.productList = [];
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('product', 'productList'+id)
@@ -1072,7 +1085,7 @@
             self.moreProduct = function() {
 
                 self.showLoadingIcon = true;
-                // 加载更多商品时，productList不清空，而是“拼接起来”
+                // 加载更多商品时，productList不清空
                 self.searchProductList(self.searchProductId,false);
             }
         }
