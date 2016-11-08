@@ -11,7 +11,7 @@
     'pascalprecht.translate'
   ])
   
-  .config(function ($httpProvider) {
+  /*.config(function ($httpProvider) {
       $httpProvider.interceptors.push(function ($rootScope, $q, $filter) {
           return {
               request: function (config) {
@@ -32,7 +32,7 @@
               
           }
       })
-  })
+  })*/
 
   .config(['$translateProvider',function($translateProvider){
       var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';

@@ -12,6 +12,9 @@
                 // root全局变量：
                 self.params = {};
                 // self.params.appid
+                // self.params.userid
+                // self.params.clear_session
+                // self.params.refresh_token
                 /* self.params.wxUserInfo
                 {    
                  "openid":" OPENID",  
@@ -62,7 +65,7 @@
                  * wx注册
                  * 获取项目及会员信息 
                  */
-                self.connectServer(code, appid);
+                self.buildsession(code, appid);
             }
 
             self.setParams = function(name, val) {
@@ -73,7 +76,11 @@
                 return self.params[name];
             }
 
-            self.connectServer = function(code, appid) {
+            self.buildsession = function(code, appid) {
+                BACKEND_CONFIG.test&&console.log('buildsession');
+                $ionicLoading.show({
+                  template: 'Loading...'
+                });
 
                 var data = {
                     "appid": appid,
@@ -81,136 +88,112 @@
                 };
                 data = JSON.stringify(data);
 
-
-                // buildsession
-                BACKEND_CONFIG.test&&console.log('buildsession');
-
-                $ionicLoading.show({
-                  template: 'Loading...'
-                });
-
                 $http({
                   method: 'POST',
                   url: backendUrl('buildsession', '', 'server'),
                   data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
-                    if(data.data.rescode == '200') {
-                        var rtn = {'data': [data.access_token, data.openid]};
-                        return rtn;
-                    }
-                    else {
-                        alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                    self.setParams('userid', data.data.userid);
+                    self.setParams('clear_session', data.data.clear_session);
+                    self.setParams('refresh_token', data.data.refresh_token);
+                    self.getWxUserInfo(data.data.access_token, data.data.openid);     
+                }, function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError') + status);
+                    $ionicLoading.hide();
+                })
+            }
+
+            self.getWxUserInfo = function(access_token, openid) {
+                BACKEND_CONFIG.test&&console.log('getWxUserInfo');
+                var lang = $translate.proposedLanguage() || $translate.use();
+                lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
+                var data = {
+                    "appid": self.getParams('appid'),
+                    "userid": self.getParams('userid'),
+                    "access_token": access_token,
+                    "lang": lang
+                };
+                data = JSON.stringify(data);
+                $http({
+                  method: 'POST',
+                  url: backendUrl('wxuserinfo', '', 'server'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                    // 将 wxUserInfo 记在 root params 缓存里
+                    self.setParams('wxUserInfo', data);
+                    BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
+                    self.WXConfigJSSDK();
+                }, function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError') + status);
+                    $ionicLoading.hide();
+                })
+            }
+
+
+            self.WXConfigJSSDK = function() {
+                BACKEND_CONFIG.test&&console.log('jssign');
+                // http://www.cnblogs.com/sunshq/p/4171490.html
+                self.noncestr = Math.random().toString(36).substr(2);
+                self.timestamp = new Date().getTime() + '';
+
+
+                var data = {
+                    "appid": self.getParams('appid'),
+                    "noncestr": self.noncestr,
+                    "timestamp": self.timestamp,
+                    "url": window.location.origin + window.location.pathname + window.location.search
+                };
+                data = JSON.stringify(data);
+                $http({
+                  method: 'POST',
+                  url: backendUrl('jssign', '', 'server'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                    if (data.rescode == '200') {
+                        wx.config({
+                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                            appId: self.getParams('appid'), // 必填，公众号的唯一标识
+                            timestamp: self.timestamp, // 必填，生成签名的时间戳
+                            nonceStr: self.noncestr, // 必填，生成签名的随机串
+                            signature: data.signature, // 必填，签名，见附录1
+                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        });
+                        self.loadProjectInfo();
+                    } else {
+                        alert($filter('translate')('serverError') + status);
+                        $ionicLoading.hide();
                     }
                 }, function errorCallback(data, status, headers, config) {
                     alert($filter('translate')('serverError') + status);
-                    return false;
-                })
-
-                // getWxUserInfo
-                .then(function(e) {
-                    if(!e) return;
-                    BACKEND_CONFIG.test&&console.log('getWxUserInfo');
-                    var access_token = e.data[0];
-                    var openid = e.data[1];
-                    var lang = $translate.proposedLanguage() || $translate.use();
-                    lang = lang == 'zh-CN' ? 'zh_CN' : 'en';
-                    var data = {
-                        "access_token": access_token,
-                        "openid": openid,
-                        "lang": lang
-                    };
-                    data = JSON.stringify(data);
-                    $http({
-                      method: 'POST',
-                      url: backendUrl('wxuserinfo', '', 'server'),
-                      data: data
-                    })
-                    .then(function successCallback(data, status, headers, config) {
-                        // 将 wxUserInfo 记在 root params 缓存里
-                        self.setParams('wxUserInfo', data);
-                        return true;
-                    }, function errorCallback(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + status);
-                        return false;
-                    })
-
-                })
-                // WXConfigJSSDK
-                .then(function(e) {
-                    if(!e) return;
-                    BACKEND_CONFIG.test&&console.log('WXConfigJSSDK');
-                    // http://www.cnblogs.com/sunshq/p/4171490.html
-                    self.noncestr = Math.random().toString(36).substr(2);
-                    self.timestamp = new Date().getTime() + '';
-
-
-                    var data = {
-                        "appid": self.getParams('appid'),
-                        "noncestr": self.noncestr,
-                        "timestamp": self.timestamp,
-                        "url": window.location.origin + window.location.pathname + window.location.search
-                    };
-                    data = JSON.stringify(data);
-                    $http({
-                      method: 'POST',
-                      url: backendUrl('jssign', '', 'server'),
-                      data: data
-                    })
-                    .then(function successCallback(data, status, headers, config) {
-                        if (data.rescode == '200') {
-                            wx.config({
-                                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                                appId: self.getParams('appid'), // 必填，公众号的唯一标识
-                                timestamp: self.timestamp, // 必填，生成签名的时间戳
-                                nonceStr: self.noncestr, // 必填，生成签名的随机串
-                                signature: data.signature, // 必填，签名，见附录1
-                                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-                            });
-                        } else {
-                            alert($filter('translate')('serverError') + status);
-                        }
-                        return true;
-                    }, function errorCallback(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + status);
-                        return false;
-                    })
-                })
-
-                // 项目信息
-                .then(function(e) {
-                    if(!e) return;
-                    BACKEND_CONFIG.test&&console.log('项目信息');
-                    var data = {
-                        "action": "GetProjectInfo",
-                        "appid": self.getParams('appid'),
-                        "clear_session": "xxxx",
-                        "openid": self.getParams('openid'),
-                        "lang": $translate.proposedLanguage() || $translate.use()
-                    };
-                    data = JSON.stringify(data);
-                    $http({
-                      method: $filter('ajaxMethod')(),
-                      url: backendUrl('project', 'projectInfo'),
-                      data: data
-                    })
-                    .then(function successCallback(data, status, headers, config) {
-                        self.projectInfo = data.data.data;
-                        self.setParams('projectInfo', self.projectInfo);
-                    }, function errorCallback(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + status);
-                    })
-                })
-
-                .catch(function(e){
-                    console.log("catch");
-                    console.log(e);
-                })
-                .finally(function(value){
                     $ionicLoading.hide();
-                });
-
-            };
+                })
+            }
+            self.loadProjectInfo = function() {
+                BACKEND_CONFIG.test&&console.log('项目信息');
+                var data = {
+                    "action": "GetProjectInfo",
+                    "appid": self.getParams('appid'),
+                    "clear_session": self.getParams('clear_session'),
+                    "openid": self.getParams('openid'),
+                    "lang": $translate.proposedLanguage() || $translate.use()
+                };
+                data = JSON.stringify(data);
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('project', 'projectInfo'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                    self.projectInfo = data.data.data;
+                    self.setParams('projectInfo', self.projectInfo);
+                }, function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError') + status);
+                    $ionicLoading.hide();
+                })
+            }
 
             // wx share
             self.wxShare = function() {
@@ -1075,8 +1058,8 @@
         }
     ])
 
-    .controller('shopCartController', ['$http', '$scope', '$filter', 'backendUrl',
-      function($http, $scope, $filter, backendUrl) {
+    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$ionicLoading', 'backendUrl',
+      function($http, $scope, $filter, $state, $ionicLoading, backendUrl) {
         console.log('shopCartController')
         var self = this;
         
@@ -1085,15 +1068,20 @@
           $scope.root.wxShare();
 
           // 初始化
-          self.loadingShopCartInfo = false;
+          self.hasEx = false; //含快递货品
 
           //watch shopCartList
           $scope.$watch('shopCartList', function() { 
             self.countTotalPrice();
+            self.judgeDist();
           }, true);
 
-          //获取 购物车信息
-          self.loadShopCartInfo();
+          // 获取购物车信息
+          self.loadSCInfo();
+        }
+
+        self.judgeDist = function() {
+            self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==false?true:false});
         }
 
         self.plusOne = function(index) {
@@ -1122,24 +1110,77 @@
           }
         }
 
-        self.loadShopCartInfo = function() {
-          self.loadingShopCartInfo = true;
+        self.loadSCInfo = function() {
+          $ionicLoading.show({
+            template: 'loading...'
+          });
           $http({
-              method: $filter('ajaxMethod')(),
-              url: backendUrl('shopCart', 'shopCartList')
-            }).then(function successCallback(data, status, headers, config) {
-                self.loadingShopCartInfo = false;
-                $scope.shopCartList = data.data.data.list;
-              }, function errorCallback(data, status, headers, config) {
-                self.loadingShopCartInfo = false;
-                alert($filter('translate')('serverError') + status);
-              });
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('shopCart', 'shopCartList')
+          })
+          .then(function successCallback(data, status, headers, config) {
+            $scope.shopCartList = data.data.data.list;
+            // 默认true：自提，false：快递
+            for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = true;}
+            return true;
+          }, function errorCallback(data, status, headers, config) {
+            throw(status);
+            return false;
+          })
+          .then(function (e) {
+            if(!e){
+              return;
+            }
+            self.loadExInfo();
+          })
+          .catch(function(e){
+            console.log("catch");
+            console.log(e);
+            alert($filter('translate')('serverError') + e);
+          })
+          .finally(function(value){
+            $ionicLoading.hide();
+          });
         }
 
+        self.loadExInfo = function() {
+            $ionicLoading.show({
+            template: 'loading...'
+          });
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('', 'memberAddress')
+          })
+          .then(function successCallback(data, status, headers, config) {
+            if(data.data.rescode == '200') {
+              if(data.data.data.list.length > 0) {
+                self.address = data.data.data.list[0]; 
+              }
+            }
+            else {
+                throw(data.data.rescode + data.data.errInfo);
+            }
+          }, function errorCallback(data, status, headers, config) {
+            throw(status);
+          })
+          .catch(function(e){
+            console.log("catch");
+            console.log(e);
+            alert($filter('translate')('serverError') + e);
+          })
+          .finally(function(value){
+            $ionicLoading.hide();
+          });
+        }
+
+        self.submitOrder = function() {
+            $state.go('shopOrderInfo');
+        }
         
       }
     ])
     
+    /* cancel page*/
     .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', 'backendUrl', 
         function($http, $scope, $filter, $stateParams, backendUrl) {
             console.log('shopOrderConfirmController')
