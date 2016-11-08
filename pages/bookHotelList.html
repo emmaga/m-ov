@@ -2,7 +2,7 @@
 
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{'bookHotel'|translate}}</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu()"></button>
     </div>
 
     <div class=" padding">
@@ -13,11 +13,13 @@
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
         <div class="list padding mod-inset-forms">
-            <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)">
+            <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)" >
+           <!--  <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCityModal(); cp.init(bhl.cityLists, bhl.doAfterPickCity)" > -->
                 <span class="input-label">{{'placeToGo'|translate}}</span>
                 <p class="mod-select-input  mod-color-theme">{{bhl.cityInfo.name}}</p>
             </div>
             <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">
+            <!-- <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDateModal();tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);"> -->
                 <span class="input-label">{{'date'|translate}}</span>
                 <p class="mod-select-input mod-color-theme">{{bhl.checkin | date:'MM月dd日'}}{{'checkIn'|translate}} > {{bhl.checkout | date:'MM月dd日'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{bhl.stayDays}}{{'days'|translate}}</p> 
                 

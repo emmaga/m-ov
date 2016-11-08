@@ -3,12 +3,7 @@
         <h1 class="title">购物车</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-    
 
-    
-
-
-    <div ng-show="shopCart.loadingShopCartInfo">loading</div>
     <div ng-repeat="item in shopCartList track by $index">
         <a ng-click="shopCart.minusOne($index)">-</a>{{item.count}}<a ng-click="shopCart.plusOne($index)">+</a>
         {{item.thumbnailSrc}}         
@@ -20,11 +15,20 @@
         <a ng-click="shopCart.delete($index)">删除</a>
         {{item.availableCount}}   <!--0 无货-->
         {{item.availableCount - item.count}}   <!-- <0 缺货-->
+        <ion-checkbox ng-model="item.dist">自提</ion-checkbox>
     </div>
     
+    <form name="orderForm" ng-submit="orderForm.$valid && shopCart.submitOrder()">
+        name: 
+        <input type="text" ng-model="shopCart.address.name" required />
+        mobile: 
+        <input type="text" ng-model="shopCart.address.mobile" required />
+        <span ng-if="shopCart.hasEx">
+            address: 
+            <input type="text" ng-model="shopCart.address.address" required/>
+        </span>
+        <button type="submit">¥{{shopCart.totalPrice | fenToYuan}}/结算</button> {{orderForm.$valid}} <!--true：可提交 false：不可提交-->
+    </form>
 
-
-
-
-    <a ui-sref="shopOrderConfirm">¥{{shopCart.totalPrice | fenToYuan}}/结算</a>
+    
 </div>

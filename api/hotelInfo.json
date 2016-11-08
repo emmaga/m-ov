@@ -17,7 +17,8 @@
             "hotelFeatures": [
                 { "name": "  WIFI  ", "icon": "  ion-wifi" },
                 { "name": "  购物  ", "icon": "  ion-bag" }
-            ]
+            ],
+            "hotelDescription":"酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 "
         
     } 
     }

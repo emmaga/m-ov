@@ -2,6 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
+        "productTotal":"9",
         "productList":[{
             "name":"产品二",
             "price":"1000",
