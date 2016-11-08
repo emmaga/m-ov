@@ -201,7 +201,7 @@
                         alert($filter('translate')('serverError') + status);
                     })
                 })
-
+                
                 .catch(function(e){
                     console.log("catch");
                     console.log(e);
@@ -301,7 +301,7 @@
             self.showCP = function(boo) {
                 self.cityPickerShow = boo ? boo : false;
             };
-
+            
             self.doAfterPickDates = function(checkin, checkout) {
                 self.checkin = checkin;
                 self.checkout = checkout;
@@ -408,7 +408,7 @@
                 self.showLoadingBool.searchHotelInfoBool = false;
                 self.showLoadingBool.searchRoomListBool = false;
                 loadingService(self.showLoadingBool);
-
+                //  searchHotelInfo  searchRoomList
                 self.searchHotelInfo();
                 self.searchRoomList();
             }
@@ -430,8 +430,8 @@
                     }
 
                 }
-                // 住酒店 天数
-                // self.day
+            // 住酒店 天数
+            // self.day
             self.searchHotelInfo = function() {
 
                 var data = {
@@ -499,22 +499,57 @@
         }
     ])
 
-    .controller('hotelInfoController', ['$http', '$scope',
-        function($http, $scope) {
+    .controller('hotelInfoController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+        function($scope, $http, $filter, $state, $stateParams, $timeout, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
+            console.log('hotelInfoController')
             var self = this;
 
             self.init = function() {
                 // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                // $scope.root.wxShare();
+                self.showLoadingBool = {};
+                self.hotelId = $stateParams.hotelId;
+                self.search();
+            }
+
+            self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
+                var data = {
+                    "action": "GetHotelInfo",
+                    "appid": $scope.root.getParams('appid'),
+                    "clear_session": "xxxx",
+                    "openid": $scope.root.getParams('openid'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+
+                    "hotelId": self.hotelId
+                    
+                };
+                data = JSON.stringify(data);
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('bookHotel', 'hotelInfo'),
+                    data: data
+
+                }).then(function successCallback(data, status, headers, config) {
+
+                    console.log(data.data.data)
+                    self.hotel = data.data.data.hotel;
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool);
+                }, function errorCallback(data, status, headers, config) {
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool);
+                    // alert(status);
+                });
             }
         }
     ])
 
-    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util',
-        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, loadingService, backendUrl, util) {
+    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
+        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, loadingService, backendUrl, util, BACKEND_CONFIG) {
             console.log("roomInfoController")
-            console.log($stateParams)
-            console.log($scope.root.params)
+            BACKEND_CONFIG.test && console.log($stateParams);
             var self = this;
             self.init = function() {
 
@@ -537,12 +572,13 @@
                 // self.countSeconds = 30;
                 // self.showTip = true;
 
-                // params 会员信息
-                self.memberInfo = $scope.root.params.memberInfo;
-                self.memberInfo.mobile = self.memberInfo.mobile - 0;
-
                 // 默认选中房间数为1
                 self.roomNumber = 1;
+                // params 会员信息
+                
+                // self.memberInfo.mobile = self.memberInfo.mobile - 0;
+
+              
             }
 
 
@@ -568,12 +604,17 @@
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
                             self.room = data.data.data.room;
+                            self.hotel = data.data.data.hotel;
+                            self.member = data.data.data.member;
+                            self.member.mobile = data.data.data.member.mobile -0;
+                            BACKEND_CONFIG.test && console.log(self.room);
                             self.priceList = data.data.data.priceList;
-                            self.showLoadingBool.searchBool = true;
-                            // 单价
+                             // 单价
                             self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                             // 房间数 最多 可选
-                            self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility)
+                            self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
+                            self.showLoadingBool.searchBool = true;
+                           
                             loadingService(self.showLoadingBool);
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchBool = true;
