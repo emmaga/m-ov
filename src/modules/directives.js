@@ -13,6 +13,7 @@
 
   .controller('cityPickerController', ['$scope', '$ionicScrollDelegate', 
     function($scope, $ionicScrollDelegate) {
+      console.log('cityPickerController')
       var self = this;
 
       self.init = function(cityLists, callback) {
@@ -41,6 +42,7 @@
 
   .controller('travelDatePickerController', ['$scope', '$filter',
     function($scope, $filter) {
+      console.log('travelDatePickerController')
       var self = this;
       // st: 开始日期, et: 结束日期; 均为时间戳
       self.init = function(checkin, checkout, st, et, callback) {

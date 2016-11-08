@@ -15,7 +15,8 @@
             "roomPri":"1000",
             "roomMemberPri":"800",
             "roomAveragePri": "237",
-            "roomRemain":"0"
+            "roomRemain":"0",
+            "roomDescription":"文字介绍文字描述"
         }, {
             "roomId": "2",
             "roomName": "沙滩独栋小屋",
@@ -28,7 +29,8 @@
             "roomPri":"2000",
             "roomMemberPri":"1700",
             "roomAveragePri": "599",
-            "roomRemain":"1"
+            "roomRemain":"1",
+            "roomDescription":"文字介绍文字描述"
         } , {
             "roomId": "3",
             "roomName": "漂浮小屋",
@@ -41,7 +43,8 @@
             "roomPri":"2000",
             "roomMemberPri":"1700",
             "roomAveragePri": "1200",
-            "roomRemain":"1"
+            "roomRemain":"1",
+            "roomDescription":"文字介绍文字描述"
         } ]
     }
 }

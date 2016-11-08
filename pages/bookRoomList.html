@@ -14,7 +14,7 @@
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- info -->
         <div class="list mod-inset-forms">
-            <a class="item" ui-sref="hotelInfo">
+            <a class="item" ui-sref="hotelInfo({hotelId:brl.hotelId})">
                 <span class="mod-tag" ng-repeat="feature in brl.hotel.hotelFeatures">
                     <i class="icon mod-icon {{feature.icon}}"></i>
                     {{feature.name}}
@@ -56,7 +56,7 @@
                     </button>
                 </span>
                 <h2>{{room.roomName}}</h2>
-                <p>{文字介绍}</p>
+                <p>{{room.roomDescription}}</p>
                 <p>
                     <span class="mod-tag" ng-repeat="feature in room.roomFeatures">
                         <i class="icon {{feature.icon}}"></i>
