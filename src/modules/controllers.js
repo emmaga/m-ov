@@ -266,10 +266,11 @@
         }
     ])
 
-    .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
-        function($scope, $filter, $timeout, $location, $http, $stateParams, $translate, loadingService, backendUrl, util) {
+    .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$translate', '$ionicModal','loadingService', 'backendUrl', 'util',
+        function($scope, $filter, $timeout, $location, $http, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
             var self = this;
+            console.log($scope)
             console.log($scope.root.params);
             self.init = function() {
 
@@ -384,6 +385,31 @@
                     });
                 }, 500)
             }
+
+            // // 弹出框
+            // // 城市选择器 弹出
+            // $ionicModal.fromTemplateUrl('pages/cityPicker.html', {
+            //     scope: $scope,
+            //     animation: 'slide-in-left'
+            // }).then(function(modal) {
+            //     $scope.modal = modal;
+            // });
+            // self.showCityModal = function() {
+            //     $scope.modal.show();
+            //     $scope.cp.init();
+                
+            // }
+
+            // // 日历选择 弹出
+            // $ionicModal.fromTemplateUrl('pages/travelDatePicker.html', {
+            //     scope: $scope,
+            //     animation: 'slide-in-left'
+            // }).then(function(modal) {
+            //     self.dateModal = modal;
+            // });
+            // self.showDateModal = function() {
+            //     self.dateModal.show();
+            // }
         }
     ])
 
@@ -409,9 +435,10 @@
                 self.showLoadingBool.searchRoomListBool = false;
                 loadingService(self.showLoadingBool);
                 //  searchHotelInfo  searchRoomList
+                // self.search();
                 self.searchHotelInfo();
                 self.searchRoomList();
-            }
+            };
             self.showDP = function(boo) {
                 self.datePickerShow = boo ? boo : false;
             };
@@ -429,7 +456,8 @@
                         $state.go('roomInfo', { roomId: roomId, hotelId: hotelId, checkIn: checkIn, checkOut: checkOut })
                     }
 
-                }
+            };
+
             // 住酒店 天数
             // self.day
             self.searchHotelInfo = function() {
@@ -444,7 +472,7 @@
                 };
                 data = JSON.stringify(data);
 
-                $timeout(function() {
+                // $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('bookHotel', 'hotelInfo'),
@@ -462,7 +490,7 @@
                         loadingService(self.showLoadingBool);
                         alert(status);
                     });
-                }, 300)
+                // }, 300)
             }
 
             self.searchRoomList = function() {
@@ -496,9 +524,81 @@
                 });
             }
 
+            // self.search = function(){
+            //     var data = {
+            //         "action": "GetHotelInfo",
+            //         "appid": $scope.root.getParams('appid'),
+            //         "clear_session": "xxxx",
+            //         "openid": $scope.root.getParams('openid'),
+            //         "lang": $translate.proposedLanguage() || $translate.use(),
+            //         "hotelId": self.hotelId
+            //     };
+            //     data = JSON.stringify(data);
+
+            //     $timeout(function() {
+            //         $http({
+            //             method: $filter('ajaxMethod')(),
+            //             url: backendUrl('bookHotel', 'hotelInfo'),
+            //             data: data
+            //         }).then(function successCallback(data, status, headers, config) {
+            //             self.hotel = data.data.data.hotel;
+            //             self.showLoadingBool.searchHotelInfoBool = true;
+
+            //             // 酒店 地图 
+            //             self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
+            //             loadingService(self.showLoadingBool);
+            //             console.log("searchHotelInfoBool");
+            //         }, function errorCallback(data, status, headers, config) {
+            //             self.showLoadingBool.searchHotelInfoBool = true;
+            //             loadingService(self.showLoadingBool);
+            //             alert(status);
+            //         })
+
+            //         // load address
+            //         .then(function(e) {
+            //             if(!e) return;
+
+            //             var data = {
+            //                 "action": "GetRoomList",
+            //                 "appid": $scope.root.getParams('appid'),
+            //                 "clear_session": "xxxx",
+            //                 "openid": $scope.root.getParams('openid'),
+            //                 "lang": $translate.proposedLanguage() || $translate.use(),
+
+            //                 "hotelId": self.hotelId,
+            //                 "bookStartDate": self.checkIn,
+            //                 "bookEndDate": self.checkOut
+            //             };
+            //             data = JSON.stringify(data);
+            //             $http({
+            //                 method: $filter('ajaxMethod')(),
+            //                 url: backendUrl('bookHotel', 'roomList'),
+            //                 data: data
+            //             })
+                        
+            //             .then(function successCallback(data, status, headers, config) {
+            //                 if(data.data.rescode == '200') {
+            //                     if(data.data.data.list.length > 0) {
+            //                       self.orderInfo.address = data.data.data.list[0]; 
+            //                     }
+            //                     return true;
+            //                 }
+            //                 else {
+            //                     alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+            //                 }
+            //             }, function errorCallback(data, status, headers, config) {
+            //                 alert($filter('translate')('serverError') + status);
+            //             })
+            //         })
+
+
+
+            //     }, 300)
+            // }
+
         }
     ])
-
+    
     .controller('hotelInfoController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
         function($scope, $http, $filter, $state, $stateParams, $timeout, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
             console.log('hotelInfoController')
@@ -614,7 +714,7 @@
                             // 房间数 最多 可选
                             self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
                             self.showLoadingBool.searchBool = true;
-                           
+                            
                             loadingService(self.showLoadingBool);
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchBool = true;
@@ -1063,6 +1163,8 @@
                         url: backendUrl('product', 'productList'+id)
                     }).then(function successCallback(data, status, headers, config) {
                         self.productList = self.productList.concat(data.data.data.productList);
+                        self.productList.length = self.productList.length;
+                        self.productTotal = data.data.data.productTotal;
                         console.log(self.productList)
                         self.showLoadingIcon = false;
                     }, function errorCallback(data, status, headers, config) {

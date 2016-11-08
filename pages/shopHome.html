@@ -29,7 +29,8 @@
     </div>
 
 
-    <a href="" ng-click="shopHome.moreProduct()">更多商品</a><ion-spinner icon="ripple" ng-show="shopHome.showLoadingIcon"></ion-spinner><br>
+    <a  ng-click="shopHome.moreProduct()" ng-show="shopHome.productTotal>shopHome.productList.length">更多商品</a><ion-spinner icon="ripple" ng-show="shopHome.showLoadingIcon"></ion-spinner><br>
+    <p ng-show="shopHome.productTotal==shopHome.productList.length">没有更多了(┬＿┬)</p> 
     
 
 

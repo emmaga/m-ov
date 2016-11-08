@@ -11,28 +11,28 @@
     'pascalprecht.translate'
   ])
   
-  .config(function ($httpProvider) {
-      $httpProvider.interceptors.push(function ($rootScope, $q, $filter) {
-          return {
-              request: function (config) {
-                  config.timeout = 10000;
-                  return config;
-              }
-              // ,responseError: function(err){
-              //       // alert($filter('translate')('serverError') + err.status);
-              //       if(-1 === err.status) {
-              //         // 远程服务器无响应
-              //       } else if(500 === err.status) {
-              //         // 处理各类自定义错误
-              //       } else if(501 === err.status) {
-              //         // ...
-              //       }
-              //       return $q.reject(err);
-              //     }
+  // .config(function ($httpProvider) {
+  //     $httpProvider.interceptors.push(function ($rootScope, $q, $filter) {
+  //         return {
+  //             request: function (config) {
+  //                 config.timeout = 10000;
+  //                 return config;
+  //             }
+  //             // ,responseError: function(err){
+  //             //       // alert($filter('translate')('serverError') + err.status);
+  //             //       if(-1 === err.status) {
+  //             //         // 远程服务器无响应
+  //             //       } else if(500 === err.status) {
+  //             //         // 处理各类自定义错误
+  //             //       } else if(501 === err.status) {
+  //             //         // ...
+  //             //       }
+  //             //       return $q.reject(err);
+  //             //     }
               
-          }
-      })
-  })
+  //         }
+  //     })
+  // })
 
   .config(['$translateProvider',function($translateProvider){
       var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
