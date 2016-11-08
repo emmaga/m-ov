@@ -1,14 +1,24 @@
 <div ng-controller="shopProductDetailController as shopProductDetail" ng-init="shopProductDetail.init()">
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">商品详情</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <button class="button button-icon icon ion-ios-cart"></button>
     </div>
-    <br><br><br><br><br>
-    <img ng-src="{{shopProductDetail.product.imgSrc}}" style="width:100px;height:80px;"><br>
-    价格：{{shopProductDetail.product.price}}<br/>
-    商品名：{{shopProductDetail.product.name}}<br/>
-    简介：{{shopProductDetail.product.intro}}<br/>
-    <a ui-sref="shopCart">立即购买</a>
-    <a >加入购物车</a>
-
+    <div class="padding mod-has-header mod-inset-forms">
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
+            <img class="" ng-src="{{shopProductDetail.product.imgSrc}}">
+        </ion-slide-box>
+        <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
+        <div class="item">
+            <p class="item-note">库存99</p>
+            <h2>{{shopProductDetail.product.name}}</h2>
+            <h2 class="mod-member-price assertive">{{shopProductDetail.product.price}}</h2>
+        </div>
+        <div class="padding">
+            <p>{{shopProductDetail.product.intro}}</p>
+        </div>
+    </div>
+    <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
+        <a class="button">加入购物车</a>
+        <a class="button button-assertive" ui-sref="shopCart">立即购买</a>
+    </div>
 </div>
