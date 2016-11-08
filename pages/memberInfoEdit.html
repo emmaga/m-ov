@@ -1,23 +1,26 @@
-<div ng-controller="memberInfoEditController as mie" ng-init="mie.init()">
-    <form novalidate class="simple-form" name="orderDetail">
-        <label class="item item-input">
-          <span class="input-label" >真实姓名:</span>
-          <input type="text" placeholder="{{mie.member.realName}}" ng-model="mie.member.realName">
-        </label>
-        <label class="item item-input">
-          <span class="input-label" >证件号码:</span>
-          <input type="text" placeholder="{{mie.member.idCardNumber}}" ng-model="mie.member.idCardNumber">
-        </label>
-        <label class="item item-input">
-          <span class="input-label" >手机号:</span>
-          <input type="number" placeholder="{{mie.member.mobile}}" ng-model="mie.member.mobile">
-          
-        </label>
-        <!-- <button ng-click="mie.getAuthCode()" ng-disabled="mie.countAbility"><span ng-show="mie.showTip">免费获取验证码</span> <span ng-show="!mie.showTip">{{mie.countSeconds}}s 后重新发送</span></button>
+<div class="padding" ng-controller="memberInfoEditController as mie" ng-init="mie.init()">
+    
+    <div class="list padding">
+    <h3 class="mod-font-light mod-text-indent">会员资料</h3>
+        <form novalidate class="mod-inset-forms" name="orderDetail">
+            <label class="item item-input">
+                <span class="input-label">真实姓名:</span>
+                <input type="text" placeholder="{{mie.member.realName}}" ng-model="mie.member.realName">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">证件号码:</span>
+                <input type="text" placeholder="{{mie.member.idCardNumber}}" ng-model="mie.member.idCardNumber">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">手机号:</span>
+                <input type="number" placeholder="{{mie.member.mobile}}" ng-model="mie.member.mobile">
+            </label>
+            <!-- <button ng-click="mie.getAuthCode()" ng-disabled="mie.countAbility"><span ng-show="mie.showTip">免费获取验证码</span> <span ng-show="!mie.showTip">{{mie.countSeconds}}s 后重新发送</span></button>
         <label class="item item-input">
           <span class="input-label" ng-model="mie.authCode">验证码</span>
           <input type="number">
         </label> -->
-         <button ng-click="mie.updataMemberInfo()">保存</button>
-    </form>
+            <button class="button button-block button-positive mod-margin-top-20" ng-click="mie.updataMemberInfo()">保存</button>
+        </form>
+    </div>
 </div>

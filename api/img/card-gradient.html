@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Animating Gradient with CSS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="container" style="background: linear-gradient(313deg, rgb(67, 184, 88), rgb(24, 169, 137), rgb(51, 122,107), rgb(67, 184, 88)) 0% 0% / 300% 300%; animation: AnimationName 14s ease infinite;">
+    </div>
+    <style type="text/css">
+    #container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        /*background: linear-gradient(313deg, #0e8b6b, #1f5748, #2fb880);*/
+        background-size: 600% 600%;
+        -webkit-animation: AnimationName 14s ease infinite;
+        animation: AnimationName 14s ease infinite;
+    }
+    
+    @-webkit-keyframes AnimationName {
+        0% {
+            background-position: 0% 5%
+        }
+        50% {
+            background-position: 100% 96%
+        }
+        100% {
+            background-position: 0% 5%
+        }
+    }
+    
+    @keyframes AnimationName {
+        0% {
+            background-position: 0% 5%
+        }
+        50% {
+            background-position: 100% 96%
+        }
+        100% {
+            background-position: 0% 5%
+        }
+    }
+    </style>
+</body>
+
+</html>
