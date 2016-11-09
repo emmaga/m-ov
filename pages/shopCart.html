@@ -24,11 +24,12 @@
             </div>
             <ion-toggle ng-model="item.dist">需要配送？</ion-toggle>
             <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0">
+                <a class="icon ion-ios-trash dark" ng-click="shopCart.delete($index)" style="position: absolute; font-size: 24px; right: 0; color: white; float: right; margin: 10px 20px; z-index: 2;"></a>
                 <h2>
                     <i class="icon ion-ios-lightbulb"></i>
                     <br>
-                    <div ng-if="item.status==0">OH 该商品已下架</div>
-                    <div ng-if="item.status!=0 && item.availableCount==0">OH 不小心卖光了</div>
+                    <small ng-if="item.status==0">十分抱歉，商品已经下架了</small>
+                    <small ng-if="item.status!=0 && item.availableCount==0">Opps.. 一不小心卖光了</small>
                 </h2>
             </div>
         </div>
