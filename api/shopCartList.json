@@ -10,7 +10,7 @@
                   "productID": "1",
                   "price": 18000,
                   "productName": "金秋时节－阳澄湖美味大闸蟹6只装",
-                  "status":1,
+                  "status":0,
                   "availableCount": 100
                 },{
                   "shopCartItemID": "123",
@@ -20,10 +20,10 @@
                   "price": 8000,
                   "productName": "金秋时节－阳澄湖美味大闸蟹6只装",
                   "status":1,
-                  "availableCount": 100
+                  "availableCount": 0
                 },{
                   "shopCartItemID": "123",
-                  "count": 2,
+                  "count": 101,
                   "thumbnailSrc": "api/img/goods1.jpg",
                   "productID": "1",
                   "price": 8000,
@@ -32,7 +32,7 @@
                   "availableCount": 100
                 },{
                   "shopCartItemID": "123",
-                  "count": 2,
+                  "count": 100,
                   "thumbnailSrc": "api/img/goods1.jpg",
                   "productID": "1",
                   "price": 18000,

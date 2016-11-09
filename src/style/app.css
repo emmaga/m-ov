@@ -23,9 +23,15 @@
 /*input*/
 
 .mod-input-number {
-    width: 100px !important;
+    width: calc(65% - 94px) !important;
+    border-radius: 3px;
+    margin-left: 10px;
+    margin-right: 10px;
+    line-height: 28px !important;
+    min-height: 28px;
     text-align: center;
-    padding: 0 !important
+    padding: 0 !important;
+    background: rgb(245,245,245) !important;
 }
 
 
@@ -64,6 +70,7 @@
 /*card*/
 
 .card.mod-flat {
+
     box-shadow: none !important;
 }
 
@@ -181,6 +188,39 @@
     content: ' ';
 }
 
+
+.mod-cart-prod-disabled{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: rgba(225,225,225,.92);
+    text-align: center;
+    line-height: 100%;
+}
+
+.mod-cart-prod-disabled:before{
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: .1;
+    background-size: 100px 100px;
+    background-image: url(../img/noise.gif);
+}
+.mod-cart-prod-disabled>h2{
+    position: absolute;
+    top: 50%;
+    margin-top: -36px !important;
+    width: 100%;
+    color: white !important;
+    font-weight: bold;
+    z-index: 1;
+    }
 
 /*会员*/
 
@@ -355,13 +395,13 @@
 }
 form.mod-fixed{
     top: 0px !important;
-    left: 1px;
+    left: 0;
     width: 100% !important;
     border: none;
     border-bottom: solid 1px #ddd !important;
     background-color: rgb(255, 255, 255) !important;
     padding-bottom: 0 !important;
-    z-index: 2;
+    z-index: 3;
 }
 .mod-fixed.mod-fixed-top {
     top: 0;
@@ -406,10 +446,6 @@ body {
 .button.ion-ios-minus-empty.button-small{
     min-width: 28px;
 }
-
-
-/*改小slider标记点*/
-
 .slider-pager .slider-pager-page {
     width: 10px !important;
 }
@@ -420,6 +456,7 @@ body {
 
 .button-small {
     line-height: 21px !important;
+    min-height: 28px !important
 }
 
 small {
@@ -438,6 +475,11 @@ small {
 }
 .bar-header .ion-ios-cart{
 transform: scale(0.75);
+}
+
+
+.card{
+    position: relative !important;
 }
 
 /*hack*/
