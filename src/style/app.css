@@ -51,17 +51,14 @@
 .mod-has-header {
     margin-top: 44px !important;
 }
+.mod-has-tabs-top {
+    margin-top: 93px !important;
+}
 
 .mod-has-tabs-top {
     margin-top: 91px;
 }
 
-
-/*bar*/
-
-.bar.mod-fixed {
-    position: fixed !important;
-}
 
 
 /*card*/
@@ -123,7 +120,7 @@
 .mod-list {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
-    padding-top: 0 !important;
+    padding-top: 1px !important;
 }
 
 .mod-inset-forms>.item {
@@ -353,6 +350,26 @@
 	width: 100%;
 	height: 100%;
 }
+.mod-fixed{
+    position: fixed !important;
+}
+form.mod-fixed{
+    top: 0px !important;
+    left: 1px;
+    width: 100% !important;
+    border: none;
+    border-bottom: solid 1px #ddd !important;
+    background-color: rgb(255, 255, 255) !important;
+    padding-bottom: 0 !important;
+    z-index: 2;
+}
+.mod-fixed.mod-fixed-top {
+    top: 0;
+}
+.mod-fixed.mod-fixed-bottom {
+    bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
 
 
 /*对ionic原写法覆盖*/
@@ -363,10 +380,6 @@ body {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     color: rgb(51, 51, 51) !important;
-}
-
-.item:not(.item-divider) {
-    background-color: transparent !important;
 }
 
 .button {
@@ -383,8 +396,15 @@ body {
     border-color: #ddd !important;
 }
 
-.bar.bar-light {
+.bar.bar-light,{
     background-color: rgba(255, 255, 255, .95) !important;
+}
+.item:not(form.mod-fixed):not(.item-divider){
+    background-color: transparent !important;
+}
+.button.ion-ios-plus-empty.button-small,
+.button.ion-ios-minus-empty.button-small{
+    min-width: 28px;
 }
 
 
@@ -416,7 +436,9 @@ small {
     border-left: none !important;
     border-right: none !important;
 }
-
+.bar-header .ion-ios-cart{
+transform: scale(0.75);
+}
 
 /*hack*/
 
@@ -428,4 +450,11 @@ small {
     max-height: 80px;
     width: 100%;
     height: 100%;
+}
+
+.item.mod-ghost{
+    height: 44px !important;
+    border: none !important;
+    pointer-events: none !important;
+    background: transparent !important;
 }

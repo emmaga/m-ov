@@ -1,35 +1,59 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
-    <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">购物车</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
-    </div>
 
-    <div ng-repeat="item in shopCartList track by $index">
-        <a ng-click="shopCart.minusOne($index)">-</a>{{item.count}}<a ng-click="shopCart.plusOne($index)">+</a>
-        {{item.thumbnailSrc}}         
-        {{item.productID}}       
-        {{item.price | fenToYuan}}      
-        {{item.productName}}      
-        {{item.status}}    <!--1正常 0下架-->
-        {{item.availableCount}}
-        <a ng-click="shopCart.delete($index)">删除</a>
-        {{item.availableCount}}   <!--0 无货-->
-        {{item.availableCount - item.count}}   <!-- <0 缺货-->
-        <ion-checkbox ng-model="item.dist">自提</ion-checkbox>
-    </div>
-    
-    <form name="orderForm" ng-submit="orderForm.$valid && shopCart.submitOrder()">
-        name: 
-        <input type="text" ng-model="shopCart.address.name" required />
-        mobile: 
-        <input type="text" ng-model="shopCart.address.mobile" required />
-        <span ng-if="shopCart.hasEx">
-            address: 
-            <input type="text" ng-model="shopCart.address.address" required/>
+
+    <div class="padding mod-has-header mod-inset-forms" style="padding-top: 120px;">
+        
+        
+        <div class="item mod-ghost" ng-if="shopCart.hasEx"></div>
+
+        <div class="item item-thumbnail-left" ng-repeat="item in shopCartList track by $index">
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
+            <h2>{{item.productName}}</h2>
+            <h2>{{item.price | fenToYuan}}</h2>
+            <div class="item item-input">
+                <div class="input-label">数量</div>
+                <a class="button button-small button-light icon ion-ios-minus-empty" ng-click="shopCart.minusOne($index)"></a>
+                <span class="mod-input-number">
+                    {{item.count}}
+                </span>
+                <a class="button button-small button-light icon ion-ios-plus-empty" ng-click="shopCart.plusOne($index)"></a>
+            </div>
+            <!-- {{item.productID}} -->
+            {{item.status}}
+            <!--1正常 0下架-->
+            {{item.availableCount}}
+            <a ng-click="shopCart.delete($index)">删除</a> {{item.availableCount}}
+            <!--0 无货-->
+            {{item.availableCount - item.count}}
+            <!-- <0 缺货-->
+            <ion-checkbox ng-model="item.dist" style="height: 44px;">自提</ion-checkbox>
+        </div>
+
+
+
+
+        <form class="light-bg list  padding mod-inset-forms mod-fixed mod-fixed-top " name="orderForm" ng-submit="orderForm.$valid && shopCart.submitOrder()">
+          
+                <button class="button button-assertive item-note" ng-disabled="{{orderForm.$valid}}" type="submit">结算</button>
+                <h3 class="mod-font-light mod-text-indent">
+                    总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
+                </h3>
+          
+
+
+            <div class="item item-input">
+                <div class="input-label">联系人</div>
+                <input type="text" ng-model="shopCart.address.name" required />
+            </div>
+            <div class="item item-input">
+                <div class="input-label">手机</div>
+                <input type="text" ng-model="shopCart.address.mobile" required />
+            </div>
+            <div class="item item-input" ng-if="shopCart.hasEx">
             邮费:¥{{shopCart.postage | fenToYuan}}
-        </span>
-        <button type="submit">¥{{shopCart.totalPrice | fenToYuan}}/结算</button> {{orderForm.$valid}} <!--true：可提交 false：不可提交-->
-    </form>
-
-    
+                <div class="input-label">地址</div>
+                <input type="text" ng-model="shopCart.address.address" required/>
+            </div>
+        </form>
+    </div>
 </div>
