@@ -29,8 +29,8 @@
         <!-- 搜索结果 -->
         <h3 class="mod-font-light mod-text-indent">{{'searchResultA'|translate}}{{bhl.hotelNum}}{{'searchResultB'|translate}}</h3>
 
-
-        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.hotelId,checkIn:bhl.checkin,checkOut:bhl.checkout})">
+        <ion-spinner icon="spiral" ng-hide="bhl.loadingIcon"></ion-spinner>
+        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.hotelId,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
             <div class="item mod-no-border">
                 <p>
                     <i class="icon ion-ios-location"></i>

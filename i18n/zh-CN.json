@@ -51,6 +51,7 @@
   "searchResultA": "为您找到",
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
+  "serverTimeout": "网络不好哟",
   "submitOrder": "提交订单",
 
 

@@ -99,7 +99,6 @@
                     self.setParams('refresh_token', data.data.refresh_token);
                     self.getWxUserInfo(data.data.access_token, data.data.openid);     
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -126,7 +125,6 @@
                     BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
                     self.WXConfigJSSDK();
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -167,7 +165,6 @@
                         $ionicLoading.hide();
                     }
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -190,7 +187,6 @@
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -262,8 +258,7 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchCityListsBool = false;
-                self.showLoadingBool.searchHotelListBool = false;
-                loadingService(self.showLoadingBool);
+                console.log(self.showLoadingBool)
                 self.datePickerShow = false;
                 self.hotels = {};
                 self.checkin = new Date().getTime();
@@ -274,6 +269,7 @@
 
                 self.cityInfo = { id: '0', name: '全部' };
                 self.searchHotelList();
+                // 异步 回调
                 self.searchCityLists();
             }
             self.showDP = function(boo) {
@@ -293,21 +289,20 @@
                 // 延时半秒隐藏
                 $timeout(function() { self.showDP(false); }, 500);
                 self.searchHotelList();
-                console.log('日期')
             };
 
             self.doAfterPickCity = function(cityId, cityName) {
                 self.cityInfo = { id: cityId, name: cityName };
                 self.showCP(false);
                 self.searchHotelList();
-                console.log('chengshi')
             };
 
 
 
             // 获取城市
             self.searchCityLists = function() {
-
+                self.showLoadingBool.searchCityListsBool = false;
+                loadingService(self.showLoadingBool);
                 var data = {
                     "action": "GetCityLists",
                     "appid": $scope.root.getParams('appid'),
@@ -316,28 +311,25 @@
                     "lang": $translate.proposedLanguage() || $translate.use()
                 };
                 data = JSON.stringify(data);
-
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('project', 'cityLists'),
-                    data: data
-                }).then(function successCallback(data, status, headers, config) {
-                    self.cityLists = data.data.data.cityLists;
-                    self.showLoadingBool.searchCityListsBool = true;
-                    loadingService(self.showLoadingBool);
-                }, function errorCallback(data, status, headers, config) {
-                    self.showLoadingBool.searchCityListsBool = true;
-                    loadingService(self.showLoadingBool);
-                    alert(status);
-                });
-
-
+                $timeout(function(){
+                  $http({
+                      method: $filter('ajaxMethod')(),
+                      url: backendUrl('project', 'cityLists'),
+                      data: data
+                  }).then(function successCallback(data, status, headers, config) {
+                      self.cityLists = data.data.data.cityLists;
+                      self.showLoadingBool.searchCityListsBool = true;
+                      loadingService(self.showLoadingBool);
+                  }, function errorCallback(data, status, headers, config) {
+                      self.showLoadingBool.searchCityListsBool = true;
+                      loadingService(self.showLoadingBool);
+                  });  
+                },500)
             }
 
             self.searchHotelList = function() {
                 // 每次 请求，都要添加loading
-                self.showLoadingBool.searchHotelListBool = false;
-                loadingService(self.showLoadingBool);
+                self.loadingIcon = false;
                 var data = {
                     "action": "GetHotelList",
                     "appid": $scope.root.getParams('appid'),
@@ -358,12 +350,9 @@
                     }).then(function successCallback(data, status, headers, config) {
                         self.hotels = data.data.data.hotelLists;
                         self.hotelNum = data.data.data.hotelNum;
-                        self.showLoadingBool.searchHotelListBool = true;
-                        loadingService(self.showLoadingBool);
+                        self.loadingIcon = true;
                     }, function errorCallback(data, status, headers, config) {
-                        self.showLoadingBool.searchHotelListBool = true;
-                        loadingService(self.showLoadingBool);
-                        alert(status);
+                        self.loadingIcon = true;
                     });
                 }, 500)
             }
@@ -415,11 +404,10 @@
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchHotelInfoBool = false;
                 self.showLoadingBool.searchRoomListBool = false;
-                loadingService(self.showLoadingBool);
                 //  searchHotelInfo  searchRoomList
-                // self.search();
                 self.searchHotelInfo();
-                self.searchRoomList();
+                // 异步 调用
+                // self.searchRoomList();
             };
             self.showDP = function(boo) {
                 self.datePickerShow = boo ? boo : false;
@@ -443,7 +431,8 @@
             // 住酒店 天数
             // self.day
             self.searchHotelInfo = function() {
-
+                self.showLoadingBool.searchHotelInfoBool = false;
+                loadingService(self.showLoadingBool);
                 var data = {
                     "action": "GetHotelInfo",
                     "appid": $scope.root.getParams('appid'),
@@ -453,8 +442,8 @@
                     "hotelId": self.hotelId
                 };
                 data = JSON.stringify(data);
-
-                // $timeout(function() {
+                
+                $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('bookHotel', 'hotelInfo'),
@@ -466,17 +455,17 @@
                         // 酒店 地图 
                         self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
                         loadingService(self.showLoadingBool);
+                        self.searchRoomList();
                         console.log("searchHotelInfoBool")
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
-                        alert(status);
                     });
-                // }, 300)
+                }, 300)
             }
 
             self.searchRoomList = function() {
-
+                self.showLoadingBool.searchRoomListBool = false;
                 var data = {
                     "action": "GetRoomList",
                     "appid": $scope.root.getParams('appid'),
@@ -502,81 +491,8 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchHotelInfoBool = true;
                     loadingService(self.showLoadingBool);
-                    alert(status);
                 });
             }
-
-            // self.search = function(){
-            //     var data = {
-            //         "action": "GetHotelInfo",
-            //         "appid": $scope.root.getParams('appid'),
-            //         "clear_session": "xxxx",
-            //         "openid": $scope.root.getParams('openid'),
-            //         "lang": $translate.proposedLanguage() || $translate.use(),
-            //         "hotelId": self.hotelId
-            //     };
-            //     data = JSON.stringify(data);
-
-            //     $timeout(function() {
-            //         $http({
-            //             method: $filter('ajaxMethod')(),
-            //             url: backendUrl('bookHotel', 'hotelInfo'),
-            //             data: data
-            //         }).then(function successCallback(data, status, headers, config) {
-            //             self.hotel = data.data.data.hotel;
-            //             self.showLoadingBool.searchHotelInfoBool = true;
-
-            //             // 酒店 地图 
-            //             self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
-            //             loadingService(self.showLoadingBool);
-            //             console.log("searchHotelInfoBool");
-            //         }, function errorCallback(data, status, headers, config) {
-            //             self.showLoadingBool.searchHotelInfoBool = true;
-            //             loadingService(self.showLoadingBool);
-            //             alert(status);
-            //         })
-
-            //         // load address
-            //         .then(function(e) {
-            //             if(!e) return;
-
-            //             var data = {
-            //                 "action": "GetRoomList",
-            //                 "appid": $scope.root.getParams('appid'),
-            //                 "clear_session": "xxxx",
-            //                 "openid": $scope.root.getParams('openid'),
-            //                 "lang": $translate.proposedLanguage() || $translate.use(),
-
-            //                 "hotelId": self.hotelId,
-            //                 "bookStartDate": self.checkIn,
-            //                 "bookEndDate": self.checkOut
-            //             };
-            //             data = JSON.stringify(data);
-            //             $http({
-            //                 method: $filter('ajaxMethod')(),
-            //                 url: backendUrl('bookHotel', 'roomList'),
-            //                 data: data
-            //             })
-                        
-            //             .then(function successCallback(data, status, headers, config) {
-            //                 if(data.data.rescode == '200') {
-            //                     if(data.data.data.list.length > 0) {
-            //                       self.orderInfo.address = data.data.data.list[0]; 
-            //                     }
-            //                     return true;
-            //                 }
-            //                 else {
-            //                     alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
-            //                 }
-            //             }, function errorCallback(data, status, headers, config) {
-            //                 alert($filter('translate')('serverError') + status);
-            //             })
-            //         })
-
-
-
-            //     }, 300)
-            // }
 
         }
     ])
@@ -608,22 +524,21 @@
                     
                 };
                 data = JSON.stringify(data);
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('bookHotel', 'hotelInfo'),
-                    data: data
-
-                }).then(function successCallback(data, status, headers, config) {
-
-                    console.log(data.data.data)
-                    self.hotel = data.data.data.hotel;
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool);
-                }, function errorCallback(data, status, headers, config) {
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool);
-                    // alert(status);
-                });
+                $timeout(function(){
+                  $http({
+                      method: $filter('ajaxMethod')(),
+                      url: backendUrl('bookHotel', 'hotelInfo'),
+                      data: data
+                  }).then(function successCallback(data, status, headers, config) {
+                      console.log(data.data.data)
+                      self.hotel = data.data.data.hotel;
+                      self.showLoadingBool.searchBool = true;
+                      loadingService(self.showLoadingBool);
+                  }, function errorCallback(data, status, headers, config) {
+                      self.showLoadingBool.searchBool = true;
+                      loadingService(self.showLoadingBool);
+                  });  
+                },500)
             }
         }
     ])
@@ -701,7 +616,6 @@
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchBool = true;
                             loadingService(self.showLoadingBool);
-                            alert(status);
                         });
                     }, 500)
 
@@ -780,7 +694,7 @@
             //   }).then(function successCallback(data, status, headers, config) {
             //       console.log(data)
             //     }, function errorCallback(data, status, headers, config) {
-            //       alert(status)
+            //       
             //     });
             // }
             self.newOrder = function() {
@@ -838,8 +752,8 @@
         }
     ])
 
-    .controller('bookOrderInfoController', ['$scope', '$http', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
-        function($scope, $http, $filter, $stateParams, $translate, loadingService, backendUrl, util) {
+    .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
+        function($scope, $http, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl, util) {
             console.log("bookInfoController")
             var self = this;
             console.log($stateParams)
@@ -856,6 +770,8 @@
                 self.search();
             }
             self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
                 var data = {
                     "action": "GetRoomOrderDetail",
                     "appid": $scope.root.getParams('appid'),
@@ -865,25 +781,27 @@
                     "orderId": $stateParams.orderId
                 };
                 data = JSON.stringify(data);
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('order', 'orderInfo'),
-                    data: data
-                }).then(function successCallback(data, status, headers, config) {
-                    self.room = data.data.data.room;
-                    console.log(self.room)
-                    self.hotel = data.data.data.hotel;
-                    self.roomOrder = data.data.data.roomOrder;
-                    self.showLoadingBool.searchBool = true;
+                $timeout(function(){
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('order', 'orderInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        self.room = data.data.data.room;
+                        console.log(self.room)
+                        self.hotel = data.data.data.hotel;
+                        self.roomOrder = data.data.data.roomOrder;
+                        self.showLoadingBool.searchBool = true;
 
-                    // 酒店天数
-                    self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
-                    loadingService(self.showLoadingBool);
-                }, function errorCallback(data, status, headers, config) {
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool);
-                    alert(status);
-                });
+                        // 酒店天数
+                        self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
+                },500)
+                
             }
         }
     ])
@@ -899,8 +817,8 @@
         }
     ])
 
-    .controller('memberHomeController', ['$http', '$scope', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $translate, loadingService, backendUrl) {
+    .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
 
             var self = this;
@@ -912,11 +830,13 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool.searchBool)
+                loadingService(self.showLoadingBool);
 
                 self.search();
             }
             self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
                 var data = {
                     "action": "GetMemberInfo",
                     "appid": $scope.root.getParams('appid'),
@@ -925,21 +845,22 @@
                     "lang": $translate.proposedLanguage() || $translate.use()
                 };
                 data = JSON.stringify(data);
+                $timeout(function(){
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('member', 'memberInfo'),
+                        data: data
 
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('member', 'memberInfo'),
-                    data: data
-
-                }).then(function successCallback(data, status, headers, config) {
-                    self.member = data.data.data.member;
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool.searchBool)
-                }, function errorCallback(data, status, headers, config) {
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool.searchBool)
-                    alert(status);
-                });
+                    }).then(function successCallback(data, status, headers, config) {
+                        self.member = data.data.data.member;
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    });
+                },500)
+                
             }
         }
     ])
@@ -957,7 +878,6 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool);
 
                 self.search();
                 // // 验证码 倒计时
@@ -967,6 +887,8 @@
             }
 
             self.search = function() {
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool);
                 var data = {
                     "action": "GetMemberInfo",
                     "appid": $scope.root.getParams('appid'),
@@ -975,22 +897,23 @@
                     "lang": $translate.proposedLanguage() || $translate.use()
                 };
                 data = JSON.stringify(data);
-
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('member', 'memberInfo'),
-                    data: data
-                }).then(function successCallback(data, status, headers, config) {
-                    console.log(data)
-                    self.member = data.data.data.member;
-                    console.log(self.member)
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool);
-                }, function errorCallback(data, status, headers, config) {
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool);
-                    alert(status);
-                });
+                $timeout(function(){
+                   $http({
+                       method: $filter('ajaxMethod')(),
+                       url: backendUrl('member', 'memberInfo'),
+                       data: data
+                   }).then(function successCallback(data, status, headers, config) {
+                       self.member = data.data.data.member;
+                       self.member.mobile = data.data.data.member.mobile-0;
+                       console.log(self.member)
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool);
+                   }, function errorCallback(data, status, headers, config) {
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool);
+                   }); 
+                },500)
+                
             }
             self.updataMemberInfo = function() {
                 var data = {
@@ -1016,7 +939,6 @@
                     loadingService(self.showLoadingBool);
                 }, function errorCallback(data, status, headers, config) {
 
-                    alert(status);
                 });
             }
 
@@ -1050,7 +972,7 @@
             //   }).then(function successCallback(data, status, headers, config) {
             //       console.log(data)
             //     }, function errorCallback(data, status, headers, config) {
-            //       alert(status)
+            //       
             //     });
             // }
         }
@@ -1075,23 +997,23 @@
                 // 发送请求之前，遮罩层
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool)
+                $timeout(function(){
+                   $http({
+                       method: $filter('ajaxMethod')(),
+                       url: backendUrl('member', 'orderList')
+                   }).then(function successCallback(data, status, headers, config) {
+                       console.log(data)
+                       self.orderLists = data.data.data.orderLists;
 
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('member', 'orderList')
-                }).then(function successCallback(data, status, headers, config) {
-                    console.log(data)
-                    self.orderLists = data.data.data.orderLists;
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool)
+                   }, function errorCallback(data, status, headers, config) {
 
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool)
-                }, function errorCallback(data, status, headers, config) {
-
-                    self.showLoadingBool.searchBool = true;
-                    loadingService(self.showLoadingBool);
-
-                    alert(status);
-                });
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool);
+                   }); 
+                },500)
+                
             }
             self.nextState = function(id,type){
                 if (type == "Room") {
@@ -1132,8 +1054,6 @@
                   // go on
                   self.searchCategory();
                   
-                }, function errorCallback(data, status, headers, config) {
-                  alert(status);
                 })
             }
 
@@ -1147,7 +1067,6 @@
                     self.searchProductList(self.categoryList["0"]["id"],true)
                 }, function errorCallback(data, status, headers, config) {
 
-                    alert(status);
                 });
             }
             self.searchProductList = function(id,bool) {
@@ -1168,7 +1087,7 @@
                         console.log(self.productList)
                         self.showLoadingIcon = false;
                     }, function errorCallback(data, status, headers, config) {
-                        alert(status);
+                        
                     });
                 }
                 // 更多商品   loading 图标
@@ -1212,7 +1131,7 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        alert(status);
+                        
                     });
                 }, 500)
 
@@ -1229,8 +1148,6 @@
                   self.shopCartItemCount = 0;
                   shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
                   
-                }, function errorCallback(data, status, headers, config) {
-                  alert(status);
                 })
             }
 
@@ -1249,8 +1166,6 @@
                     self.loadShopCartInfo();
                   }
                   
-                }, function errorCallback(data, status, headers, config) {
-                  alert(status);
                 })
             }
 
@@ -1332,21 +1247,7 @@
             $scope.shopCartList = data.data.data.list;
             // 默认true：自提，false：快递
             for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = true;}
-            return true;
-          }, function errorCallback(data, status, headers, config) {
-            throw(status);
-            return false;
-          })
-          .then(function (e) {
-            if(!e){
-              return;
-            }
             self.loadExInfo();
-          })
-          .catch(function(e){
-            console.log("catch");
-            console.log(e);
-            alert($filter('translate')('serverError') + e);
           })
           .finally(function(value){
             $ionicLoading.hide();
@@ -1368,15 +1269,8 @@
               }
             }
             else {
-                throw(data.data.rescode + data.data.errInfo);
+                alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
             }
-          }, function errorCallback(data, status, headers, config) {
-            throw(status);
-          })
-          .catch(function(e){
-            console.log("catch");
-            console.log(e);
-            alert($filter('translate')('serverError') + e);
           })
           .finally(function(value){
             $ionicLoading.hide();
@@ -1389,85 +1283,7 @@
         
       }
     ])
-    
-    /* cancel page*/
-    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', 'backendUrl', 
-        function($http, $scope, $filter, $stateParams, backendUrl) {
-            console.log('shopOrderConfirmController')
-            var self = this;
 
-            self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
-                
-                // init
-                self.orderInfo = {};
-
-                // 加载要购买物品的信息及用户地址
-                self.loadOrderInfo();
-            }
-
-            self.countTotalPrice = function() {
-              self.totalPrice = 0;
-              if(self.orderInfo.list) {
-                for (var i = 0; i < self.orderInfo.list.length; i++) {
-                  self.totalPrice += self.orderInfo.list[i].price * self.orderInfo.list[i].count;
-                } 
-              }
-            }
-
-            self.loadOrderInfo = function() {
-                self.loadingOrderInfo = true;
-                // loadCartInfo
-                $http({
-                  method: $filter('ajaxMethod')(),
-                  url: backendUrl('', 'shopCartList')
-                })
-                .then(function successCallback(data, status, headers, config) {
-                    if(data.data.rescode == '200') {
-                        self.orderInfo.list = data.data.data.list;
-                        self.countTotalPrice();
-                        return true;
-                    }
-                    else {
-                        alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
-                    }
-                }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
-                    return false;
-                })
-                // load address
-                .then(function(e) {
-                    if(!e) return;
-                    $http({
-                      method: $filter('ajaxMethod')(),
-                      url: backendUrl('', 'memberAddress')
-                    })
-                    .then(function successCallback(data, status, headers, config) {
-                        if(data.data.rescode == '200') {
-                            if(data.data.data.list.length > 0) {
-                              self.orderInfo.address = data.data.data.list[0]; 
-                            }
-                            return true;
-                        }
-                        else {
-                            alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
-                        }
-                    }, function errorCallback(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + status);
-                    })
-                })
-                .catch(function(e){
-                    console.log("catch");
-                    console.log(e);
-                })
-                .finally(function(value){
-                    self.loadingOrderInfo = false;
-                });
-            }
-
-        }
-    ]) 
 
     .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
         function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
@@ -1479,6 +1295,7 @@
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
                 self.showLoadingBool = {};
+                self.showLoadingBool.searchBool = false;
                 self.search();
             }
 
@@ -1499,7 +1316,6 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        alert(status);
                     });
                 }, 500)
 

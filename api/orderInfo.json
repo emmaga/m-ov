@@ -7,7 +7,8 @@
             "hotelId": "1",
             "hotelName": "酒店名字一",
             "bookStartDate": "1288323623006",
-            "bookEndDate": "1288423623006"
+            "bookEndDate": "1288423623006",
+            "description":"酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 "
         },
         "room": {
             "roomId": "1",

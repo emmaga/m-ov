@@ -1,6 +1,7 @@
 {
   "myOrders": "myOrders",
   "serverError": "oops! Sorry it looks like something went wrong.",
+  "serverTimeout": "poor network",
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
   "checkIn": "check in",
