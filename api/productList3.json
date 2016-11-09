@@ -7,17 +7,20 @@
             "name":"产品三",
             "price":"1000",
             "intro":"商品简介商品简介商品简介商品简介商品简介",
-            "imgSrc":"api/img/goods1.jpg"
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
         },{
             "name":"产品三",
             "price":"2000",
             "intro":"商品简介商品简介商品简介商品简介商品简介",
-            "imgSrc":"api/img/goods1.jpg"
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
         },{
             "name":"产品三",
             "price":"3000",
             "intro":"商品简介商品简介商品简介商品简介商品简介",
-            "imgSrc":"api/img/goods1.jpg"
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
         }]
     }
     

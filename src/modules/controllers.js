@@ -254,7 +254,6 @@
             console.log('bookHotelListController');
             var self = this;
             console.log($scope)
-            console.log($scope.root.params);
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -375,10 +374,10 @@
             //     scope: $scope,
             //     animation: 'slide-in-left'
             // }).then(function(modal) {
-            //     $scope.modal = modal;
+            //     self.cityModal = modal;
             // });
             // self.showCityModal = function() {
-            //     $scope.modal.show();
+            //     self.modal.show();
             //     $scope.cp.init();
                 
             // }
