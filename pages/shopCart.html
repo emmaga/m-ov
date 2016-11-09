@@ -26,6 +26,7 @@
         <span ng-if="shopCart.hasEx">
             address: 
             <input type="text" ng-model="shopCart.address.address" required/>
+            邮费:¥{{shopCart.postage | fenToYuan}}
         </span>
         <button type="submit">¥{{shopCart.totalPrice | fenToYuan}}/结算</button> {{orderForm.$valid}} <!--true：可提交 false：不可提交-->
     </form>
