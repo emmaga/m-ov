@@ -1051,12 +1051,30 @@
                 self.showLoadingBool = {};
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
-                self.searchCategory();
+                self.loadShopCartInfo();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
                 // 商品数组
                 self.productList = [];
             }
+            self.loadShopCartInfo = function() {
+                // 获取购物车商品数量
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopCart', 'shopCartList')
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  var shopCartList = data.data.data.list;
+                  self.shopCartItemCount = 0;
+                  shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
+                  // go on
+                  self.searchCategory();
+                  
+                }, function errorCallback(data, status, headers, config) {
+                  alert(status);
+                })
+            }
+
             self.searchCategory = function() {
                 $http({
                     method: $filter('ajaxMethod')(),
@@ -1101,14 +1119,15 @@
         }
     ])
 
-    .controller('shopProductDetailController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
+    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
+        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, loadingService, backendUrl) {
 
             console.log('shopProductDetailController')
             var self = this;
 
             self.init = function() {
                 self.showLoadingBool = {};
+                self.buying = false;
 
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
@@ -1127,12 +1146,57 @@
                         self.product = data.data.data.product;
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
+                        self.loadShopCartInfo();
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
                         alert(status);
                     });
                 }, 500)
+
+            }
+
+            self.loadShopCartInfo = function() {
+                // 获取购物车商品数量
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopCart', 'shopCartList')
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  var shopCartList = data.data.data.list;
+                  self.shopCartItemCount = 0;
+                  shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
+                  
+                }, function errorCallback(data, status, headers, config) {
+                  alert(status);
+                })
+            }
+
+            self.addToCart = function(callBack) {
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopCart', 'shopCartList')
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(callBack){
+                    // 购买
+                    callBack();
+                  }
+                  else {
+                    // 加载购物车数量
+                    self.loadShopCartInfo();
+                  }
+                  
+                }, function errorCallback(data, status, headers, config) {
+                  alert(status);
+                })
+            }
+
+            self.buy = function() {
+                self.buying = true;
+                self.addToCart(function() {
+                    $state.go('shopCart');
+                });
 
             }
         }
@@ -1153,8 +1217,8 @@
 
           //watch shopCartList
           $scope.$watch('shopCartList', function() { 
-            self.countTotalPrice();
             self.judgeDist();
+            self.countTotalPrice();
           }, true);
 
           // 获取购物车信息
@@ -1188,6 +1252,9 @@
             for (var i = 0; i < $scope.shopCartList.length; i++) {
               self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
             } 
+          }
+          if(self.hasEx) {
+            self.totalPrice += self.postage;
           }
         }
 
