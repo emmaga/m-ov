@@ -1279,8 +1279,8 @@
 
           //watch shopCartList
           $scope.$watch('shopCartList', function() { 
-            self.countTotalPrice();
             self.judgeDist();
+            self.countTotalPrice();
           }, true);
 
           // 获取购物车信息
@@ -1314,6 +1314,9 @@
             for (var i = 0; i < $scope.shopCartList.length; i++) {
               self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
             } 
+          }
+          if(self.hasEx) {
+            self.totalPrice += self.postage;
           }
         }
 
