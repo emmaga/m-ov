@@ -122,7 +122,7 @@
                 })
                 .then(function successCallback(data, status, headers, config) {
                     // 将 wxUserInfo 记在 root params 缓存里
-                    self.setParams('wxUserInfo', data);
+                    self.setParams('wxUserInfo', data.data);
                     BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
                     self.WXConfigJSSDK();
                 }, function errorCallback(data, status, headers, config) {
@@ -254,7 +254,6 @@
             console.log('bookHotelListController');
             var self = this;
             console.log($scope)
-            console.log($scope.root.params);
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -375,10 +374,10 @@
             //     scope: $scope,
             //     animation: 'slide-in-left'
             // }).then(function(modal) {
-            //     $scope.modal = modal;
+            //     self.cityModal = modal;
             // });
             // self.showCityModal = function() {
-            //     $scope.modal.show();
+            //     self.modal.show();
             //     $scope.cp.init();
                 
             // }
