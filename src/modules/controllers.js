@@ -1270,21 +1270,7 @@
             $scope.shopCartList = data.data.data.list;
             // 默认true：自提，false：快递
             for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = true;}
-            return true;
-          }, function errorCallback(data, status, headers, config) {
-            throw(status);
-            return false;
-          })
-          .then(function (e) {
-            if(!e){
-              return;
-            }
             self.loadExInfo();
-          })
-          .catch(function(e){
-            console.log("catch");
-            console.log(e);
-            alert($filter('translate')('serverError') + e);
           })
           .finally(function(value){
             $ionicLoading.hide();
@@ -1306,15 +1292,8 @@
               }
             }
             else {
-                throw(data.data.rescode + data.data.errInfo);
+                alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
             }
-          }, function errorCallback(data, status, headers, config) {
-            throw(status);
-          })
-          .catch(function(e){
-            console.log("catch");
-            console.log(e);
-            alert($filter('translate')('serverError') + e);
           })
           .finally(function(value){
             $ionicLoading.hide();
@@ -1327,85 +1306,7 @@
         
       }
     ])
-    
-    /* cancel page*/
-    .controller('shopOrderConfirmController', ['$http', '$scope', '$filter', '$stateParams', 'backendUrl', 
-        function($http, $scope, $filter, $stateParams, backendUrl) {
-            console.log('shopOrderConfirmController')
-            var self = this;
 
-            self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
-                
-                // init
-                self.orderInfo = {};
-
-                // 加载要购买物品的信息及用户地址
-                self.loadOrderInfo();
-            }
-
-            self.countTotalPrice = function() {
-              self.totalPrice = 0;
-              if(self.orderInfo.list) {
-                for (var i = 0; i < self.orderInfo.list.length; i++) {
-                  self.totalPrice += self.orderInfo.list[i].price * self.orderInfo.list[i].count;
-                } 
-              }
-            }
-
-            self.loadOrderInfo = function() {
-                self.loadingOrderInfo = true;
-                // loadCartInfo
-                $http({
-                  method: $filter('ajaxMethod')(),
-                  url: backendUrl('', 'shopCartList')
-                })
-                .then(function successCallback(data, status, headers, config) {
-                    if(data.data.rescode == '200') {
-                        self.orderInfo.list = data.data.data.list;
-                        self.countTotalPrice();
-                        return true;
-                    }
-                    else {
-                        alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
-                    }
-                }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
-                    return false;
-                })
-                // load address
-                .then(function(e) {
-                    if(!e) return;
-                    $http({
-                      method: $filter('ajaxMethod')(),
-                      url: backendUrl('', 'memberAddress')
-                    })
-                    .then(function successCallback(data, status, headers, config) {
-                        if(data.data.rescode == '200') {
-                            if(data.data.data.list.length > 0) {
-                              self.orderInfo.address = data.data.data.list[0]; 
-                            }
-                            return true;
-                        }
-                        else {
-                            alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
-                        }
-                    }, function errorCallback(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + status);
-                    })
-                })
-                .catch(function(e){
-                    console.log("catch");
-                    console.log(e);
-                })
-                .finally(function(value){
-                    self.loadingOrderInfo = false;
-                });
-            }
-
-        }
-    ]) 
 
     .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
         function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {

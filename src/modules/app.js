@@ -10,29 +10,6 @@
     'app.services',
     'pascalprecht.translate'
   ])
-  
-  // .config(function ($httpProvider) {
-  //     $httpProvider.interceptors.push(function ($rootScope, $q, $filter) {
-  //         return {
-  //             request: function (config) {
-  //                 config.timeout = 10000;
-  //                 return config;
-  //             }
-  //             // ,responseError: function(err){
-  //             //       // alert($filter('translate')('serverError') + err.status);
-  //             //       if(-1 === err.status) {
-  //             //         // 远程服务器无响应
-  //             //       } else if(500 === err.status) {
-  //             //         // 处理各类自定义错误
-  //             //       } else if(501 === err.status) {
-  //             //         // ...
-  //             //       }
-  //             //       return $q.reject(err);
-  //             //     }
-              
-  //         }
-  //     })
-  // })
 
   .config(['$translateProvider',function($translateProvider){
       var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
@@ -41,6 +18,32 @@
           prefix: 'i18n/',
           suffix: '.json'
       });
+  }])
+
+
+  .config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('myInterceptor');
+  }])
+
+
+  .factory('myInterceptor', ['$q','$filter', function($q, $filter) {
+    var interceptor = {
+      'request' : function(config) {
+        config.timeout = 7000;
+        return config;
+      },
+      'responseError': function(err) {
+        if(err.status == 408) {
+          alert($filter('translate')('serverTimeout'));
+        }
+        else {
+          alert('from 拦截器 '+$filter('translate')('serverError') + err.status);
+        }
+        //阻止下一步
+        return $q.reject(err);
+      }
+    }
+    return interceptor;
   }])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
@@ -143,14 +146,6 @@
         views: {
           '': {
             templateUrl: 'pages/shopCart.html'
-          }
-        }
-      })
-      .state('shopOrderConfirm', {
-        url: '/shopOrderConfirm',
-        views: {
-          '': {
-            templateUrl: 'pages/shopOrderConfirm.html'
           }
         }
       })
