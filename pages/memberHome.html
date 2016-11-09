@@ -5,8 +5,8 @@
         <iframe class="mod-bg" src="api/img/card-gradient.html"></iframe>
         <div class="item item-avatar ">
             <!-- <img src="{{root.getParams('wxUserInfo').headimgurl}}" /> -->
-            <img src="api/img/avatar.jpg" />
-            <h2>会员名{{root.getParams('wxUserInfo').nickname}}</h2>
+            <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
+            <h2>{{root.getParams('wxUserInfo').nickname}}</h2>
             <p>{{memberHome.member.memberLevel.name}}</p>
             
         </div>

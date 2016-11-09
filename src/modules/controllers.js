@@ -122,7 +122,7 @@
                 })
                 .then(function successCallback(data, status, headers, config) {
                     // 将 wxUserInfo 记在 root params 缓存里
-                    self.setParams('wxUserInfo', data);
+                    self.setParams('wxUserInfo', data.data);
                     BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
                     self.WXConfigJSSDK();
                 }, function errorCallback(data, status, headers, config) {
