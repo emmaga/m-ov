@@ -34,11 +34,15 @@
 
         <form class="light-bg list  padding mod-inset-forms mod-fixed mod-fixed-top " name="orderForm" ng-submit="orderForm.$valid && shopCart.submitOrder()">
           
-                <button class="button button-assertive item-note" ng-class="{disabled:!orderForm.$valid}" type="submit">结算</button>
-                <h3 class="mod-font-light mod-text-indent">
-                    总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
-                </h3>
-          
+            <button class="button button-assertive item-note" ng-class="{disabled:!orderForm.$valid}" type="submit">结算</button>
+            <h3 class="mod-font-light mod-text-indent">
+                总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
+                <small ng-if="shopCart.hasEx">
+                    ( 含邮费: ¥{{shopCart.postage | fenToYuan}} )
+                    
+                </small>
+            </h3>
+                
 
 
             <div class="item item-input">
@@ -50,7 +54,6 @@
                 <input type="text" ng-model="shopCart.address.mobile" required />
             </div>
             <div class="item item-input" ng-if="shopCart.hasEx">
-            邮费:¥{{shopCart.postage | fenToYuan}}
                 <div class="input-label">地址</div>
                 <input type="text" ng-model="shopCart.address.address" required/>
             </div>
