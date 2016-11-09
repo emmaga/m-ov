@@ -99,7 +99,6 @@
                     self.setParams('refresh_token', data.data.refresh_token);
                     self.getWxUserInfo(data.data.access_token, data.data.openid);     
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -126,7 +125,6 @@
                     BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
                     self.WXConfigJSSDK();
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -167,7 +165,6 @@
                         $ionicLoading.hide();
                     }
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -190,7 +187,6 @@
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
                 }, function errorCallback(data, status, headers, config) {
-                    alert($filter('translate')('serverError') + status);
                     $ionicLoading.hide();
                 })
             }
@@ -327,7 +323,6 @@
                   }, function errorCallback(data, status, headers, config) {
                       self.showLoadingBool.searchCityListsBool = true;
                       loadingService(self.showLoadingBool);
-                      alert(status);
                   });  
                 },500)
             }
@@ -358,7 +353,6 @@
                         self.loadingIcon = true;
                     }, function errorCallback(data, status, headers, config) {
                         self.loadingIcon = true;
-                        alert(status);
                     });
                 }, 500)
             }
@@ -466,7 +460,6 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
-                        alert(status);
                     });
                 }, 300)
             }
@@ -498,7 +491,6 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchHotelInfoBool = true;
                     loadingService(self.showLoadingBool);
-                    alert(status);
                 });
             }
 
@@ -545,7 +537,6 @@
                   }, function errorCallback(data, status, headers, config) {
                       self.showLoadingBool.searchBool = true;
                       loadingService(self.showLoadingBool);
-                      // alert(status);
                   });  
                 },500)
             }
@@ -625,7 +616,6 @@
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchBool = true;
                             loadingService(self.showLoadingBool);
-                            alert(status);
                         });
                     }, 500)
 
@@ -704,7 +694,7 @@
             //   }).then(function successCallback(data, status, headers, config) {
             //       console.log(data)
             //     }, function errorCallback(data, status, headers, config) {
-            //       alert(status)
+            //       
             //     });
             // }
             self.newOrder = function() {
@@ -809,7 +799,6 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
-                        alert(status);
                     });
                 },500)
                 
@@ -869,7 +858,6 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        alert(status);
                     });
                 },500)
                 
@@ -923,7 +911,6 @@
                    }, function errorCallback(data, status, headers, config) {
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
-                       alert(status);
                    }); 
                 },500)
                 
@@ -952,7 +939,6 @@
                     loadingService(self.showLoadingBool);
                 }, function errorCallback(data, status, headers, config) {
 
-                    alert(status);
                 });
             }
 
@@ -986,7 +972,7 @@
             //   }).then(function successCallback(data, status, headers, config) {
             //       console.log(data)
             //     }, function errorCallback(data, status, headers, config) {
-            //       alert(status)
+            //       
             //     });
             // }
         }
@@ -1025,8 +1011,6 @@
 
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
-
-                       alert(status);
                    }); 
                 },500)
                 
@@ -1070,8 +1054,6 @@
                   // go on
                   self.searchCategory();
                   
-                }, function errorCallback(data, status, headers, config) {
-                  alert(status);
                 })
             }
 
@@ -1085,7 +1067,6 @@
                     self.searchProductList(self.categoryList["0"]["id"],true)
                 }, function errorCallback(data, status, headers, config) {
 
-                    alert(status);
                 });
             }
             self.searchProductList = function(id,bool) {
@@ -1106,7 +1087,7 @@
                         console.log(self.productList)
                         self.showLoadingIcon = false;
                     }, function errorCallback(data, status, headers, config) {
-                        alert(status);
+                        
                     });
                 }
                 // 更多商品   loading 图标
@@ -1150,7 +1131,7 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        alert(status);
+                        
                     });
                 }, 500)
 
@@ -1167,8 +1148,6 @@
                   self.shopCartItemCount = 0;
                   shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
                   
-                }, function errorCallback(data, status, headers, config) {
-                  alert(status);
                 })
             }
 
@@ -1187,8 +1166,6 @@
                     self.loadShopCartInfo();
                   }
                   
-                }, function errorCallback(data, status, headers, config) {
-                  alert(status);
                 })
             }
 
@@ -1339,7 +1316,6 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
-                        alert(status);
                     });
                 }, 500)
 

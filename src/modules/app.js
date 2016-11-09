@@ -30,10 +30,12 @@
     var interceptor = {
       'request' : function(config) {
         config.timeout = 7000;
+        config.timeStamp = new Date().getTime();
         return config;
       },
       'responseError': function(err) {
-        if(err.status == 408) {
+        console.log(new Date().getTime() - err.config.timeStamp)
+        if(new Date().getTime() - err.config.timeStamp >= 7000) {
           alert($filter('translate')('serverTimeout'));
         }
         else {
