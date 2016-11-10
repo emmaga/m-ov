@@ -28,7 +28,7 @@
     <div class="item item-divider">
         <p>{{'fillInOrder'|translate}}</p>
     </div>
-    <div novalidate class="mod-inset-forms list mod-list padding" name="orderDetail">
+    <form novalidate class="mod-inset-forms list mod-list padding" name="orderDetail" ng-submit="orderDetail.$valid && roomInfo.newOrder()">
         <div class="item">
             {{roomInfo.member.level.name}}
         </div>
@@ -55,7 +55,7 @@
         </div>
         <div class="item item-input">
             <div class="input-label">{{'contackName'|translate}}:</div>
-            <input type="text" ng-model="roomInfo.member.realName">
+            <input type="text" ng-model="roomInfo.member.realName" required>
         </div>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
         <label class="item item-input">
@@ -64,32 +64,35 @@
         </label> -->
         <div class="item item-input">
             <div class="input-label">{{'phoneNumber'|translate}}:</div>
-            <input type="number" ng-model="roomInfo.member.mobile">
+            <input type="number" ng-model="roomInfo.member.mobile" required>
         </div>
-    </div>
-    <div class="item item-divider">
-        <p>{{'priceDetail'|translate}}</p>
-    </div>
-    <div class="list padding mod-list mod-inset-forms">
-        <div class="item">
-            <p ng-repeat="price in roomInfo.priceList">
-                {{price.date | date:'yyyy年MM月dd日'}} {{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}
-                <br>
-            </p>
+        <div class="item item-divider">
+            <p>{{'priceDetail'|translate}}</p>
         </div>
-        <div class="item">
-            {{'totalPrice'|translate}}:{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
+        <div class="list padding mod-list mod-inset-forms">
+            <div class="item">
+                <p ng-repeat="price in roomInfo.priceList">
+                    {{price.date | date:'yyyy年MM月dd日'}} {{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}
+                    <br>
+                </p>
+            </div>
+            <div class="item">
+                {{'totalPrice'|translate}}:{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
+            </div>
         </div>
-    </div>
-    <div class="item item-divider">
-        <p>{{'refundDoc'|translate}}</p>
-    </div>
-    <div class="list  mod-list">
-        <div class="item">
-            {{roomInfo.room.changeDeal }}
+        <div class="item item-divider">
+            <p>{{'refundDoc'|translate}}</p>
         </div>
-    </div>
-    <div class="item item-divider padding">
-        <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
-    </div>
+        <div class="list  mod-list">
+            <div class="item">
+                {{roomInfo.room.changeDeal }}
+            </div>
+        </div>
+        <!-- <div class="item item-divider padding">
+            <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
+        </div> -->
+        <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">
+    </form>
+    
+    
 </div>

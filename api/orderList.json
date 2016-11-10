@@ -2,6 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
+        "orderNum":"4",
         "orderLists": [{
             "orderType": "Room",      
             "orderId": "1001",

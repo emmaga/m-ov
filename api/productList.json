@@ -2,7 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
-        "productTotal":"9",
+        "productTotal":"30",
         "productList":[{
             "name":"产品一",
             "price":"1000",
@@ -10,13 +10,55 @@
             "imgSrc":"api/img/goods1.jpg",
             "availableCount":"10"
         },{
-            "name":"产品二",
+            "name":"产品一",
             "price":"2000",
             "intro":"商品简介商品简介商品简介商品简介商品简介",
             "imgSrc":"api/img/goods1.jpg",
             "availableCount":"10"
         },{
-            "name":"产品三",
+            "name":"产品一",
+            "price":"3000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
+            "price":"1000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
+            "price":"2000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
+            "price":"3000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
+            "price":"1000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
+            "price":"2000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
+            "price":"3000",
+            "intro":"商品简介商品简介商品简介商品简介商品简介",
+            "imgSrc":"api/img/goods1.jpg",
+            "availableCount":"10"
+        },{
+            "name":"产品一",
             "price":"3000",
             "intro":"商品简介商品简介商品简介商品简介商品简介",
             "imgSrc":"api/img/goods1.jpg",
