@@ -4,32 +4,31 @@
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <div class=" mod-has-header">
-     
         <div class="item mod-no-border-top">
             <div class="row">
-
-                <p class="col mod-no-padding">{{'orderID'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderId}}</p>
+                <p class="col mod-no-padding">{{'orderID'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderId}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'orderDate'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.dealTime | date}}</p>
+                <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.dealTime | date}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderTotalPri | currency}}</p>
+                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderTotalPri | currency}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.paymentMethod}}</p>
+                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
+                <p class="col mod-no-padding col-75">微信支付</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.orderStatus}}</p>
-
+                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.room.orderStatus}}</p>
             </div>
         </div>
     </div>
-
     <div class="item item-divider"></div>
     <div class="list padding mod-inset-forms mod-list">
-
-        
         <a class="item item-thumbnail-left mod-no-side-border">
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{bookOrderInfo.room.roomImgSrc}});"></div>
             <h2>{{bookOrderInfo.room.roomName}}</h2>
@@ -43,37 +42,42 @@
         </a>
         <div class="item">
             <div class="row">
-                <p class="col mod-no-padding">入住时间:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.bookStartDate | date:'yyyy年MM月dd日'}}~{{bookOrderInfo.hotel.bookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{{bookOrderInfo.stayDays}}天</p>
+                <p class="col mod-no-padding">入住时间:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.bookStartDate | date:'yyyy年MM月dd日'}}~{{bookOrderInfo.hotel.bookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{{bookOrderInfo.stayDays}}天</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">房间数:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
+                <p class="col mod-no-padding">房间数:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">联系人:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
+                <p class="col mod-no-padding">联系人:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">手机号:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
+                <p class="col mod-no-padding">手机号:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
+                <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'contactName'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
+                <p class="col mod-no-padding">{{'contactName'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
-
+                <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">退改协议:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.room.changeDeal}}</p>
-
+                <p class="col mod-no-padding">退改协议:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.room.changeDeal}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">简介:</p><p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.description}}</p>
-
+                <p class="col mod-no-padding">简介:</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.description}}</p>
             </div>
         </div>
-
     </div>
     <div class="item item-divider">
         <a class="button button-block button-balanced" ng-click="">{{'payNow'|translate}}</a>
