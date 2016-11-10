@@ -1211,7 +1211,7 @@
         }
 
         self.judgeDist = function() {
-            self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==false?true:false});
+            self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==true?true:false});
         }
 
         self.plusOne = function(index) {
@@ -1253,8 +1253,8 @@
           })
           .then(function successCallback(data, status, headers, config) {
             $scope.shopCartList = data.data.data.list;
-            // 默认true：自提，false：快递
-            for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = true;}
+            // 默认true：快递，false：自提
+            for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = false;}
             self.loadExInfo();
           })
           .finally(function(value){
