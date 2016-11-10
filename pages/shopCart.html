@@ -1,7 +1,9 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
-    <div class="padding mod-has-header mod-inset-forms" style="padding-top: 120px; background: rgb(245,245,245);">
+    <div class="mod-has-header" style="padding-top: 114px;">
         <div class="item mod-ghost" ng-if="shopCart.hasEx"></div>
-        <div class="card" ng-repeat="item in shopCartList track by $index">
+
+        <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
+        <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
             <div class="item item-icon-right" style="padding: 13px;">
                 ￥{{item.price*item.count | fenToYuan}}
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px;"></a>
@@ -14,21 +16,22 @@
             <div class="item item-input">
                 <div class="input-label">
                     <div ng-if="(item.availableCount - item.count) >= 0">数量</div>
-                    <div ng-if="(item.availableCount - item.count) < 0" class="assertive">超过库存</div>
+                    <div ng-if="(item.availableCount - item.count) < 0" class="assertive">超过库存{{item.count - item.availableCount}}</div>
                 </div>
                 <a class="button button-small button-light icon ion-ios-minus-empty" ng-class="{disabled:( item.count <= 1)}" ng-click="shopCart.minusOne($index)"></a>
                 <span class="mod-input-number">
                     {{item.count}}
                 </span>
-                <a class="button button-small button-light icon ion-ios-plus-empty" ng-class="{disabled:((item.availableCount - item.count) < 0)}" ng-click="shopCart.plusOne($index)"></a>
+                <a class="button button-small button-light icon ion-ios-plus-empty" ng-class="{disabled:((item.availableCount - item.count) <= 0)}" ng-click="shopCart.plusOne($index)"></a>
             </div>
             <ion-toggle ng-model="item.dist">需要配送？</ion-toggle>
             <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0">
+                <a class="icon ion-ios-trash dark" ng-click="shopCart.delete($index)" style="position: absolute; font-size: 24px; right: 0; color: white; float: right; margin: 10px 30px; z-index: 2;"></a>
                 <h2>
-                    <i class="icon ion-ios-lightbulb"></i>
+                    <i class="icon ion-android-alert"></i>
                     <br>
-                    <div ng-if="item.status==0">OH 该商品已下架</div>
-                    <div ng-if="item.status!=0 && item.availableCount==0">OH 不小心卖光了</div>
+                    <small ng-if="item.status==0">十分抱歉，商品已经下架了</small>
+                    <small ng-if="item.status!=0 && item.availableCount==0">Oops.. 一不小心卖光了</small>
                 </h2>
             </div>
         </div>

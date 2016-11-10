@@ -3,26 +3,58 @@
         <h1 class="title">订单详情</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
-
-
-
-    <br><br><br><br><br>
-    订单号：{{shopOrderInfo.detail.orderId}}<br>
-    订单状态：{{shopOrderInfo.detail.orderStatus}}<br>
-    下单时间：{{shopOrderInfo.detail.orderId| date}}<br>
-    总价：{{shopOrderInfo.detail.totalPri}}<br>
-    商品列表：
-    <div ng-repeat="product in shopOrderInfo.detail.productList">
-        <img ng-src="{{product.imgSrc}}" style="width:100px;height:80px;"><br>
-    	商品名字：{{product.name}}<br>
-    	商品单价：{{product.unitPrice}}<br>
-    	商品数量：{{product.number}}<br>
-
+    <div class=" mod-has-header">
+        <div class="item mod-no-border-top">
+            <div class="row">
+                <p class="col mod-no-padding">{{'orderID'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderId}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderId| date}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.totalPri}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
+                <p class="col mod-no-padding col-75">微信支付</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderStatus}}</p>
+            </div>
+        </div>
     </div>
-    姓名：{{shopOrderInfo.detail.name}}<br>
-    住址：{{shopOrderInfo.detail.address}}<br>
-    手机：{{shopOrderInfo.detail.mobile}}<br>
-    <button>继续购物</button>
-    
-
+    <div class="item item-divider"></div>
+    <div class="list padding mod-inset-forms mod-list">
+        <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.imgSrc}});"></div>
+            <h2>{{product.name}}</h2>
+            <h2 class="assertive">{{product.unitPrice}}</h2>
+            <p>购买数量&nbsp{{product.number}}</p>
+        </a>
+    </div>
+    <div class="item">
+        <div class="row">
+            <p class="col mod-no-padding">联系人:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.name}}</p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">手机号:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.mobile}}</p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">配送方式:</p>
+            <p class="col mod-no-padding col-75">自提&nbsp+&nbsp快递 </p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">送货地址:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
+        </div>
+    </div>
+    <div class="item item-divider">
+        <a class="button button-block button-balanced">继续购物</a>
+    </div>
 </div>

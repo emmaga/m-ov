@@ -70,7 +70,7 @@
 /*card*/
 
 .card.mod-flat {
-
+    overflow: visible !important;
     box-shadow: none !important;
 }
 
@@ -191,14 +191,12 @@
 
 .mod-cart-prod-disabled{
     position: absolute;
-    left: 0;
+    left: -10px;
     top: 0;
-    right: 0;
+    right: -10px;
     bottom: 0;
     z-index: 2;
-    background-color: rgba(225,225,225,.92);
-    text-align: center;
-    line-height: 100%;
+    background-color: rgba(125,125,125,.92);
 }
 
 .mod-cart-prod-disabled:before{
@@ -220,7 +218,13 @@
     color: white !important;
     font-weight: bold;
     z-index: 1;
+    line-height: 1 !important;
+    text-align: center;
     }
+.mod-cart-prod-disabled>h2>small{
+    margin-top: -10px;
+    font-size: 14px !important
+}
 
 /*会员*/
 
@@ -354,9 +358,11 @@
 .mod-margin-top-20 {
     margin-top: 20px !important
 }
-
-
 .mod-no-margin-bottom {
+    margin-bottom: 0 !important
+}
+.mod-no-margin-vertical{
+    margin-top: 0 !important;
     margin-bottom: 0 !important
 }
 
@@ -480,6 +486,7 @@ transform: scale(0.75);
 
 .card{
     position: relative !important;
+    box-shadow: none
 }
 
 /*hack*/
