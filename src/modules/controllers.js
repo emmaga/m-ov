@@ -916,6 +916,7 @@
                 
             }
             self.updataMemberInfo = function() {
+                console.log('updataMemberInfo')
                 var data = {
                     "action": "modifyMemberInfo",
                     "appid": $scope.root.getParams('appid'),
@@ -1040,6 +1041,7 @@
                 self.showLoadingIcon = false;
                 // 商品数组
                 self.productList = [];
+
             }
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
@@ -1087,9 +1089,15 @@
                         console.log(self.productList)
                         self.showLoadingIcon = false;
                     }, function errorCallback(data, status, headers, config) {
+
                         
+
+                       
+                        self.showLoadingIcon = false;
+
                     });
                 }
+
                 // 更多商品   loading 图标
             self.moreProduct = function() {
 

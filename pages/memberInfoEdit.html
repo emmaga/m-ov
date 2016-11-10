@@ -2,25 +2,29 @@
     
     <div class="list padding">
     <h3 class="mod-font-light mod-text-indent">会员资料</h3>
-        <form novalidate class="mod-inset-forms" name="orderDetail">
+        <form novalidate class="mod-inset-forms" name="editMemberInfo" ng-submit="editMemberInfo.$valid && mie.updataMemberInfo()">
             <label class="item item-input">
                 <span class="input-label">真实姓名:</span>
-                <input type="text" ng-model="mie.member.realName">
+                <input type="text" ng-model="mie.member.realName" name="name" required>
             </label>
+            <div ng-show="editMemberInfo.$submitted || editMemberInfo.name.$touched">
+                  <div ng-show="editMemberInfo.name.$error.required">Tell us your name.</div>
+            </div>
             <label class="item item-input">
                 <span class="input-label">证件号码:</span>
-                <input type="text" ng-model="mie.member.idCardNumber">
+                <input type="text" ng-model="mie.member.idCardNumber" required >
             </label>
             <label class="item item-input">
                 <span class="input-label">手机号:</span>
-                <input type="number" ng-model="mie.member.mobile">
+                <input type="number" ng-model="mie.member.mobile" required >
             </label>
             <!-- <button ng-click="mie.getAuthCode()" ng-disabled="mie.countAbility"><span ng-show="mie.showTip">免费获取验证码</span> <span ng-show="!mie.showTip">{{mie.countSeconds}}s 后重新发送</span></button>
         <label class="item item-input">
           <span class="input-label" ng-model="mie.authCode">验证码</span>
           <input type="number">
         </label> -->
-            <button class="button button-block button-positive mod-margin-top-20" ng-click="mie.updataMemberInfo()">保存</button>
+            <input type="submit" class="button button-block button-positive mod-margin-top-20"  value="保存" />
+            <!-- <button class="button button-block button-positive mod-margin-top-20" ng-click="mie.updataMemberInfo()">保存</button> -->
         </form>
     </div>
 </div>
