@@ -36,10 +36,10 @@
       'responseError': function(err) {
         console.log(new Date().getTime() - err.config.timeStamp)
         if(new Date().getTime() - err.config.timeStamp >= 7000) {
-          alert($filter('translate')('serverTimeout'));
+          alert($filter('translate')('serverTimeout') + err.status);
         }
         else {
-          alert('from 拦截器 '+$filter('translate')('serverError') + err.status);
+          alert($filter('translate')('serverError') + err.status);
         }
         //阻止下一步
         return $q.reject(err);
