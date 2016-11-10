@@ -3,6 +3,7 @@
     "errInfo": "",
     "data": {
         "memberLevel":"微信会员",
+        "roomNum":"3",
         "lists": [{
             "roomId": "1",
             "roomName": "海景公寓房",

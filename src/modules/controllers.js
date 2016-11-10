@@ -328,6 +328,8 @@
             }
 
             self.searchHotelList = function() {
+                // 请求之前 都要先清空
+                self.hotels = {};
                 // 每次 请求，都要添加loading
                 self.loadingIcon = false;
                 var data = {
@@ -486,6 +488,7 @@
 
                 }).then(function successCallback(data, status, headers, config) {
                     self.rooms = data.data.data;
+                    console.log(self.rooms)
                     self.showLoadingBool.searchRoomListBool = true;
                     loadingService(self.showLoadingBool);
                 }, function errorCallback(data, status, headers, config) {
@@ -905,6 +908,7 @@
                    }).then(function successCallback(data, status, headers, config) {
                        self.member = data.data.data.member;
                        self.member.mobile = data.data.data.member.mobile-0;
+                       self.member.idCardNumber = data.data.data.member.idCardNumber-0;
                        console.log(self.member)
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
@@ -1005,7 +1009,7 @@
                    }).then(function successCallback(data, status, headers, config) {
                        console.log(data)
                        self.orderLists = data.data.data.orderLists;
-
+                       self.orderListNum = data.data.data.orderNum;
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool)
                    }, function errorCallback(data, status, headers, config) {
@@ -1026,8 +1030,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $timeout, $stateParams, loadingService, backendUrl) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1075,27 +1079,26 @@
                     console.log(id);
                     // 记录当前点击的商品分类的id
                     self.searchProductId = id;
+                    self.showLoadingIcon = true;
                     // 点击“分类”时，清空productList数组
                     if (bool == true) {
                         self.productList = [];
                     }
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('product', 'productList'+id)
-                    }).then(function successCallback(data, status, headers, config) {
-                        self.productList = self.productList.concat(data.data.data.productList);
-                        self.productList.length = self.productList.length;
-                        self.productTotal = data.data.data.productTotal;
-                        console.log(self.productList)
-                        self.showLoadingIcon = false;
-                    }, function errorCallback(data, status, headers, config) {
-
-                        
-
-                       
-                        self.showLoadingIcon = false;
-
-                    });
+                    $timeout(function(){
+                        $http({
+                            method: $filter('ajaxMethod')(),
+                            url: backendUrl('product', 'productList'+id)
+                        }).then(function successCallback(data, status, headers, config) {
+                            self.productList = self.productList.concat(data.data.data.productList);
+                            self.productList.length = self.productList.length;
+                            self.productTotal = data.data.data.productTotal;
+                            console.log(self.productList)
+                            self.showLoadingIcon = false;
+                        }, function errorCallback(data, status, headers, config) {
+                            self.showLoadingIcon = false;
+                        });
+                    },500)
+                    
                 }
 
                 // 更多商品   loading 图标

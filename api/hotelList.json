@@ -2,7 +2,7 @@
     "rescode": "200",
     "errInfo": "",
     "data":{
-        "hotelNum":"10",
+        "hotelNum":"5",
         "memberLevel":"微信会员",
         "hotelLists": [{
             "hotelId": "1",
@@ -19,6 +19,48 @@
             ],
             "hotelMemberPri":"800"
         }, {
+            "hotelId": "2",
+            "hotelName": "酒店地址二",
+            "hotelImgSrc": "api/img/cover2.jpg",
+            "hotelAddress": "苏州 · 沧浪区 · 新市路282号",
+            "hotelLocation":{
+                "X":"121.632901",
+                "Y":"31.218352"
+            },
+            "hotelFeatures": [
+                { "name": "wifi", "icon": "xxxxxx" },
+                { "name": "wifi", "icon": "xxxxxx" }
+            ],
+            "hotelMemberPri":"900"
+        },{
+            "hotelId": "2",
+            "hotelName": "酒店地址二",
+            "hotelImgSrc": "api/img/cover2.jpg",
+            "hotelAddress": "苏州 · 沧浪区 · 新市路282号",
+            "hotelLocation":{
+                "X":"121.632901",
+                "Y":"31.218352"
+            },
+            "hotelFeatures": [
+                { "name": "wifi", "icon": "xxxxxx" },
+                { "name": "wifi", "icon": "xxxxxx" }
+            ],
+            "hotelMemberPri":"900"
+        },{
+            "hotelId": "2",
+            "hotelName": "酒店地址二",
+            "hotelImgSrc": "api/img/cover2.jpg",
+            "hotelAddress": "苏州 · 沧浪区 · 新市路282号",
+            "hotelLocation":{
+                "X":"121.632901",
+                "Y":"31.218352"
+            },
+            "hotelFeatures": [
+                { "name": "wifi", "icon": "xxxxxx" },
+                { "name": "wifi", "icon": "xxxxxx" }
+            ],
+            "hotelMemberPri":"900"
+        },{
             "hotelId": "2",
             "hotelName": "酒店地址二",
             "hotelImgSrc": "api/img/cover2.jpg",
