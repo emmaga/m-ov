@@ -105,7 +105,7 @@
             self.buildsession = function(code, appid) {
                 BACKEND_CONFIG.test&&console.log('buildsession');
                 $ionicLoading.show({
-                  template: 'Loading...'
+                  template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
                 });
 
                 var data = {
@@ -1285,7 +1285,7 @@
 
         self.loadSCInfo = function() {
           $ionicLoading.show({
-            template: 'loading...'
+            template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
           });
           $http({
             method: $filter('ajaxMethod')(),
@@ -1304,7 +1304,7 @@
 
         self.loadExInfo = function() {
             $ionicLoading.show({
-            template: 'loading...'
+            template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
           });
           $http({
             method: $filter('ajaxMethod')(),

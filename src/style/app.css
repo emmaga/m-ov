@@ -312,7 +312,29 @@
     border-left: solid 1px rgb(151, 151, 151);
 }
 
+.mod-spinner-list{
+    position: relative;
+    /*top: -10px;*/
+    display: block;
+    text-align: center;
+}
+.mod-spinner-page{
+    position: relative;
+    top: 6px;
+    
+}
+.mod-spinner-page svg{
+    fill: rgb(255,255,255);
+}
 
+
+
+
+
+
+
+
+/*util*/
 /*字体*/
 
 .mod-font-light {
@@ -354,7 +376,6 @@
 }
 
 
-/*util*/
 
 .mod-no-margin-top {
     margin-top: 0 !important
@@ -438,7 +459,9 @@ body {
     overflow-x: hidden !important;
     color: rgb(51, 51, 51) !important;
 }
-
+.backdrop{
+    background-color: rgba(255,255,255,.4) !important;
+}
 .button {
     border-width: 0.5px !important;
     transition-duration: 250ms;
