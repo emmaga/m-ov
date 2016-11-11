@@ -284,6 +284,13 @@
 
 
 /*note*/
+.mod-note{
+    opacity: 0.5;
+    padding: 0 14px !important;
+}
+.mod-note>.icon{
+    font-size: 15px;
+}
 .mod-note-bottomline{
     text-align: center !important;
     border-top: solid 1px rgb(150,150,150);
@@ -296,7 +303,7 @@
     line-height: 1.6; 
     opacity: 0.5
 }
-.mod-note-emptylist>.ion-android-alert{
+.mod-note-emptylist>.icon{
     font-size: 32px;
 }
 
@@ -395,6 +402,9 @@
 
 .mod-color-excited {
     color: rgb(250, 40, 0) !important;
+}
+.mod-color-cold {
+    color: rgb(151,151,151);
 }
 
 .mod-color-white {}

@@ -2,7 +2,10 @@
     <div class="mod-has-header" style="padding-top: 114px;">
         <div class="item mod-ghost" ng-if="shopCart.hasEx"></div>
         
-        <div ng-show="shopCartList.length == 0">空荡荡的购物车</div>
+        <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
+            <i class="icon ion-ios-cart-outline"></i><br>
+            空荡荡的购物车
+        </p>
 
         <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
@@ -17,7 +20,7 @@
             </div>
             <div class="item item-input">
                 <div class="input-label">
-                    <div ng-if="(item.availableCount - item.count) >= 0">数量</div>
+                    <div ng-if="(item.availableCount - item.count) >= 0">购买数量</div>
                     <div ng-if="(item.availableCount - item.count) < 0" class="assertive">超过库存{{item.count - item.availableCount}}</div>
                 </div>
                 <a class="button button-small button-light icon ion-ios-minus-empty" ng-class="{disabled:( item.count <= 1)}" ng-click="shopCart.minusOne($index)"></a>
