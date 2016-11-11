@@ -309,4 +309,40 @@
 
   }])
 
+  // 商品页面滚动
+  // 太他娘的打击了
+  .directive('scrolly', ['$document', function ($document,$window) {
+      return {
+          restrict: 'EA',
+          link: function (scope, element, attrs) {
+              var raw = element[0];
+              console.log(raw)
+              console.log('loading directive');
+              // $document.bind('scroll', function () {
+              //     console.log(raw)
+              //     console.log('in scroll');
+              //     // console.log(document.body.scrollTop)
+              //     // console.log(document.body.clientHeight)
+              //     // console.log(document.body.scrollHeight)
+              //     console.log(raw.scrollTop)
+              //     console.log(raw.offsetHeight)
+              //     console.log(raw.scrollHeight)
+                  
+              //     // console.log(raw.scrollTop + raw.offsetHeight);
+              //     // console.log(raw.scrollHeight);
+              //     if (raw.scrollTop + raw.offsetHeight > raw.scrollHeight) { //at the bottom
+              //         // scope.$apply(attrs.scrolly);
+              //         console.log('test');
+              //     }
+              // })
+              
+              // angular.element(window).bind('scroll', function () {
+              //           console.log((window.innerHeight + window.scrollY) >= document.body.offsetHeight)
+              //         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+              //             scope.$apply(attrs.scrolly);
+              //         }
+              // });
+          }
+      }
+  }])
 })();
