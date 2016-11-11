@@ -48,12 +48,12 @@
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms.lists" ng-click="brl.nextState(room.roomId,brl.hotelId,brl.checkIn,brl.checkOut,room.roomRemain)">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.roomImgSrc}});"></div>
                 <span class="item-note">
-                    <h2 class="mod-member-price mod-color-excited">￥{{room.roomAveragePri}}<small>/{{'days'|translate}}</small></h2>
-                    <button class="button button-small button-assertive button-block mod-no-margin-top"  ng-class="{class1:(room.roomRemain==0),class2:!(room.roomRemain==0)}">
+                    <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.roomRemain==0),'mod-color-excited':!(room.roomRemain==0)}">￥{{room.roomAveragePri}}<small>/{{'days'|translate}}</small></h2>
+                    <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:(room.roomRemain==0),'button-assertive':!(room.roomRemain==0)}">
                         
-                        <span ng-if="room.roomRemain==0">{{'bookSoldOut'|translate}}</span>
+                        <span class="mod-color-cold" ng-if="room.roomRemain==0">{{'bookSoldOut'|translate}}</span>
                         <span ng-if="!(room.roomRemain==0)">{{'booking'|translate}}</span>
-                        <i class="icon ion-ios-arrow-right"></i>
+                        <i ng-if="!(room.roomRemain==0)" class="icon ion-ios-arrow-right"></i>
                     </button>
                 </span>
                 <h2>{{room.roomName}}</h2>
