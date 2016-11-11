@@ -79,14 +79,14 @@
                     $('.card').css('pointer-events','auto');
                 });*/
                 document.addEventListener('touchmove', function(event) {
-                    event.preventDefault();
+                    // event.preventDefault();
                     var l = document.getElementsByClassName('card');
                     for(var i=0; i< l.length; i++) {
                         l[i].style.pointerEvents= "none";
                     }
                 })
                 document.addEventListener('scroll', function(event) {
-                    event.preventDefault();
+                    // event.preventDefault();
                     var l = document.getElementsByClassName('card');
                     for(var i=0; i< l.length; i++) {
                         l[i].style.pointerEvents= "auto";
