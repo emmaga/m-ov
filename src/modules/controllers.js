@@ -158,7 +158,7 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                     } else {
                         alert($filter('translate')('serverError') + status);
@@ -411,6 +411,17 @@
                 // 异步 调用
                 // self.searchRoomList();
             };
+
+            self.map = function() {
+                wx.openLocation({
+                    latitude: 31.213295602955096, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: 121.62629999999999, // 经度，浮点数，范围为180 ~ -180。
+                    name: '上海清鹤大酒店', // 位置名
+                    address: '上海市浦东新区祖冲之路2277弄11号楼', // 地址详情说明
+                    scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                    infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                });
+            }
             self.showDP = function(boo) {
                 self.datePickerShow = boo ? boo : false;
             };
