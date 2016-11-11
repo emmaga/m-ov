@@ -48,13 +48,11 @@
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.roomId,brl.hotelId,brl.checkIn,brl.checkOut,room.roomRemain)">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.LogoImgURL}});"></div>
                 <span class="item-note">
-<<<<<<< Updated upstream
+
+
                     <h2 class="mod-member-price mod-color-excited">￥{{room.roomAveragePri}}<small>/{{'night'|translate}}</small></h2>
-                    <button class="button button-small button-assertive button-block mod-no-margin-top"  ng-class="{class1:(room.roomRemain==0),class2:!(room.roomRemain==0)}">
-=======
-                    <h2 class="mod-member-price mod-color-excited">￥{{room.roomAveragePri}}<small>/{{'days'|translate}}</small></h2>
                     <button class="button button-small button-assertive button-block mod-no-margin-top"  ng-class="{class1:(room.Refund==0),class2:!(room.Refund==0)}">
->>>>>>> Stashed changes
+
                         
                         <span ng-if="room.Refund==0">{{'bookSoldOut'|translate}}</span>
                         <span ng-if="!(room.Refund==0)">{{'booking'|translate}}</span>

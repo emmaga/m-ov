@@ -1,24 +1,24 @@
 <div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.init()">
     <!-- 头部 -->
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">{{roomInfo.room.roomName}}</h1>
+        <h1 class="title">{{roomInfo.room.RoomTypeName['zh-CN']}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <!-- 内容 -->
     <div class="padding mod-has-header" style="padding-bottom: 0">
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide ng-repeat="room in roomInfo.room.roomImgGallery">
-                <img style="width: 100%; height: 100%;" ng-src="{{room.imgSrc}}">
+            <ion-slide ng-repeat="room in roomInfo.room.Gallery">
+                <img style="width: 100%; height: 100%;" ng-src="{{room.ImageURL}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- info -->
         <div class="list padding mod-inset-forms mod-list">
             <div class="item">
-                <span class="mod-tag" ng-repeat="feature in roomInfo.room.roomFeatures">
+                <span class="mod-tag" ng-repeat="feature in roomInfo.room.Features">
                 <i class="icon mod-icon {{feature.icon}}"></i>
-                {{feature.name}}
+                {{feature.Name}}
               </span>
             </div>
             <div class="item">
@@ -32,13 +32,13 @@
     </div>
     <form novalidate class="mod-inset-forms list mod-list padding" name="orderDetail" ng-submit="orderDetail.$valid && roomInfo.newOrder()">
         <div class="item">
-            {{roomInfo.member.level.name}}
+            {{roomInfo.member.memberLevel.name}}
         </div>
         <div class="item">
-            {{roomInfo.room.roomName}}
+            {{roomInfo.room.RoomTypeName['zh-CN']}}
         </div>
         <div class="item">
-            {{roomInfo.hotel.description}}
+            {{roomInfo.hotel.Description['zh-CN']}}
         </div>
         <div class="item">
             {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
@@ -87,7 +87,7 @@
         </div>
         <div class="list  mod-list">
             <div class="item">
-                {{roomInfo.room.changeDeal }}
+                退改协议：{{roomInfo.room.changeDeal }}
             </div>
         </div>
         <!-- <div class="item item-divider padding">

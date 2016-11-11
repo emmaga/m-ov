@@ -272,11 +272,11 @@
         function($scope, $filter, $timeout, $location, $http, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
             var self = this;
-<<<<<<< Updated upstream
+
             
-=======
+
             console.log($scope.root.params)
->>>>>>> Stashed changes
+
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -423,9 +423,6 @@
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
                 console.log($stateParams.ID)
-                console.log(self.hotelId)
-                console.log(self.checkIn)
-                console.log(self.checkOut)
                 // 酒店天数
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
 
@@ -594,6 +591,8 @@
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchRoomInfoBool = false;
                 self.showLoadingBool.searchMemberInfoBool = false;
+                self.showLoadingBool.searchHotelInfoBool = false;
+
 
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
@@ -620,10 +619,7 @@
                     self.showLoadingBool.searchRoomInfoBool = false;
                     loadingService(self.showLoadingBool);
                     var data = {
-                        "action": "GetRoomInfo",
-                        "appid": $scope.root.getParams('appid'),
-                        "clear_session": "xxxx",
-                        "openid": $scope.root.getParams('openid'),
+                        "clear_session": $scope.root.getParams('clear_session'),
                         "lang": $translate.proposedLanguage() || $translate.use(),
 
                         "roomId": self.roomId,
@@ -639,19 +635,20 @@
                             url: backendUrl('bookHotel', 'roomInfo'),
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
-                            self.room = data.data.data.room;
+                            self.searchHotelInfo();
+                            console.log(data)
+                            self.room = data.data.data;
                             // ionic silder update
                             $ionicSlideBoxDelegate.update();
-                            self.hotel = data.data.data.hotel;
                             
                             BACKEND_CONFIG.test && console.log(self.room);
-                            self.priceList = data.data.data.priceList;
-                             // 单价
-                            self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
-                            // 房间数 最多 可选
-                            self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
-                            self.showLoadingBool.searchRoomInfoBool = true;
+                            // self.priceList = data.data.data.priceList;
+                            //  // 单价
+                            // self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
+                            // // 房间数 最多 可选
+                            // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
                             
+                            self.showLoadingBool.searchRoomInfoBool = true;
                             loadingService(self.showLoadingBool);
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchRoomInfoBool = true;
@@ -660,13 +657,43 @@
                     }, 500)
                 
             }
+             
+            self.searchHotelInfo = function() {
+                self.showLoadingBool.searchHotelInfoBool = false;
+                loadingService(self.showLoadingBool);
+                var data = {
+                    "clear_session":$scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                };
+                data = JSON.stringify(data);
+                
+                $timeout(function() {
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('bookHotel', 'hotelInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        self.hotel = data.data.data;
+                        console.log(self.hotel)
+                        self.showLoadingBool.searchHotelInfoBool = true;
+                        
+                        // 酒店 地图 
+                        // self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
+                        loadingService(self.showLoadingBool);
+                        console.log("searchHotelInfoBool")
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchHotelInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
+                }, 300)
+            }
 
             // 
             self.searchMemberInfo = function() {
                 self.showLoadingBool.searchMemberInfoBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "appid": $scope.root.getParams('appid'),
                     "clear_session": "xxxx",
                     "openid": $scope.root.getParams('openid'),
                     "lang": $translate.proposedLanguage() || $translate.use()
@@ -678,7 +705,8 @@
                         url: backendUrl('member', 'memberInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        self.member = data.data.data.member;
+                        self.member = data.data.data;
+                        console.log(self.member)
                         self.member.mobile -= 0;
                         self.showLoadingBool.searchMemberInfoBool = true;
                         loadingService(self.showLoadingBool);
@@ -724,6 +752,7 @@
                     //   self.roomNumber=self.roomNumber+num;
                     // }
                 }
+
                 // 验证码 倒计时
                 // self.countSecond = function(){
                 //    self.countAbility = true;
