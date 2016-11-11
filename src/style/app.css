@@ -19,6 +19,11 @@
 
 /*mod(modified)*/
 
+/*button*/
+.button.mod-load-more{
+    color: #666 !important;
+    font-size: 14px;
+}
 
 /*input*/
 
@@ -273,6 +278,24 @@
 }
 
 
+/*note*/
+.mod-note-bottomline{
+    text-align: center !important;
+    border-top: solid 1px rgb(150,150,150);
+    padding-top: 20px; 
+    opacity: 0.5
+}
+.mod-note-emptylist{
+    text-align: center !important;
+    padding-top: 20px;
+    line-height: 1.6; 
+    opacity: 0.5
+}
+.mod-note-emptylist>.ion-android-alert{
+    font-size: 32px;
+}
+
+
 /*价格*/
 
 .mod-member-price {
@@ -312,7 +335,29 @@
     border-left: solid 1px rgb(151, 151, 151);
 }
 
+.mod-spinner-list{
+    position: relative;
+    /*top: -10px;*/
+    display: block;
+    text-align: center;
+}
+.mod-spinner-page{
+    position: relative;
+    top: 6px;
+    
+}
+.mod-spinner-page svg{
+    fill: rgb(255,255,255);
+}
 
+
+
+
+
+
+
+
+/*util*/
 /*字体*/
 
 .mod-font-light {
@@ -325,6 +370,9 @@
 
 .mod-text-indent {
     text-indent: 0.5em;
+}
+.mod-text-center {
+    text-align: center;
 }
 
 .mod-sticky-bar {
@@ -354,7 +402,6 @@
 }
 
 
-/*util*/
 
 .mod-no-margin-top {
     margin-top: 0 !important
@@ -438,7 +485,9 @@ body {
     overflow-x: hidden !important;
     color: rgb(51, 51, 51) !important;
 }
-
+.backdrop{
+    background-color: rgba(255,255,255,.4) !important;
+}
 .button {
     border-width: 0.5px !important;
     transition-duration: 250ms;
@@ -452,6 +501,7 @@ body {
 .button.button-light {
     border-color: #ddd !important;
 }
+
 
 .bar.bar-light,
 {

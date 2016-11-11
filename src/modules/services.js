@@ -38,7 +38,7 @@
           $ionicLoading.hide();
         } else {
           $ionicLoading.show({
-               template: 'Loading...'
+               template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
              })  
         }
     }
