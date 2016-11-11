@@ -164,9 +164,11 @@
   // 每次页面跳转时触发
   .run(['$rootScope', function($rootScope) {
     $rootScope.$on("$locationChangeSuccess", function(){
-        document.body.scrollTop = 0;
+      document.body.scrollTop = 0;
     })
   }])
+
+
 
   .constant('BACKEND_CONFIG', {
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',

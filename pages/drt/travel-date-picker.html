@@ -1,13 +1,13 @@
 <div ng-controller="travelDatePickerController as tdp">
 
     <div class="row tdp-center has-header tdp-header">
-        <div class="col col-14 positive">日</div>
-        <div class="col col-14">一</div>
-        <div class="col col-14">二</div>
-        <div class="col col-14">三</div>
-        <div class="col col-14">四</div>
-        <div class="col col-14">五</div>
-        <div class="col col-14 positive">六</div>
+        <div class="col col-14 positive">{{'Sunday'|translate}}</div>
+        <div class="col col-14">{{'Monday'|translate}}</div>
+        <div class="col col-14">{{'Tuesday'|translate}}</div>
+        <div class="col col-14">{{'Wednesday'|translate}}</div>
+        <div class="col col-14">{{'Thursday'|translate}}</div>
+        <div class="col col-14">{{'Friday'|translate}}</div>
+        <div class="col col-14 positive">{{'Saturday'|translate}}</div>
     </div>
     
     <div class="tdp-msg" ng-show="tdp.msgShow">{{tdp.msg}}</div>
@@ -19,7 +19,7 @@
             <div ng-repeat="m in tdp.dates">
 
                 <div class="item item-divider">
-                    {{m.month | date:'yyyy年M月'}}
+                    {{m.month | date:'yyyy.M'}}
                 </div>
                 
                 <ul class="list tdp-d-list">

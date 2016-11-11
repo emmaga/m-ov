@@ -15,6 +15,7 @@
   "detail": "细节",
 
   "fillInOrder": "填写订单",
+  "Friday": "五",
 
 
   "goOnBooking": "继续预定",
@@ -24,6 +25,9 @@
   "map": "地图",
   "minPrice": "起",
   "myOrders": "我的订单",
+  "Monday": "一",
+  
+  "night": "晚",
   
   "orderDetail": "订单详情",
   "orderDate": "下单时间",
@@ -53,10 +57,16 @@
   "serverError": "哎哟，出错了",
   "serverTimeout": "网络不好哟",
   "submitOrder": "提交订单",
+  "Saturday": "六",
+  "Sunday": "日",
 
 
   "total": "共",
-  "totalPrice": "总价"
+  "totalPrice": "总价",
+  "Thursday": "四",
+  "Tuesday": "二",
+
+  "Wednesday": "三"
 
 
 }

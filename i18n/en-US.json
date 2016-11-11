@@ -1,9 +1,24 @@
 {
+  "checkIn": "check in",
+  "checkOut": "check out",
+
+  "Friday": "Fr",
+
   "myOrders": "myOrders",
-  "serverError": "oops! Sorry it looks like something went wrong.",
-  "serverTimeout": "poor network",
+  "Monday": "一",
+
+  "night": "night",
+
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
-  "checkIn": "check in",
-  "checkOut": "check out"
+
+  "serverError": "oops! Sorry it looks like something went wrong.",
+  "serverTimeout": "poor network",
+  "Saturday": "Sa",
+  "Sunday": "Su",
+
+  "Thursday": "Th",
+  "Tuesday": "Tu",
+
+  "Wednesday": "We"
 }

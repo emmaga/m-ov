@@ -1,6 +1,8 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
     <div class="mod-has-header" style="padding-top: 114px;">
         <div class="item mod-ghost" ng-if="shopCart.hasEx"></div>
+        
+        <div ng-show="shopCartList.length == 0">空荡荡的购物车</div>
 
         <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
