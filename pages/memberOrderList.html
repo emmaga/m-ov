@@ -10,22 +10,22 @@
             </div>
             <div class="item item-thumbnail-left mod-no-side-border" ng-click="mol.nextState(order.orderId,order.orderType)" >
                 <div ng-show="order.orderType=='Room'">
-                    <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
+                    <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
                     <span class="item-note">
                         <p>订单状态{{order.orderStatus}}</p>
                     </span>
                     <h2>{{order.roomName}}×{{order.roomNumber}}</h2>
                     <p>{{order.hotelName}}</p>
+                    <p>{{'totalPrice'|translate}}:&nbsp￥{{order.orderTotalPri}}</p>
                     <p>{{order.bookStartDate | date:'MM月dd日'}}{{'checkIn'|translate}}~{{order.bookEndDate | date:'MM月dd日'}}{{'checkOut'|translate}}</p>
-                    <p>{{'totalPrice'|translate}}:{{order.orderTotalPri}}</p>
                 </div>
                 <div ng-show="order.orderType=='Shop'">
-                    <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
+                    <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
                     <span class="item-note">
                         <p>订单状态{{order.orderStatus}}</p>
                     </span>
-                    <p>商品总数：{{order.productTotalNum}}</p>
-                    <p>商品总价：{{order.orderTotalPri}}</p>
+                    <h2>{{order.productTotalNum}}件商品</h2>
+                    <p>总价:&nbsp￥{{order.orderTotalPri}}</p>
                 </div>
                 
             </div>
