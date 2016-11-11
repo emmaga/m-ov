@@ -275,7 +275,7 @@
         function($scope, $filter, $timeout, $location, $http, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
             var self = this;
-            console.log($scope)
+            
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -284,7 +284,7 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchCityListsBool = false;
-                console.log(self.showLoadingBool)
+                
                 self.datePickerShow = false;
                 self.hotels = {};
                 self.checkin = new Date().getTime();
