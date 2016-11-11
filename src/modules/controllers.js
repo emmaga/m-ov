@@ -1184,8 +1184,8 @@
         }
     ])
 
-    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, loadingService, backendUrl) {
+    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl',
+        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $ionicSlideBoxDelegate, loadingService, backendUrl) {
 
             console.log('shopProductDetailController')
             var self = this;
@@ -1209,6 +1209,9 @@
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)
                         self.product = data.data.data.product;
+                        // ionic silder update
+                        $ionicSlideBoxDelegate.update();
+
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                         self.loadShopCartInfo();
