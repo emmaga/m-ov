@@ -8,7 +8,7 @@
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
             <ion-slide ng-repeat="room in brl.rooms.lists">
-                <img ng-src="{{room.roomImgSrc}}">
+                <img style="width: 100%; height: 100%;" ng-src="{{room.roomImgSrc}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
