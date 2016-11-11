@@ -8,6 +8,7 @@
             var self = this;
 
             self.init = function() {
+                self.wxBrowserHack();
 
                 // root全局变量：
                 self.params = {};
@@ -66,6 +67,31 @@
                  * 获取项目及会员信息 
                  */
                 self.buildsession(code, appid);
+            }
+
+            self.wxBrowserHack = function() {
+                // fix 商城页面，wx浏览器滚动时点击fix的div（分类）会点到下面一层（商品详情）
+                /*$(document).on('touchmove',function(){
+                    $('.card').css('pointer-events','none');
+                    // alert('scroll');
+                });
+                $(document).on('scroll',function(){
+                    $('.card').css('pointer-events','auto');
+                });*/
+                document.addEventListener('touchmove', function(event) {
+                    event.preventDefault();
+                    var l = document.getElementsByClassName('card');
+                    for(var i=0; i< l.length; i++) {
+                        l[i].style.pointerEvents= "none";
+                    }
+                })
+                document.addEventListener('scroll', function(event) {
+                    event.preventDefault();
+                    var l = document.getElementsByClassName('card');
+                    for(var i=0; i< l.length; i++) {
+                        l[i].style.pointerEvents= "auto";
+                    }
+                })
             }
 
             self.setParams = function(name, val) {
