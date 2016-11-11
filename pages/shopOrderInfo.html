@@ -32,8 +32,8 @@
         <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.imgSrc}});"></div>
             <h2>{{product.name}}</h2>
-            <h2 class="assertive">{{product.unitPrice}}</h2>
-            <p>购买数量&nbsp{{product.number}}</p>
+            <p>单价:&nbsp￥{{product.unitPrice}}</p>
+            <p>购买数量:&nbsp{{product.number}}</p>
         </a>
     </div>
     <div class="item">
