@@ -1,26 +1,93 @@
 {
-    "rescode": "200",
-    "errInfo": "",
-    "data":{
-        "hotel":{
-            "hotelId": "1",
-            "hotelName": "酒店名字一",
-            "hotelLocation":{
-                "X":"121.632901",
-                "Y":"31.218352"
+
+    "data": {
+
+        "Name": {
+
+            "zh-CN": "酒店一"
+
+        },
+
+        "LocationX": 121.632901,
+
+        "LocationY": 31.218352,
+
+        "LogoURL": "1.jpg",
+
+        "Features": [
+
+            {
+
+                "ImageURL": "wifi.icon",
+
+                "Name": "wifi"
+
             },
-            "hotelImgGallery":[{
-                "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
-            },{
-                "imgSrc": "http://otatest.cleartv.cn/demo/demo/uca-url.svg"
-            }] ,
-            "hotelFeatures": [
-                { "name": "  WIFI  ", "icon": "  ion-wifi" },
-                { "name": "  购物  ", "icon": "  ion-bag" }
-            ],
-            "hotelDescription":"酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 酒店描述 "
-        
-    } 
-    }
-    
+
+            {
+
+                "ImageURL": "park.icon",
+
+                "Name": "park"
+
+            }
+
+        ],
+
+        "TelePhone": null,
+
+        "Gallery": [
+
+            {
+
+                "ImageURL": "api/img/room1.jpg",
+
+                "ImageSize": 11,
+
+                "Seq": 1
+
+            },
+            {
+
+                "ImageURL": "api/img/room1.jpg",
+
+                "ImageSize": 11,
+
+                "Seq": 1
+
+            },
+            {
+
+                "ImageURL": "api/img/room1.jpg",
+
+                "ImageSize": 11,
+
+                "Seq": 1
+
+            }
+
+        ],
+
+        "Address": {
+
+            "zh-CN": "上海上海上海"
+
+        },
+
+        "Description": {
+
+            "zh-CN": "shanghai"
+
+        },
+
+        "ID": 1,
+
+        "OfficePhone": null
+
+    },
+
+    "rescode": "200",
+
+    "errInfo": "None"
+
 }

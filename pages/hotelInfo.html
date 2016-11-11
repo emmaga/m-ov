@@ -1,8 +1,8 @@
 <div ng-controller="hotelInfoController as hotelInfo" ng-init="hotelInfo.init()">
   hotelInfoController
-  <span class="mod-tag" ng-repeat="feature in hotelInfo.hotel.hotelFeatures">
+  <span class="mod-tag" ng-repeat="feature in hotelInfo.hotel.Features">
       <i class="icon mod-icon {{feature.icon}}"></i>
-      {{feature.name}}
+      {{feature.Name}}
   </span><br>
   描述：<br>
   {{hotelInfo.hotel.hotelDescription}}

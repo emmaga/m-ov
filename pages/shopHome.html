@@ -36,11 +36,11 @@
         </div>
 
         <ion-spinner icon="dots" class="mod-spinner-list" ng-show="shopHome.showLoadingIcon"></ion-spinner>
-        <a class="button button-light button-block mod-load-more" ng-click="shopHome.moreProduct()" ng-show="shopHome.productTotal>shopHome.productList.length && !shopHome.showLoadingIcon">
+        <a class="button button-light button-block mod-load-more" ng-click="shopHome.moreProduct()"  ng-show="(shopHome.productTotal>shopHome.productList.length) && (!shopHome.showLoadingIcon)">
             显示更多商品
             <i class="ion-android-arrow-dropdown"></i>
         </a>
-        <p class="mod-note-bottomline" ng-show="shopHome.productTotal==shopHome.productList.length && shopHome.productTotal!=0">
+        <p class="mod-note-bottomline" ng-show="shopHome.productTotal==shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
             <i class="icon ion-android-happy"></i>
             没有更多了
         </p>

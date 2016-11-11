@@ -13,7 +13,7 @@
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
         <div class="list padding mod-inset-forms">
-            <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityLists, bhl.doAfterPickCity)" >
+            <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityListContent, bhl.doAfterPickCity)" >
            <!--  <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCityModal(); cp.init(bhl.cityLists, bhl.doAfterPickCity)" > -->
                 <span class="input-label">{{'placeToGo'|translate}}</span>
                 <p class="mod-select-input  mod-color-theme">{{bhl.cityInfo.name}}</p>
@@ -31,19 +31,19 @@
         <h3 class="mod-font-light mod-text-indent" ng-show="bhl.loadingIcon">{{'searchResultA'|translate}}{{bhl.hotelNum}}{{'searchResultB'|translate}}</h3>
 
         
-        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.hotelId,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
+        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.ID,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
             <div class="item mod-no-border">
                 <p>
                     <i class="icon ion-ios-location"></i>
-                    {{hotel.hotelAddress}}
+                    {{hotel.Address['zh-CN']}}
                 </p>
-                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.hotelImgSrc}});"></div>
+                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.LogoURL}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <h2 class="mod-member-price">￥{{hotel.hotelMemberPri}}{{'minPrice'|translate}}</h2>
+                <h2 class="mod-member-price">￥{{hotel.lowestPrice}}{{'minPrice'|translate}}</h2>
                 <p class="mod-price-tag mod-member0">微信会员价</p>
                 <br>
-                <p class="mod-display-inlineblock">{{hotel.hotelName}}</p>
+                <p class="mod-display-inlineblock">{{hotel.Name['zh-CN']}}</p>
                 <!-- <span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span> -->
             </div>
             <div class="mod-split-line mod-15shorter"></div>

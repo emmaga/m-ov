@@ -16,16 +16,16 @@
       console.log('cityPickerController')
       var self = this;
 
-      self.init = function(cityLists, callback) {
+      self.init = function(cityListContent, callback) {
         self.callback = callback;
-        self.cityLists = cityLists;
+        self.cityListContent = cityListContent;
       }
 
       self.scrollTo = function(pos) {
         var offset = document.getElementById(pos).offsetTop;
         /*console.log(offset);
         document.getElementById('cp-city-list').scrollTop = offset;*/
-        $ionicScrollDelegate.$getByHandle('cityList').scrollTo(0, offset, true);
+        $ionicScrollDelegate.$getByHandle('cityInitial').scrollTo(0, offset, true);
       }
 
   }])

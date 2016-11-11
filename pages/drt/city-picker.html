@@ -1,6 +1,32 @@
 <div ng-controller="cityPickerController as cp">
     <div class="cp-side cp-wrapper">
         <div class="cp-cell">
+            <a ng-repeat="cityInitial in cp.cityListContent.searchInitialList" ng-click="cp.scrollTo(cityInitial)">{{cityInitial}}<br /></a>
+        </div>
+    </div>
+    <ion-content delegate-handle="cityInitial" id="cp-city-list" class="content has-header">
+
+        <div class="list">
+            <ng-repeat ng-repeat="cities in cp.cityListContent.cityLists">
+              <div id="{{cities.searchInitial}}" class="item item-divider cp-item-divider">
+                  {{cities.searchInitial}}
+              </div>
+              
+              <ul class="list cp-list">
+                  <li ng-repeat="city in cities.cities track by $index" ng-click="cp.callback(city.cityId, city.cityName)" class="item cp-item">
+                    <div class="row cp-row">
+                      <div class="col col-14">
+                          {{city.cityName}}
+                      </div>
+                    </div>
+                  </li>
+              </ul>
+          </ng-repeat>
+        </div>
+    </ion-content>
+
+<!--     <div class="cp-side cp-wrapper">
+        <div class="cp-cell">
             <a ng-repeat="cities in cp.cityLists" ng-click="cp.scrollTo(cities.initials)">{{cities.initials}}<br /></a>
         </div>
     </div>
@@ -23,5 +49,5 @@
               </ul>
           </ng-repeat>
         </div>
-    </ion-content>
+    </ion-content> -->
 </div>
