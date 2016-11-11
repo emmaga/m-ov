@@ -412,8 +412,8 @@
         }
     ])
 
-    .controller('bookRoomListController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
-        function($scope, $http, $filter, $state, $stateParams, $timeout, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
+    .controller('bookRoomListController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
+        function($scope, $http, $filter, $state, $stateParams, $timeout, $ionicSlideBoxDelegate, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
             console.log('bookRoomListController')
             var self = this;
             self.init = function() {
@@ -525,6 +525,9 @@
 
                 }).then(function successCallback(data, status, headers, config) {
                     self.rooms = data.data.data;
+                    // ionic silder update
+                    $ionicSlideBoxDelegate.update();
+
                     console.log(self.rooms)
                     self.showLoadingBool.searchRoomListBool = true;
                     loadingService(self.showLoadingBool);
@@ -583,8 +586,8 @@
         }
     ])
 
-    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
-        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, loadingService, backendUrl, util, BACKEND_CONFIG) {
+    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
+        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, loadingService, backendUrl, util, BACKEND_CONFIG) {
             console.log("roomInfoController")
             BACKEND_CONFIG.test && console.log($stateParams);
             var self = this;
@@ -641,6 +644,8 @@
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
                             self.room = data.data.data.room;
+                            // ionic silder update
+                            $ionicSlideBoxDelegate.update();
                             self.hotel = data.data.data.hotel;
                             self.member = data.data.data.member;
                             self.member.mobile = data.data.data.member.mobile -0;
