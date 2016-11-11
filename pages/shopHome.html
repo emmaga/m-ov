@@ -1,10 +1,10 @@
 <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()" >
     <!-- 分类 -->
-    <div class="bar tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0">
+    <div class="bar tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0;">
         <div class="tabs">
-            <a class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id" ng-click="shopHome.searchProductList(category.id,true)" ng-class="{active:(shopHome.searchProductId==category.id)}">
+            <div class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id" ng-click="shopHome.searchProductList(category.id,true)" ng-class="{active:(shopHome.searchProductId==category.id)}">
             {{category.name}}
-          </a>
+          </div>
         </div>
     </div>
     <!--header-->
@@ -17,6 +17,7 @@
 
 
     <div class="list mod-has-tabs-top padding">
+    
         <div class="card mod-flat" ng-repeat='product in shopHome.productList' ui-sref="shopProductDetail">
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
@@ -30,6 +31,10 @@
         </div>
     </div>
       
+    <!-- touch hack -->
+    <!-- <div class="mod-touch-hack"></div> -->
+
+
     <a ng-click="shopHome.moreProduct()" ng-show="shopHome.productTotal>shopHome.productList.length && !shopHome.showLoadingIcon">更多商品</a>
     <ion-spinner icon="ripple" ng-show="shopHome.showLoadingIcon"></ion-spinner>
     <br>
