@@ -31,7 +31,7 @@
     min-height: 28px;
     text-align: center;
     padding: 0 !important;
-    background: rgb(245,245,245) !important;
+    background: rgb(245, 245, 245) !important;
 }
 
 
@@ -57,6 +57,7 @@
 .mod-has-header {
     margin-top: 44px !important;
 }
+
 .mod-has-tabs-top {
     margin-top: 93px !important;
 }
@@ -64,7 +65,6 @@
 .mod-has-tabs-top {
     margin-top: 91px;
 }
-
 
 
 /*card*/
@@ -170,17 +170,19 @@
     margin: 32px 20px !important;
     overflow: hidden !important;
     border-radius: 12px !important;
-    border-bottom: solid 1px rgb(200,200,200) !important;
-    box-shadow: 0px 12px 24px 6px rgba(0,0,0,.35)
+    border-bottom: solid 1px rgb(200, 200, 200) !important;
+    box-shadow: 0px 12px 24px 6px rgba(0, 0, 0, .35)
 }
 
-.mod-member-card>iframe,.mod-member-card>img{
+.mod-member-card>iframe,
+.mod-member-card>img {
     border-radius: 12px;
     overflow: hidden !important;
 }
+
 .mod-member-card h1,
 .mod-member-card h2,
-.mod-member-card p{
+.mod-member-card p {
     color: white !important;
 }
 
@@ -188,18 +190,17 @@
     content: ' ';
 }
 
-
-.mod-cart-prod-disabled{
+.mod-cart-prod-disabled {
     position: absolute;
     left: -10px;
     top: 0;
     right: -10px;
     bottom: 0;
     z-index: 2;
-    background-color: rgba(125,125,125,.92);
+    background-color: rgba(125, 125, 125, .92);
 }
 
-.mod-cart-prod-disabled:before{
+.mod-cart-prod-disabled:before {
     content: ' ';
     position: absolute;
     left: 0;
@@ -210,7 +211,8 @@
     background-size: 100px 100px;
     background-image: url(../img/noise.gif);
 }
-.mod-cart-prod-disabled>h2{
+
+.mod-cart-prod-disabled>h2 {
     position: absolute;
     top: 50%;
     margin-top: -36px !important;
@@ -220,11 +222,13 @@
     z-index: 1;
     line-height: 1 !important;
     text-align: center;
-    }
-.mod-cart-prod-disabled>h2>small{
+}
+
+.mod-cart-prod-disabled>h2>small {
     margin-top: -10px;
     font-size: 14px !important
 }
+
 
 /*会员*/
 
@@ -355,13 +359,16 @@
 .mod-no-margin-top {
     margin-top: 0 !important
 }
+
 .mod-margin-top-20 {
     margin-top: 20px !important
 }
+
 .mod-no-margin-bottom {
     margin-bottom: 0 !important
 }
-.mod-no-margin-vertical{
+
+.mod-no-margin-vertical {
     margin-top: 0 !important;
     margin-bottom: 0 !important
 }
@@ -391,15 +398,17 @@
     text-align: center !important;
 }
 
-.mod-bg{
-	position: absolute;
-	width: 100%;
-	height: 100%;
+.mod-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
-.mod-fixed{
+
+.mod-fixed {
     position: fixed !important;
 }
-form.mod-fixed{
+
+form.mod-fixed {
     top: 0px !important;
     left: 0;
     width: 100% !important;
@@ -409,9 +418,11 @@ form.mod-fixed{
     padding-bottom: 0 !important;
     z-index: 3;
 }
+
 .mod-fixed.mod-fixed-top {
     top: 0;
 }
+
 .mod-fixed.mod-fixed-bottom {
     bottom: 0 !important;
     margin-bottom: 0 !important;
@@ -442,16 +453,20 @@ body {
     border-color: #ddd !important;
 }
 
-.bar.bar-light,{
+.bar.bar-light,
+{
     background-color: rgba(255, 255, 255, .95) !important;
 }
-.item:not(form.mod-fixed):not(.item-divider){
+
+.item:not(.item-divider) {
     background-color: transparent !important;
 }
+
 .button.ion-ios-plus-empty.button-small,
-.button.ion-ios-minus-empty.button-small{
+.button.ion-ios-minus-empty.button-small {
     min-width: 28px;
 }
+
 .slider-pager .slider-pager-page {
     width: 10px !important;
 }
@@ -469,25 +484,25 @@ small {
     font-size: 12px !important;
 }
 
-.item-icon-right .ion-ios-arrow-right{
+.item-icon-right .ion-ios-arrow-right {
     font-size: 24px !important;
     opacity: 0.5
 }
-
 
 .item.item-divider {
     border-left: none !important;
     border-right: none !important;
 }
-.bar-header .ion-ios-cart{
-transform: scale(0.75);
+
+.bar-header .ion-ios-cart {
+    transform: scale(0.75);
 }
 
-
-.card{
+.card {
     position: relative !important;
     box-shadow: none
 }
+
 
 /*hack*/
 
@@ -501,9 +516,17 @@ transform: scale(0.75);
     height: 100%;
 }
 
-.item.mod-ghost{
+.item.mod-ghost {
     height: 44px !important;
     border: none !important;
     pointer-events: none !important;
     background: transparent !important;
+}
+.mod-touch-hack{
+    position: fixed;
+    background: red;
+    top: 0;
+    width: 100%;
+    height: 96px;
+    z-index: 2000
 }
