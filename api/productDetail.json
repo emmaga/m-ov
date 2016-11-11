@@ -1,13 +1,19 @@
 {
     "rescode": "200",
     "errInfo": "",
-    "data":{
-        "product":{
-            "imgSrc":"api/img/goods1.jpg",
-            "price":"1000",
-            "name":"大闸蟹",
-            "intro":"商品简介商品简介商品简介商品简介商品简介商品简介商品简介商品简介",
-            "availableCount":"10"
+    "data": {
+        "product": {
+            "gallery": [{
+                "imgSrc": "api/img/goods1.jpg",
+            }, {
+                "imgSrc": "api/img/goods1.jpg",
+            }, {
+                "imgSrc": "api/img/goods1.jpg",
+            }],
+            "price": "1000",
+            "name": "大闸蟹",
+            "intro": "商品简介商品简介商品简介商品简介商品简介商品简介商品简介商品简介",
+            "availableCount": "10"
         }
     }
 }

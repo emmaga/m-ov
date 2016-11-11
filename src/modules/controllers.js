@@ -569,8 +569,8 @@
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
-                self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool);
+                self.showLoadingBool.searchRoomInfoBool = false;
+                self.showLoadingBool.searchMemberInfoBool = false;
 
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
@@ -578,7 +578,7 @@
                 self.hotelId = $stateParams.hotelId;
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
-                self.search();
+                self.searchMemberInfo();
                 // //  验证码 倒计时
                 // self.countSeconds = 30;
                 // self.showTip = true;
@@ -593,7 +593,9 @@
             }
 
 
-            self.search = function() {
+            self.searchRoomInfo = function() {
+                    self.showLoadingBool.searchRoomInfoBool = false;
+                    loadingService(self.showLoadingBool);
                     var data = {
                         "action": "GetRoomInfo",
                         "appid": $scope.root.getParams('appid'),
@@ -616,24 +618,53 @@
                         }).then(function successCallback(data, status, headers, config) {
                             self.room = data.data.data.room;
                             self.hotel = data.data.data.hotel;
-                            self.member = data.data.data.member;
-                            self.member.mobile = data.data.data.member.mobile -0;
+                            
                             BACKEND_CONFIG.test && console.log(self.room);
                             self.priceList = data.data.data.priceList;
                              // 单价
                             self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                             // 房间数 最多 可选
                             self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
-                            self.showLoadingBool.searchBool = true;
+                            self.showLoadingBool.searchRoomInfoBool = true;
                             
                             loadingService(self.showLoadingBool);
                         }, function errorCallback(data, status, headers, config) {
-                            self.showLoadingBool.searchBool = true;
+                            self.showLoadingBool.searchRoomInfoBool = true;
                             loadingService(self.showLoadingBool);
                         });
                     }, 500)
+                
+            }
 
-                }
+            // 
+            self.searchMemberInfo = function() {
+                self.showLoadingBool.searchMemberInfoBool = false;
+                loadingService(self.showLoadingBool);
+                var data = {
+                    "appid": $scope.root.getParams('appid'),
+                    "clear_session": "xxxx",
+                    "openid": $scope.root.getParams('openid'),
+                    "lang": $translate.proposedLanguage() || $translate.use()
+                };
+                data = JSON.stringify(data);
+                $timeout(function(){
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('member', 'memberInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        self.member = data.data.data.member;
+                        self.member.mobile -= 0;
+                        self.showLoadingBool.searchMemberInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                        self.searchRoomInfo();
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchMemberInfoBool = true;
+                        loadingService(self.showLoadingBool)
+                    });
+                },500)
+            }
+
                 // 计算客房总价
             self.roomBookPrcFun = function(array) {
                     var length = array.length,
@@ -1056,7 +1087,7 @@
                 self.showLoadingIcon = false;
                 // 商品数组
                 self.productList = [];
-
+                //
             }
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
@@ -1114,7 +1145,7 @@
 
                 // 更多商品   loading 图标
             self.moreProduct = function() {
-
+                console.log('moreProduct')
                 self.showLoadingIcon = true;
                 // 加载更多商品时，productList不清空
                 self.searchProductList(self.searchProductId,false);
