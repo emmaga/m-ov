@@ -173,7 +173,7 @@
 /*会员卡*/
 
 .mod-member-card {
-    /*position: relative;*/
+    position: relative;
     /*padding-top: 44px !important;*/
     color: white !important;
     padding: 0 !important;
@@ -182,6 +182,19 @@
     border-radius: 12px !important;
     border-bottom: solid 1px rgb(200, 200, 200) !important;
     box-shadow: 0px 12px 24px 6px rgba(0, 0, 0, .35)
+}
+
+.mod-member-card-logo{
+    position: absolute;
+    overflow: hidden;
+    border-radius: 12px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    mix-blend-mode: exclusion;
+    background: -webkit-radial-gradient(top left,80% 197%, rgba(195,155,255,0) 20%,rgba(195,155,255,0.3) 100%);
+    border:none !important;
 }
 
 .mod-member-card>iframe,
@@ -438,6 +451,7 @@
 .mod-no-padding {
     padding: 0 !important
 }
+
 
 .mod-no-border-top {
     border-top: none !important

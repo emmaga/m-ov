@@ -1,19 +1,31 @@
 <div ng-controller="memberHomeController as memberHome" ng-init="memberHome.init()">
     <!-- <div class="list padding mod-inset-forms mod-list mod-member-card {{memberHome.member.memberLevel.class}} mod-doodle"> -->
-    <div class="list mod-inset-forms mod-list mod-member-card">
+    <div class="list mod-list mod-member-card">
 
         <iframe class="mod-bg" src="api/img/card-gradient.html"></iframe>
-        <div class="item item-avatar ">
+        <div class="item item-avatar " style="border-bottom-width: 0.5px;">
+
+            
             <!-- <img src="{{root.getParams('wxUserInfo').headimgurl}}" /> -->
-            <img src="{{root.getParams('wxUserInfo').headimgurl}}" />
-            <h2>{{root.getParams('wxUserInfo').nickname}}</h2>
+            <img src="api/img/avatar.jpg" />
+            
+            <!-- <h2>{{root.getParams('wxUserInfo').nickname}}</h2> -->
+            <h2>LH</h2>
+
             <p>{{memberHome.member.memberLevel.name}}</p>
+
             
         </div>
-        <h1>
-            {{memberHome.member.score}}
-            <small>积分</small>
-        </h1>
+        <div class="mod-member-card-logo">
+            <img src="api/img/hotel-logo.png">
+        </div>
+        <div class="item" style="padding-top: 64px;">
+
+            <h1 class="item-note" style="font-size: 36px;">
+                {{memberHome.member.score}}
+                <small>积分</small>
+            </h1>
+        </div>
     </div>
 
 
