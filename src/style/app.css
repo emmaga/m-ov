@@ -147,7 +147,10 @@
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
-
+.mod-inset-forms>.item-divider{
+    border-top: solid 1px #ddd !important; 
+    margin: 0px -10px 0px -10px !important;
+}
 .item.mod-no-ativated {
     background-color: rgba(0, 0, 0, 0) !important;
     border-top-color: rgba(0, 0, 0, 0) !important;
