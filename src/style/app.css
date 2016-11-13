@@ -160,6 +160,9 @@
 .mod-item-input {
     padding: 6px 0px 5px 16px;
 }
+.item-input.mod-short>.input-label{
+    width: 20% !important;
+}
 
 .mod-select-input {
     display: block;
