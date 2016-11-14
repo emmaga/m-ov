@@ -9,10 +9,12 @@
 
         <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
-            <div class="item item-icon-right" style="padding: 13px;">
+
+            <ion-checkbox ng-model="isChecked" class="item-icon-right">
                 ￥{{item.price*item.count | fenToYuan}}
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px;"></a>
-            </div>
+            </ion-checkbox>
+
             <div class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
@@ -29,7 +31,7 @@
                 </span>
                 <a class="button button-small button-light icon ion-ios-plus-empty" ng-class="{disabled:((item.availableCount - item.count) <= 0)}" ng-click="shopCart.plusOne($index)"></a>
             </div>
-            <ion-toggle ng-model="item.dist">此商品需要配送？</ion-toggle>
+            <!-- <ion-toggle ng-model="item.dist">此商品需要配送？</ion-toggle> -->
             <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0">
                 <a class="icon ion-ios-trash dark" ng-click="shopCart.delete($index)" style="position: absolute; font-size: 24px; right: 0; color: white; float: right; margin: 10px 30px; z-index: 2;"></a>
                 <h2>
@@ -61,10 +63,14 @@
                 <div class="input-label">手机</div>
                 <input type="text" ng-model="shopCart.address.mobile" required />
             </div>
-            <div class="item item-input mod-short" ng-if="shopCart.hasEx">
+            <ion-toggle ng-model="item.dist">需要配送？</ion-toggle>
+            
+            <!-- <div class="item item-input mod-short" ng-if="shopCart.hasEx"> -->
+            <div class="item item-input mod-short">
                 <div class="input-label">地址</div>
                 <input type="text" ng-model="shopCart.address.address" required/>
             </div>
+
         </form>
     </div>
 </div>
