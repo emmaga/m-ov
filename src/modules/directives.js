@@ -11,14 +11,17 @@
     }
   })
 
-  .controller('cityPickerController', ['$scope', '$ionicScrollDelegate', 
-    function($scope, $ionicScrollDelegate) {
+  .controller('cityPickerController', ['$scope', '$ionicScrollDelegate', '$timeout',
+    function($scope, $ionicScrollDelegate, $timeout) {
       console.log('cityPickerController')
       var self = this;
 
       self.init = function(cityLists, callback) {
         self.callback = callback;
         self.cityLists = cityLists;
+        // 防止点透
+        // 将城市点击变成可点的状态
+        $timeout(function() {self.touchHackEnable = false;}, 1000);
       }
 
       self.scrollTo = function(pos) {
@@ -40,8 +43,8 @@
     }
   })
 
-  .controller('travelDatePickerController', ['$scope', '$filter',
-    function($scope, $filter) {
+  .controller('travelDatePickerController', ['$scope', '$filter', '$timeout',
+    function($scope, $filter, $timeout) {
       console.log('travelDatePickerController')
       var self = this;
       // st: 开始日期, et: 结束日期; 均为时间戳
@@ -62,6 +65,10 @@
         self.callback = callback;
         
         self.setDateData();
+
+        // 防止点透
+        // 将日期点击变成可点的状态
+        $timeout(function() {self.touchHackEnable = false;}, 1000);
 
         //set msg
         self.msgShow = true;

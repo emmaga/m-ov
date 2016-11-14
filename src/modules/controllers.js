@@ -3,12 +3,15 @@
 (function() {
     var app = angular.module('app.controllers', ['ngCookies'])
 
-    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading',
-        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading) {
+    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture',
+        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture) {
             var self = this;
 
             self.init = function() {
                 self.wxBrowserHack();
+
+                // 点透 test
+                self.clickTimeStamp = new Date().getTime();
 
                 // root全局变量：
                 self.params = {};
@@ -70,14 +73,6 @@
             }
 
             self.wxBrowserHack = function() {
-                // fix 商城页面，wx浏览器滚动时点击fix的div（分类）会点到下面一层（商品详情）
-                /*$(document).on('touchmove',function(){
-                    $('.card').css('pointer-events','none');
-                    // alert('scroll');
-                });
-                $(document).on('scroll',function(){
-                    $('.card').css('pointer-events','auto');
-                });*/
                 document.addEventListener('touchmove', function(event) {
                     // event.preventDefault();
                     var l = document.getElementsByClassName('card');
@@ -271,11 +266,16 @@
         }
     ])
 
-    .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$stateParams', '$translate', '$ionicModal','loadingService', 'backendUrl', 'util',
-        function($scope, $filter, $timeout, $location, $http, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
+    .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$state', '$stateParams', '$translate', '$ionicModal','loadingService', 'backendUrl', 'util',
+        function($scope, $filter, $timeout, $location, $http, $state, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
             var self = this;
             
+            /*test*/
+            self.gotoBookRoomList = function(hotelId) {
+                $state.go('bookRoomList', {hotelId:hotelId,checkIn:self.checkin,checkOut:self.checkout});
+            }
+
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -300,11 +300,21 @@
             }
             self.showDP = function(boo) {
                 self.datePickerShow = boo ? boo : false;
+                if(boo == false){
+                    // 点击穿透
+                    // 将日期点击变成不可点的状态
+                    $scope.tdp.touchHackEnable = true;
+                }
             };
 
             // 显示／隐藏城市选择器
             self.showCP = function(boo) {
                 self.cityPickerShow = boo ? boo : false;
+                if(boo == false){
+                    // 点击穿透
+                    // 将日期点击变成不可点的状态
+                    $scope.cp.touchHackEnable = true;
+                }
             };
             
             self.doAfterPickDates = function(checkin, checkout) {
@@ -618,6 +628,9 @@
                 
                 // self.memberInfo.mobile = self.memberInfo.mobile - 0;
 
+                // 防止点透
+                // 将input点击变成可点的状态
+                $timeout(function() {self.touchHackEnable = false;}, 1000);
               
             }
 

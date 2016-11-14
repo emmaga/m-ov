@@ -25,7 +25,7 @@
     $httpProvider.interceptors.push('myInterceptor');
   }])
 
-
+  // 7000ms 超时
   .factory('myInterceptor', ['$q','$filter', function($q, $filter) {
     var interceptor = {
       'request' : function(config) {
@@ -162,7 +162,8 @@
   }])
 
   // 每次页面跳转时触发
-  .run(['$rootScope', function($rootScope) {
+  .run(['$rootScope', '$timeout', function($rootScope, $timeout) {
+    // 滚动到页面顶部
     $rootScope.$on("$locationChangeSuccess", function(){
       document.body.scrollTop = 0;
     })
