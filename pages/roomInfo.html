@@ -85,15 +85,18 @@
         <div class="item item-divider">
             <p>{{'refundDoc'|translate}}</p>
         </div>
-        <div class="list  mod-list">
-            <div class="item">
-                退改协议：{{roomInfo.room.changeDeal }}
-            </div>
+
+
+       
+        <div class="padding">
+            {{roomInfo.room.changeDeal }}
         </div>
         <!-- <div class="item item-divider padding">
             <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
         </div> -->
-        <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">
+        <div class="item item-divider">
+            <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">
+        </div>
     </form>
     
     

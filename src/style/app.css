@@ -147,7 +147,10 @@
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
-
+.mod-inset-forms>.item-divider{
+    border-top: solid 1px #ddd !important; 
+    margin: 0px -10px 0px -10px !important;
+}
 .item.mod-no-ativated {
     background-color: rgba(0, 0, 0, 0) !important;
     border-top-color: rgba(0, 0, 0, 0) !important;
@@ -156,6 +159,9 @@
 
 .mod-item-input {
     padding: 6px 0px 5px 16px;
+}
+.item-input.mod-short>.input-label{
+    width: 20% !important;
 }
 
 .mod-select-input {
@@ -173,7 +179,7 @@
 /*会员卡*/
 
 .mod-member-card {
-    /*position: relative;*/
+    position: relative;
     /*padding-top: 44px !important;*/
     color: white !important;
     padding: 0 !important;
@@ -182,6 +188,19 @@
     border-radius: 12px !important;
     border-bottom: solid 1px rgb(200, 200, 200) !important;
     box-shadow: 0px 12px 24px 6px rgba(0, 0, 0, .35)
+}
+
+.mod-member-card-logo{
+    position: absolute;
+    overflow: hidden;
+    border-radius: 12px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    mix-blend-mode: exclusion;
+    background: -webkit-radial-gradient(top left,80% 197%, rgba(195,155,255,0) 20%,rgba(195,155,255,0.3) 100%);
+    border:none !important;
 }
 
 .mod-member-card>iframe,
@@ -284,6 +303,13 @@
 
 
 /*note*/
+.mod-note{
+    opacity: 0.5;
+    padding: 0 14px !important;
+}
+.mod-note>.icon{
+    font-size: 15px;
+}
 .mod-note-bottomline{
     text-align: center !important;
     border-top: solid 1px rgb(150,150,150);
@@ -296,7 +322,7 @@
     line-height: 1.6; 
     opacity: 0.5
 }
-.mod-note-emptylist>.ion-android-alert{
+.mod-note-emptylist>.icon{
     font-size: 32px;
 }
 
@@ -396,6 +422,9 @@
 .mod-color-excited {
     color: rgb(250, 40, 0) !important;
 }
+.mod-color-cold {
+    color: rgb(151,151,151);
+}
 
 .mod-color-white {}
 
@@ -428,6 +457,7 @@
 .mod-no-padding {
     padding: 0 !important
 }
+
 
 .mod-no-border-top {
     border-top: none !important
