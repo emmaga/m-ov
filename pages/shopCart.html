@@ -1,6 +1,6 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
     <div class="mod-has-header" style="padding-top: 166px;">
-        <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCart.hasEx"></div>
+        <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCartList.hasEx"></div>
         
         <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
             <i class="icon ion-ios-cart-outline"></i><br>
@@ -12,7 +12,7 @@
 
             <div class="item item-checkbox item-icon-right assertive">
                 <div class="checkbox checkbox-assertive">
-                    <input ng-model="item.checked" type="checkbox">
+                    <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
                 </div>
                 ￥{{item.price*item.count | fenToYuan}}
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
@@ -53,7 +53,7 @@
             </div>
             <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                 总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
-                <small ng-if="shopCart.hasEx">
+                <small ng-if="shopCartList.hasEx">
                     (&nbsp含邮费¥{{shopCart.postage | fenToYuan}}&nbsp)
                     
                 </small>
@@ -66,9 +66,9 @@
                 <div class="input-label">手机</div>
                 <input type="text" ng-model="shopCart.address.mobile" required />
             </div>
-            <ion-toggle ng-model="shopCart.hasEx">需要配送？</ion-toggle>
+            <ion-toggle ng-model="shopCartList.hasEx">需要配送？</ion-toggle>
             
-            <div class="item item-input mod-short" ng-if="shopCart.hasEx">
+            <div class="item item-input mod-short" ng-if="shopCartList.hasEx">
                 <div class="input-label">地址</div>
                 <input type="text" ng-model="shopCart.address.address" required/>
             </div>

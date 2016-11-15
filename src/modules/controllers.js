@@ -1301,12 +1301,17 @@
           $scope.root.wxShare();
 
           // 初始化
-          self.hasEx = false; //含快递货品
           self.postage = 1000; //邮费 todo
+          $scope.shopCartList = new Array();
 
           //watch shopCartList
-          $scope.$watch('shopCartList', function() { 
+          $scope.$watch('shopCartList', function() {
             self.judgeChecked();
+            self.countTotalPrice();
+          }, true);
+
+          // watch shopCartList.hasEx
+          $scope.$watch('shopCartList.hasEx', function() {
             self.countTotalPrice();
           }, true);
 
@@ -1314,8 +1319,16 @@
           self.loadSCInfo();
         }
 
+        self.selectAll = function() {
+            var l = $scope.shopCartList;
+            for (var i = 0; i < l.length; i++) {
+                // 商品不下架，商品库存不缺
+                l[i].checked = l[i].status&&(l[i].availableCount - l[i].count)>=0&&l[i].availableCount!=0;
+            }
+        }
+
+        // 购物车是否有内容选取
         self.judgeChecked = function() {
-            console.log($scope.shopCartList);
             self.checked = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.checked==true?true:false});
         }
 
@@ -1340,10 +1353,12 @@
           self.totalPrice = 0;
           if($scope.shopCartList) {
             for (var i = 0; i < $scope.shopCartList.length; i++) {
-              self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
+              if($scope.shopCartList[i].checked == true) {
+                self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
+              }
             } 
           }
-          if(self.hasEx) {
+          if($scope.shopCartList.hasEx) {
             self.totalPrice += self.postage;
           }
         }
@@ -1358,9 +1373,9 @@
           })
           .then(function successCallback(data, status, headers, config) {
             $scope.shopCartList = data.data.data.list;
-            // 默认true：快递，false：自提
-            for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = false;}
             self.loadExInfo();
+            $scope.shopCartList.hasEx = false; //含快递货品
+            self.selectAll(); // 默认选上所有的物品
           })
           .finally(function(value){
             $ionicLoading.hide();
