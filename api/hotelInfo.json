@@ -18,7 +18,7 @@
 
             {
 
-                "ImageURL": "wifi.icon",
+                "ImageURL": "ion-wifi",
 
                 "Name": "wifi"
 
@@ -26,9 +26,9 @@
 
             {
 
-                "ImageURL": "park.icon",
+                "ImageURL": "ion-android-alarm-clock",
 
-                "Name": "park"
+                "Name": "叫早"
 
             }
 
