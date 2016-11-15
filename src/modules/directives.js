@@ -16,16 +16,16 @@
       console.log('cityPickerController')
       var self = this;
 
-      self.init = function(cityLists, callback) {
+      self.init = function(cityListContent, callback) {
         self.callback = callback;
-        self.cityLists = cityLists;
+        self.cityListContent = cityListContent;
       }
 
       self.scrollTo = function(pos) {
         var offset = document.getElementById(pos).offsetTop;
         /*console.log(offset);
         document.getElementById('cp-city-list').scrollTop = offset;*/
-        $ionicScrollDelegate.$getByHandle('cityList').scrollTo(0, offset, true);
+        $ionicScrollDelegate.$getByHandle('cityInitial').scrollTo(0, offset, true);
       }
 
   }])
@@ -311,37 +311,24 @@
 
   // 商品页面滚动
   // 太他娘的打击了
-  .directive('scrolly', ['$document', function ($document,$window) {
+  .directive('scrolly', ['$document', '$window', '$q',   function ($document,$window,$q) {
       return {
           restrict: 'EA',
           link: function (scope, element, attrs) {
-              var raw = element[0];
-              console.log(raw)
-              console.log('loading directive');
-              // $document.bind('scroll', function () {
-              //     console.log(raw)
-              //     console.log('in scroll');
-              //     // console.log(document.body.scrollTop)
-              //     // console.log(document.body.clientHeight)
-              //     // console.log(document.body.scrollHeight)
-              //     console.log(raw.scrollTop)
-              //     console.log(raw.offsetHeight)
-              //     console.log(raw.scrollHeight)
-                  
-              //     // console.log(raw.scrollTop + raw.offsetHeight);
-              //     // console.log(raw.scrollHeight);
-              //     if (raw.scrollTop + raw.offsetHeight > raw.scrollHeight) { //at the bottom
-              //         // scope.$apply(attrs.scrolly);
-              //         console.log('test');
-              //     }
-              // })
-              
-              // angular.element(window).bind('scroll', function () {
-              //           console.log((window.innerHeight + window.scrollY) >= document.body.offsetHeight)
-              //         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-              //             scope.$apply(attrs.scrolly);
-              //         }
-              // });
+             var scrollFun =  function () {
+                     scope.$apply(attrs.scrolly);
+                     angular.element(window).off('scroll');
+                     if (scope.$last === true) {
+                         console.log('scrollFun')
+                     }
+              }
+              angular.element(window).on('scroll', function () {
+                    console.log((window.innerHeight + window.scrollY) >= document.body.offsetHeight)
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                      scrollFun();
+                    }
+                 }
+              );
           }
       }
   }])
