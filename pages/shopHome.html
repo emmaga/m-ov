@@ -13,7 +13,10 @@
 
     <!--header-->
     <div class="bar bar-header mod-bg-transparent mod-fixed">
-        <h1 class="title">商城</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
+            店
+        </button>
+        <h1 class="title">{{shopHome.hotelName}}商城</h1>
         <button ui-sref="shopCart" class="button button-icon icon ion-ios-cart">
             {{shopHome.shopCartItemCount}}
         </button>
@@ -52,6 +55,13 @@
 
     </div>
       
-
+    <!-- hotel picker start-->
+    <div class="ab-container" ng-show="shopHome.hotelPickerShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="shopHome.showHP(false)">{{'back'|translate}}</button>
+        </div>
+        <hotel-picker></hotel-picker>
+    </div>
+    <!-- hotel picker end-->
  
 </div>
