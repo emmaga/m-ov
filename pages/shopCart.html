@@ -1,6 +1,6 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
-    <div class="mod-has-header" style="padding-top: 114px;">
-        <div class="item mod-ghost" ng-if="shopCart.hasEx"></div>
+    <div class="mod-has-header" style="padding-top: 166px;">
+        <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCart.hasEx"></div>
         
         <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
             <i class="icon ion-ios-cart-outline"></i><br>
@@ -51,7 +51,7 @@
                 支付
                 <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
             </div>
-            <h3 class="mod-font-light mod-text-indent">
+            <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                 总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
                 <small ng-if="shopCart.hasEx">
                     (&nbsp含邮费¥{{shopCart.postage | fenToYuan}}&nbsp)

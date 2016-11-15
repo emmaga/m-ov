@@ -315,9 +315,12 @@
     font-size: 15px;
 }
 .mod-note-bottomline{
+    position: relative;
+    top: 10px;
     text-align: center !important;
-    border-top: solid 1px rgb(150,150,150);
-    padding-top: 20px; 
+    border-top: solid 0.5px rgb(150,150,150);
+    padding-top: 30px; 
+    margin-bottom: 0 !important;
     opacity: 0.5
 }
 .mod-note-emptylist{
@@ -620,7 +623,6 @@ small {
 }
 
 .item.mod-ghost {
-    height: 44px !important;
     border: none !important;
     pointer-events: none !important;
     background: transparent !important;
