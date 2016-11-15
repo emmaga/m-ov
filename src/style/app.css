@@ -471,10 +471,7 @@
 }
 
 .mod-bg-transparent {
-    background: transparent !important;
     background-color: transparent !important;
-    background: rgba(0, 0, 0, 0) !important;
-    background-color: rgba(0, 0, 0, 0) !important;
 }
 
 .mod-item-note {
@@ -548,8 +545,7 @@ body {
 }
 
 
-.bar.bar-light,
-{
+.bar.bar-light{
     background-color: rgba(255, 255, 255, .95) !important;
 }
 
@@ -596,6 +592,9 @@ small {
 .bar-header .ion-ios-cart {
     transform: scale(0.75);
 }
+.bar-header>h1{
+    color: #444 !important;
+}
 
 .card {
     position: relative !important;
@@ -634,4 +633,16 @@ small {
     width: 100%;
     height: 96px;
     z-index: 2000
+}
+
+
+@supports (-webkit-backdrop-filter:blur(18px)) {
+    .bar.bar-light {
+        -webkit-backdrop-filter: blur(18px);
+        background-color: rgba(255, 255, 255, .68) !important
+    }
+    .ricepaper{
+        -webkit-backdrop-filter: blur(18px);
+        background-color: rgba(255, 255, 255, .68) !important
+    }
 }
