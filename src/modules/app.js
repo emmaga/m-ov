@@ -34,7 +34,7 @@
         return config;
       },
       'responseError': function(err) {
-        console.log(new Date().getTime() - err.config.timeStamp)
+        // console.log(new Date().getTime() - err.config.timeStamp)
         if(new Date().getTime() - err.config.timeStamp >= 7000) {
           alert($filter('translate')('serverTimeout') + err.status);
         }

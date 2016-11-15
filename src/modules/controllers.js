@@ -1127,8 +1127,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $timeout, $stateParams, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', '$state', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $timeout, $stateParams, $state, loadingService, backendUrl) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1145,6 +1145,12 @@
                 self.productList = [];
                 //
             }
+
+            self.gotoShopDetail = function() {
+                angular.element(window).off('scroll'); 
+                $state.go('shopProductDetail');
+            }
+
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
                 $http({

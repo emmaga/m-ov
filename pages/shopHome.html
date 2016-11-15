@@ -27,7 +27,7 @@
 
     <div class="list mod-has-tabs-top padding" style="padding-bottom: 40px">
 
-        <div class="card mod-flat" ng-repeat='product in shopHome.productList' ui-sref="shopProductDetail" scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" >
+        <div class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail()" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
