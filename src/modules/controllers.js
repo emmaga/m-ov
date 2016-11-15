@@ -1306,7 +1306,7 @@
 
           //watch shopCartList
           $scope.$watch('shopCartList', function() { 
-            self.judgeDist();
+            self.judgeChecked();
             self.countTotalPrice();
           }, true);
 
@@ -1314,8 +1314,9 @@
           self.loadSCInfo();
         }
 
-        self.judgeDist = function() {
-            // self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==true?true:false});
+        self.judgeChecked = function() {
+            console.log($scope.shopCartList);
+            self.checked = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.checked==true?true:false});
         }
 
         self.plusOne = function(index) {
