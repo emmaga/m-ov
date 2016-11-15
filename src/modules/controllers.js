@@ -1137,6 +1137,7 @@
                 self.showLoadingBool = {};
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
+                
                 self.loadShopCartInfo();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
@@ -1155,8 +1156,22 @@
                   self.shopCartItemCount = 0;
                   shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
                   // go on
-                  self.searchCategory();
+                  // 先搜索酒店列表，根据酒店列表的第一个酒店id查找该酒店的分类
+                  self.getHotelLists();
                   
+                })
+            }
+
+            self.getHotelLists = function() {
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('hotellists', 'hotelLists')
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  self.hotelLists = data.data.data;
+                  self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
+                  self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
+                  self.searchCategory();
                 })
             }
 
@@ -1206,6 +1221,23 @@
                 // 加载更多商品时，productList不清空
                 self.searchProductList(self.searchProductId,false);
             }
+
+            // 显示／隐藏酒店选择器
+            self.showHP = function(boo) {
+                self.hotelPickerShow = boo ? boo : false;
+                if(boo == false){
+                    // 点击穿透
+                    // 将点击变成不可点的状态
+                    $scope.hp.touchHackEnable = true;
+                }
+            };
+            
+            self.doAfterPickHotel = function(hotelId, hotelName) {
+                self.showHP(false);
+                self.hotelId = hotelId;
+                self.hotelName = hotelName;
+                self.searchCategory();
+            };
         }
     ])
 

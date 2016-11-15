@@ -1,0 +1,27 @@
+<div ng-controller="hotelPickerController as hp">
+    <div class="cp-side cp-wrapper">
+        <div class="cp-cell">
+            <a ng-repeat="hotelInitial in hp.hotelLists.searchInitialList" ng-click="hp.scrollTo(hotelInitial)">{{hotelInitial}}<br /></a>
+        </div>
+    </div>
+    <ion-content delegate-handle="hotelInitial" class="content has-header">
+
+        <div class="list">
+            <ng-repeat ng-repeat="hotels in hp.hotelLists.hotelLists">
+              <div id="{{hotels.searchInitial}}" class="item item-divider cp-item-divider">
+                  {{hotels.searchInitial}}
+              </div>
+              
+              <ul class="list cp-list">
+                  <li ng-repeat="hotel in hotels.hotels track by $index" ng-click="hp.callback(hotel.id, hotel.name)" class="item cp-item" ng-class="{'touch-hack-enable': hp.touchHackEnable}">
+                    <div class="row cp-row">
+                      <div class="col col-14">
+                          {{hotel.name}}
+                      </div>
+                    </div>
+                  </li>
+              </ul>
+          </ng-repeat>
+        </div>
+    </ion-content>
+</div>
