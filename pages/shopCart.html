@@ -66,10 +66,9 @@
                 <div class="input-label">手机</div>
                 <input type="text" ng-model="shopCart.address.mobile" required />
             </div>
-            <ion-toggle ng-model="item.dist">需要配送？</ion-toggle>
+            <ion-toggle ng-model="shopCart.hasEx">需要配送？</ion-toggle>
             
-            <!-- <div class="item item-input mod-short" ng-if="shopCart.hasEx"> -->
-            <div class="item item-input mod-short">
+            <div class="item item-input mod-short" ng-if="shopCart.hasEx">
                 <div class="input-label">地址</div>
                 <input type="text" ng-model="shopCart.address.address" required/>
             </div>

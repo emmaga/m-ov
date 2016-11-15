@@ -25,7 +25,7 @@
                 <ul class="list tdp-d-list">
                     <li ng-repeat="w in m.weeks track by $index" class="item tdp-d-item">
                       <div class="row tdp-d-row">
-                        <div ng-repeat="d in w track by $index" ng-click="tdp.clickDate(d)" ng-class="{'tdp-disable': tdp.dDisable(d), 'tdp-d-during': tdp.isDuring(d), 'tdp-d-checkin': tdp.isCheckin(d), 'tdp-d-checkout': tdp.isCheckout(d)}" class="col col-14">
+                        <div ng-repeat="d in w track by $index" ng-click="tdp.clickDate(d)" ng-class="{'tdp-disable': tdp.dDisable(d), 'tdp-d-during': tdp.isDuring(d), 'tdp-d-checkin': tdp.isCheckin(d), 'tdp-d-checkout': tdp.isCheckout(d), 'touch-hack-enable': tdp.touchHackEnable}" class="col col-14">
                             {{d | date:'d'}}
                         </div>
                       </div>

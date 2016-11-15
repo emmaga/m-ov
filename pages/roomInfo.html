@@ -1,4 +1,4 @@
-<div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.init()">
+<div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.touchHackEnable = true; roomInfo.init()">
     <!-- 头部 -->
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{roomInfo.room.RoomTypeName['zh-CN']}}</h1>
@@ -57,7 +57,7 @@
         </div>
         <div class="item item-input">
             <div class="input-label">{{'contackName'|translate}}:</div>
-            <input type="text" ng-model="roomInfo.member.realName" required>
+            <input ng-class="{'touch-hack-enable': roomInfo.touchHackEnable}" type="text" ng-model="roomInfo.member.realName" required>
         </div>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
         <label class="item item-input">
@@ -66,7 +66,7 @@
         </label> -->
         <div class="item item-input">
             <div class="input-label">{{'phoneNumber'|translate}}:</div>
-            <input type="number" ng-model="roomInfo.member.mobile" required>
+            <input ng-class="{'touch-hack-enable': roomInfo.touchHackEnable}" type="number" ng-model="roomInfo.member.mobile" required>
         </div>
         <div class="item item-divider">
             <p>{{'priceDetail'|translate}}</p>
@@ -95,7 +95,7 @@
             <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
         </div> -->
         <div class="item item-divider">
-        <button type="submit" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">{{'submitOrder'|translate}}</button>
+            <button type="submit" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">{{'submitOrder'|translate}}</button>
         </div>
     </form>
     
