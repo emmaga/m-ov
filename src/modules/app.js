@@ -127,6 +127,14 @@
           }
         }
       })
+      .state('shopOrderList', {
+        url: '/shopOrderList',
+        views: {
+          '': {
+            templateUrl: 'pages/shopOrderList.html'
+          }
+        }
+      })
       .state('shopHome', {
         url: '/shopHome',
         views: {

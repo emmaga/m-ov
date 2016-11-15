@@ -1126,10 +1126,55 @@
                 // 发送请求之前，遮罩层
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool)
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "action": "roomOrderList"
+                };
+                data = JSON.stringify(data);
                 $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
-                       url: backendUrl('member', 'orderList')
+                       url: backendUrl('roomorder', 'roomOrderList')
+                   }).then(function successCallback(data, status, headers, config) {
+                       console.log(data)
+                       self.orderLists = data.data.data;
+                       self.orderListNum = data.data.data.orderNum;
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool)
+                   }, function errorCallback(data, status, headers, config) {
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool);
+                   }); 
+                },500)
+                
+            }
+
+        }
+    ])
+
+    .controller('shopOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
+            console.log('shopOrderListController')
+            var self = this;
+
+            self.init = function() {
+
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
+
+                // 遮罩层 bool
+                self.showLoadingBool = {};
+                
+                // self.search();
+            }
+            self.search = function() {
+                // 发送请求之前，遮罩层
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool)
+                $timeout(function(){
+                   $http({
+                       method: $filter('ajaxMethod')(),
+                       url: backendUrl('member', 'roomOrderList')
                    }).then(function successCallback(data, status, headers, config) {
                        console.log(data)
                        self.orderLists = data.data.data.orderLists;

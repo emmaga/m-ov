@@ -4,31 +4,25 @@
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <div class="list mod-has-header">
-        <div ng-repeat="order in mol.orderLists" >
+        <div ng-repeat="order in mol.orderLists" ui-sref="bookOrderInfo">
             <div class="item item-divider">
-                <p>{{'orderID'|translate}} #{{order.orderId}}</p>
+                <p>{{'orderID'|translate}} #{{order.ID}}</p>
+                <span class="item-note">
+                    <p>订单状态{{order.Status | orderStatusToChinese}}</p>
+                </span>
             </div>
-            <div class="item item-thumbnail-left mod-no-side-border" ng-click="mol.nextState(order.orderId,order.orderType)" >
-                <div ng-show="order.orderType=='Room'">
-                    <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
-                    <span class="item-note">
-                        <p>订单状态{{order.orderStatus}}</p>
-                    </span>
-                    <h2>{{order.roomName}}×{{order.roomNumber}}</h2>
+            <div class="item item-thumbnail-left mod-no-side-border" >
+                    <div ng-repeat="good in order.GoodsList">
+                        <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
+                        <h2>{{good.roomName}}×{{good.GoodsNum}}</h2>
+                    </div>
                     <p>{{order.hotelName}}</p>
-                    <p>{{'totalPrice'|translate}}:&nbsp￥{{order.orderTotalPri}}</p>
+                    <p>{{'totalPrice'|translate}}:&nbsp￥{{good.Price}}</p>
                     <p>{{order.bookStartDate | date:'MM月dd日'}}{{'checkIn'|translate}}~{{order.bookEndDate | date:'MM月dd日'}}{{'checkOut'|translate}}</p>
-                </div>
-                <div ng-show="order.orderType=='Shop'">
-                    <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
-                    <span class="item-note">
-                        <p>订单状态{{order.orderStatus}}</p>
-                    </span>
-                    <h2>{{order.productTotalNum}}件商品</h2>
-                    <p>总价:&nbsp￥{{order.orderTotalPri}}</p>
-                </div>
-                
             </div>
+            <div class="button button-block button-positive" ng-show="order.Status=='WAITPAY'">去支付</div>
+            <div class="button button-block button-positive" ng-show="!order.Status=='WAITPAY'">已支付</div>
+            <div class="button button-block button-positive" ng-show="order.Status=='WAITPAY' || order.Status=='WAITAPPROVAL' || order.Status=='ACCEPT'">取消订单</div>
         </div>
     </div>
     <p ng-show="mol.showLoadingBool.searchBool==true && mol.orderListNum ==0 ">很抱歉，暂无订单</p>

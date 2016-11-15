@@ -1,0 +1,24 @@
+<div ng-controller="shopOrderListController as sol" ng-init="sol.init()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">{{'myOrders'|translate}}</h1>
+        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+    </div>
+    <div class="list mod-has-header">
+        <div ng-repeat="order in sol.orderLists" >
+            <div class="item item-divider">
+                <p>{{'orderID'|translate}} #{{order.orderId}}</p>
+            </div>
+            <div class="item item-thumbnail-left mod-no-side-border" ng-click="sol.nextState(order.orderId,order.orderType)" >
+                    <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{order.imgSrc}});"></div>
+                    <span class="item-note">
+                        <p>订单状态{{order.orderStatus}}</p>
+                    </span>
+                    <h2>{{order.productTotalNum}}件商品</h2>
+                    <p>总价:&nbsp￥{{order.orderTotalPri}}</p>
+            </div>
+        </div>
+    </div>
+    <p ng-show="sol.showLoadingBool.searchBool==true && sol.orderListNum ==0 ">很抱歉，暂无订单</p>
+
+
+</div>

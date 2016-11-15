@@ -1,0 +1,158 @@
+{
+    "data": [
+        {
+            "Status": "WAITPAY",
+            "GoodsList": [
+                {
+                    "GoodsID": 1,
+                    "GoodsNum": 3,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                },
+                {
+                    "GoodsID": 2,
+                    "GoodsNum": 4,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                }
+            ],
+            "Price": 20000,
+            "CreateTime": "2016-11-13 01:43:37",
+            "OrderNum": "012016111301146664",
+            "PayTime": null,
+            "ID": 127
+        },
+        {
+            "Status": "ACCEPT",
+            "GoodsList": [
+                {
+                    "GoodsID": 1,
+                    "GoodsNum": 3,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                },
+                {
+                    "GoodsID": 2,
+                    "GoodsNum": 3,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                }
+            ],
+            "Price": 2000,
+            "CreateTime": "2016-11-13 01:44:55",
+            "OrderNum": "012016111301955670",
+            "PayTime": "2016-11-13 14:30:37",
+            "ID": 128
+        },
+        {
+            "Status": "WAITAPPROVAL",
+            "GoodsList": [
+                {
+                    "GoodsID": 1,
+                    "GoodsNum": 4,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                },
+                {
+                    "GoodsID": 2,
+                    "GoodsNum": 4,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                }
+            ],
+            "Price": 20000,
+            "CreateTime": "2016-11-13 01:45:08",
+            "OrderNum": "012016111301883707",
+            "PayTime": "2016-11-13 14:32:55",
+            "ID": 129
+        },
+        {
+            "Status": "WAITPAY",
+            "GoodsList": [
+                {
+                    "GoodsID": 1,
+                    "GoodsNum": null,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                },
+                {
+                    "GoodsID": 2,
+                    "GoodsNum": null,
+                    "GoodsPriceList": [
+                        {
+                            "date": 1288323623006,
+                            "price": 20000
+                        },
+                        {
+                            "date": 1288323623007,
+                            "price": 20000
+                        }
+                    ]
+                }
+            ],
+            "Price": 20000,
+            "CreateTime": "2016-11-13 14:22:00",
+            "OrderNum": "012016111314942472",
+            "PayTime": null,
+            "ID": 130
+        }
+    ],
+    "rescode": "200",
+    "errInfo": "None"
+}
