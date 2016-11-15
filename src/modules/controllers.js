@@ -718,7 +718,7 @@
                 },500)
             }
 
-                // 计算客房总价
+                // 计算客房总
             self.roomBookPrcFun = function(array) {
                     var length = array.length,
                         totalPri = 0;
