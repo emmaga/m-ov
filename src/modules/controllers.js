@@ -1303,7 +1303,7 @@
         }
 
         self.judgeDist = function() {
-            self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==true?true:false});
+            // self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==true?true:false});
         }
 
         self.plusOne = function(index) {
