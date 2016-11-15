@@ -1,6 +1,6 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
-    <div class="mod-has-header" style="padding-top: 166px;">
-        <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCartList.hasEx"></div>
+    <div class="mod-has-header" style="padding-top: 230px;">
+        <!-- <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCartList.hasEx"></div> -->
         
         <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
             <i class="icon ion-ios-cart-outline"></i><br>
@@ -67,6 +67,9 @@
                 <input type="text" ng-model="shopCart.address.mobile" required />
             </div>
             <ion-toggle ng-model="shopCartList.hasEx">需要配送？</ion-toggle>
+            <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
+                自提地点&nbsp{门店名}
+            </div>
             
             <div class="item item-input mod-short" ng-if="shopCartList.hasEx">
                 <div class="input-label">地址</div>
