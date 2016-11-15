@@ -516,6 +516,9 @@ form.mod-fixed {
 
 
 /*对ionic原写法覆盖*/
+html{
+  touch-action: manipulation !important;
+}
 
 html,
 body {
@@ -555,7 +558,9 @@ body {
 .button.ion-ios-minus-empty.button-small {
     min-width: 28px;
 }
-
+.item-checkbox {
+    padding-left: 54px !important;
+}
 
 
 .slider-pager .slider-pager-page {

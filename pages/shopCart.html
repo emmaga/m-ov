@@ -10,15 +10,18 @@
         <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
 
-            <ion-checkbox ng-model="isChecked" class="item-icon-right">
+            <div ng-model="isChecked" class="item item-checkbox item-icon-right assertive">
+                <div class="checkbox checkbox-assertive">
+                    <input type="checkbox">
+                </div>
                 ￥{{item.price*item.count | fenToYuan}}
-                <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px;"></a>
-            </ion-checkbox>
+                <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
+            </div>
 
             <div class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
-                <h2 class="assertive">单价:&nbsp￥{{item.price | fenToYuan}}</h2>
+                <p>单价:&nbsp￥{{item.price | fenToYuan}}</p>
             </div>
             <div class="item item-input">
                 <div class="input-label">

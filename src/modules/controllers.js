@@ -10,9 +10,6 @@
             self.init = function() {
                 self.wxBrowserHack();
 
-                // 点透 test
-                self.clickTimeStamp = new Date().getTime();
-
                 // root全局变量：
                 self.params = {};
                 // self.params.appid
@@ -192,10 +189,7 @@
             self.loadProjectInfo = function() {
                 BACKEND_CONFIG.test&&console.log('项目信息');
                 var data = {
-                    "action": "GetProjectInfo",
-                    "appid": self.getParams('appid'),
                     "clear_session": self.getParams('clear_session'),
-                    "openid": self.getParams('openid'),
                     "lang": $translate.proposedLanguage() || $translate.use()
                 };
                 data = JSON.stringify(data);
@@ -270,11 +264,6 @@
         function($scope, $filter, $timeout, $location, $http, $state, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
             var self = this;
-            
-            /*test*/
-            self.gotoBookRoomList = function(hotelId) {
-                $state.go('bookRoomList', {hotelId:hotelId,checkIn:self.checkin,checkOut:self.checkout});
-            }
 
             self.init = function() {
 
@@ -294,7 +283,7 @@
                 self.stayDays = util.countDay(self.checkin, self.checkout);
 
                 self.cityInfo = { id: '0', name: '全部' };
-                self.searchHotelList();
+                
                 // 异步 回调
                 self.searchCityLists();
             }
@@ -340,10 +329,7 @@
                 self.showLoadingBool.searchCityListsBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "action": "GetCityLists",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use()
                 };
                 data = JSON.stringify(data);
@@ -353,9 +339,12 @@
                       url: backendUrl('project', 'cityLists'),
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
-                      self.cityLists = data.data.data.cityLists;
+                      console.log(data)
+                      self.cityListContent = data.data.data;
+                      console.log(self.cityListContent)
                       self.showLoadingBool.searchCityListsBool = true;
                       loadingService(self.showLoadingBool);
+                      self.searchHotelList();
                   }, function errorCallback(data, status, headers, config) {
                       self.showLoadingBool.searchCityListsBool = true;
                       loadingService(self.showLoadingBool);
@@ -369,10 +358,7 @@
                 // 每次 请求，都要添加loading
                 self.loadingIcon = false;
                 var data = {
-                    "action": "GetHotelList",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "bookCity": self.cityInfo.cityId, //0: all, 城市ID
                     "bookStartDate": self.checkin,
@@ -386,8 +372,9 @@
                         url: backendUrl('bookHotel', 'hotelList'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        self.hotels = data.data.data.hotelLists;
-                        self.hotelNum = data.data.data.hotelNum;
+                        console.log(data)
+                        self.hotels = data.data.data;
+                        self.hotelNum = self.hotels.length;
                         self.loadingIcon = true;
                     }, function errorCallback(data, status, headers, config) {
                         self.loadingIcon = true;
@@ -430,11 +417,10 @@
 
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
-
                 self.hotelId = $stateParams.hotelId;
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
-
+                console.log($stateParams.ID)
                 // 酒店天数
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
 
@@ -450,10 +436,10 @@
 
             self.map = function() {
                 wx.openLocation({
-                    latitude: 31.213295602955096, // 纬度，浮点数，范围为90 ~ -90
-                    longitude: 121.62629999999999, // 经度，浮点数，范围为180 ~ -180。
-                    name: '上海清鹤大酒店', // 位置名
-                    address: '上海市浦东新区祖冲之路2277弄11号楼', // 地址详情说明
+                    latitude: self.hotel.LocationX, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: self.hotel.LocationY, // 经度，浮点数，范围为180 ~ -180。
+                    name: self.hotel.Name['zh-CN'], // 位置名
+                    address: self.hotel.Address['zh-CN'], // 地址详情说明
                     scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为最大
                     infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                 });
@@ -483,10 +469,7 @@
                 self.showLoadingBool.searchHotelInfoBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "action": "GetHotelInfo",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "clear_session":$scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "hotelId": self.hotelId
                 };
@@ -498,11 +481,12 @@
                         url: backendUrl('bookHotel', 'hotelInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        self.hotel = data.data.data.hotel;
+                        self.hotel = data.data.data;
+                        console.log(self.hotel)
                         self.showLoadingBool.searchHotelInfoBool = true;
-
+                        
                         // 酒店 地图 
-                        self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
+                        // self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
                         loadingService(self.showLoadingBool);
                         self.searchRoomList();
                         console.log("searchHotelInfoBool")
@@ -516,12 +500,9 @@
             self.searchRoomList = function() {
                 self.showLoadingBool.searchRoomListBool = false;
                 var data = {
-                    "action": "GetRoomList",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-
+                     
                     "hotelId": self.hotelId,
                     "bookStartDate": self.checkIn,
                     "bookEndDate": self.checkOut
@@ -535,6 +516,7 @@
 
                 }).then(function successCallback(data, status, headers, config) {
                     self.rooms = data.data.data;
+                    console.log(self.rooms)
                     // ionic silder update
                     $ionicSlideBoxDelegate.update();
 
@@ -567,10 +549,7 @@
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "action": "GetHotelInfo",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
 
                     "hotelId": self.hotelId
@@ -584,7 +563,7 @@
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
                       console.log(data.data.data)
-                      self.hotel = data.data.data.hotel;
+                      self.hotel = data.data.data;
                       self.showLoadingBool.searchBool = true;
                       loadingService(self.showLoadingBool);
                   }, function errorCallback(data, status, headers, config) {
@@ -610,6 +589,8 @@
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchRoomInfoBool = false;
                 self.showLoadingBool.searchMemberInfoBool = false;
+                self.showLoadingBool.searchHotelInfoBool = false;
+
 
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
@@ -639,10 +620,7 @@
                     self.showLoadingBool.searchRoomInfoBool = false;
                     loadingService(self.showLoadingBool);
                     var data = {
-                        "action": "GetRoomInfo",
-                        "appid": $scope.root.getParams('appid'),
-                        "clear_session": "xxxx",
-                        "openid": $scope.root.getParams('openid'),
+                        "clear_session": $scope.root.getParams('clear_session'),
                         "lang": $translate.proposedLanguage() || $translate.use(),
 
                         "roomId": self.roomId,
@@ -658,19 +636,20 @@
                             url: backendUrl('bookHotel', 'roomInfo'),
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
-                            self.room = data.data.data.room;
+                            self.searchHotelInfo();
+                            console.log(data)
+                            self.room = data.data.data;
                             // ionic silder update
                             $ionicSlideBoxDelegate.update();
-                            self.hotel = data.data.data.hotel;
                             
                             BACKEND_CONFIG.test && console.log(self.room);
-                            self.priceList = data.data.data.priceList;
-                             // 单价
-                            self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
-                            // 房间数 最多 可选
-                            self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
-                            self.showLoadingBool.searchRoomInfoBool = true;
+                            // self.priceList = data.data.data.priceList;
+                            //  // 单价
+                            // self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
+                            // // 房间数 最多 可选
+                            // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
                             
+                            self.showLoadingBool.searchRoomInfoBool = true;
                             loadingService(self.showLoadingBool);
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchRoomInfoBool = true;
@@ -679,13 +658,43 @@
                     }, 500)
                 
             }
+             
+            self.searchHotelInfo = function() {
+                self.showLoadingBool.searchHotelInfoBool = false;
+                loadingService(self.showLoadingBool);
+                var data = {
+                    "clear_session":$scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                };
+                data = JSON.stringify(data);
+                
+                $timeout(function() {
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('bookHotel', 'hotelInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        self.hotel = data.data.data;
+                        console.log(self.hotel)
+                        self.showLoadingBool.searchHotelInfoBool = true;
+                        
+                        // 酒店 地图 
+                        // self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
+                        loadingService(self.showLoadingBool);
+                        console.log("searchHotelInfoBool")
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchHotelInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
+                }, 300)
+            }
 
             // 
             self.searchMemberInfo = function() {
                 self.showLoadingBool.searchMemberInfoBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "appid": $scope.root.getParams('appid'),
                     "clear_session": "xxxx",
                     "openid": $scope.root.getParams('openid'),
                     "lang": $translate.proposedLanguage() || $translate.use()
@@ -697,7 +706,8 @@
                         url: backendUrl('member', 'memberInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        self.member = data.data.data.member;
+                        self.member = data.data.data;
+                        console.log(self.member)
                         self.member.mobile -= 0;
                         self.showLoadingBool.searchMemberInfoBool = true;
                         loadingService(self.showLoadingBool);
@@ -709,7 +719,7 @@
                 },500)
             }
 
-                // 计算客房总价
+                // 计算客房总
             self.roomBookPrcFun = function(array) {
                     var length = array.length,
                         totalPri = 0;
@@ -743,6 +753,7 @@
                     //   self.roomNumber=self.roomNumber+num;
                     // }
                 }
+
                 // 验证码 倒计时
                 // self.countSecond = function(){
                 //    self.countAbility = true;
@@ -1162,6 +1173,7 @@
                 });
             }
             self.searchProductList = function(id,bool) {
+                    self.showLoadingIcon = true
                     console.log(id);
                     // 记录当前点击的商品分类的id
                     self.searchProductId = id;
