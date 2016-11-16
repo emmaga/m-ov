@@ -1719,9 +1719,12 @@
                 $scope.root.wxShare();
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
+                self.showCancelBtn = false;
+                self.showPayBtn = false;
                 self.search();
             }
 
+            
 
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
@@ -1733,6 +1736,9 @@
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)
                         self.detail = data.data.data.detail;
+                        var s = self.detail.Status;
+                        self.showPayBtn = (s == 'WAITPAY');
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');
                         console.log(self.detail)
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
