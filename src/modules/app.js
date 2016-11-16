@@ -152,7 +152,7 @@
         }
       })
       .state('shopCart', {
-        url: '/shopCart',
+        url: '/shopCart/?hotelId',
         views: {
           '': {
             templateUrl: 'pages/shopCart.html'

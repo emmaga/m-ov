@@ -1,26 +1,26 @@
-<div ng-controller="shopProductDetailController as shopProductDetail" ng-init="shopProductDetail.init()">
+<div ng-controller="shopProductDetailController as sp" ng-init="sp.init()">
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">商品详情</h1>
-        <button ui-sref="shopCart" class="button button-icon icon ion-ios-cart">{{shopProductDetail.shopCartItemCount}}</button>
+        <button ng-click="sp.gotoShopCart()" class="button button-icon icon ion-ios-cart">{{sp.shopCartItemCount}}</button>
     </div>
     <div class="padding mod-has-header mod-inset-forms">
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide ng-repeat="img in shopProductDetail.product.gallery">
+            <ion-slide ng-repeat="img in sp.product.gallery">
                 <img style="width: 100%; height: 100%;" ng-src="{{img.imgSrc}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <div class="item">
-            <p class="item-note">库存{{shopProductDetail.product.availableCount}}</p>
-            <h2>{{shopProductDetail.product.name}}</h2>
-            <h2 class="mod-member-price assertive">{{shopProductDetail.product.price}}</h2>
+            <p class="item-note">库存{{sp.product.availableCount}}</p>
+            <h2>{{sp.product.name}}</h2>
+            <h2 class="mod-member-price assertive">{{sp.product.price}}</h2>
         </div>
         <div class="padding">
-            <p>{{shopProductDetail.product.intro}}</p>
+            <p>{{sp.product.intro}}</p>
         </div>
     </div>
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
-        <a class="button" ng-click="shopProductDetail.addToCart()">加入购物车</a>
-        <a class="button button-assertive" ng-click="shopProductDetail.buy()" ng-class="{disabled:shopProductDetail.buying}">立即购买</a>
+        <a class="button" ng-click="sp.addToCart()">加入购物车</a>
+        <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}">立即购买</a>
     </div>
 </div>

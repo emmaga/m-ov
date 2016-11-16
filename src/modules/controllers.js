@@ -1416,6 +1416,10 @@
                 self.search();
             }
 
+            self.gotoShopCart = function() {
+                $state.go('shopCart', {hotelId: self.hotelId});
+            }
+
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
@@ -1509,15 +1513,15 @@
             self.buy = function() {
                 self.buying = true;
                 self.addToCart(function() {
-                    $state.go('shopCart');
+                    self.gotoShopCart();
                 });
 
             }
         }
     ])
 
-    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$ionicLoading', 'backendUrl',
-      function($http, $scope, $filter, $state, $ionicLoading, backendUrl) {
+    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', 'backendUrl',
+      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, backendUrl) {
         console.log('shopCartController')
         var self = this;
         
@@ -1526,6 +1530,7 @@
           $scope.root.wxShare();
 
           // 初始化
+          self.hotelId = $stateParams.hotelId;
           self.postage = 1000; //邮费 todo
           $scope.shopCartList = new Array();
 
@@ -1561,17 +1566,81 @@
           var item = $scope.shopCartList[index];
           if(item.count < item.availableCount){
             item.count += 1;
+            self.updateProductCount(index);
           }
-        }
-
-        self.delete = function(index) {
-          $scope.shopCartList.splice(index, 1);
         }
 
         self.minusOne = function(index) {
           if($scope.shopCartList[index].count >= 2){
             $scope.shopCartList[index].count -= 1;
+            self.updateProductCount(index);
           }
+        }
+
+        self.updateProductCount = function(index) {
+            var data = {
+                "action": "updateShoppingCart",
+                "clear_session": $scope.root.getParams('clear_session'),
+                "appid": $scope.root.getParams('appid'),
+                "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "hotelId": self.hotelId,
+                "shoppingCartItems":[
+                    {
+                        "shoppingCartID":$scope.shopCartList[index].shopCartItemID,
+                        "count":$scope.shopCartList[index].count
+                    }
+                ]
+            }
+            data = JSON.stringify(data);
+
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shopinfo', 'shopCartList'),
+              data: data
+            })
+            .then(
+              function successCallback(data, status, headers, config) {
+                if(data.data.rescode != '200') {
+                    alert(errInfo);
+                }
+              },
+              function errorCallback(data, status, headers, config) {
+
+              }
+            )
+        }
+
+        self.delete = function(index) {
+          $scope.shopCartList.splice(index, 1);
+          var data = {
+              "action": "deleteShoppingCart",
+              "clear_session": $scope.root.getParams('clear_session'),
+              "appid": $scope.root.getParams('appid'),
+              "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+              "lang": $translate.proposedLanguage() || $translate.use(),
+              "hotelId": self.hotelId,
+              "shoppingCartIDs":[
+                $scope.shopCartList[index].shopCartItemID
+              ]
+          }
+          data = JSON.stringify(data);
+
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('shopinfo', 'shopCartList'),
+            data: data
+          })
+          .then(
+            function successCallback(data, status, headers, config) {
+                if(data.data.rescode != '200') {
+                    alert(errInfo);
+                }
+            },
+            function errorCallback(data, status, headers, config) {
+
+            }
+          )
         }
 
         self.countTotalPrice = function() {
