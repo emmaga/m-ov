@@ -20,9 +20,7 @@
                     <p>{{'totalPrice'|translate}}:&nbsp￥{{good.Price}}</p>
                     <p>{{order.bookStartDate | date:'MM月dd日'}}{{'checkIn'|translate}}~{{order.bookEndDate | date:'MM月dd日'}}{{'checkOut'|translate}}</p>
             </div>
-            <div class="button button-block button-positive" ng-show="order.Status=='WAITPAY'">去支付</div>
-            <div class="button button-block button-positive" ng-show="!order.Status=='WAITPAY'">已支付</div>
-            <div class="button button-block button-positive" ng-show="order.Status=='WAITPAY' || order.Status=='WAITAPPROVAL' || order.Status=='ACCEPT'">取消订单</div>
+            
         </div>
     </div>
     <p ng-show="mol.showLoadingBool.searchBool==true && mol.orderListNum ==0 ">很抱歉，暂无订单</p>

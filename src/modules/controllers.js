@@ -646,13 +646,13 @@
                             // 假数据，每天的价钱
                             self.priceList = [{
                                                 "date":"1288323623006",
-                                                "price":"100"
+                                                "price":100
                                             }, {
                                                 "date":"1289323623006",
-                                                "price":"200"
+                                                "price":200
                                             }, {
                                                 "date":"1290323623006",
-                                                "price":"300"
+                                                "price":300
                                             }];
                              // 单价
                             self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
@@ -814,7 +814,7 @@
                     "action": "newOrder",
                     "goodsList":[
                         {
-                            "roomID": self.roomId,
+                            "roomID": self.roomId - 0,
                             "bookStartDate": self.checkIn + '',
                             "bookEndDate": self.checkOut + '',
                             "totalPrice":bookTotalPri,
@@ -826,7 +826,7 @@
                     "Mobile": self.member.mobile + ''
                      
                 };
-                data = JSON.stringify(data);
+                data = angular.toJson(data,true);
                 $http.post(backendUrl('roomorder', '', 'server'), data)
                     .success(function(data, status, headers, config) {
                         if (data.rescode == '200') {
@@ -837,7 +837,7 @@
                                 "payType": "JSAPI",
                                 "orderID": orderID
                             };
-                            data = JSON.stringify(data);
+                            data = angular.toJson(data,true);
                             $http.post(backendUrl('roomorder', '', 'server'), data)
                             .success(function(data, status, headers, config){
                                  if (data.rescode == '200') {
@@ -1262,7 +1262,7 @@
                             self.productList = self.productList.concat(data.data.data.productList);
                             self.productList.length = self.productList.length;
                             self.productTotal = data.data.data.productTotal;
-                            console.log(self.productList)
+                            console.log(self.productList + new Date())
                             self.showLoadingIcon = false;
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingIcon = false;
