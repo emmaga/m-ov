@@ -1261,7 +1261,7 @@
             }
 
             self.gotoShopDetail = function(productId) {
-                angular.element(window).off('scroll'); alert(self.hotelId)
+                angular.element(window).off('scroll'); 
                 $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId });
             }
 
@@ -1399,8 +1399,8 @@
         }
     ])
 
-    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl',
-        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $ionicSlideBoxDelegate, loadingService, backendUrl) {
+    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$translate', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl',
+        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $translate, $ionicSlideBoxDelegate, loadingService, backendUrl) {
 
             console.log('shopProductDetailController')
             var self = this;
