@@ -3,8 +3,8 @@
 
 
     <!-- 分类 -->
-    <div class="bar tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0">
-        <div class="tabs">
+    <div class="bar bar-light tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0; height: 93px;">
+        <div class="tabs mod-bg-transparent">
             <a class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id" ng-click="shopHome.searchProductList(category.id,true)" ng-class="{active:(shopHome.searchProductId==category.id)}">
             {{category.name}}
           </a>
@@ -12,8 +12,11 @@
     </div>
 
     <!--header-->
-    <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">商城</h1>
+    <div class="bar bar-header mod-bg-transparent mod-fixed">
+        <button class="button button-icon icon ion-navicon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
+            店
+        </button>
+        <h1 class="title">{{shopHome.hotelName}}商城</h1>
         <button ui-sref="shopCart" class="button button-icon icon ion-ios-cart">
             {{shopHome.shopCartItemCount}}
         </button>
@@ -22,13 +25,14 @@
 
 
 
-    <div class="list mod-has-tabs-top padding">
+    <div class="list mod-has-tabs-top padding" style="padding-bottom: 40px">
 
         <p class="mod-note">
             <i class="icon ion-android-happy"></i>
             购买后请到前台取货，需要快递的商品可在购物车里勾选。
         </p>
-        <a class="card mod-flat" ng-repeat='product in shopHome.productList' ui-sref="shopProductDetail"  scrolly="shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()">
+
+        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail()" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
@@ -56,6 +60,13 @@
 
     </div>
       
-
+    <!-- hotel picker start-->
+    <div class="ab-container" ng-show="shopHome.hotelPickerShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="shopHome.showHP(false)">{{'back'|translate}}</button>
+        </div>
+        <hotel-picker></hotel-picker>
+    </div>
+    <!-- hotel picker end-->
  
 </div>

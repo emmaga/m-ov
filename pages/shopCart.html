@@ -1,6 +1,46 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
-    <div class="mod-has-header" style="padding-top: 114px;">
-        <div class="item mod-ghost" ng-if="shopCart.hasEx"></div>
+
+    <form class="light-bg list  padding mod-inset-forms" style="padding-top: 72px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
+
+        <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)">
+            
+            <div class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;">
+                支付
+                <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
+            </div>
+            <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
+                <small ng-if="shopCartList.hasEx">
+                    (&nbsp含邮费¥{{shopCart.postage | fenToYuan}}&nbsp)
+                    
+                </small>
+            </h3>
+            <!-- <div class="mod-split-line mod-break-padding"></div> -->
+        </div>
+
+
+
+        <div class="item item-input mod-short">
+            <div class="input-label">联系人</div>
+            <input type="text" ng-model="shopCart.address.name" required />
+        </div>
+        <div class="item item-input mod-short">
+            <div class="input-label">手机</div>
+            <input type="text" ng-model="shopCart.address.mobile" required />
+        </div>
+        <ion-toggle ng-model="shopCartList.hasEx">需要配送？</ion-toggle>
+        <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
+            自提地点&nbsp{门店名}
+        </div>
+        
+        <div class="item item-input mod-short" ng-if="shopCartList.hasEx">
+            <div class="input-label">地址</div>
+            <input type="text" ng-model="shopCart.address.address" required/>
+        </div>
+
+    </form>
+    <div class="" style="/*padding-top: 230px;*/">
+        <!-- <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCartList.hasEx"></div> -->
         
         <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
             <i class="icon ion-ios-cart-outline"></i><br>
@@ -10,9 +50,9 @@
         <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
 
-            <div ng-model="isChecked" class="item item-checkbox item-icon-right assertive">
+            <div class="item item-checkbox item-icon-right assertive">
                 <div class="checkbox checkbox-assertive">
-                    <input type="checkbox">
+                    <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
                 </div>
                 ￥{{item.price*item.count | fenToYuan}}
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
@@ -45,34 +85,5 @@
                 </h2>
             </div>
         </div>
-        <form class="light-bg list  padding mod-inset-forms mod-fixed mod-fixed-top " name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
-
-            <div class="item-note button button-assertive" ng-class="{disabled: shopCartList.length==0 || !orderForm.$valid}" type="submit" style=" text-indent: 3px; top: 4px; right: 2px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;">
-                支付
-                <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
-            </div>
-            <h3 class="mod-font-light mod-text-indent">
-                总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
-                <small ng-if="shopCart.hasEx">
-                    (&nbsp含邮费¥{{shopCart.postage | fenToYuan}}&nbsp)
-                    
-                </small>
-            </h3>
-            <div class="item item-input mod-short">
-                <div class="input-label">联系人</div>
-                <input type="text" ng-model="shopCart.address.name" required />
-            </div>
-            <div class="item item-input mod-short">
-                <div class="input-label">手机</div>
-                <input type="text" ng-model="shopCart.address.mobile" required />
-            </div>
-            <ion-toggle ng-model="shopCart.hasEx">需要配送？</ion-toggle>
-            
-            <div class="item item-input mod-short" ng-if="shopCart.hasEx">
-                <div class="input-label">地址</div>
-                <input type="text" ng-model="shopCart.address.address" required/>
-            </div>
-
-        </form>
     </div>
 </div>

@@ -1199,8 +1199,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $timeout, $stateParams, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', '$state', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $timeout, $stateParams, $state, loadingService, backendUrl) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1209,6 +1209,7 @@
                 self.showLoadingBool = {};
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
+                
                 self.loadShopCartInfo();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
@@ -1216,6 +1217,12 @@
                 self.productList = [];
                 //
             }
+
+            self.gotoShopDetail = function() {
+                angular.element(window).off('scroll'); 
+                $state.go('shopProductDetail');
+            }
+
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
                 $http({
@@ -1227,8 +1234,22 @@
                   self.shopCartItemCount = 0;
                   shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
                   // go on
-                  self.searchCategory();
+                  // 先搜索酒店列表，根据酒店列表的第一个酒店id查找该酒店的分类
+                  self.getHotelLists();
                   
+                })
+            }
+
+            self.getHotelLists = function() {
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('hotellists', 'hotelLists')
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  self.hotelLists = data.data.data;
+                  self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
+                  self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
+                  self.searchCategory();
                 })
             }
 
@@ -1278,6 +1299,23 @@
                 // 加载更多商品时，productList不清空
                 self.searchProductList(self.searchProductId,false);
             }
+
+            // 显示／隐藏酒店选择器
+            self.showHP = function(boo) {
+                self.hotelPickerShow = boo ? boo : false;
+                if(boo == false){
+                    // 点击穿透
+                    // 将点击变成不可点的状态
+                    $scope.hp.touchHackEnable = true;
+                }
+            };
+            
+            self.doAfterPickHotel = function(hotelId, hotelName) {
+                self.showHP(false);
+                self.hotelId = hotelId;
+                self.hotelName = hotelName;
+                self.searchCategory();
+            };
         }
     ])
 
@@ -1373,12 +1411,17 @@
           $scope.root.wxShare();
 
           // 初始化
-          self.hasEx = false; //含快递货品
           self.postage = 1000; //邮费 todo
+          $scope.shopCartList = new Array();
 
           //watch shopCartList
-          $scope.$watch('shopCartList', function() { 
-            self.judgeDist();
+          $scope.$watch('shopCartList', function() {
+            self.judgeChecked();
+            self.countTotalPrice();
+          }, true);
+
+          // watch shopCartList.hasEx
+          $scope.$watch('shopCartList.hasEx', function() {
             self.countTotalPrice();
           }, true);
 
@@ -1386,8 +1429,17 @@
           self.loadSCInfo();
         }
 
-        self.judgeDist = function() {
-            // self.hasEx = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.dist==true?true:false});
+        self.selectAll = function() {
+            var l = $scope.shopCartList;
+            for (var i = 0; i < l.length; i++) {
+                // 商品不下架，商品库存不缺
+                l[i].checked = l[i].status&&(l[i].availableCount - l[i].count)>=0&&l[i].availableCount!=0;
+            }
+        }
+
+        // 购物车是否有内容选取
+        self.judgeChecked = function() {
+            self.checked = $scope.shopCartList&&$scope.shopCartList.some(function(x){return x.checked==true?true:false});
         }
 
         self.plusOne = function(index) {
@@ -1411,10 +1463,12 @@
           self.totalPrice = 0;
           if($scope.shopCartList) {
             for (var i = 0; i < $scope.shopCartList.length; i++) {
-              self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
+              if($scope.shopCartList[i].checked == true) {
+                self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
+              }
             } 
           }
-          if(self.hasEx) {
+          if($scope.shopCartList.hasEx) {
             self.totalPrice += self.postage;
           }
         }
@@ -1429,9 +1483,9 @@
           })
           .then(function successCallback(data, status, headers, config) {
             $scope.shopCartList = data.data.data.list;
-            // 默认true：快递，false：自提
-            for (var i in $scope.shopCartList){$scope.shopCartList[i].dist = false;}
             self.loadExInfo();
+            $scope.shopCartList.hasEx = false; //含快递货品
+            self.selectAll(); // 默认选上所有的物品
           })
           .finally(function(value){
             $ionicLoading.hide();

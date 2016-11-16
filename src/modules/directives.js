@@ -35,6 +35,38 @@
 
   // ===============================================================
 
+  .directive("hotelPicker", function () {
+    return {
+      restrict: 'EA',
+      templateUrl: 'pages/drt/hotel-picker.html',
+      replace: true
+    }
+  })
+
+  .controller('hotelPickerController', ['$scope', '$ionicScrollDelegate', '$timeout',
+    function($scope, $ionicScrollDelegate, $timeout) {
+      console.log('hotelPickerController')
+      var self = this;
+
+      self.init = function(hotelLists, callback) {
+        self.callback = callback;
+        self.hotelLists = hotelLists;
+        // 防止点透
+        // 将点击变成可点的状态
+        $timeout(function() {self.touchHackEnable = false;}, 1000);
+      }
+
+      self.scrollTo = function(pos) {
+        var offset = document.getElementById(pos).offsetTop;
+        $ionicScrollDelegate.$getByHandle('hotelInitial').scrollTo(0, offset, true);
+      }
+
+  }])
+
+  // ===============================================================
+
+
+
   .directive("travelDatePicker", function () {
     return {
       restrict: 'EA',
