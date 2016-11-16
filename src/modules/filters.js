@@ -89,4 +89,26 @@
     }
   }])
 
+  .filter("dateTimeToTimestamp", function() {
+    return function(dateTime) {
+      var d = new Date(dateTime);
+      return d.getTime();
+    }
+  })
+
+  .filter("deliverWay",['$filter', function($filter){
+    return function(deliverWay){
+      var flag;
+      switch (deliverWay){
+         case 'express':
+             flag = $filter('translate')('express');
+             break;
+         case 'bySelf':
+             flag = $filter('translate')('bySelf');
+             break;
+      }
+      return flag;
+    }
+  }])
+
 })();

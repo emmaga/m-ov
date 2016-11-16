@@ -7,23 +7,23 @@
         <div class="item mod-no-border-top">
             <div class="row">
                 <p class="col mod-no-padding">{{'orderID'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderId}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.OrderNum}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderId| date}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.dealTime | dateTimeToTimestamp | date:'yyyy.M.d HH:mm:ss'}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.totalPri}}</p>
+                <p class="col mod-no-padding col-75">¥{{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
                 <p class="col mod-no-padding col-75">微信支付</p>
-            </div>
+            </div> -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderStatus}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus}}</p>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
         <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.imgSrc}});"></div>
             <h2>{{product.name}}</h2>
-            <p>单价:&nbsp￥{{product.unitPrice}}</p>
+            <p>单价:&nbsp￥{{product.unitPrice | fenToYuan}}</p>
             <p>购买数量:&nbsp{{product.number}}</p>
         </a>
     </div>
@@ -47,7 +47,7 @@
         </div>
         <div class="row">
             <p class="col mod-no-padding">配送方式:</p>
-            <p class="col mod-no-padding col-75">自提&nbsp+&nbsp快递 </p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
         <div class="row">
             <p class="col mod-no-padding">送货地址:</p>
