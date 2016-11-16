@@ -195,7 +195,7 @@
                 data = JSON.stringify(data);
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('project', 'projectInfo'),
+                  url: backendUrl('projectinfo', 'projectInfo'),
                   data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
@@ -1199,8 +1199,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', '$state', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $timeout, $stateParams, $state, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', '$state', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1215,12 +1215,20 @@
                 self.showLoadingIcon = false;
                 // 商品数组
                 self.productList = [];
-                //
+                // 一次加载数量
+                self.perPageCount = 10;
+                // 当前页数
+                self.page = 0;
             }
 
             self.gotoShopDetail = function() {
                 angular.element(window).off('scroll'); 
                 $state.go('shopProductDetail');
+            }
+
+            self.gotoShopCart = function() {
+                angular.element(window).off('scroll'); 
+                $state.go('shopCart');
             }
 
             self.loadShopCartInfo = function() {
@@ -1254,9 +1262,19 @@
             }
 
             self.searchCategory = function() {
+                var data = {
+                    "action": "getProductCategory",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                };
+                data = JSON.stringify(data);
                 $http({
                     method: $filter('ajaxMethod')(),
-                    url: backendUrl('product', 'productCategory')
+                    url: backendUrl('shopinfo', 'productCategory'),
+                    data: data
                 }).then(function successCallback(data, status, headers, config) {
                     self.categoryList = data.data.data.categoryList;
                     // 默认加载第一个分类
@@ -1269,17 +1287,21 @@
                     self.showLoadingIcon = true
                     console.log(id);
                     // 记录当前点击的商品分类的id
-                    self.searchProductId = id;
+                    self.searchCategoryId = id;
                     self.showLoadingIcon = true;
                     // 点击“分类”时，清空productList数组
                     if (bool == true) {
                         self.productList = [];
+                        self.page = 0;
                     }
                     $timeout(function(){
+                        var data = {'page':self.page+1};
                         $http({
                             method: $filter('ajaxMethod')(),
-                            url: backendUrl('product', 'productList'+id)
+                            url: backendUrl('product', 'productList'+id),
+                            data: data
                         }).then(function successCallback(data, status, headers, config) {
+                            self.page++;
                             self.productList = self.productList.concat(data.data.data.productList);
                             self.productList.length = self.productList.length;
                             self.productTotal = data.data.data.productTotal;
@@ -1297,7 +1319,7 @@
                 console.log('moreProduct')
                 self.showLoadingIcon = true;
                 // 加载更多商品时，productList不清空
-                self.searchProductList(self.searchProductId,false);
+                self.searchProductList(self.searchCategoryId,false);
             }
 
             // 显示／隐藏酒店选择器

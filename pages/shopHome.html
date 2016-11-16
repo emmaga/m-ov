@@ -5,7 +5,7 @@
     <!-- 分类 -->
     <div class="bar bar-light tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0; height: 93px;">
         <div class="tabs mod-bg-transparent">
-            <a class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id" ng-click="shopHome.searchProductList(category.id,true)" ng-class="{active:(shopHome.searchProductId==category.id)}">
+            <a class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id" ng-click="shopHome.searchProductList(category.id,true)" ng-class="{active:(shopHome.searchCategoryId==category.id)}">
             {{category.name}}
           </a>
         </div>
@@ -16,8 +16,11 @@
         <button class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
             <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
         </button>
+
         <h1 class="title">商城</h1>
-        <button ui-sref="shopCart" class="button button-icon icon ion-ios-cart">
+      
+        <button ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
+
             {{shopHome.shopCartItemCount}}
         </button>
 
