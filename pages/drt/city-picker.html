@@ -1,10 +1,13 @@
 <div ng-controller="cityPickerController as cp">
 
     <div class="cp-side cp-wrapper">
-        <div class="cp-cell">
+        <div class="cp-cell ricepaper">
             <a ng-repeat="cityInitial in cp.cityListContent.searchInitialList" ng-click="cp.scrollTo(cityInitial)">{{cityInitial}}<br /></a>
         </div>
     </div>
+
+
+
     <ion-content delegate-handle="cityInitial" id="cp-city-list" class="content has-header">
 
         <div class="list">

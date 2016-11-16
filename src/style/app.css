@@ -68,7 +68,7 @@
 /*content*/
 
 .mod-has-header {
-    margin-top: 44px !important;
+    margin-top: 43px !important;
 }
 
 .mod-has-tabs-top {
@@ -636,6 +636,13 @@ small {
     z-index: 2000
 }
 
+.ricepaper{
+        background-color: rgba(255, 255, 255, .95) !important
+    }
+.ricepaper-dark{
+        background-color: rgba(0, 0, 0, .75) !important
+    }
+
 
 @supports (-webkit-backdrop-filter:blur(18px)) {
     .bar.bar-light {
@@ -645,5 +652,8 @@ small {
     .ricepaper{
         -webkit-backdrop-filter: blur(18px);
         background-color: rgba(255, 255, 255, .68) !important
+    }
+    .ricepaper-dark{
+        background-color: rgba(0, 0, 0, .68) !important
     }
 }

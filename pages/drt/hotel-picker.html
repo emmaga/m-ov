@@ -1,9 +1,11 @@
 <div ng-controller="hotelPickerController as hp">
+
     <div class="cp-side cp-wrapper">
-        <div class="cp-cell">
+        <div class="cp-cell ricepaper">
             <a ng-repeat="hotelInitial in hp.hotelLists.searchInitialList" ng-click="hp.scrollTo(hotelInitial)">{{hotelInitial}}<br /></a>
         </div>
     </div>
+    
     <ion-content delegate-handle="hotelInitial" class="content has-header">
 
         <div class="list">
