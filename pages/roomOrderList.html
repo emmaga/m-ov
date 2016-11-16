@@ -1,10 +1,10 @@
-<div ng-controller="memberOrderListController as mol" ng-init="mol.init()">
+<div ng-controller="roomOrderListController as mol" ng-init="rol.init()">
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{'myOrders'|translate}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <div class="list mod-has-header">
-        <div ng-repeat="order in mol.orderLists" ui-sref="bookOrderInfo">
+        <div ng-repeat="order in rol.orderLists" ui-sref="bookOrderInfo">
             <div class="item item-divider">
                 <p>{{'orderID'|translate}} #{{order.ID}}</p>
                 <span class="item-note">
@@ -23,7 +23,7 @@
             
         </div>
     </div>
-    <p ng-show="mol.showLoadingBool.searchBool==true && mol.orderListNum ==0 ">很抱歉，暂无订单</p>
+    <p ng-show="rol.showLoadingBool.searchBool==true && rol.orderListNum ==0 ">很抱歉，暂无订单</p>
 
 
 </div>

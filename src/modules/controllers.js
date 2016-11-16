@@ -642,7 +642,6 @@
                     var data = {
                         "clear_session": $scope.root.getParams('clear_session'),
                         "lang": $translate.proposedLanguage() || $translate.use(),
-
                         "roomId": self.roomId-0,
                         "hotelId": self.hotelId - 0,
                         "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
@@ -981,7 +980,7 @@
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-
+                // 会员接口 没好呢
                 self.search();
             }
             self.search = function() {
@@ -1130,9 +1129,9 @@
         }
     ])
 
-    .controller('memberOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
+    .controller('roomOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
         function($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
-            console.log('memberOrderListController')
+            console.log('roomOrderListController')
             var self = this;
 
             self.init = function() {
@@ -1151,6 +1150,7 @@
                 loadingService(self.showLoadingBool)
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
                     "action": "roomOrderList"
                 };
                 data = JSON.stringify(data);

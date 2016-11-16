@@ -119,11 +119,11 @@
           }
         }
       })
-      .state('memberOrderList', {
-        url: '/memberOrderList',
+      .state('roomOrderList', {
+        url: '/roomOrderList',
         views: {
           '': {
-            templateUrl: 'pages/memberOrderList.html'
+            templateUrl: 'pages/roomOrderList.html'
           }
         }
       })
