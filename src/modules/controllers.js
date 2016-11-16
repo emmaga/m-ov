@@ -169,6 +169,9 @@
                 })
                 .then(function successCallback(data, status, headers, config) {
                     if (data.data.rescode == '200') {
+                        // 标志已经拿到clearsession和wx初始化
+                        self._readystate = true;
+
                         self.loadProjectInfo();
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -265,6 +268,17 @@
             console.log('bookHotelListController');
             var self = this;
 
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
+
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -336,7 +350,7 @@
                 $timeout(function(){
                   $http({
                       method: $filter('ajaxMethod')(),
-                      url: backendUrl('project', 'cityLists'),
+                      url: backendUrl('citylist', 'cityLists'),
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
                       console.log(data)
@@ -1295,10 +1309,21 @@
                         self.page = 0;
                     }
                     $timeout(function(){
-                        var data = {'page':self.page+1};
+                        var data = {
+                            "action": "getProductList",
+                            "clear_session": $scope.root.getParams('clear_session'),
+                            "appid": $scope.root.getParams('appid'),
+                            "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                            "lang": $translate.proposedLanguage() || $translate.use(),
+                            "hotelId": self.hotelId,
+                            "categoryId":self.searchCategoryId,
+                            "page":self.page+1,
+                            "count":self.perPageCount
+                        };
+                        data = JSON.stringify(data);
                         $http({
                             method: $filter('ajaxMethod')(),
-                            url: backendUrl('product', 'productList'+id),
+                            url: backendUrl('shopinfo', 'productList'+id),
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
                             self.page++;
