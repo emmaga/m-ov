@@ -35,13 +35,13 @@
             {{roomInfo.member.memberLevel.name}}
         </div>
         <div class="item">
-            {{roomInfo.room.RoomTypeName['zh-CN']}}
+            {{roomInfo.room.RoomTypeName}}
         </div>
         <div class="item">
-            {{roomInfo.hotel.Description['zh-CN']}}
+            {{roomInfo.hotel.Description}}
         </div>
         <div class="item">
-            {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
+            {{roomInfo.checkIn | date:'MM月dd日'}}入住123~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
             <div class="input-label">{{'roomQuantity'|translate}}:</div>
@@ -73,13 +73,13 @@
         </div>
         <div class="list padding mod-list mod-inset-forms">
             <div class="item">
-                <p ng-repeat="price in roomInfo.priceList">
+                <p ng-repeat="price in roomInfo.PriceInfo.PriceList">
                     {{price.date | date:'yyyy年MM月dd日'}} {{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}
                     <br>
                 </p>
             </div>
             <div class="item">
-                {{'totalPrice'|translate}}:{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
+                {{'totalPrice'|translate}}:人民币{{roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}
             </div>
         </div>
         <div class="item item-divider">

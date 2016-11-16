@@ -26,7 +26,7 @@
             </a>
             <!-- <a class="item" href="{{brl.locationHref}}"> -->
             <a class="item" ng-click="brl.map()">
-                <i class="icon ion-ios-location-outline"></i> 上海市· 浦东新区· 祖冲之路2277弄
+                <i class="icon ion-ios-location-outline"></i> {{brl.hotel.Address }}
                 <span class="item-note">
                     {{'map'|translate}}
                     <i class="icon ion-ios-arrow-right"></i>
@@ -45,27 +45,27 @@
         <div class="list mod-inset-forms">
 
 
-            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.roomId,brl.hotelId,brl.checkIn,brl.checkOut,room.roomRemain)">
+            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.Refund)">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.LogoImgURL}});"></div>
                 <span class="item-note">
 
 
                   
 
-                    <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.roomRemain==0),'mod-color-excited':!(room.roomRemain==0)}">￥{{room.roomAveragePri}}<small>/{{'days'|translate}}</small></h2>
-                    <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:(room.roomRemain==0),'button-assertive':!(room.roomRemain==0)}">
+                    <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.Refund==0),'mod-color-excited':!(room.Refund==0)}">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
+                    <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:(room.Refund==0),'button-assertive':!(room.Refund==0)}">
 
-                        <span class="mod-color-cold" ng-if="room.roomRemain==0">{{'bookSoldOut'|translate}}</span>
-                        <span ng-if="!(room.roomRemain==0)">{{'booking'|translate}}</span>
-                        <i ng-if="!(room.roomRemain==0)" class="icon ion-ios-arrow-right"></i>
+                        <span class="mod-color-cold" ng-if="room.Refund==0">{{'bookSoldOut'|translate}}</span>
+                        <span ng-if="!(room.Refund==0)">{{'booking'|translate}}</span>
+                        <i ng-if="!(room.Refund==0)" class="icon ion-ios-arrow-right"></i>
 
                     </button>
                 </span>
-                <h2>{{room.RoomTypeName['zh-CN']}}</h2>
-                <p>{{room.Description['zh-CN']}}</p>
+                <h2>{{room.RoomTypeName}}</h2>
+                <p>{{room.Description}}</p>
                 <p>
-                    <span class="mod-tag mod-tag-small" ng-repeat="feature in room.roomFeatures">
-                        <i class="icon {{feature.icon}}"></i>
+                    <span class="mod-tag mod-tag-small" ng-repeat="feature in room.Features">
+                        <i class="icon {{feature.icon}}">feature.Name</i>
                     </span>
                 </p>
             </a>

@@ -374,16 +374,16 @@
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "bookCity": self.cityInfo.cityId, //0: all, 城市ID
-                    "bookStartDate": self.checkin,
-                    "bookEndDate": self.checkout
+                    "bookCity": self.cityInfo.id-0, //0: all, 城市ID
+                    "bookStartDate": $filter('date')(self.checkin-0,'yyyy-MM-dd'),
+                    "bookEndDate": $filter('date')(self.checkout-0,'yyyy-MM-dd')
                 };
                 data = JSON.stringify(data);
 
                 $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('bookHotel', 'hotelList'),
+                        url: backendUrl('hotellist', 'hotelList'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)
@@ -426,6 +426,7 @@
     .controller('bookRoomListController', ['$scope', '$http', '$filter', '$state', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$translate', 'loadingService', 'backendUrl', 'BACKEND_CONFIG', 'util',
         function($scope, $http, $filter, $state, $stateParams, $timeout, $ionicSlideBoxDelegate, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
             console.log('bookRoomListController')
+            console.log($stateParams)
             var self = this;
             self.init = function() {
 
@@ -470,9 +471,9 @@
                 $timeout(function() { self.showDP(false); }, 500);
             };
             // 可以预订 才跳转
-            self.nextState = function(roomId, hotelId, checkIn, checkOut, roomRemain) {
+            self.nextState = function(roomId, checkIn, checkOut, roomRemain) {
                     if (!(roomRemain == 0)) {
-                        $state.go('roomInfo', { roomId: roomId, hotelId: hotelId, checkIn: checkIn, checkOut: checkOut })
+                        $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut })
                     }
 
             };
@@ -485,14 +486,14 @@
                 var data = {
                     "clear_session":$scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId
+                    "hotelId": self.hotelId -0
                 };
                 data = JSON.stringify(data);
                 
                 $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('bookHotel', 'hotelInfo'),
+                        url: backendUrl('hotelinfo', 'hotelInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         self.hotel = data.data.data;
@@ -517,18 +518,21 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                      
-                    "hotelId": self.hotelId,
-                    "bookStartDate": self.checkIn,
-                    "bookEndDate": self.checkOut
+                    // "hotelId": self.hotelId -0,
+                    // 假数据
+                    "hotelId": 1,
+                    "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
+                    "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd') 
                 };
                 data = JSON.stringify(data);
 
                 $http({
                     method: $filter('ajaxMethod')(),
-                    url: backendUrl('bookHotel', 'roomList'),
+                    url: backendUrl('roomlist', 'roomList'),
                     data: data
 
                 }).then(function successCallback(data, status, headers, config) {
+                    console.log(data)
                     self.rooms = data.data.data;
                     console.log(self.rooms)
                     // ionic silder update
@@ -592,7 +596,7 @@
     .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
         function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, loadingService, backendUrl, util, BACKEND_CONFIG) {
             console.log("roomInfoController")
-            BACKEND_CONFIG.test && console.log($stateParams);
+            console.log($stateParams);
             var self = this;
             self.init = function() {
 
@@ -602,7 +606,7 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchRoomInfoBool = false;
-                self.showLoadingBool.searchMemberInfoBool = false;
+                // self.showLoadingBool.searchMemberInfoBool = false;
                 self.showLoadingBool.searchHotelInfoBool = false;
 
 
@@ -612,7 +616,9 @@
                 self.hotelId = $stateParams.hotelId;
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
-                self.searchMemberInfo();
+                // 会员接口 还没有弄好
+                // self.searchMemberInfo();
+                self.searchRoomInfo();
                 // //  验证码 倒计时
                 // self.countSeconds = 30;
                 // self.showTip = true;
@@ -637,17 +643,17 @@
                         "clear_session": $scope.root.getParams('clear_session'),
                         "lang": $translate.proposedLanguage() || $translate.use(),
 
-                        "roomId": self.roomId,
-                        "hotelId": self.hotelId,
-                        "bookStartDate": self.checkIn,
-                        "bookEndDate": self.checkOut
+                        "roomId": self.roomId-0,
+                        "hotelId": self.hotelId - 0,
+                        "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
+                        "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd')
                     };
                     data = JSON.stringify(data);
 
                     $timeout(function() {
                         $http({
                             method: $filter('ajaxMethod')(),
-                            url: backendUrl('bookHotel', 'roomInfo'),
+                            url: backendUrl('roominfo', 'roomInfo'),
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
                             self.searchHotelInfo();
@@ -656,18 +662,7 @@
                             // ionic silder update
                             $ionicSlideBoxDelegate.update();
                             
-                            BACKEND_CONFIG.test && console.log(self.room);
-                            // 假数据，每天的价钱
-                            self.priceList = [{
-                                                "date":"1288323623006",
-                                                "price":100
-                                            }, {
-                                                "date":"1289323623006",
-                                                "price":200
-                                            }, {
-                                                "date":"1290323623006",
-                                                "price":300
-                                            }];
+                            self.priceList = self.room.PriceInfo.PriceList;
                              // 单价
                             self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                             // // 房间数 最多 可选
@@ -689,14 +684,16 @@
                 var data = {
                     "clear_session":$scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId
+                    // "hotelId": self.hotelId-0
+                    // 假数据
+                    "hotelId": 1
                 };
                 data = JSON.stringify(data);
                 
                 $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('bookHotel', 'hotelInfo'),
+                        url: backendUrl('hotelinfo', 'hotelInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         self.hotel = data.data.data;
@@ -829,10 +826,22 @@
                     "goodsList":[
                         {
                             "roomID": self.roomId - 0,
-                            "bookStartDate": self.checkIn + '',
-                            "bookEndDate": self.checkOut + '',
+                            "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
+                            "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
                             "totalPrice":bookTotalPri,
-                            "priceList": self.priceList
+                            "priceList": self.priceList,
+                            "bookCount":self.roomNumber,
+                            // 假数据
+                            "priceList": [
+                                          {
+                                              "date":"2016-11-15",
+                                              "price":20000
+                                          },
+                                          {
+                                              "date":"2016-11-16",
+                                              "price":20000
+                                          }
+                                      ]
                         }
                     ],
                     "totalPrice":bookTotalPri,
@@ -844,7 +853,7 @@
                 $http.post(backendUrl('roomorder', '', 'server'), data)
                     .success(function(data, status, headers, config) {
                         if (data.rescode == '200') {
-                            var orderID = data.data.data.orderID;
+                            var orderID = data.data.orderID;
                             var data = {
                                 "clear_session": $scope.root.getParams('clear_session'),
                                 "action": "weixinPay",
@@ -855,7 +864,7 @@
                             $http.post(backendUrl('roomorder', '', 'server'), data)
                             .success(function(data, status, headers, config){
                                  if (data.rescode == '200') {
-                                    self.wxPay(data.JS_Pay_API, data.orderNum);
+                                    self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
                                  } else {
                                      alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
                                  }
@@ -880,13 +889,13 @@
                     paySign: JS_Pay_API.paySign, // 支付签名
                     success: function(res) {
                         // 支付成功后的回调函数
-                        $state.go('orderInfo', { orderId: orderId })
+                        $state.go('bookOrderInfo', { orderId: orderId })
                     },
                     cancel: function() {
-                        $state.go('orderInfo', { orderId: orderId })
+                        $state.go('bookOrderInfo', { orderId: orderId })
                     },
                     error: function(e) {
-                        $state.go('orderInfo', { orderId: orderId })
+                        $state.go('bookOrderInfo', { orderId: orderId })
                     }
                 });
             }
