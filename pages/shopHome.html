@@ -13,11 +13,14 @@
 
     <!--header-->
     <div class="bar bar-header mod-bg-transparent mod-fixed">
-        <button class="button button-icon icon ion-navicon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
-            店
+        <button class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
+            <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
         </button>
-        <h1 class="title">{{shopHome.hotelName}}商城</h1>
+
+        <h1 class="title">商城</h1>
+      
         <button ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
+
             {{shopHome.shopCartItemCount}}
         </button>
 
