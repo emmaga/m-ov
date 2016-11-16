@@ -1193,7 +1193,7 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 
-                // self.search();
+                self.search();
             }
             self.search = function() {
                 // 发送请求之前，遮罩层
@@ -1202,15 +1202,14 @@
                 $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
-                       url: backendUrl('member', 'roomOrderList')
+                       url: backendUrl('member', 'shopOrderList')
                    }).then(function successCallback(data, status, headers, config) {
-                       console.log(data)
-                       self.orderLists = data.data.data.orderLists;
+                       self.orderLists = data.data.data;
+                       console.log(data.data.data)
                        self.orderListNum = data.data.data.orderNum;
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool)
                    }, function errorCallback(data, status, headers, config) {
-
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
                    }); 
