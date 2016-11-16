@@ -55,4 +55,38 @@
     }
   })
 
+  .filter("orderStatus",['$filter', function($filter){
+    return function(orderStatus){
+      var flag;
+      switch (orderStatus){
+         case 'WAITPAY':
+             flag = $filter('translate')('WAITPAY');
+             break;
+         case 'WAITAPPROVAL':
+             flag = $filter('translate')('WAITAPPROVAL');
+             break;
+
+         case 'ACCEPT':
+             flag = $filter('translate')('ACCEPT');
+             break;
+         case 'DELIVERING':
+             flag = $filter('translate')('DELIVERING');
+             break;
+         case 'COMPLETED':
+             flag = $filter('translate')('COMPLETED');
+             break;
+         case 'CANCEL_REFUNDING':
+             flag = $filter('translate')('CANCEL_REFUNDING');
+             break;
+         case 'SELLER_CANCEL_REFUNDING':
+             flag = $filter('translate')('SELLER_CANCEL_REFUNDING');
+             break;
+         case 'CANCELED':
+             flag = $filter('translate')('CANCELED');
+             break;
+      }
+      return flag;
+    }
+  }])
+
 })();
