@@ -22,7 +22,9 @@
             "totalGoods": 6,
             "totalPrice": 40000,
             "PayTime": null,
-            "ID": 127
+            "ID": 127,
+            "hotelId":1,
+            "hotelName":"上海大酒店"
         },
         {
             "Status": "WAITPAY",
@@ -46,7 +48,9 @@
             "totalGoods": 6,
             "totalPrice": 40000,
             "PayTime": null,
-            "ID": 127
+            "ID": 127,
+            "hotelId":1,
+            "hotelName":"上海大酒店2"
         }
     ],
     "rescode": "200",
