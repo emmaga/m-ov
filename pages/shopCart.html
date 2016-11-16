@@ -30,7 +30,7 @@
         </div>
         <ion-toggle ng-model="shopCartList.hasEx">需要配送？</ion-toggle>
         <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
-            自提地点&nbsp{门店名}
+            自提地点&nbsp{{shopCart.hotelName}}
         </div>
         
         <div class="item item-input mod-short" ng-if="shopCartList.hasEx">

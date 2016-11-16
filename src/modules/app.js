@@ -144,7 +144,7 @@
         }
       })
       .state('shopProductDetail', {
-        url: '/shopProductDetail/?hotelId&productId',
+        url: '/shopProductDetail/?hotelId&productId&hotelName',
         views: {
           '': {
             templateUrl: 'pages/shopProductDetail.html'
@@ -152,7 +152,7 @@
         }
       })
       .state('shopCart', {
-        url: '/shopCart/?hotelId',
+        url: '/shopCart/?hotelId&hotelName',
         views: {
           '': {
             templateUrl: 'pages/shopCart.html'

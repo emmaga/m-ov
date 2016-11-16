@@ -1262,12 +1262,12 @@
 
             self.gotoShopDetail = function(productId) {
                 angular.element(window).off('scroll'); 
-                $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId });
+                $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId, hotelName:self.hotelName });
             }
 
             self.gotoShopCart = function() {
                 angular.element(window).off('scroll'); 
-                $state.go('shopCart');
+                $state.go('shopCart', {hotelId: self.hotelId, hotelName:self.hotelName});
             }
 
             self.loadShopCartInfo = function() {
@@ -1407,6 +1407,7 @@
 
             self.init = function() {
                 self.hotelId = $stateParams.hotelId;
+                self.hotelName = $stateParams.hotelName;
                 self.productId = $stateParams.productId;
                 self.showLoadingBool = {};
                 self.buying = false;
@@ -1417,7 +1418,7 @@
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart', {hotelId: self.hotelId});
+                $state.go('shopCart', {hotelId: self.hotelId, hotelName: self.hotelName});
             }
 
             self.search = function() {
@@ -1531,6 +1532,7 @@
 
           // 初始化
           self.hotelId = $stateParams.hotelId;
+          self.hotelName = $stateParams.hotelName;
           self.postage = 1000; //邮费 todo
           $scope.shopCartList = new Array();
 
