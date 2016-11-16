@@ -144,7 +144,7 @@
         }
       })
       .state('shopProductDetail', {
-        url: '/shopProductDetail',
+        url: '/shopProductDetail/?hotelId&productId',
         views: {
           '': {
             templateUrl: 'pages/shopProductDetail.html'
@@ -183,7 +183,7 @@
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
     testUrl       : 'api/',
     testExtesion  : '.json',
-    test          : false,
-    mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
+    test          : true//,
+    //mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
   })
 })();

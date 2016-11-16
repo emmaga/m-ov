@@ -10,6 +10,11 @@
             self.init = function() {
                 self.wxBrowserHack();
 
+                if(BACKEND_CONFIG.test == true) {
+                    // 标志已经拿到clearsession和wx初始化
+                    self._readystate = true;
+                }
+
                 // root全局变量：
                 self.params = {};
                 // self.params.appid
@@ -1228,12 +1233,23 @@
             console.log('shopHomeController')
             var self = this;
 
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
+            
             self.init = function() {
                 self.showLoadingBool = {};
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
                 
-                self.loadShopCartInfo();
+                self.getHotelLists();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
                 // 商品数组
@@ -1244,9 +1260,9 @@
                 self.page = 0;
             }
 
-            self.gotoShopDetail = function() {
-                angular.element(window).off('scroll'); 
-                $state.go('shopProductDetail');
+            self.gotoShopDetail = function(productId) {
+                angular.element(window).off('scroll'); alert(self.hotelId)
+                $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId });
             }
 
             self.gotoShopCart = function() {
@@ -1256,18 +1272,24 @@
 
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
+                var data = {
+                    "action": "getShoppingCart",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                }
+                data = JSON.stringify(data);
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart', 'shopCartList')
+                  url: backendUrl('shopinfo', 'shopCartList'),
+                  data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
                   var shopCartList = data.data.data.list;
                   self.shopCartItemCount = 0;
                   shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
-                  // go on
-                  // 先搜索酒店列表，根据酒店列表的第一个酒店id查找该酒店的分类
-                  self.getHotelLists();
-                  
                 })
             }
 
@@ -1281,6 +1303,7 @@
                   self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
                   self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
                   self.searchCategory();
+                  self.loadShopCartInfo();
                 })
             }
 
@@ -1301,7 +1324,8 @@
                 }).then(function successCallback(data, status, headers, config) {
                     self.categoryList = data.data.data.categoryList;
                     // 默认加载第一个分类
-                    self.searchProductList(self.categoryList["0"]["id"],true)
+                    self.searchProductList(self.categoryList["0"]["id"],true);
+                    
                 }, function errorCallback(data, status, headers, config) {
 
                 });
@@ -1382,6 +1406,8 @@
             var self = this;
 
             self.init = function() {
+                self.hotelId = $stateParams.hotelId;
+                self.productId = $stateParams.productId;
                 self.showLoadingBool = {};
                 self.buying = false;
 
@@ -1393,12 +1419,23 @@
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-                $timeout(function() {
+                //$timeout(function() {
+                    var data = {
+                        "action": "getProductDetail",
+                        "appid": $scope.root.getParams('appid'),
+                        "clear_session": "xxxx",
+                        "openid": $scope.root.getParams('openid'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "hotelId": self.hotelId,
+                        "productId":self.productId
+                    }
+                    data = JSON.stringify(data);
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('product', 'productDetail')
+                        url: backendUrl('shopinfo', 'productDetail'),
+                        data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        console.log(data)
+                        
                         self.product = data.data.data.product;
                         // ionic silder update
                         $ionicSlideBoxDelegate.update();
@@ -1411,15 +1448,25 @@
                         loadingService(self.showLoadingBool)
                         
                     });
-                }, 500)
+                //}, 500)
 
             }
 
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
+                var data = {
+                    "action": "getShoppingCart",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                }
+                data = JSON.stringify(data);
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart', 'shopCartList')
+                  url: backendUrl('shopinfo', 'shopCartList'),
+                  data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
                   var shopCartList = data.data.data.list;
@@ -1430,9 +1477,21 @@
             }
 
             self.addToCart = function(callBack) {
+                var data = {
+                    "action": "getShoppingCart",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId,
+                    "productId":self.productId
+                }
+                data = JSON.stringify(data);
+
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart', 'shopCartList')
+                  url: backendUrl('shopinfo', 'shopCartList'),
+                  data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
                   if(callBack){
