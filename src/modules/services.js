@@ -58,7 +58,14 @@
       // 住酒店天数
       'countDay': function(ms1,ms2){
         return (getDayStamp(ms2)-getDayStamp(ms1))/(24*60*60*1000)
+      },
+      // date, dateTime to timeStamp
+      'datetimeToTimestamp': function(datetime) {
+        var d = new Date(datetime);
+        return d.getTime();
       }
+      
+
     }
   })
 })();

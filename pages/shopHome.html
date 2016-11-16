@@ -1,4 +1,4 @@
-<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  ng-disabled="true">
+<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  >
 <!-- <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  > -->
 
 
@@ -27,7 +27,12 @@
 
     <div class="list mod-has-tabs-top padding" style="padding-bottom: 40px">
 
-        <div class="card mod-flat" ng-repeat='product in shopHome.productList' ui-sref="shopProductDetail" scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" >
+        <p class="mod-note">
+            <i class="icon ion-android-happy"></i>
+            购买后请到前台取货，需要快递的商品可在购物车里勾选。
+        </p>
+
+        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail()" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
@@ -37,7 +42,7 @@
                 <p>{{product.intro}}</p>
                 <h2 class="mod-member-price assertive">￥{{product.price}}</h2>
             </div>
-        </div>
+        </a>
 
         <ion-spinner icon="dots" class="mod-spinner-list" ng-show="shopHome.showLoadingIcon"></ion-spinner>
         <!-- <a class="button button-light button-block mod-load-more" ng-click="shopHome.moreProduct()"  ng-show="(shopHome.productTotal>shopHome.productList.length) && (!shopHome.showLoadingIcon)">

@@ -349,7 +349,6 @@
   }])
 
   // 商品页面滚动
-  // 太他娘的打击了
   .directive('scrolly', ['$document', '$window', '$q',   function ($document,$window,$q) {
       return {
           restrict: 'EA',

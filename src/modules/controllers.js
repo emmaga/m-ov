@@ -643,9 +643,19 @@
                             $ionicSlideBoxDelegate.update();
                             
                             BACKEND_CONFIG.test && console.log(self.room);
-                            // self.priceList = data.data.data.priceList;
-                            //  // 单价
-                            // self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
+                            // 假数据，每天的价钱
+                            self.priceList = [{
+                                                "date":"1288323623006",
+                                                "price":100
+                                            }, {
+                                                "date":"1289323623006",
+                                                "price":200
+                                            }, {
+                                                "date":"1290323623006",
+                                                "price":300
+                                            }];
+                             // 单价
+                            self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                             // // 房间数 最多 可选
                             // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
                             
@@ -718,7 +728,7 @@
                     });
                 },500)
             }
-
+            
                 // 计算客房总
             self.roomBookPrcFun = function(array) {
                     var length = array.length,
@@ -798,31 +808,48 @@
             //     });
             // }
             self.newOrder = function() {
+                var bookTotalPri = self.roomPriPerDay*self.roomNumber
                 var data = {
-                    "wxappid": $scope.root.getParams('appid'), // 公众ID
-                    "orderType": "Room", // Room/Shop
-                    "goodsID": self.roomId, // 商品ID
-                    // todo
-                    "goodsName": "酒店名称", // 商品名称
-                    "goodsDetail": self.room.roomName, // 商品详情
-                    // todo
-                    "goodsExtraInfo": "钻石会员", // 商品额外信息
-                    // todo
-                    "goodsPrice": 1, // 整型，单位分
-                    // todo
-                    "clientIP": "1.1.1.1", // 客户端ip
-                    // todo
-                    "userid": 1
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "action": "newOrder",
+                    "goodsList":[
+                        {
+                            "roomID": self.roomId - 0,
+                            "bookStartDate": self.checkIn + '',
+                            "bookEndDate": self.checkOut + '',
+                            "totalPrice":bookTotalPri,
+                            "priceList": self.priceList
+                        }
+                    ],
+                    "totalPrice":bookTotalPri,
+                    "contactName": self.member.realName,
+                    "Mobile": self.member.mobile + ''
+                     
                 };
-                data = JSON.stringify(data);
-                $http.post(backendUrl('neworder', '', 'server'), data)
+                data = angular.toJson(data,true);
+                $http.post(backendUrl('roomorder', '', 'server'), data)
                     .success(function(data, status, headers, config) {
                         if (data.rescode == '200') {
-                            self.wxPay(data.JS_Pay_API, data.orderNum);
-                        } else {
-                            alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
-                        }
-                    })
+                            var orderID = data.data.data.orderID;
+                            var data = {
+                                "clear_session": $scope.root.getParams('clear_session'),
+                                "action": "weixinPay",
+                                "payType": "JSAPI",
+                                "orderID": orderID
+                            };
+                            data = angular.toJson(data,true);
+                            $http.post(backendUrl('roomorder', '', 'server'), data)
+                            .success(function(data, status, headers, config){
+                                 if (data.rescode == '200') {
+                                    self.wxPay(data.JS_Pay_API, data.orderNum);
+                                 } else {
+                                     alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                                 }
+                            })
+                            .error(function(data, status, headers, config) {
+                                alert($filter('translate')('serverError') + status);
+                            })
+                    }})
                     .error(function(data, status, headers, config) {
                         alert($filter('translate')('serverError') + status);
                     })
@@ -1099,10 +1126,55 @@
                 // 发送请求之前，遮罩层
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool)
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "action": "roomOrderList"
+                };
+                data = JSON.stringify(data);
                 $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
-                       url: backendUrl('member', 'orderList')
+                       url: backendUrl('roomorder', 'roomOrderList')
+                   }).then(function successCallback(data, status, headers, config) {
+                       console.log(data)
+                       self.orderLists = data.data.data;
+                       self.orderListNum = data.data.data.orderNum;
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool)
+                   }, function errorCallback(data, status, headers, config) {
+                       self.showLoadingBool.searchBool = true;
+                       loadingService(self.showLoadingBool);
+                   }); 
+                },500)
+                
+            }
+
+        }
+    ])
+
+    .controller('shopOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
+            console.log('shopOrderListController')
+            var self = this;
+
+            self.init = function() {
+
+                // 注册微信分享朋友和朋友圈
+                $scope.root.wxShare();
+
+                // 遮罩层 bool
+                self.showLoadingBool = {};
+                
+                // self.search();
+            }
+            self.search = function() {
+                // 发送请求之前，遮罩层
+                self.showLoadingBool.searchBool = false;
+                loadingService(self.showLoadingBool)
+                $timeout(function(){
+                   $http({
+                       method: $filter('ajaxMethod')(),
+                       url: backendUrl('member', 'roomOrderList')
                    }).then(function successCallback(data, status, headers, config) {
                        console.log(data)
                        self.orderLists = data.data.data.orderLists;
@@ -1127,8 +1199,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $timeout, $stateParams, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', '$state', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $timeout, $stateParams, $state, loadingService, backendUrl) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1145,6 +1217,12 @@
                 self.productList = [];
                 //
             }
+
+            self.gotoShopDetail = function() {
+                angular.element(window).off('scroll'); 
+                $state.go('shopProductDetail');
+            }
+
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
                 $http({
@@ -1205,7 +1283,7 @@
                             self.productList = self.productList.concat(data.data.data.productList);
                             self.productList.length = self.productList.length;
                             self.productTotal = data.data.data.productTotal;
-                            console.log(self.productList)
+                            console.log(self.productList + new Date())
                             self.showLoadingIcon = false;
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingIcon = false;
