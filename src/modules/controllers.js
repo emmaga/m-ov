@@ -1091,11 +1091,19 @@
                     url: backendUrl('member', 'memberInfo'),
                     data: data
                 }).then(function successCallback(data, status, headers, config) {
-
-                    loadingService(self.showLoadingBool);
+                    if(data.data.rescode != '200') {
+                        alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
+                    }else {
+                        alert('修改成功');
+                        $state.reload();
+                    }
+                    
                 }, function errorCallback(data, status, headers, config) {
 
-                });
+                })
+                .finally(function(value){
+                  loadingService(self.showLoadingBool);
+                })
             }
 
 
