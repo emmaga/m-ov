@@ -160,7 +160,7 @@
         }
       })
       .state('shopOrderInfo', {
-        url: '/shopOrderInfo',
+        url: '/shopOrderInfo?orderId',
         views: {
           '': {
             templateUrl: 'pages/shopOrderInfo.html'

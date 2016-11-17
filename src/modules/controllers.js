@@ -1216,11 +1216,11 @@
                 },500)
                 
             }
-            self.nextState = function(id,type){
+            self.nextState = function(id){
                 if (type == "Room") {
-                     $state.go('bookOrderInfo')
+                     $state.go('bookOrderInfo', {orderId: id})
                 } else {
-                     $state.go('shopOrderInfo')
+                     $state.go('shopOrderInfo', {orderId: id})
                 }
             }
         }
@@ -1532,7 +1532,8 @@
           // 初始化
           self.hotelId = $stateParams.hotelId;
           self.hotelName = $stateParams.hotelName;
-          self.postage = 1000; //邮费 todo
+          // self.postage = 1000; //邮费 todo
+          self.postage = 1;
           $scope.shopCartList = new Array();
 
           //watch shopCartList
@@ -1700,8 +1701,120 @@
           });
         }
 
+        // 提交订单
         self.submitOrder = function() {
-            $state.go('shopOrderInfo');
+            
+
+
+            //开始生成订单
+            $ionicLoading.show({
+               template: '订单生成中...'
+            });
+            // 支付按钮变为不可点击，防止多次点击
+            document.getElementById('payBtn').disabled = true;
+            
+            var goodsList = new Array();
+            var l = $scope.shopCartList;
+            for (var i = 0; i < l.length; i++) {
+                if (goodsList[i].checked) {
+                    goodsList[i].shopCartItemID = l[i].shopCartItemID;
+                    goodsList[i].shopGoodsID = l[i].productID;
+                    goodsList[i].goodsCount = l[i].count;
+                }
+            }
+            var deliverWay = l.hasEX ? 'express' : 'bySelf';
+            var data = {
+                "clear_session": $scope.root.getParams('clear_session'),
+                "appid": $scope.root.getParams('appid'),
+                "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "hotelId": self.hotelId,
+                "goodsList": goodsList,
+                "delivery":{
+                    "deliverWay": deliverWay,
+                    "contactName": self.address.name,
+                    "mobile": self.address.mobile,
+                    "address": self.address.address
+                }
+            }
+            data= JSON.stringify(data);
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shoporder', 'memberAddress'),
+              data: data
+            })
+            .then(function successCallback(data, status, headers, config) {
+              //订单生成成功
+              if(data.data.rescode == '200') {
+                // 支付
+                self.pay(data.data.data.orderNum);
+              }
+              //订单生成失败
+              else {
+                  alert('订单生成失败，' + data.data.rescode + data.data.errInfo);
+              }
+            })
+            //订单生成结束
+            .finally(function(value){
+              $ionicLoading.hide();
+              // 支付按钮变为可点击
+              document.getElementById('payBtn').disabled = false;
+            });
+        }
+
+        // 支付
+        self.pay = function(orderId) {
+            self.orderId = orderId;
+            //获取支付参数
+            $ionicLoading.show({
+               template: '等待支付...'
+            });
+            var data = {
+                "clear_session": $scope.root.getParams('clear_session'),
+                "appid": $scope.root.getParams('appid'),
+                "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "hotelId": self.hotelId,
+                "orderID": orderId,
+                "payType": "JSAPI"
+            }
+            data = JSON.stringify(data);
+
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shoporder', 'memberAddress'),
+              data: data
+            })
+            .then(function successCallback(data, status, headers, config) {
+              if(data.data.rescode == '200') {
+                var wxP = data.data.data.JS_Pay_API;
+                wx.chooseWXPay({
+                    timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                    nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
+                    package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                    signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                    paySign: wxP.paySign, // 支付签名
+                    success: function(res) {
+                        // 支付后跳转到订单详情页面
+                        $state.go('shopOrderInfo', { orderId: self.orderId }); 
+                    },
+                    cancel: function() {
+                        $state.go('shopOrderInfo', { orderId: self.orderId }); 
+                    },
+                    error: function(e) {
+                        $state.go('shopOrderInfo', { orderId: self.orderId }); 
+                    }
+                });
+              }
+              else {
+                  alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+              }
+            })
+            .finally(function(value){
+              $ionicLoading.hide();
+            });
+
+            
         }
         
       }
@@ -1717,6 +1830,8 @@
             self.init = function() {
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
+
+                self.orderId = $stateParams.orderId;
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
                 self.showCancelBtn = false;
@@ -1730,6 +1845,8 @@
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                 $timeout(function() {
+
+                    var data = {orderId: self.orderId}
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('product', 'shopOrderInfo')

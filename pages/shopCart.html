@@ -4,10 +4,10 @@
 
         <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)">
             
-            <div class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;">
+            <button id="payBtn" class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;">
                 支付
                 <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
-            </div>
+            </button>
             <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                 总价:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
                 <small ng-if="shopCartList.hasEx">
