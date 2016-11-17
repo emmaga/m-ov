@@ -55,8 +55,8 @@
         </div>
     </div>
     <div class="item item-divider">
-        <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="">{{'payNow'|translate}}</button>
-        <a id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-positive">取消订单</a>
+        <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
+        <button ng-click="shopOrderInfo.canelOrder" id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-positive">取消订单</button>
         <a class="button button-block button-positive" ui-sref="shopHome">继续购物</a>
     </div>
 </div>
