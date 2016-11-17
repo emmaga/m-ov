@@ -9,7 +9,7 @@
     <div class=" padding">
         <!-- doodle/海报 -->
         
-        <iframe class="mod-doodle" ng-src="{{root.params.projectInfo.projectImgSrc}}"> </iframe>
+        <iframe class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}"> </iframe>
         
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
@@ -36,7 +36,7 @@
             <div class="item mod-no-border">
                 <p>
                     <i class="icon ion-ios-location"></i>
-                    {{hotel.Address['zh-CN']}}
+                    {{hotel.Address}}
                 </p>
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.LogoURL}});"></div>
             </div>
@@ -44,7 +44,7 @@
                 <h2 class="mod-member-price">￥{{hotel.lowestPrice}}{{'minPrice'|translate}}</h2>
                 <p class="mod-price-tag mod-member0">微信会员价</p>
                 <br>
-                <p class="mod-display-inlineblock">{{hotel.Name['zh-CN']}}</p>
+                <p class="mod-display-inlineblock">{{hotel.Name}}</p>
                 <!-- <span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span> -->
             </div>
             <div class="mod-split-line mod-15shorter"></div>

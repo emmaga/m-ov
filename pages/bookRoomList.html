@@ -1,6 +1,6 @@
 <div ng-controller="bookRoomListController as brl" ng-init="brl.init()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">{{brl.hotel.hotelName}}</h1>
+        <h1 class="title">{{brl.hotel.Name}}</h1>
         <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
     </div>
     <!-- 内容 -->
@@ -45,7 +45,7 @@
         <div class="list mod-inset-forms">
 
 
-            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.Refund)">
+            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.LogoImgURL}});"></div>
                 <span class="item-note">
 
@@ -70,7 +70,7 @@
                 </p>
             </a>
         </div>
-        <p ng-show="brl.showLoadingBool.searchRoomListBool ==true && brl.rooms.roomNum == 0">很抱歉，您选择的酒店暂无结果</p>
+        <p ng-show="brl.showLoadingBool.searchRoomListBool ==true && brl.rooms.length == 0">很抱歉，您选择的酒店暂无结果</p>
         <!-- date picker start-->
         <div class="ab-container" ng-show="brl.datePickerShow">
             <div class="bar bar-header">

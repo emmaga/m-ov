@@ -266,8 +266,9 @@
     .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$state', '$stateParams', '$translate', '$ionicModal','loadingService', 'backendUrl', 'util',
         function($scope, $filter, $timeout, $location, $http, $state, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
+            console.log('$stateParams'+$stateParams);
+            console.log('$scope.root.params'+$scope.root.params);
             var self = this;
-
             self.beforeInit = function() {
                 if($scope.root._readystate) {
                     self.init();
@@ -429,13 +430,12 @@
             console.log($stateParams)
             var self = this;
             self.init = function() {
-
+                
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
                 self.hotelId = $stateParams.hotelId;
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
-                console.log($stateParams.ID)
                 // 酒店天数
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
 
@@ -453,8 +453,8 @@
                 wx.openLocation({
                     latitude: self.hotel.LocationX, // 纬度，浮点数，范围为90 ~ -90
                     longitude: self.hotel.LocationY, // 经度，浮点数，范围为180 ~ -180。
-                    name: self.hotel.Name['zh-CN'], // 位置名
-                    address: self.hotel.Address['zh-CN'], // 地址详情说明
+                    name: self.hotel.Name, // 位置名
+                    address: self.hotel.Address, // 地址详情说明
                     scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为最大
                     infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                 });
@@ -471,11 +471,15 @@
                 $timeout(function() { self.showDP(false); }, 500);
             };
             // 可以预订 才跳转
-            self.nextState = function(roomId, checkIn, checkOut, roomRemain) {
-                    if (!(roomRemain == 0)) {
-                        $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut })
-                    }
-
+            self.nextState = function(roomId, checkIn, checkOut, AvailableNumList) {
+                    var flag = true;
+                    AvailableNumList.forEach(function(value,index,array){
+                        if(array[index]['availableNum'] <= 0){
+                            flag = false;
+                            return flag;
+                        } 
+                    })
+                    flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut })
             };
 
             // 住酒店 天数
@@ -486,7 +490,9 @@
                 var data = {
                     "clear_session":$scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId -0
+                    // 假数据
+                    // "hotelId": self.hotelId -0
+                    "hotelId": 1
                 };
                 data = JSON.stringify(data);
                 
@@ -534,11 +540,8 @@
                 }).then(function successCallback(data, status, headers, config) {
                     console.log(data)
                     self.rooms = data.data.data;
-                    console.log(self.rooms)
                     // ionic silder update
                     $ionicSlideBoxDelegate.update();
-
-                    console.log(self.rooms)
                     self.showLoadingBool.searchRoomListBool = true;
                     loadingService(self.showLoadingBool);
                 }, function errorCallback(data, status, headers, config) {
@@ -627,7 +630,6 @@
                 self.roomNumber = 1;
                 // params 会员信息
                 
-                // self.memberInfo.mobile = self.memberInfo.mobile - 0;
 
                 // 防止点透
                 // 将input点击变成可点的状态
@@ -903,7 +905,7 @@
 
     .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
         function($scope, $http, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl, util) {
-            console.log("bookInfoController")
+            console.log("bookOrderInfoController")
             var self = this;
             console.log($stateParams)
             self.init = function() {
@@ -915,7 +917,7 @@
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-
+                
                 self.search();
             }
             self.search = function() {
@@ -1256,6 +1258,17 @@
 
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
+                var data = {
+                    "action": "getShoppingCart",
+                    "clear_session":$scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    // 假数据
+                    // "hotelId": self.hotelId-0
+                    
+                };
+                data = JSON.stringify(data);
                 $http({
                   method: $filter('ajaxMethod')(),
                   url: backendUrl('shopCart', 'shopCartList')
@@ -1419,7 +1432,7 @@
                 // 获取购物车商品数量
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart', 'shopCartList')
+                  url: backendUrl('shopinfo', 'shopCartList')
                 })
                 .then(function successCallback(data, status, headers, config) {
                   var shopCartList = data.data.data.list;
