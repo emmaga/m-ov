@@ -144,7 +144,7 @@
         }
       })
       .state('shopProductDetail', {
-        url: '/shopProductDetail',
+        url: '/shopProductDetail/?hotelId&productId&hotelName',
         views: {
           '': {
             templateUrl: 'pages/shopProductDetail.html'
@@ -152,7 +152,8 @@
         }
       })
       .state('shopCart', {
-        url: '/shopCart/?hotelId',
+
+        url: '/shopCart/?hotelId&hotelName',
         views: {
           '': {
             templateUrl: 'pages/shopCart.html'
@@ -160,7 +161,7 @@
         }
       })
       .state('shopOrderInfo', {
-        url: '/shopOrderInfo',
+        url: '/shopOrderInfo?orderId',
         views: {
           '': {
             templateUrl: 'pages/shopOrderInfo.html'
@@ -183,7 +184,7 @@
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
     testUrl       : 'api/',
     testExtesion  : '.json',
-    test          : false,
-    mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
+    test          : true//,
+    //mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
   })
 })();

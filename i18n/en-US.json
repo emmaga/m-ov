@@ -20,5 +20,19 @@
   "Thursday": "Th",
   "Tuesday": "Tu",
 
-  "Wednesday": "We"
+  "Wednesday": "We",
+
+
+
+
+  "WAITPAY" : "WAITPAY",
+  "WAITAPPROVAL": "WAITAPPROVAL",
+  "ACCEPT": "ACCEPT",
+  "DELIVERING": "DELIVERING",
+  "COMPLETED": "COMPLETED",
+  "CANCEL_REFUNDING": "CANCEL_REFUNDING",
+  "SELLER_CANCEL_REFUNDING": "SELLER_CANCEL_REFUNDING",
+  "CANCELED": "CANCELED",
+  "express": "express",
+  "bySelf": "bySelf"
 }

@@ -66,7 +66,17 @@
   "Thursday": "四",
   "Tuesday": "二",
 
-  "Wednesday": "三"
+  "Wednesday": "三",
 
+  "WAITPAY" : "待付款",
+  "WAITAPPROVAL": "审核中",
+  "ACCEPT": "订单接收",
+  "DELIVERING": "订单配送",
+  "COMPLETED": "订单完成",
+  "CANCEL_REFUNDING": "订单取消退款中",
+  "SELLER_CANCEL_REFUNDING": "订单商家取消退款中",
+  "CANCELED": "订单取消",
+  "express": "快递",
+  "bySelf": "自提"
 
 }

@@ -10,6 +10,11 @@
             self.init = function() {
                 self.wxBrowserHack();
 
+                if(BACKEND_CONFIG.test == true) {
+                    // 标志已经拿到clearsession和wx初始化
+                    self._readystate = true;
+                }
+
                 // root全局变量：
                 self.params = {};
                 // self.params.appid
@@ -1088,11 +1093,19 @@
                     url: backendUrl('member', 'memberInfo'),
                     data: data
                 }).then(function successCallback(data, status, headers, config) {
-
-                    loadingService(self.showLoadingBool);
+                    if(data.data.rescode != '200') {
+                        alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
+                    }else {
+                        alert('修改成功');
+                        $state.reload();
+                    }
+                    
                 }, function errorCallback(data, status, headers, config) {
 
-                });
+                })
+                .finally(function(value){
+                  loadingService(self.showLoadingBool);
+                })
             }
 
 
@@ -1190,7 +1203,7 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 
-                // self.search();
+                self.search();
             }
             self.search = function() {
                 // 发送请求之前，遮罩层
@@ -1199,27 +1212,22 @@
                 $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
-                       url: backendUrl('member', 'roomOrderList')
+                       url: backendUrl('member', 'shopOrderList')
                    }).then(function successCallback(data, status, headers, config) {
-                       console.log(data)
-                       self.orderLists = data.data.data.orderLists;
+                       self.orderLists = data.data.data;
+                       console.log(data.data.data)
                        self.orderListNum = data.data.data.orderNum;
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool)
                    }, function errorCallback(data, status, headers, config) {
-
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
                    }); 
                 },500)
                 
             }
-            self.nextState = function(id,type){
-                if (type == "Room") {
-                     $state.go('bookOrderInfo')
-                } else {
-                     $state.go('shopOrderInfo')
-                }
+            self.nextState = function(id){
+                $state.go('shopOrderInfo', {orderId: id})
             }
         }
     ])
@@ -1230,12 +1238,23 @@
             console.log('shopHomeController')
             var self = this;
 
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
+            
             self.init = function() {
                 self.showLoadingBool = {};
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
                 
-                self.loadShopCartInfo();
+                self.getHotelLists();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
                 // 商品数组
@@ -1246,41 +1265,37 @@
                 self.page = 0;
             }
 
-            self.gotoShopDetail = function() {
+            self.gotoShopDetail = function(productId) {
                 angular.element(window).off('scroll'); 
-                $state.go('shopProductDetail');
+                $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId, hotelName:self.hotelName });
             }
 
             self.gotoShopCart = function() {
                 angular.element(window).off('scroll'); 
-                $state.go('shopCart');
+                $state.go('shopCart', {hotelId: self.hotelId, hotelName:self.hotelName});
             }
 
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
                 var data = {
                     "action": "getShoppingCart",
-                    "clear_session":$scope.root.getParams('clear_session'),
-                    "lang": $translate.proposedLanguage() || $translate.use(),
+
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
-                    // 假数据
-                    // "hotelId": self.hotelId-0
-                    
-                };
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                }
                 data = JSON.stringify(data);
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart', 'shopCartList')
+                  url: backendUrl('shopinfo', 'shopCartList'),
+                  data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
                   var shopCartList = data.data.data.list;
                   self.shopCartItemCount = 0;
                   shopCartList.forEach(function(value) {self.shopCartItemCount += value.count});
-                  // go on
-                  // 先搜索酒店列表，根据酒店列表的第一个酒店id查找该酒店的分类
-                  self.getHotelLists();
-                  
                 })
             }
 
@@ -1294,6 +1309,7 @@
                   self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
                   self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
                   self.searchCategory();
+                  self.loadShopCartInfo();
                 })
             }
 
@@ -1314,7 +1330,8 @@
                 }).then(function successCallback(data, status, headers, config) {
                     self.categoryList = data.data.data.categoryList;
                     // 默认加载第一个分类
-                    self.searchProductList(self.categoryList["0"]["id"],true)
+                    self.searchProductList(self.categoryList["0"]["id"],true);
+                    
                 }, function errorCallback(data, status, headers, config) {
 
                 });
@@ -1388,13 +1405,16 @@
         }
     ])
 
-    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl',
-        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $ionicSlideBoxDelegate, loadingService, backendUrl) {
+    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$translate', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl',
+        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $translate, $ionicSlideBoxDelegate, loadingService, backendUrl) {
 
             console.log('shopProductDetailController')
             var self = this;
 
             self.init = function() {
+                self.hotelId = $stateParams.hotelId;
+                self.hotelName = $stateParams.hotelName;
+                self.productId = $stateParams.productId;
                 self.showLoadingBool = {};
                 self.buying = false;
 
@@ -1403,15 +1423,30 @@
                 self.search();
             }
 
+            self.gotoShopCart = function() {
+                $state.go('shopCart', {hotelId: self.hotelId, hotelName: self.hotelName});
+            }
+
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-                $timeout(function() {
+                //$timeout(function() {
+                    var data = {
+                        "action": "getProductDetail",
+                        "appid": $scope.root.getParams('appid'),
+                        "clear_session": "xxxx",
+                        "openid": $scope.root.getParams('openid'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "hotelId": self.hotelId,
+                        "productId":self.productId
+                    }
+                    data = JSON.stringify(data);
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('product', 'productDetail')
+                        url: backendUrl('shopinfo', 'productDetail'),
+                        data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        console.log(data)
+                        
                         self.product = data.data.data.product;
                         // ionic silder update
                         $ionicSlideBoxDelegate.update();
@@ -1424,15 +1459,26 @@
                         loadingService(self.showLoadingBool)
                         
                     });
-                }, 500)
+                //}, 500)
 
             }
 
             self.loadShopCartInfo = function() {
                 // 获取购物车商品数量
+                var data = {
+                    "action": "getShoppingCart",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId
+                }
+                data = JSON.stringify(data);
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopinfo', 'shopCartList')
+
+                  url: backendUrl('shopinfo', 'shopCartList'),
+                  data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
                   var shopCartList = data.data.data.list;
@@ -1443,9 +1489,21 @@
             }
 
             self.addToCart = function(callBack) {
+                var data = {
+                    "action": "getShoppingCart",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId,
+                    "productId":self.productId
+                }
+                data = JSON.stringify(data);
+
                 $http({
                   method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopCart', 'shopCartList')
+                  url: backendUrl('shopinfo', 'shopCartList'),
+                  data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
                   if(callBack){
@@ -1463,15 +1521,15 @@
             self.buy = function() {
                 self.buying = true;
                 self.addToCart(function() {
-                    $state.go('shopCart');
+                    self.gotoShopCart();
                 });
 
             }
         }
     ])
 
-    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$ionicLoading', 'backendUrl',
-      function($http, $scope, $filter, $state, $ionicLoading, backendUrl) {
+    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', 'backendUrl',
+      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, backendUrl) {
         console.log('shopCartController')
         var self = this;
         
@@ -1480,7 +1538,10 @@
           $scope.root.wxShare();
 
           // 初始化
-          self.postage = 1000; //邮费 todo
+          self.hotelId = $stateParams.hotelId;
+          self.hotelName = $stateParams.hotelName;
+          // self.postage = 1000; //邮费 todo
+          self.postage = 1;
           $scope.shopCartList = new Array();
 
           //watch shopCartList
@@ -1515,17 +1576,81 @@
           var item = $scope.shopCartList[index];
           if(item.count < item.availableCount){
             item.count += 1;
+            self.updateProductCount(index);
           }
-        }
-
-        self.delete = function(index) {
-          $scope.shopCartList.splice(index, 1);
         }
 
         self.minusOne = function(index) {
           if($scope.shopCartList[index].count >= 2){
             $scope.shopCartList[index].count -= 1;
+            self.updateProductCount(index);
           }
+        }
+
+        self.updateProductCount = function(index) {
+            var data = {
+                "action": "updateShoppingCart",
+                "clear_session": $scope.root.getParams('clear_session'),
+                "appid": $scope.root.getParams('appid'),
+                "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "hotelId": self.hotelId,
+                "shoppingCartItems":[
+                    {
+                        "shoppingCartID":$scope.shopCartList[index].shopCartItemID,
+                        "count":$scope.shopCartList[index].count
+                    }
+                ]
+            }
+            data = JSON.stringify(data);
+
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shopinfo', 'shopCartList'),
+              data: data
+            })
+            .then(
+              function successCallback(data, status, headers, config) {
+                if(data.data.rescode != '200') {
+                    alert(errInfo);
+                }
+              },
+              function errorCallback(data, status, headers, config) {
+
+              }
+            )
+        }
+
+        self.delete = function(index) {
+          $scope.shopCartList.splice(index, 1);
+          var data = {
+              "action": "deleteShoppingCart",
+              "clear_session": $scope.root.getParams('clear_session'),
+              "appid": $scope.root.getParams('appid'),
+              "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+              "lang": $translate.proposedLanguage() || $translate.use(),
+              "hotelId": self.hotelId,
+              "shoppingCartIDs":[
+                $scope.shopCartList[index].shopCartItemID
+              ]
+          }
+          data = JSON.stringify(data);
+
+          $http({
+            method: $filter('ajaxMethod')(),
+            url: backendUrl('shopinfo', 'shopCartList'),
+            data: data
+          })
+          .then(
+            function successCallback(data, status, headers, config) {
+                if(data.data.rescode != '200') {
+                    alert(errInfo);
+                }
+            },
+            function errorCallback(data, status, headers, config) {
+
+            }
+          )
         }
 
         self.countTotalPrice = function() {
@@ -1584,8 +1709,120 @@
           });
         }
 
+        // 提交订单
         self.submitOrder = function() {
-            $state.go('shopOrderInfo');
+            
+
+
+            //开始生成订单
+            $ionicLoading.show({
+               template: '订单生成中...'
+            });
+            // 支付按钮变为不可点击，防止多次点击
+            document.getElementById('payBtn').disabled = true;
+            
+            var goodsList = new Array();
+            var l = $scope.shopCartList;
+            for (var i = 0; i < l.length; i++) {
+                if (goodsList[i].checked) {
+                    goodsList[i].shopCartItemID = l[i].shopCartItemID;
+                    goodsList[i].shopGoodsID = l[i].productID;
+                    goodsList[i].goodsCount = l[i].count;
+                }
+            }
+            var deliverWay = l.hasEX ? 'express' : 'bySelf';
+            var data = {
+                "clear_session": $scope.root.getParams('clear_session'),
+                "appid": $scope.root.getParams('appid'),
+                "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "hotelId": self.hotelId,
+                "goodsList": goodsList,
+                "delivery":{
+                    "deliverWay": deliverWay,
+                    "contactName": self.address.name,
+                    "mobile": self.address.mobile,
+                    "address": self.address.address
+                }
+            }
+            data= JSON.stringify(data);
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shoporder', 'memberAddress'),
+              data: data
+            })
+            .then(function successCallback(data, status, headers, config) {
+              //订单生成成功
+              if(data.data.rescode == '200') {
+                // 支付
+                self.pay(data.data.data.orderNum);
+              }
+              //订单生成失败
+              else {
+                  alert('订单生成失败，' + data.data.rescode + data.data.errInfo);
+              }
+            })
+            //订单生成结束
+            .finally(function(value){
+              $ionicLoading.hide();
+              // 支付按钮变为可点击
+              document.getElementById('payBtn').disabled = false;
+            });
+        }
+
+        // 支付
+        self.pay = function(orderId) {
+            self.orderId = orderId;
+            //获取支付参数
+            $ionicLoading.show({
+               template: '等待支付...'
+            });
+            var data = {
+                "clear_session": $scope.root.getParams('clear_session'),
+                "appid": $scope.root.getParams('appid'),
+                "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "hotelId": self.hotelId,
+                "orderID": orderId,
+                "payType": "JSAPI"
+            }
+            data = JSON.stringify(data);
+
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shoporder', 'memberAddress'),
+              data: data
+            })
+            .then(function successCallback(data, status, headers, config) {
+              if(data.data.rescode == '200') {
+                var wxP = data.data.data.JS_Pay_API;
+                wx.chooseWXPay({
+                    timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                    nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
+                    package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                    signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                    paySign: wxP.paySign, // 支付签名
+                    success: function(res) {
+                        // 支付后跳转到订单详情页面
+                        $state.go('shopOrderInfo', { orderId: self.orderId }); 
+                    },
+                    cancel: function() {
+                        $state.go('shopOrderInfo', { orderId: self.orderId }); 
+                    },
+                    error: function(e) {
+                        $state.go('shopOrderInfo', { orderId: self.orderId }); 
+                    }
+                });
+              }
+              else {
+                  alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+              }
+            })
+            .finally(function(value){
+              $ionicLoading.hide();
+            });
+
+            
         }
         
       }
@@ -1601,22 +1838,32 @@
             self.init = function() {
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
+
+                self.orderId = $stateParams.orderId;
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
+                self.showCancelBtn = false;
+                self.showPayBtn = false;
                 self.search();
             }
 
+            
 
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                 $timeout(function() {
+
+                    var data = {orderId: self.orderId}
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('product', 'shopOrderInfo')
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)
                         self.detail = data.data.data.detail;
+                        var s = self.detail.Status;
+                        self.showPayBtn = (s == 'WAITPAY');
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');
                         console.log(self.detail)
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
@@ -1626,6 +1873,106 @@
                     });
                 }, 500)
 
+            }
+
+            self.pay = function() {
+                // 等待支付
+                // 支付按钮变为不可点击，防止多次点击
+                document.getElementById('payBtn').disabled = true;
+
+
+                //获取支付参数
+                $ionicLoading.show({
+                   template: '等待支付...'
+                });
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId,
+                    "orderID": self.orderId,
+                    "payType": "JSAPI"
+                }
+                data = JSON.stringify(data);
+
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shoporder', 'memberAddress'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    var wxP = data.data.data.JS_Pay_API;
+                    wx.chooseWXPay({
+                        timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
+                        package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                        signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        paySign: wxP.paySign, // 支付签名
+                        success: function(res) {
+                            // 支付后跳转到订单详情页面
+                            $state.reload();
+                        },
+                        cancel: function() {
+                            $state.reload();
+                        },
+                        error: function(e) {
+                            $state.reload();
+                        }
+                    });
+                  }
+                  else {
+                      alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                  }
+                })
+                .finally(function(value){
+                  $ionicLoading.hide();
+                  document.getElementById('payBtn').disabled = false;
+                });
+            }
+
+            self.canelOrder = function() {
+                // 取消订单
+                // 支付按钮变为不可点击，防止多次点击
+                document.getElementById('cancelBtn').disabled = true;
+
+                $ionicLoading.show({
+                   template: '订单取消中...'
+                });
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "action": "guestCancelOrder",
+                    "orderID": self.orderId
+                }
+                data = JSON.stringify(data);
+
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shoporder', 'memberAddress'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    if(data.data.data.RefundRequestACK) {
+                        alert('订单取消成功，预计款项将于24小时内退回，请注意查收');
+                    }
+                    else {
+                        alert('订单取消成功');
+                    }
+                    
+                  }
+                  else {
+                      alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                  }
+                })
+                .finally(function(value){
+                  $ionicLoading.hide();
+                  document.getElementById('cancelBtn').disabled = false;
+                });
             }
         }
     ])

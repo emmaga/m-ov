@@ -1,4 +1,4 @@
-<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  >
+<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.beforeInit()"  >
 <!-- <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  > -->
 
 
@@ -35,7 +35,7 @@
             购买后请到前台取货，需要快递的商品可在购物车里勾选。
         </p>
 
-        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail()" >
+        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.shopGoodsId)" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
@@ -52,7 +52,7 @@
             显示更多商品
             <i class="ion-android-arrow-dropdown"></i>
         </a> -->
-        <p class="mod-note-bottomline" ng-show="shopHome.productTotal==shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
+        <p class="mod-note-bottomline" ng-show="shopHome.productTotal<=shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
             <i class="icon ion-android-happy"></i>
             没有更多了
         </p>
