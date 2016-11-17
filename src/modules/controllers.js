@@ -1217,11 +1217,7 @@
                 
             }
             self.nextState = function(id){
-                if (type == "Room") {
-                     $state.go('bookOrderInfo', {orderId: id})
-                } else {
-                     $state.go('shopOrderInfo', {orderId: id})
-                }
+                $state.go('shopOrderInfo', {orderId: id})
             }
         }
     ])
@@ -1925,7 +1921,46 @@
             }
 
             self.canelOrder = function() {
-                
+                // 取消订单
+                // 支付按钮变为不可点击，防止多次点击
+                document.getElementById('cancelBtn').disabled = true;
+
+                $ionicLoading.show({
+                   template: '订单取消中...'
+                });
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "action": "guestCancelOrder",
+                    "orderID": self.orderId
+                }
+                data = JSON.stringify(data);
+
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shoporder', 'memberAddress'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    if(data.data.data.RefundRequestACK) {
+                        alert('订单取消成功，预计款项将于24小时内退回，请注意查收');
+                    }
+                    else {
+                        alert('订单取消成功');
+                    }
+                    
+                  }
+                  else {
+                      alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                  }
+                })
+                .finally(function(value){
+                  $ionicLoading.hide();
+                  document.getElementById('cancelBtn').disabled = false;
+                });
             }
         }
     ])
