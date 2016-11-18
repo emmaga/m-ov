@@ -271,8 +271,6 @@
     .controller('bookHotelListController', ['$scope', '$filter', '$timeout', '$location', '$http', '$state', '$stateParams', '$translate', '$ionicModal','loadingService', 'backendUrl', 'util',
         function($scope, $filter, $timeout, $location, $http, $state, $stateParams, $translate, $ionicModal, loadingService, backendUrl, util) {
             console.log('bookHotelListController');
-            console.log('$stateParams'+$stateParams);
-            console.log('$scope.root.params'+$scope.root.params);
             var self = this;
             self.beforeInit = function() {
                 if($scope.root._readystate) {
@@ -623,9 +621,7 @@
                 self.hotelId = $stateParams.hotelId;
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
-                // 会员接口 还没有弄好
-                // self.searchMemberInfo();
-                self.searchRoomInfo();
+                self.searchMemberInfo();
                 // //  验证码 倒计时
                 // self.countSeconds = 30;
                 // self.showTip = true;
@@ -721,18 +717,20 @@
                 self.showLoadingBool.searchMemberInfoBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "action": "getMemberInfo",
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use()
+                    // "clear_session": "openvod_userid_9_5v2elt5z",
+                    // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
                 $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('member', 'memberInfo'),
+                        url: backendUrl('shopmember', 'memberInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        self.member = data.data.data;
+                        self.member = data.data.data.member;
                         console.log(self.member)
                         self.member.mobile -= 0;
                         self.showLoadingBool.searchMemberInfoBool = true;
@@ -836,18 +834,7 @@
                             "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
                             "totalPrice":bookTotalPri,
                             "priceList": self.priceList,
-                            "bookCount":self.roomNumber,
-                            // 假数据
-                            "priceList": [
-                                          {
-                                              "date":"2016-11-15",
-                                              "price":20000
-                                          },
-                                          {
-                                              "date":"2016-11-16",
-                                              "price":20000
-                                          }
-                                      ]
+                            "bookCount":self.roomNumber
                         }
                     ],
                     "totalPrice":bookTotalPri,
@@ -883,7 +870,7 @@
                         .error(function(data, status, headers, config) {
                             alert($filter('translate')('serverError') + status);
                         })
-                    
+
                 },500)
                
             }
@@ -1030,26 +1017,24 @@
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
-                self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool);
-                // 会员接口 没好呢
+                
                 self.search();
             }
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "action": "GetMemberInfo",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "action": "getMemberInfo",
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use()
+                    // "clear_session": "openvod_userid_9_5v2elt5z",
+                    // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
                 $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('member', 'memberInfo'),
+                        url: backendUrl('shopmember', 'memberInfo'),
                         data: data
 
                     }).then(function successCallback(data, status, headers, config) {
@@ -1066,8 +1051,8 @@
         }
     ])
 
-    .controller('memberInfoEditController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $timeout, $translate, loadingService, backendUrl) {
+    .controller('memberInfoEditController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $translate, loadingService, backendUrl) {
             console.log("memberInfoEditController");
             var self = this;
             self.memberId = $stateParams.memberId;
@@ -1079,7 +1064,7 @@
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
-
+                self.updataMemberInfoBool = false;
                 self.search();
                 // // 验证码 倒计时
                 // self.countAbility = false;
@@ -1091,17 +1076,17 @@
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "action": "GetMemberInfo",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "action": "getMemberInfo",
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use()
+                    // "clear_session": "openvod_userid_9_5v2elt5z",
+                    // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
                 $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
-                       url: backendUrl('member', 'memberInfo'),
+                       url: backendUrl('shopmember', 'memberInfo'),
                        data: data
                    }).then(function successCallback(data, status, headers, config) {
                        self.member = data.data.data.member;
@@ -1109,21 +1094,21 @@
                        self.member.idCardNumber = data.data.data.member.idCardNumber-0;
                        console.log(self.member)
                        self.showLoadingBool.searchBool = true;
-                       loadingService(self.showLoadingBool);
                    }, function errorCallback(data, status, headers, config) {
                        self.showLoadingBool.searchBool = true;
-                       loadingService(self.showLoadingBool);
-                   }); 
+                   })
+                   .finally(function(value){
+                     loadingService(self.showLoadingBool);
+                   })  ; 
                 },500)
                 
             }
             self.updataMemberInfo = function() {
+                self.updataMemberInfoBool = true
                 console.log('updataMemberInfo')
                 var data = {
                     "action": "modifyMemberInfo",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "memberInfo": {
                         "realName": self.member.realName,
@@ -1132,25 +1117,28 @@
                     }
                 };
                 data = JSON.stringify(data);
+                $timeout(function(){
+                  $http({
+                      method: $filter('ajaxMethod')(),
+                      url: backendUrl('shopmember', 'memberInfo'),
+                      data: data
+                  }).then(function successCallback(data, status, headers, config) {
+                      if(data.data.rescode != '200') {
+                          alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
+                      }else {
+                          alert('修改成功');
+                          $state.reload();
+                      }
+                      
+                  }, function errorCallback(data, status, headers, config) {
 
-                $http({
-                    method: $filter('ajaxMethod')(),
-                    url: backendUrl('member', 'memberInfo'),
-                    data: data
-                }).then(function successCallback(data, status, headers, config) {
-                    if(data.data.rescode != '200') {
-                        alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
-                    }else {
-                        alert('修改成功');
-                        $state.reload();
-                    }
-                    
-                }, function errorCallback(data, status, headers, config) {
-
-                })
-                .finally(function(value){
-                  loadingService(self.showLoadingBool);
-                })
+                  })
+                  .finally(function(value){
+                    loadingService(self.showLoadingBool);
+                    self.updataMemberInfoBool = false;
+                  })  
+                },2000)
+                
             }
 
 
@@ -1326,7 +1314,7 @@
             }
 
             self.gotoShopCart = function() {
-                angular.element(window).off('scroll'); 
+                // angular.element(window).off('scroll'); 
                 $state.go('shopCart', {hotelId: self.hotelId, hotelName:self.hotelName});
             }
 
@@ -1434,7 +1422,7 @@
                             self.productList = self.productList.concat(data.data.data.productList);
                             self.productList.length = self.productList.length;
                             self.productTotal = data.data.data.productTotal;
-                            console.log(self.productList + new Date())
+                            console.log(self.productList + new Date().getTime())
                             self.showLoadingIcon = false;
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingIcon = false;

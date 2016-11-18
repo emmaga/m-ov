@@ -184,7 +184,7 @@
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
     testUrl       : 'api/',
     testExtesion  : '.json',
-    test          : true//,
+    test          : false//,
     //mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
   })
 })();

@@ -20,7 +20,7 @@
           <span class="input-label" ng-model="mie.authCode">验证码</span>
           <input type="number">
         </label> -->
-            <input type="submit" class="button button-block button-positive mod-margin-top-20"  value="保存" ng-disabled="editMemberInfo.$invalid "/>
+            <input type="submit" class="button button-block button-positive mod-margin-top-20"  value="保存" ng-disabled="editMemberInfo.$invalid || mie.updataMemberInfoBool"/>
           
             <!-- <button class="button button-block button-positive mod-margin-top-20" ng-click="mie.updataMemberInfo()">保存</button> -->
         </form>
