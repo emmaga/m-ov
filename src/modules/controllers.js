@@ -1528,8 +1528,8 @@
         }
     ])
 
-    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', 'backendUrl',
-      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, backendUrl) {
+    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl',
+      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl) {
         console.log('shopCartController')
         var self = this;
         
@@ -1722,12 +1722,15 @@
             document.getElementById('payBtn').disabled = true;
             
             var goodsList = new Array();
+            var goodsList_n = 0;
             var l = $scope.shopCartList;
             for (var i = 0; i < l.length; i++) {
-                if (goodsList[i].checked) {
-                    goodsList[i].shopCartItemID = l[i].shopCartItemID;
-                    goodsList[i].shopGoodsID = l[i].productID;
-                    goodsList[i].goodsCount = l[i].count;
+                if (l[i].checked) {
+                    goodsList[goodsList_n] = {};
+                    goodsList[goodsList_n].shopCartItemID = l[i].shopCartItemID;
+                    goodsList[goodsList_n].shopGoodsID = l[i].productID;
+                    goodsList[goodsList_n].goodsCount = l[i].count;
+                    goodsList_n++;
                 }
             }
             var deliverWay = l.hasEX ? 'express' : 'bySelf';
@@ -1829,8 +1832,8 @@
     ])
 
 
-    .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$stateParams', '$timeout', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $stateParams, $timeout, loadingService, backendUrl) {
+    .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl) {
             console.log('shopOrderInfoController')    
     
             var self = this;
@@ -1904,7 +1907,7 @@
                 .then(function successCallback(data, status, headers, config) {
                   if(data.data.rescode == '200') {
                     var wxP = data.data.data.JS_Pay_API;
-                    wx.chooseWXPay({
+                    wx&&wx.chooseWXPay({
                         timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
                         package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
@@ -1963,7 +1966,7 @@
                     else {
                         alert('订单取消成功');
                     }
-                    
+                    $state.reload();
                   }
                   else {
                       alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
