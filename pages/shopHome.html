@@ -35,12 +35,12 @@
             购买后请到前台取货，需要快递的商品可在购物车里勾选。
         </p>
 
-        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.shopGoodsId)" >
+        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <p class="item-note">库存：{{product.availableCount}}</p>
+                <p class="item-note">库存：{{product.invetory}}</p>
                 <h2>{{product.name}}</h2>
                 <p>{{product.intro}}</p>
                 <h2 class="mod-member-price assertive">￥{{product.price}}</h2>

@@ -11,9 +11,9 @@
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <div class="item">
-            <p class="item-note">库存{{sp.product.availableCount}}</p>
+            <p class="item-note">库存{{sp.product.invetory}}</p>
             <h2>{{sp.product.name}}</h2>
-            <h2 class="mod-member-price assertive">{{sp.product.price}}</h2>
+            <h2 class="mod-member-price assertive">{{sp.product.price | fenToYuan}}</h2>
         </div>
         <div class="padding">
             <p>{{sp.product.intro}}</p>
