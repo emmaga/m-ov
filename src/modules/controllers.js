@@ -612,11 +612,11 @@
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
-                self.showLoadingBool.searchRoomInfoBool = false;
-                // self.showLoadingBool.searchMemberInfoBool = false;
-                self.showLoadingBool.searchHotelInfoBool = false;
+                // self.showLoadingBool.searchRoomInfoBool = false;
+                // // self.showLoadingBool.searchMemberInfoBool = false;
+                // self.showLoadingBool.searchHotelInfoBool = false;
 
-
+                self.submitOrderBool = false;
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
                 self.roomId = $stateParams.roomId;
@@ -661,11 +661,10 @@
                             url: backendUrl('roominfo', 'roomInfo'),
                             data: data
                         }).then(function successCallback(data, status, headers, config) {
-                            self.searchHotelInfo();
                             console.log(data)
+                            self.searchHotelInfo();
                             self.room = data.data.data;
-                            // ionic silder update
-                            $ionicSlideBoxDelegate.update();
+                            
                             
                             self.priceList = self.room.PriceInfo.PriceList;
                              // 单价
@@ -675,6 +674,8 @@
                             
                             self.showLoadingBool.searchRoomInfoBool = true;
                             loadingService(self.showLoadingBool);
+                            // ionic silder update
+                            $ionicSlideBoxDelegate.update();
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingBool.searchRoomInfoBool = true;
                             loadingService(self.showLoadingBool);
@@ -708,7 +709,6 @@
                         // 酒店 地图 
                         // self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
                         loadingService(self.showLoadingBool);
-                        console.log("searchHotelInfoBool")
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
@@ -824,6 +824,7 @@
             //     });
             // }
             self.newOrder = function() {
+                self.submitOrderBool = true;
                 var bookTotalPri = self.roomPriPerDay*self.roomNumber
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -855,32 +856,36 @@
                      
                 };
                 data = angular.toJson(data,true);
-                $http.post(backendUrl('roomorder', '', 'server'), data)
-                    .success(function(data, status, headers, config) {
-                        if (data.rescode == '200') {
-                            var orderID = data.data.orderID;
-                            var data = {
-                                "clear_session": $scope.root.getParams('clear_session'),
-                                "action": "weixinPay",
-                                "payType": "JSAPI",
-                                "orderID": orderID
-                            };
-                            data = angular.toJson(data,true);
-                            $http.post(backendUrl('roomorder', '', 'server'), data)
-                            .success(function(data, status, headers, config){
-                                 if (data.rescode == '200') {
-                                    self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
-                                 } else {
-                                     alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
-                                 }
-                            })
-                            .error(function(data, status, headers, config) {
-                                alert($filter('translate')('serverError') + status);
-                            })
-                    }})
-                    .error(function(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + status);
-                    })
+                $timeout(function(){
+                    $http.post(backendUrl('roomorder', '', 'server'), data)
+                        .success(function(data, status, headers, config) {
+                            if (data.rescode == '200') {
+                                var orderID = data.data.orderID;
+                                var data = {
+                                    "clear_session": $scope.root.getParams('clear_session'),
+                                    "action": "weixinPay",
+                                    "payType": "JSAPI",
+                                    "orderID": orderID
+                                };
+                                data = angular.toJson(data,true);
+                                $http.post(backendUrl('roomorder', '', 'server'), data)
+                                .success(function(data, status, headers, config){
+                                     if (data.rescode == '200') {
+                                        self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
+                                     } else {
+                                         alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                                     }
+                                })
+                                .error(function(data, status, headers, config) {
+                                    alert($filter('translate')('serverError') + status);
+                                })
+                        }})
+                        .error(function(data, status, headers, config) {
+                            alert($filter('translate')('serverError') + status);
+                        })
+                    
+                },500)
+               
             }
 
             self.wxPay = function(JS_Pay_API, orderId) {
@@ -982,7 +987,7 @@
                 $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('roomorder', 'orderInfo','server'),
+                        url: backendUrl('roomorder', 'orderInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)

@@ -1,101 +1,86 @@
 {
-
-    "data": {
-
-        "Refund": 1,
-
-        "PriceMonday": 20000,
-
-        "Addr": {
-
-            "zh-CN": "2楼"
-
-        },
-
-        "LogoImgSize": 22,
-
-        "LogoImgURL": "2.jpg",
-
-        "PriceThursday": 20000,
-
-        "PriceWednesday": 20000,
-
-        "RoomTypeName": {
-
-            "zh-CN": "标准间"
-
-        },
-
-        "Gallery": [
-
-            {
-
-                "ImageURL": "api/img/room1.jpg",
-
-                "ImageSize": 22,
-
-                "Seq": 1
-
-            },
-
-            {
-
-                "ImageURL": "api/img/room1.jpg",
-
-                "ImageSize": 23,
-
-                "Seq": 2
-
-            }
-
-        ],
-
-        "Reschedule": 0,
-
-        "Features": [
-
-            {
-
-                "ImageURL": "window.jpg",
-
-                "Name": "window"
-
-            },
-
-            {
-
-                "ImageURL": "breakfast.jpg",
-
-                "Name": "breakfast"
-
-            }
-
-        ],
-
-        "PriceTuesday": 20000,
-
-        "PriceNormal": 20000,
-
-        "PriceSunday": 20000,
-
-        "PriceList": [],
-
-        "PriceFriday": 20000,
-
-        "ID": 1,
-
-        "PriceSaturday": 20000,
-
-        "Description": {
-
-            "zh-CN": "详细的不想说"
-
-        }
-
-    },
-
-    "rescode": "200",
-
-    "errInfo": "None"
-
+  "data": {
+      "Refund": 1,
+      "Addr": "2楼",
+      "LogoImgSize": 22,
+      "LogoImgURL": "2.jpg",
+      "AvailableNumList": [
+          {
+              "date": "2016-11-15",
+              "availableNum": 10
+          },
+          {
+              "date": "2016-11-16",
+              "availableNum": 10
+          },
+          {
+              "date": "2016-11-17",
+              "availableNum": 10
+          },
+          {
+              "date": "2016-11-18",
+              "availableNum": 5
+          },
+          {
+              "date": "2016-11-19",
+              "availableNum": 10
+          }
+      ],
+      "RoomTypeName": "标准间",
+      "Gallery": [
+          {
+              "ImageURL": "roomgallery.jpg",
+              "ImageSize": 22,
+              "Seq": 1
+          },
+          {
+              "ImageURL": "roomgallery.jpg",
+              "ImageSize": 23,
+              "Seq": 2
+          }
+      ],
+      "Reschedule": 0,
+      "PriceNormal": 30000,
+      "PriceInfo": {
+          "AvaragePrice": 18280,
+          "PriceList": [
+              {
+                  "date": "2016-11-15",
+                  "price": 20200
+              },
+              {
+                  "date": "2016-11-16",
+                  "price": 20300
+              },
+              {
+                  "date": "2016-11-17",
+                  "price": 20400
+              },
+              {
+                  "date": "2016-11-18",
+                  "price": 20500
+              },
+              {
+                  "date": "2016-11-19",
+                  "price": 10000
+              }
+          ],
+          "TotalPrice": 91400,
+          "Days": 5
+      },
+      "ID": 1,
+      "Features": [
+          {
+              "ImageURL": "window.jpg",
+              "Name": "window"
+          },
+          {
+              "ImageURL": "breakfast.jpg",
+              "Name": "breakfast"
+          }
+      ],
+      "Description": "详细的不想说"
+  },
+  "rescode": "200",
+  "errInfo": "None"
 }
