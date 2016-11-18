@@ -923,12 +923,6 @@
                 self.showLoadingBool.searchBool = false;
                 
                 self.search();
-                self.testArray = [
-                   {"test":1},
-                   {"test":1},
-                   {"test":1},
-                   {"test":1}
-                ]
             }
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
@@ -945,7 +939,7 @@
                 $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('roomorder', 'orderInfo'),
+                        url: backendUrl('roomorder', 'roomOrderInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)
@@ -964,6 +958,10 @@
                     });
                 },500)
                 
+            }
+
+            self.countDay = function(startDate,endDate){
+                return util.countDays(startDate,endDate);
             }
             // 取消订单
             self.cancelOrder = function(status) {

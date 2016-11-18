@@ -43,20 +43,9 @@
         <div class="item">
             <div class="row">
                 <p class="col mod-no-padding">入住时间:</p>
-                <p class="col mod-no-padding col-75">{{good.bookStartDate | date:'yyyy年MM月dd日'}}~{{good.bookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{多少天}天</p>
+                <p class="col mod-no-padding col-75">{{good.BookStartDate | date:'yyyy年MM月dd日'}}~{{good.BookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{{bookOrderInfo.countDay(good.BookStartDate,good.BookEndDate)}}天</p>
             </div>
-            <div class="row">
-                <p class="col mod-no-padding">房间数:</p>
-                <p class="col mod-no-padding col-75">{{good.GoodsNum}}</p>
-            </div>
-            <div class="row">
-                <p class="col mod-no-padding">联系人:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
-            </div>
-            <div class="row">
-                <p class="col mod-no-padding">手机号:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
-            </div>
+            
             <div class="row">
                 <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>

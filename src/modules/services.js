@@ -47,17 +47,26 @@
   .factory('util',function(){
     // 时间戳 去掉 时分秒
     function getDayStamp(d) {
-         // 兼容一下，字符串的先转化为数字
+         // 时间戳字符串字符串的先转化为数字
         var d = d-0;
         var d = new Date(d);
         d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
         return d.getTime();
       }
-      
+    // "2016-11-22" 去掉 时分秒
+    function getDayStamps(d) {
+        var d = new Date(d);
+        d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        return d.getTime();
+      }  
     return{
       // 住酒店天数
       'countDay': function(ms1,ms2){
         return (getDayStamp(ms2)-getDayStamp(ms1))/(24*60*60*1000)
+      },
+
+      'countDays': function(ms1,ms2){
+        return (getDayStamps(ms2)-getDayStamps(ms1))/(24*60*60*1000)
       }
       
       
