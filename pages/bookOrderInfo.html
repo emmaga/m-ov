@@ -7,35 +7,35 @@
         <div class="item mod-no-border-top">
             <div class="row">
                 <p class="col mod-no-padding">{{'orderID'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderId}}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ID}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.dealTime | date}}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.CreateTime }}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.orderTotalPri | currency}}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.Price | currency}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
-                <p class="col mod-no-padding col-75">微信支付</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.PayType }}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.room.orderStatus}}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.Status|orderStatusToChinese}}</p>
             </div>
         </div>
     </div>
     <div class="item item-divider"></div>
-    <div class="list padding mod-inset-forms mod-list">
+    <div ng-repeat="good in bookOrderInfo.GoodsList ">
         <a class="item item-thumbnail-left mod-no-side-border">
-            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{bookOrderInfo.room.roomImgSrc}});"></div>
-            <h2>{{bookOrderInfo.room.roomName}}</h2>
-            <p>{{bookOrderInfo.hotel.hotelName}}</p>
-            <p>{文字介绍}</p>
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{good.RoomBasicInfo.LogoImgURL}});"></div>
+            <h2>{{good.RoomBasicInfo.RoomTypeName}}</h2>
+            <p>{{good.RoomBasicInfo.HotelBasicInfo.HotelName}}</p>
+            <p>{{good.RoomBasicInfo.Description}}</p>
             <p>
-                <span class="mod-tag" ng-repeat="feature in bookOrderInfo.room.roomFeatures">
+                <span class="mod-tag" ng-repeat="feature in bookOrderInfo.roomOrder.roomFeatures">
                     <i class="icon {{feature.icon}}"></i>
                 </span>
             </p>
@@ -43,11 +43,11 @@
         <div class="item">
             <div class="row">
                 <p class="col mod-no-padding">入住时间:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.bookStartDate | date:'yyyy年MM月dd日'}}~{{bookOrderInfo.hotel.bookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{{bookOrderInfo.stayDays}}天</p>
+                <p class="col mod-no-padding col-75">{{good.bookStartDate | date:'yyyy年MM月dd日'}}~{{good.bookEndDate|date:'yyyy年MM月dd日'}}&nbsp·&nbsp共{多少天}天</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">房间数:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
+                <p class="col mod-no-padding col-75">{{good.GoodsNum}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">联系人:</p>
@@ -79,8 +79,10 @@
             </div>
         </div>
     </div>
+    <div class="item item-divider"></div>
     <div class="item item-divider">
         <a class="button button-block button-balanced" ng-click="">{{'payNow'|translate}}</a>
         <a class="button button-block button-positive" ui-sref="bookHotelList">{{'goOnBooking'|translate}}</a>
+        <a class="button button-block button-positive" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)">{取消订单}</a>
     </div>
 </div>

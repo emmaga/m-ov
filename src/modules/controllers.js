@@ -917,44 +917,85 @@
 
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
-
+                self.orderId = $stateParams.orderId;
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
-                loadingService(self.showLoadingBool);
                 
                 self.search();
+                self.testArray = [
+                   {"test":1},
+                   {"test":1},
+                   {"test":1},
+                   {"test":1}
+                ]
             }
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                 var data = {
-                    "action": "GetRoomOrderDetail",
-                    "appid": $scope.root.getParams('appid'),
-                    "clear_session": "xxxx",
-                    "openid": $scope.root.getParams('openid'),
+                    "action": "roomOrderDetail",
+                    "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "orderId": $stateParams.orderId
+                    // "orderID": self.orderId
+                    // 假数据
+                    "orderID": 187
                 };
                 data = JSON.stringify(data);
                 $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('order', 'orderInfo'),
+                        url: backendUrl('roomorder', 'orderInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        self.room = data.data.data.room;
-                        console.log(self.room)
-                        self.hotel = data.data.data.hotel;
-                        self.roomOrder = data.data.data.roomOrder;
+                        console.log(data)
+                        self.roomOrder = data.data.data;
+                        self.GoodsList =data.data.data.GoodsList;
+                        console.log(self.roomOrder)
+                        console.log(self.GoodsList)
                         self.showLoadingBool.searchBool = true;
 
                         // 酒店天数
-                        self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
+                        // self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
                         loadingService(self.showLoadingBool);
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
+                    });
+                },500)
+                
+            }
+            // 取消订单
+            self.cancelOrder = function(status) {
+               if (!(status=='WAITPAY' || status=='WAITAPPROVAL' || status=='ACCEPT')) {
+                  return;
+               }
+                var data = {
+                    "action": "guestCancelOrder",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    // "orderID": self.orderId
+                    // 假数据
+                    "orderID": 187
+
+                };
+                data = JSON.stringify(data);
+                $timeout(function(){
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('roomorder', 'orderInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        console.log(data)
+                        self.roomOrder = data.data.data;
+                        console.log(self.room)
+                        
+                        
+
+                        // 酒店天数
+                        self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
+                       
+                    }, function errorCallback(data, status, headers, config) {
+                        
                     });
                 },500)
                 
