@@ -95,7 +95,7 @@
             <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
         </div> -->
         <div class="item item-divider">
-            <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">
+            <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid || roomInfo.submitOrderBool">
         </div>
     </form>
     

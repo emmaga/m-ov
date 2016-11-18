@@ -1,0 +1,43 @@
+{
+  "data": {
+      "Status": "WAITAPPROVAL",
+      "GoodsList": [
+          {
+              "RoomBasicInfo": {
+                  "Description": "详细的不想说",
+                  "LogoImgSize": 22,
+                  "LogoImgURL": "2.jpg",
+                  "HotelBasicInfo": {
+                      "HotelID": 1,
+                      "HotelName": "上海门店"
+                  },
+                  "RoomTypeName": "标准间",
+                  "RoomID": 1,
+                  "Addr": "2楼"
+              },
+              "GoodsNum": 1,
+              "BookEndDate": "2016-11-22",
+              "GoodsID": 1,
+              "BookStartDate": "2016-11-21",
+              "GoodsPriceList": [
+                  {
+                      "date": "2016-11-15",
+                      "price": 20000
+                  },
+                  {
+                      "date": "2016-11-16",
+                      "price": 20000
+                  }
+              ]
+          }
+      ],
+      "PayTransactionID": "4003242001201611170012210081",
+      "Price": 1,
+      "PayType": "WEIXIN",
+      "CreateTime": "2016-11-17 17:35:57",
+      "OrderNum": "01201611171757086317",
+      "ID": 187
+  },
+  "rescode": "200",
+  "errInfo": "None"
+}
