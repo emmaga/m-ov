@@ -836,18 +836,7 @@
                             "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
                             "totalPrice":bookTotalPri,
                             "priceList": self.priceList,
-                            "bookCount":self.roomNumber,
-                            // 假数据
-                            "priceList": [
-                                          {
-                                              "date":"2016-11-15",
-                                              "price":20000
-                                          },
-                                          {
-                                              "date":"2016-11-16",
-                                              "price":20000
-                                          }
-                                      ]
+                            "bookCount":self.roomNumber
                         }
                     ],
                     "totalPrice":bookTotalPri,
@@ -883,7 +872,7 @@
                         .error(function(data, status, headers, config) {
                             alert($filter('translate')('serverError') + status);
                         })
-                    
+
                 },500)
                
             }
@@ -1311,12 +1300,12 @@
             }
 
             self.gotoShopDetail = function(productId) {
-                angular.element(window).off('scroll'); 
+                // angular.element(window).off('scroll'); 
                 $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId, hotelName:self.hotelName });
             }
 
             self.gotoShopCart = function() {
-                angular.element(window).off('scroll'); 
+                // angular.element(window).off('scroll'); 
                 $state.go('shopCart', {hotelId: self.hotelId, hotelName:self.hotelName});
             }
 
@@ -1414,7 +1403,7 @@
                             self.productList = self.productList.concat(data.data.data.productList);
                             self.productList.length = self.productList.length;
                             self.productTotal = data.data.data.productTotal;
-                            console.log(self.productList + new Date())
+                            console.log(self.productList + new Date().getTime())
                             self.showLoadingIcon = false;
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingIcon = false;
