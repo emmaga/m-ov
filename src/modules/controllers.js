@@ -1767,9 +1767,16 @@
             $ionicLoading.show({
             template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
           });
+          var data = {
+            "action": "getMemberDeliveryInfo",
+            "clear_session": $scope.root.getParams('clear_session'),
+            "lang": $translate.proposedLanguage() || $translate.use()
+          }
+          data = JSON.stringify(data);
           $http({
             method: $filter('ajaxMethod')(),
-            url: backendUrl('', 'memberAddress')
+            url: backendUrl('shopmember', 'memberAddress'),
+            data: data
           })
           .then(function successCallback(data, status, headers, config) {
             if(data.data.rescode == '200') {
@@ -1810,7 +1817,7 @@
                     goodsList_n++;
                 }
             }
-            var deliverWay = l.hasEX ? 'express' : 'bySelf';
+            var deliverWay = $scope.shopCartList.hasEx ? 'express' : 'bySelf';
             var data = {
                 "action": "newShopOrder",
                 "clear_session": $scope.root.getParams('clear_session'),
@@ -1935,7 +1942,7 @@
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-                $timeout(function() {
+                //$timeout(function() {
 
                     var data = {
 
@@ -1962,7 +1969,7 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
                     });
-                }, 500)
+                //}, 500)
 
             }
 
