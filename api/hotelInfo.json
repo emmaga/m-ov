@@ -1,93 +1,32 @@
 {
-
-    "data": {
-
-        "Name": {
-
-            "zh-CN": "酒店一"
-
-        },
-
-        "LocationX": 121.632901,
-
-        "LocationY": 31.218352,
-
-        "LogoURL": "1.jpg",
-
-        "Features": [
-
-            {
-
-                "ImageURL": "ion-wifi",
-
-                "Name": "wifi"
-
-            },
-
-            {
-
-                "ImageURL": "ion-android-alarm-clock",
-
-                "Name": "叫早"
-
-            }
-
-        ],
-
-        "TelePhone": null,
-
-        "Gallery": [
-
-            {
-
-                "ImageURL": "api/img/room1.jpg",
-
-                "ImageSize": 11,
-
-                "Seq": 1
-
-            },
-            {
-
-                "ImageURL": "api/img/room1.jpg",
-
-                "ImageSize": 11,
-
-                "Seq": 1
-
-            },
-            {
-
-                "ImageURL": "api/img/room1.jpg",
-
-                "ImageSize": 11,
-
-                "Seq": 1
-
-            }
-
-        ],
-
-        "Address": {
-
-            "zh-CN": " 上海市· 浦东新区· 祖冲之路2277弄"
-
-        },
-
-        "Description": {
-
-            "zh-CN": "shanghai"
-
-        },
-
-        "ID": 1,
-
-        "OfficePhone": null
-
-    },
-
-    "rescode": "200",
-
-    "errInfo": "None"
-
+  "data": {
+      "Name": "上海门店",
+      "LocationX": null,
+      "LocationY": null,
+      "LogoURL": "1.jpg",
+      "Features": [
+          {
+              "ImageURL": "wifi.icon",
+              "Name": "wifi"
+          },
+          {
+              "ImageURL": "park.icon",
+              "Name": "park"
+          }
+      ],
+      "TelePhone": null,
+      "Gallery": [
+          {
+              "ImageURL": "detail.jpg",
+              "ImageSize": 11,
+              "Seq": 1
+          }
+      ],
+      "Address": "shanghai",
+      "Description": "shanghai",
+      "ID": 1,
+      "OfficePhone": null
+  },
+  "rescode": "200",
+  "errInfo": "None"
 }

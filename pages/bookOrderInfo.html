@@ -48,15 +48,15 @@
             
             <div class="row">
                 <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.roomNumber}}</p>
+                <p class="col mod-no-padding col-75">{{good.GoodsNum}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'contactName'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.contactName}}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ContactorName}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.mobile}}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ContactorPhone}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">退改协议:</p>
@@ -64,14 +64,14 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">简介:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.hotel.description}}</p>
+                <p class="col mod-no-padding col-75">{{good.RoomBasicInfo.Description}}</p>
             </div>
         </div>
     </div>
     <div class="item item-divider"></div>
     <div class="item item-divider">
-        <a class="button button-block button-balanced" ng-click="">{{'payNow'|translate}}</a>
-        <a class="button button-block button-positive" ui-sref="bookHotelList">{{'goOnBooking'|translate}}</a>
-        <a class="button button-block button-positive" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)">{取消订单}</a>
+        <a class="button button-block button-balanced" ng-click="" ng-disabled="bookOrderInfo.cancelOrderBool">{{'payNow'|translate}}</a>
+        <a class="button button-block button-positive" ui-sref="bookHotelList" ng-disabled="bookOrderInfo.cancelOrderBool">{{'goOnBooking'|translate}}</a>
+        <a class="button button-block button-positive" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)" ng-disabled="bookOrderInfo.cancelOrderBool">{取消订单}</a>
     </div>
 </div>

@@ -515,7 +515,6 @@
                         // self.locationHref = BACKEND_CONFIG.mapUrl + '?x=' + self.hotel.hotelLocation.X + '&y=' + self.hotel.hotelLocation.Y;
                         loadingService(self.showLoadingBool);
                         self.searchRoomList();
-                        console.log("searchHotelInfoBool")
                     }, function errorCallback(data, status, headers, config) {
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
@@ -968,9 +967,12 @@
                if (!(status=='WAITPAY' || status=='WAITAPPROVAL' || status=='ACCEPT')) {
                   return;
                }
+               self.cancelOrderBool = true;
+               self.roomOrder.Status = 'CANCEL_REFUNDING';
                 var data = {
                     "action": "guestCancelOrder",
-                    "clear_session": $scope.root.getParams('clear_session'),
+                    // "clear_session": $scope.root.getParams('clear_session'),
+                    "clear_session": "openvod_userid_3_wyki7g6g",
                     // "orderID": self.orderId
                     // 假数据
                     "orderID": 187
@@ -980,20 +982,19 @@
                 $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
-                        url: backendUrl('roomorder', 'orderInfo'),
+                        url: backendUrl('roomorder', 'orderInfo','server'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         console.log(data)
-                        self.roomOrder = data.data.data;
-                        console.log(self.room)
-                        
-                        
-
-                        // 酒店天数
-                        self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
-                       
+                        self.cancelOrderBool = false;
+                        self.roomOrder.Status = 'CANCELED';
+                        if (data.data.rescode==200) {
+                            alert('取消成功')
+                        }
                     }, function errorCallback(data, status, headers, config) {
-                        
+                        bookOrderInfo.roomOrder.Status = status;
+                        self.cancelOrderBool = false;
+                        alert('取消订单失败，请稍后重试')
                     });
                 },500)
                 
