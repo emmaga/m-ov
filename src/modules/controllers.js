@@ -1818,7 +1818,7 @@
                     "deliverWay": deliverWay,
                     "contactName": self.address.name,
                     "mobile": self.address.mobile,
-                    "address": l.hasEX ? self.address.address : ''
+                    "address": $scope.shopCartList.hasEx ? self.address.address : ''
                 }
             }
             data= JSON.stringify(data);
