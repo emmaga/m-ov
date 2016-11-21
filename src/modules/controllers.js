@@ -3,8 +3,8 @@
 (function() {
     var app = angular.module('app.controllers', ['ngCookies'])
 
-    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture',
-        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture) {
+    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle',
+        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle) {
             var self = this;
 
             self.init = function() {
@@ -209,6 +209,7 @@
                 .then(function successCallback(data, status, headers, config) {
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
+                    setTitle('测试酒店名称')
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })
@@ -351,7 +352,6 @@
                     "lang": $translate.proposedLanguage() || $translate.use()
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                   $http({
                       method: $filter('ajaxMethod')(),
                       url: backendUrl('citylist', 'cityLists'),
@@ -367,7 +367,6 @@
                       self.showLoadingBool.searchCityListsBool = true;
                       loadingService(self.showLoadingBool);
                   });  
-                },500)
             }
 
             self.searchHotelList = function() {
@@ -384,7 +383,6 @@
                 };
                 data = JSON.stringify(data);
 
-                $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('hotellist', 'hotelList'),
@@ -397,7 +395,6 @@
                     }, function errorCallback(data, status, headers, config) {
                         self.loadingIcon = true;
                     });
-                }, 500)
             }
 
             // // 弹出框
@@ -499,7 +496,6 @@
                 };
                 data = JSON.stringify(data);
                 
-                $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('hotelinfo', 'hotelInfo'),
@@ -517,7 +513,6 @@
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
                     });
-                }, 300)
             }
 
             self.searchRoomList = function() {
@@ -579,7 +574,6 @@
                     
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                   $http({
                       method: $filter('ajaxMethod')(),
                       url: backendUrl('bookHotel', 'hotelInfo'),
@@ -593,7 +587,6 @@
                       self.showLoadingBool.searchBool = true;
                       loadingService(self.showLoadingBool);
                   });  
-                },500)
             }
         }
     ])
@@ -651,7 +644,6 @@
                     };
                     data = JSON.stringify(data);
 
-                    $timeout(function() {
                         $http({
                             method: $filter('ajaxMethod')(),
                             url: backendUrl('roominfo', 'roomInfo'),
@@ -676,7 +668,6 @@
                             self.showLoadingBool.searchRoomInfoBool = true;
                             loadingService(self.showLoadingBool);
                         });
-                    }, 500)
                 
             }
              
@@ -692,7 +683,6 @@
                 };
                 data = JSON.stringify(data);
                 
-                $timeout(function() {
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('hotelinfo', 'hotelInfo'),
@@ -709,7 +699,6 @@
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
                     });
-                }, 300)
             }
 
             // 
@@ -724,7 +713,6 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('shopmember', 'memberInfo'),
@@ -740,7 +728,6 @@
                         self.showLoadingBool.searchMemberInfoBool = true;
                         loadingService(self.showLoadingBool)
                     });
-                },500)
             }
             
                 // 计算客房总
@@ -843,7 +830,6 @@
                      
                 };
                 data = angular.toJson(data,true);
-                $timeout(function(){
                     $http.post(backendUrl('roomorder', '', 'server'), data)
                         .success(function(data, status, headers, config) {
                             if (data.rescode == '200') {
@@ -870,8 +856,6 @@
                         .error(function(data, status, headers, config) {
                             alert($filter('translate')('serverError') + status);
                         })
-
-                },500)
                
             }
 
@@ -927,7 +911,6 @@
                     "orderID": 187
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('roomorder', 'roomOrderInfo'),
@@ -947,7 +930,6 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     });
-                },500)
                 
             }
 
@@ -971,7 +953,6 @@
 
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('roomorder', 'orderInfo'),
@@ -988,7 +969,6 @@
                         self.cancelOrderBool = false;
                         alert('取消订单失败，请稍后重试')
                     });
-                },500)
                 
             }
         }
@@ -1031,7 +1011,6 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                     $http({
                         method: $filter('ajaxMethod')(),
                         url: backendUrl('shopmember', 'memberInfo'),
@@ -1045,7 +1024,6 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
                     });
-                },500)
                 
             }
         }
@@ -1083,7 +1061,6 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
                        url: backendUrl('shopmember', 'memberInfo'),
@@ -1100,7 +1077,6 @@
                    .finally(function(value){
                      loadingService(self.showLoadingBool);
                    })  ; 
-                },500)
                 
             }
             self.updataMemberInfo = function() {
@@ -1117,7 +1093,6 @@
                     }
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                   $http({
                       method: $filter('ajaxMethod')(),
                       url: backendUrl('shopmember', 'memberInfo'),
@@ -1137,7 +1112,6 @@
                     loadingService(self.showLoadingBool);
                     self.updataMemberInfoBool = false;
                   })  
-                },2000)
                 
             }
 
@@ -1202,7 +1176,6 @@
                     "action": "roomOrderList"
                 };
                 data = JSON.stringify(data);
-                $timeout(function(){
                    $http({
                        method: $filter('ajaxMethod')(),
                        url: backendUrl('roomorder', 'roomOrderList')
@@ -1216,7 +1189,6 @@
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
                    }); 
-                },500)
                 
             }
 
@@ -1242,7 +1214,6 @@
                 // 发送请求之前，遮罩层
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool)
-                //$timeout(function(){
                     var data = {
                         "action": "shopOrderList",
                         "clear_session": $scope.root.getParams('clear_session'),
@@ -1264,7 +1235,6 @@
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool);
                     }); 
-                //},500)
                 
             }
             self.nextState = function(id){
@@ -1400,7 +1370,6 @@
                         self.productList = [];
                         self.page = 0;
                     }
-                    //$timeout(function(){
                         var data = {
                             "action": "getProductList",
                             "clear_session": $scope.root.getParams('clear_session'),
@@ -1427,8 +1396,6 @@
                         }, function errorCallback(data, status, headers, config) {
                             self.showLoadingIcon = false;
                         });
-                    //},500)
-                    
                 }
 
                 // 更多商品   loading 图标
@@ -1483,7 +1450,6 @@
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-                //$timeout(function() {
                     var data = {
                         "action": "getProductDetail",
                         "appid": $scope.root.getParams('appid'),
@@ -1514,7 +1480,6 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     });
-                //}, 500)
 
             }
 
@@ -1930,8 +1895,7 @@
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
-                //$timeout(function() {
-
+   
                     var data = {
 
                         "action": "getOrderDetail",
@@ -1957,7 +1921,6 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool)
                     });
-                //}, 500)
 
             }
 

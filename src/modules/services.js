@@ -73,4 +73,24 @@
 
     }
   })
+  
+  // 设置微信title
+  .factory('setTitle',function(){
+    return function(title){
+        var body = document.body;
+        document.title = title; 
+        var $iframe = document.createElement('iframe');
+        $iframe.src = '/favicon.ico';
+
+        $iframe.style.display = 'none';
+        $iframe.onload = function(){
+          setTimeout(function(){
+            $iframe.onload = null;
+            body.removeChild($iframe);
+          }, 0);
+        };
+
+        body.appendChild($iframe);
+    }
+  })
 })();

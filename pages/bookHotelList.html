@@ -41,7 +41,7 @@
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.LogoURL}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <h2 class="mod-member-price">￥{{hotel.lowestPrice}}{{'minPrice'|translate}}</h2>
+                <h2 class="mod-member-price">￥{{hotel.lowestPrice | fenToYuan}}{{'minPrice'|translate}}</h2>
                 <p class="mod-price-tag mod-member0">微信会员价</p>
                 <br>
                 <p class="mod-display-inlineblock">{{hotel.Name}}</p>
