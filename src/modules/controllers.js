@@ -209,8 +209,7 @@
                 .then(function successCallback(data, status, headers, config) {
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
-                    setTitle('测试酒店名称')
-                    // setTitle(self.params.projectInfo.projectName)
+                    setTitle(self.params.projectInfo.projectName)
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })
