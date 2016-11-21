@@ -210,6 +210,7 @@
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
                     setTitle('测试酒店名称')
+                    // setTitle(self.params.projectInfo.projectName)
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })
@@ -429,6 +430,16 @@
             console.log('bookRoomListController')
             console.log($stateParams)
             var self = this;
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
                 
                 // 注册微信分享朋友和朋友圈
@@ -554,7 +565,16 @@
         function($scope, $http, $filter, $state, $stateParams, $timeout, $translate, loadingService, backendUrl, BACKEND_CONFIG, util) {
             console.log('hotelInfoController')
             var self = this;
-
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
                 // 注册微信分享朋友和朋友圈
                 // $scope.root.wxShare();
@@ -596,6 +616,16 @@
             console.log("roomInfoController")
             console.log($stateParams);
             var self = this;
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -887,6 +917,16 @@
         function($scope, $http, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl, util) {
             console.log("bookOrderInfoController")
             var self = this;
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             console.log($stateParams)
             self.init = function() {
 
@@ -988,8 +1028,17 @@
     .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
         function($http, $scope, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
-
             var self = this;
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -1033,6 +1082,16 @@
         function($http, $scope, $state, $filter, $stateParams, $timeout, $translate, loadingService, backendUrl) {
             console.log("memberInfoEditController");
             var self = this;
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.memberId = $stateParams.memberId;
             self.init = function() {
 
@@ -1155,7 +1214,16 @@
         function($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
             console.log('roomOrderListController')
             var self = this;
-
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -1199,7 +1267,16 @@
         function($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
             console.log('shopOrderListController')
             var self = this;
-
+            self.beforeInit = function() {
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
 
                 // 注册微信分享朋友和朋友圈
@@ -1248,7 +1325,7 @@
 
             console.log('shopHomeController')
             var self = this;
-
+            
             self.beforeInit = function() {
                 console.log('beforeInit')
                 if($scope.root._readystate) {
@@ -1341,7 +1418,8 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId
+                    // "hotelId": self.hotelId
+                    "hotelId": 1
                 };
                 data = JSON.stringify(data);
                 $http({
@@ -1430,7 +1508,17 @@
 
             console.log('shopProductDetailController')
             var self = this;
-
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function() {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
             self.init = function() {
                 self.hotelId = $stateParams.hotelId;
                 self.hotelName = $stateParams.hotelName;
@@ -1552,7 +1640,17 @@
       function($http, $scope, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl) {
         console.log('shopCartController')
         var self = this;
-        
+        self.beforeInit = function() {
+            console.log('beforeInit')
+            if($scope.root._readystate) {
+                self.init();
+            }
+            else {
+                $timeout(function() {
+                    self.beforeInit();
+                }, 50);
+            }
+        }
         self.init = function() {
           // 注册微信分享朋友和朋友圈
           $scope.root.wxShare();
@@ -1877,7 +1975,17 @@
             console.log('shopOrderInfoController')    
     
             var self = this;
-             
+             self.beforeInit = function() {
+                 console.log('beforeInit')
+                 if($scope.root._readystate) {
+                     self.init();
+                 }
+                 else {
+                     $timeout(function() {
+                         self.beforeInit();
+                     }, 50);
+                 }
+             }
             self.init = function() {
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();

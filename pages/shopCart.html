@@ -1,4 +1,4 @@
-<div ng-controller="shopCartController as shopCart" ng-init="shopCart.init()">
+<div ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()">
 
     <form class="light-bg list  padding mod-inset-forms" style="padding-top: 72px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
 
