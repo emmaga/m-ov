@@ -357,9 +357,15 @@
                       url: backendUrl('citylist', 'cityLists'),
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
-                      console.log(data)
                       self.cityListContent = data.data.data;
-                      console.log(self.cityListContent)
+                      var allStr = $filter('translate')('all');
+                      self.cityListContent.searchInitialList.unshift(allStr);
+                      self.cityListContent.cityLists.unshift({
+                        cities: [{cityID:0,cityName:allStr}],
+                        searchInitial: allStr
+                      });
+                      console.log(self.cityListContent);
+
                       self.showLoadingBool.searchCityListsBool = true;
                       loadingService(self.showLoadingBool);
                       self.searchHotelList();
@@ -1880,7 +1886,7 @@
                     "deliverWay": deliverWay,
                     "contactName": self.address.name,
                     "mobile": self.address.mobile,
-                    "address": l.hasEX ? self.address.address : ''
+                    "address": $scope.shopCartList.hasEx ? self.address.address : ''
                 }
             }
             data= JSON.stringify(data);

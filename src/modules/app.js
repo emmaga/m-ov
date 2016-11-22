@@ -170,14 +170,27 @@
       })
   }])
 
-  // 每次页面跳转时触发
+  // 每次页面跳转完成时触发
   .run(['$rootScope', '$timeout', function($rootScope, $timeout) {
-    // 滚动到页面顶部
+    
     $rootScope.$on("$locationChangeSuccess", function(){
+      // 滚动到页面顶部
       document.body.scrollTop = 0;
+      
+      // 点透
+      setTimeout(function(){
+      document.getElementById('pageCover').style.display='none';
+    },300)
     })
   }])
 
+  // 每次页面开始跳转时触发
+  .run(['$rootScope', '$timeout', function($rootScope) {
+    $rootScope.$on("$viewContentLoading", function(){
+      // 点透
+      document.getElementById('pageCover').style.display='block';
+    })
+  }])
 
 
   .constant('BACKEND_CONFIG', {
