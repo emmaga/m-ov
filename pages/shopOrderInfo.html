@@ -30,10 +30,10 @@
     <div class="item item-divider"></div>
     <div class="list padding mod-inset-forms mod-list">
         <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
-            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.imgSrc}});"></div>
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
             <h2>{{product.name}}</h2>
-            <p>单价:&nbsp￥{{product.totalPri | fenToYuan}}</p>
-            <p>购买数量:&nbsp{{product.number}}</p>
+            <p>单价:&nbsp￥{{product.price | fenToYuan}}</p>
+            <p>购买数量:&nbsp{{product.GoodsNum}}</p>
         </a>
     </div>
     <div class="item">

@@ -17,7 +17,7 @@
             <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
         </button>
 
-        <h1 class="title">商城</h1>
+        <h1 class="title">{{shopHome.shopName}}</h1>
       
         <button ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
 
@@ -43,7 +43,7 @@
                 <p class="item-note">库存：{{product.invetory}}</p>
                 <h2>{{product.name}}</h2>
                 <p>{{product.intro}}</p>
-                <h2 class="mod-member-price assertive">￥{{product.price}}</h2>
+                <h2 class="mod-member-price assertive">￥{{product.price | fenToYuan}}</h2>
             </div>
         </a>
 

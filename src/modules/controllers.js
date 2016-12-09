@@ -301,7 +301,7 @@
                 // 酒店天数
                 self.stayDays = util.countDay(self.checkin, self.checkout);
 
-                self.cityInfo = { id: '0', name: '全部' };
+                self.cityInfo = { id: '0', name: 'all' };
                 
                 // 异步 回调
                 self.searchCityLists();
@@ -364,8 +364,6 @@
                         cities: [{cityID:0,cityName:allStr}],
                         searchInitial: allStr
                       });
-                      console.log(self.cityListContent);
-
                       self.showLoadingBool.searchCityListsBool = true;
                       loadingService(self.showLoadingBool);
                       self.searchHotelList();
@@ -507,8 +505,8 @@
                     "clear_session":$scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     // 假数据
-                    // "hotelId": self.hotelId -0
-                    "hotelId": 1
+                    "hotelId": self.hotelId -0
+                    // "hotelId": 1
                 };
                 data = JSON.stringify(data);
                 
@@ -537,9 +535,9 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                      
-                    // "hotelId": self.hotelId -0,
+                    "hotelId": self.hotelId -0,
                     // 假数据
-                    "hotelId": 1,
+                    // "hotelId": 1,
                     "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
                     "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd') 
                 };
@@ -562,6 +560,18 @@
                     loadingService(self.showLoadingBool);
                 });
             }
+            // 检查是否有房间，有则返回true
+            self.roomCheckAvail = function(arr, key) {
+                var flag = true;
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i][key] == 0) {
+                        flag = false;
+                        return flag;
+                    }
+                }
+                return flag;
+            }
+
 
         }
     ])
@@ -595,13 +605,13 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
 
-                    "hotelId": self.hotelId
+                    "hotelId": self.hotelId -0
                     
                 };
                 data = JSON.stringify(data);
                   $http({
                       method: $filter('ajaxMethod')(),
-                      url: backendUrl('bookHotel', 'hotelInfo'),
+                      url: backendUrl('hotelinfo', 'hotelInfo'),
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
                       console.log(data.data.data)
@@ -712,9 +722,9 @@
                 var data = {
                     "clear_session":$scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    // "hotelId": self.hotelId-0
+                    "hotelId": self.hotelId-0
                     // 假数据
-                    "hotelId": 1
+                    // "hotelId": 1
                 };
                 data = JSON.stringify(data);
                 
@@ -869,6 +879,8 @@
                         .success(function(data, status, headers, config) {
                             if (data.rescode == '200') {
                                 var orderID = data.data.orderID;
+                                // 订单id
+                                self.bookOrderID = orderID;
                                 var data = {
                                     "clear_session": $scope.root.getParams('clear_session'),
                                     "action": "weixinPay",
@@ -905,21 +917,21 @@
                     paySign: JS_Pay_API.paySign, // 支付签名
                     success: function(res) {
                         // 支付成功后的回调函数
-                        $state.go('bookOrderInfo', { orderId: orderId })
+                        $state.go('bookOrderInfo', { orderId: self.bookOrderID })
                     },
                     cancel: function() {
-                        $state.go('bookOrderInfo', { orderId: orderId })
+                        $state.go('bookOrderInfo', { orderId: self.bookOrderID })
                     },
                     error: function(e) {
-                        $state.go('bookOrderInfo', { orderId: orderId })
+                        $state.go('bookOrderInfo', { orderId: self.bookOrderID })
                     }
                 });
             }
         }
     ])
 
-    .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl', 'util',
-        function($scope, $http, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl, util) {
+    .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', '$state', 'loadingService', 'backendUrl', 'util',
+        function($scope, $http, $timeout, $filter, $stateParams, $translate, $state, loadingService, backendUrl, util) {
             console.log("bookOrderInfoController")
             var self = this;
             self.beforeInit = function() {
@@ -951,9 +963,9 @@
                     "action": "roomOrderDetail",
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    // "orderID": self.orderId
+                    "orderID": self.orderId - 0
                     // 假数据
-                    "orderID": 187
+                    // "orderID": 187
                 };
                 data = JSON.stringify(data);
                     $http({
@@ -961,20 +973,20 @@
                         url: backendUrl('roomorder', 'roomOrderInfo'),
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
-                        console.log(data)
                         self.roomOrder = data.data.data;
                         self.GoodsList =data.data.data.GoodsList;
-                        console.log(self.roomOrder)
-                        console.log(self.GoodsList)
-                        self.showLoadingBool.searchBool = true;
-
+                        var s = self.roomOrder.Status;
+                        self.showPayBtn = (s == 'WAITPAY');
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');    
                         // 酒店天数
                         // self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
-                        loadingService(self.showLoadingBool);
                     }, function errorCallback(data, status, headers, config) {
+                        
+                    }).finally(function(value) {
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     });
+
                 
             }
 
@@ -983,18 +995,17 @@
             }
             // 取消订单
             self.cancelOrder = function(status) {
-               if (!(status=='WAITPAY' || status=='WAITAPPROVAL' || status=='ACCEPT')) {
-                  return;
-               }
+
                self.cancelOrderBool = true;
                self.roomOrder.Status = 'CANCEL_REFUNDING';
                 var data = {
                     "action": "guestCancelOrder",
-                    // "clear_session": $scope.root.getParams('clear_session'),
-                    "clear_session": "openvod_userid_3_wyki7g6g",
-                    // "orderID": self.orderId
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    // "clear_session": "openvod_userid_3_wyki7g6g",
+                    "orderID": self.orderId - 0
                     // 假数据
-                    "orderID": 187
+                    // "orderID": 187
 
                 };
                 data = JSON.stringify(data);
@@ -1006,8 +1017,17 @@
                         console.log(data)
                         self.cancelOrderBool = false;
                         self.roomOrder.Status = 'CANCELED';
-                        if (data.data.rescode==200) {
-                            alert('取消成功')
+                        if(data.data.rescode == '200') {
+                          if(data.data.data.RefundRequestACK) {
+                              alert('订单取消成功，预计款项将于24小时内退回，请注意查收');
+                          }
+                          else {
+                              alert('订单取消成功');
+                          }
+                          $state.reload('bookOrderInfo',{orderId: self.orderId-0});
+                        }
+                        else {
+                            alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
                         }
                     }, function errorCallback(data, status, headers, config) {
                         bookOrderInfo.roomOrder.Status = status;
@@ -1015,6 +1035,63 @@
                         alert('取消订单失败，请稍后重试')
                     });
                 
+            }
+
+            // 去支付
+            self.payNow = function(status) {
+               
+               self.payNowBool = true;
+                var data = {
+                    "action": "weixinPay",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "payType": "JSAPI",
+                    // 假数据
+                    // "orderID": 187
+                    "orderID": self.orderId - 0
+
+                };
+                data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('roomorder', 'orderInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        if (data.data.rescode == '200') {
+
+                           self.wxPay(data.data.data.JS_Pay_API, data.data.data.orderNum);
+                        } else {
+                            alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                        }
+                    }, function errorCallback(data, status, headers, config) {
+                        alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                    }).finally(function(){
+                    });
+                
+            }
+
+
+            self.wxPay = function(JS_Pay_API, orderId) {
+                var orderId = orderId;
+                console.log(JS_Pay_API.timeStamp + ', ' + JS_Pay_API.nonceStr + ', ' + JS_Pay_API.package + ', ' + JS_Pay_API.signType + ', ' + JS_Pay_API.paySign);
+                wx.chooseWXPay({
+                    timestamp: JS_Pay_API.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                    nonceStr: JS_Pay_API.nonceStr, // 支付签名随机串，不长于 32 位
+                    package: JS_Pay_API.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                    signType: JS_Pay_API.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                    paySign: JS_Pay_API.paySign, // 支付签名
+                    success: function(res) {
+                         // $state.reload()
+                        $state.go($state.current, { orderId: self.orderId - 0 }, {reload: true, inherit: false});
+                        // $state.reload('bookOrderInfo', { orderId: self.orderId - 0 })
+                    },
+                    cancel: function() {
+                        $state.go($state.current, { orderId: self.orderId - 0 }, {reload: true, inherit: false});
+                    },
+                    error: function(e) {
+                        $state.go($state.current, { orderId: self.orderId - 0 }, {reload: true, inherit: false});
+                    }
+                });
             }
         }
     ])
@@ -1251,7 +1328,8 @@
                 data = JSON.stringify(data);
                    $http({
                        method: $filter('ajaxMethod')(),
-                       url: backendUrl('roomorder', 'roomOrderList')
+                       url: backendUrl('roomorder', 'roomOrderList'),
+                       data: data
                    }).then(function successCallback(data, status, headers, config) {
                        console.log(data)
                        self.orderLists = data.data.data;
@@ -1332,7 +1410,6 @@
             var self = this;
             
             self.beforeInit = function() {
-                console.log('beforeInit')
                 if($scope.root._readystate) {
                     self.init();
                 }
@@ -1347,7 +1424,6 @@
                 self.showLoadingBool = {};
                 // 注册微信分享朋友和朋友圈
                 $scope.root.wxShare();
-                console.log('getHotelLists')
                 self.getHotelLists();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
@@ -1366,7 +1442,6 @@
             }
 
             self.gotoShopCart = function() {
-                // angular.element(window).off('scroll'); 
                 $state.go('shopCart', {hotelId: self.hotelId, hotelName:self.hotelName});
             }
 
@@ -1379,7 +1454,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId
+                    "hotelId": self.hotelId - 0
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1412,8 +1487,41 @@
                   self.hotelLists = data.data.data;
                   self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
                   self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
-                  self.searchCategory();
+                  self.getShopName();
+                },function errorCallback(data, status, headers, config) {
+                
                 })
+            }
+
+            // 商城名字
+            self.getShopName = function() {
+                var data = {
+                    "action": "getShopName",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId - 0
+                    // "hotelId": 1
+                };
+                data = JSON.stringify(data);
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('shopinfo', 'productCategory'),
+                    data: data
+                }).then(function successCallback(data, status, headers, config) {
+                    if (data.data.rescode == '200') {
+                       self.shopName = data.data.data.shopName;
+                       self.searchCategory();
+                    } else {
+                        alert($filter('translate')('serverError') + status);
+                    }
+                    
+                   
+                    
+                }, function errorCallback(data, status, headers, config) {
+
+                });
             }
 
             self.searchCategory = function() {
@@ -1423,8 +1531,8 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    // "hotelId": self.hotelId
-                    "hotelId": 1
+                    "hotelId": self.hotelId - 0
+                    // "hotelId": 1
                 };
                 data = JSON.stringify(data);
                 $http({
@@ -1435,53 +1543,60 @@
                     //加载购物车内容
                     self.loadShopCartInfo();
                     self.categoryList = data.data.data.categoryList;
-                    // 默认加载第一个分类
-                    self.searchProductList(self.categoryList["0"]["id"],true);
+               
+                    if (self.categoryList.length !=0) {
+                        // 默认加载第一个分类
+                        self.searchProductList(self.categoryList["0"]["id"],true);
+                    }
+                    
                     
                 }, function errorCallback(data, status, headers, config) {
 
                 });
             }
-            self.searchProductList = function(id,bool) {
-                    self.showLoadingIcon = true
-                    console.log(id);
-                    // 记录当前点击的商品分类的id
-                    self.searchCategoryId = id;
-                    self.showLoadingIcon = true;
-                    // 点击“分类”时，清空productList数组
-                    if (bool == true) {
-                        self.productList = [];
-                        self.page = 0;
-                    }
-                        var data = {
-                            "action": "getProductList",
-                            "clear_session": $scope.root.getParams('clear_session'),
-                            "appid": $scope.root.getParams('appid'),
-                            "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
-                            "lang": $translate.proposedLanguage() || $translate.use(),
-                            "hotelId": self.hotelId,
-                            "categoryId":self.searchCategoryId,
-                            "page":self.page+1,
-                            "count":self.perPageCount
-                        };
-                        data = JSON.stringify(data);
-                        $http({
-                            method: $filter('ajaxMethod')(),
-                            url: backendUrl('shopinfo', 'productList'+id),
-                            data: data
-                        }).then(function successCallback(data, status, headers, config) {
-                            self.page++;
-                            self.productList = self.productList.concat(data.data.data.productList);
-                            self.productList.length = self.productList.length;
-                            self.productTotal = data.data.data.productTotal;
-                            console.log(self.productList + new Date().getTime())
-                            self.showLoadingIcon = false;
-                        }, function errorCallback(data, status, headers, config) {
-                            self.showLoadingIcon = false;
-                        });
+            self.searchProductList = function(id, bool) {
+                self.showLoadingIcon = true
+                console.log(id);
+                // 记录当前点击的商品分类的id
+                self.searchCategoryId = id;
+                self.showLoadingIcon = true;
+                // 点击“分类”时，清空productList数组
+                if (bool == true) {
+                    self.productList = [];
+                    self.page = 0;
                 }
+                var data = {
+                    "action": "getProductList",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo') && $scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelId": self.hotelId,
+                    "categoryId": self.searchCategoryId,
+                    "page": self.page + 1,
+                    "count": self.perPageCount
+                };
+                data = JSON.stringify(data);
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('shopinfo', 'productList' + id),
+                    data: data
+                }).then(function successCallback(data, status, headers, config) {
+                    self.page++;
+                    self.productList = self.productList.concat(data.data.data.productList);
+                    self.productList.length = self.productList.length;
+                    self.productTotal = data.data.data.productTotal;
+                    console.log(self.productList + new Date().getTime())
+                    self.showLoadingIcon = false;
+                }, function errorCallback(data, status, headers, config) {
+                    self.showLoadingIcon = false;
+                });
+            }
 
-                // 更多商品   loading 图标
+
+
+ 
+           // 更多商品   loading 图标
             self.moreProduct = function() {
                 console.log('moreProduct')
                 self.showLoadingIcon = true;
@@ -1503,7 +1618,7 @@
                 self.showHP(false);
                 self.hotelId = hotelId;
                 self.hotelName = hotelName;
-                self.searchCategory();
+                self.getShopName();
             };
         }
     ])
@@ -1544,13 +1659,14 @@
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                     var data = {
-                        "action": "getProductDetail",
-                        "appid": $scope.root.getParams('appid'),
-                        "clear_session": $scope.root.getParams('clear_session'),
-                        "openid": $scope.root.getParams('openid'),
-                        "lang": $translate.proposedLanguage() || $translate.use(),
-                        "hotelId": self.hotelId,
-                        "productId":self.productId
+                            "action": "getProductDetail",
+                            "appid": $scope.root.getParams('appid'),
+                            "clear_session": $scope.root.getParams('clear_session'),
+                            "openid": $scope.root.getParams('openid'),
+                            "lang": $translate.proposedLanguage() || $translate.use(),
+                            "hotelId": self.hotelId,
+                            "productId": self.productId - 0
+
                     }
                     data = JSON.stringify(data);
                     $http({
@@ -2124,7 +2240,7 @@
                     else {
                         alert('订单取消成功');
                     }
-                    $state.reload();
+                    $state.reload('shopOrderInfo',{orderId: self.orderId-0});
                   }
                   else {
                       alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);

@@ -53,11 +53,11 @@
                   
 
                     <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.Refund==0),'mod-color-excited':!(room.Refund==0)}">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
-                    <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:(room.Refund==0),'button-assertive':!(room.Refund==0)}">
+                    <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:!brl.roomCheckAvail(room.AvailableNumList,'availableNum'),'button-assertive':brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">
 
-                        <span class="mod-color-cold" ng-if="room.Refund==0">{{'bookSoldOut'|translate}}</span>
-                        <span ng-if="!(room.Refund==0)">{{'booking'|translate}}</span>
-                        <i ng-if="!(room.Refund==0)" class="icon ion-ios-arrow-right"></i>
+                        <span class="mod-color-cold" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'bookSoldOut'|translate}}</span>
+                        <span ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'booking'|translate}}</span>
+                        <i ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')" class="icon ion-ios-arrow-right"></i>
 
                     </button>
                 </span>
@@ -65,7 +65,7 @@
                 <p>{{room.Description}}</p>
                 <p>
                     <span class="mod-tag mod-tag-small" ng-repeat="feature in room.Features">
-                        <i class="icon {{feature.icon}}">feature.Name</i>
+                        <i class="icon {{feature.icon}}">{{feature.Name}}</i>
                     </span>
                 </p>
             </a>

@@ -5,8 +5,8 @@
     </div>
     <div class="padding mod-has-header mod-inset-forms">
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide ng-repeat="img in sp.product.gallery">
-                <img style="width: 100%; height: 100%;" ng-src="{{img.imgSrc}}">
+            <ion-slide ng-repeat="img in sp.product.imgSrc">
+                <img style="width: 100%; height: 100%;" ng-src="{{img}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>

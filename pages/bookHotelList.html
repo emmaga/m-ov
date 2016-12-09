@@ -8,15 +8,17 @@
 
     <div class=" padding">
         <!-- doodle/海报 -->
-        
-        <iframe class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}"> </iframe>
+
+        <img class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}"> </img>
+        <!-- iframe 加载时，ng有限制 -->
+        <!-- <iframe class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}"> </iframe> -->
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- 筛选/查询 -->
         <div class="list padding mod-inset-forms">
             <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityListContent, bhl.doAfterPickCity)" >
            <!--  <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCityModal(); cp.init(bhl.cityLists, bhl.doAfterPickCity)" > -->
                 <span class="input-label">{{'placeToGo'|translate}}</span>
-                <p class="mod-select-input  mod-color-theme">{{bhl.cityInfo.name}}</p>
+                <p class="mod-select-input  mod-color-theme">{{bhl.cityInfo.name | translate }}</p>
             </div>
             <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDP(true); tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);">
             <!-- <div class="item item-input item-stacked-label mod-no-ativated" ng-click="bhl.showDateModal();tdp.init(bhl.checkin, bhl.checkout,null , null, bhl.doAfterPickDates);"> -->
@@ -39,7 +41,7 @@
                 </p>
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{hotel.LogoURL}});"></div>
             </div>
-            <div class="item mod-no-border ">
+            <div class="item mod-no-border">
                 <h2 class="mod-member-price">￥{{hotel.lowestPrice | fenToYuan}}{{'minPrice'|translate}}</h2>
                 <p class="mod-price-tag mod-member0">微信会员价</p>
                 <br>

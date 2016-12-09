@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.Price | currency}}</p>
+                <p class="col mod-no-padding col-75">￥{{bookOrderInfo.roomOrder.Price | fenToYuan}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
@@ -30,7 +30,7 @@
     <div class="item item-divider"></div>
     <div ng-repeat="good in bookOrderInfo.GoodsList ">
         <a class="item item-thumbnail-left mod-no-side-border">
-            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{good.RoomBasicInfo.LogoImgURL}});"></div>
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{good.RoomBasicInfo.roomImg}});"></div>
             <h2>{{good.RoomBasicInfo.RoomTypeName}}</h2>
             <p>{{good.RoomBasicInfo.HotelBasicInfo.HotelName}}</p>
             <p>{{good.RoomBasicInfo.Description}}</p>
@@ -70,8 +70,8 @@
     </div>
     <div class="item item-divider"></div>
     <div class="item item-divider">
-        <a class="button button-block button-balanced" ng-click="" ng-disabled="bookOrderInfo.cancelOrderBool">{{'payNow'|translate}}</a>
-        <a class="button button-block button-positive" ui-sref="bookHotelList" ng-disabled="bookOrderInfo.cancelOrderBool">{{'goOnBooking'|translate}}</a>
-        <a class="button button-block button-positive" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)" ng-disabled="bookOrderInfo.cancelOrderBool">{取消订单}</a>
+        <a class="button button-block button-balanced" ng-click="bookOrderInfo.payNow()" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showPayBtn">{{'payNow'|translate}}</a>
+        <a class="button button-block button-positive" ui-sref="bookHotelList" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool">{{'goOnBooking'|translate}}</a>
+        <a class="button button-block button-positive" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showCancelBtn">取消订单</a>
     </div>
 </div>

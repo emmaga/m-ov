@@ -111,4 +111,13 @@
     }
   }])
 
+
+  // ng 的sec 策略
+  .filter('trustSrc', ['$sce', function($sce) {
+      return function(url) {
+          return $sce.trustAsResourceUrl(url);
+      };
+  }])
+
+
 })();
