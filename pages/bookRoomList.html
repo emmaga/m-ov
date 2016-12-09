@@ -46,7 +46,7 @@
 
 
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
-                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.LogoImgURL}});"></div>
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
                 <span class="item-note">
 
 
