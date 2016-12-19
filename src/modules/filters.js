@@ -75,8 +75,8 @@
          case 'COMPLETED':
              flag = $filter('translate')('COMPLETED');
              break;
-         case 'CANCEL_REFUNDING':
-         case 'SELLER_CANCEL_REFUNDING':
+         // 字段名字 
+         case 'REFUNDING':
              flag = $filter('translate')('CANCEL_REFUNDING');
              break;
          // case 'SELLER_CANCEL_REFUNDING':
