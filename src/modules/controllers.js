@@ -3,8 +3,8 @@
 (function() {
     var app = angular.module('app.controllers', ['ngCookies'])
 
-    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle',
-        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle) {
+    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle', 'util',
+        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle, util) {
             var self = this;
 
             self.init = function() {
@@ -16,7 +16,7 @@
                 }
 
                 // root全局变量：
-                self.params = {};
+                // self.params = {};
                 // self.params.appid
                 // self.params.userid
                 // self.params.clear_session
@@ -70,8 +70,15 @@
                 /* 获取cleartoken（clear_session）和openid
                  * wx注册
                  * 获取项目及会员信息 
+                 * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
                  */
-                self.buildsession(code, appid);
+                if(self.getParams('clear_session')) {
+                    self._readystate = false;
+                    self.WXConfigJSSDK();
+                }
+                else{
+                    self.buildsession(code, appid);
+                }
             }
 
             self.wxBrowserHack = function() {
@@ -92,11 +99,13 @@
             }
 
             self.setParams = function(name, val) {
-                self.params[name] = val;
+                // self.params[name] = val;
+                util.setParams(name, val);
             }
 
             self.getParams = function(name) {
-                return self.params[name];
+                // return self.params[name];
+                return util.getParams(name);
             }
 
             self.buildsession = function(code, appid) {
@@ -209,7 +218,7 @@
                 .then(function successCallback(data, status, headers, config) {
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
-                    setTitle(self.params.projectInfo.projectName)
+                    setTitle(data.data.data.projectName);
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })

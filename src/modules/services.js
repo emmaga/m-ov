@@ -44,7 +44,7 @@
     }
     
   }])
-  .factory('util',function(){
+  .factory('util',['$cookies', function($cookies){
     // 时间戳 去掉 时分秒
     function getDayStamp(d) {
          // 时间戳字符串字符串的先转化为数字
@@ -67,12 +67,31 @@
 
       'countDays': function(ms1,ms2){
         return (getDayStamps(ms2)-getDayStamps(ms1))/(24*60*60*1000)
+      },
+      /**
+       * 设置变量
+       */
+      'setParams': function (paramsName, value) {
+          $cookies.put(paramsName, JSON.stringify(value))
+      },
+      /**
+       * 获取变量
+       * @param paramsName
+       * @returns {*}
+       */
+      'getParams': function (paramsName) {
+          if($cookies.get(paramsName)) {
+              return JSON.parse($cookies.get(paramsName));
+          }
+          else {
+              return false;
+          }
       }
       
       
 
     }
-  })
+  }])
   
   // 设置微信title
   .factory('setTitle',function(){
@@ -93,4 +112,5 @@
         body.appendChild($iframe);
     }
   })
+
 })();

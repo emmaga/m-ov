@@ -8,6 +8,7 @@
     'app.controllers',
     'app.directive',
     'app.services',
+    'ngCookies',
     'pascalprecht.translate'
   ])
 
