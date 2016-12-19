@@ -76,11 +76,12 @@
              flag = $filter('translate')('COMPLETED');
              break;
          case 'CANCEL_REFUNDING':
+         case 'SELLER_CANCEL_REFUNDING':
              flag = $filter('translate')('CANCEL_REFUNDING');
              break;
-         case 'SELLER_CANCEL_REFUNDING':
-             flag = $filter('translate')('SELLER_CANCEL_REFUNDING');
-             break;
+         // case 'SELLER_CANCEL_REFUNDING':
+         //     flag = $filter('translate')('SELLER_CANCEL_REFUNDING');
+         //     break;
          case 'CANCELED':
              flag = $filter('translate')('CANCELED');
              break;
