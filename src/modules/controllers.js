@@ -140,7 +140,7 @@
                 })
                 .then(function successCallback(data, status, headers, config) {
                     if (data.data.rescode == '200') {
-                        // 标志已经拿到clearsession和wx初始化
+                        // 标志已经拿到clearsession和wx开始注册
                         self._readystate = true;
 
                         self.loadProjectInfo();
