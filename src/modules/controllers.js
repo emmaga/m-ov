@@ -22,7 +22,7 @@
                 var code = qParts.code;
                 var appid = qParts.appid;
 
-                // 将 appid 记在 root params 缓存里
+           
                 self.setParams('appid', appid);
 
                 /* 获取cleartoken（clear_session）和openid
@@ -110,7 +110,7 @@
                   data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
-                    // 将 wxUserInfo 记在 root params 缓存里
+                    
                     self.setParams('wxUserInfo', data.data);
                     BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
                     self.WXConfigJSSDK();
@@ -125,7 +125,6 @@
                 // http://www.cnblogs.com/sunshq/p/4171490.html
                 self.noncestr = Math.random().toString(36).substr(2);
                 self.timestamp = new Date().getTime() + '';
-
 
                 var data = {
                     "appid": self.getParams('appid'),
@@ -151,8 +150,22 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
+                        wx.ready(function(){
+                            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                            // 禁用“分享给好友”，“分享到朋友圈”, "在Safari中打开", "邮件","复制链接"
+                            wx.hideMenuItems({
+                                menuList: [
+                                    'menuItem:share:appMessage', 
+                                    'menuItem:share:timeline', 
+                                    'menuItem:openWithSafari',
+                                    'menuItem:share:email', 
+                                    'menuItem:copyUrl'
+                                ]
+                            });
+                        });
+                        
                     } else {
                         alert($filter('translate')('serverError') + status);
                         $ionicLoading.hide();
@@ -1027,9 +1040,6 @@
             }
             self.init = function() {
 
-                
-                
-
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 
@@ -1080,9 +1090,6 @@
             }
             self.memberId = $stateParams.memberId;
             self.init = function() {
-
-                
-                
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1212,9 +1219,6 @@
             }
             self.init = function() {
 
-                
-                
-
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 
@@ -1265,9 +1269,6 @@
                 }
             }
             self.init = function() {
-
-                
-                
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1326,8 +1327,7 @@
             
             self.init = function() {
                 self.showLoadingBool = {};
-                
-                
+
                 self.getHotelLists();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
