@@ -58,116 +58,56 @@
       })
       .state('bookRoomList', {
         url: '/bookRoomList/?hotelId&checkIn&checkOut',
-        views: {
-          '': {
-            templateUrl: 'pages/bookRoomList.html'
-          }
-        }
+        templateUrl: 'pages/bookRoomList.html'
       })
       .state('hotelInfo', {
         url: '/hotelInfo/?hotelId',
-        views: {
-          '': {
-            templateUrl: 'pages/hotelInfo.html'
-          }
-        }
+        templateUrl: 'pages/hotelInfo.html'
       })
       .state('bookHotelList', {
         url: '/bookHotelList',
-        views: {
-          '': {
-            templateUrl: 'pages/bookHotelList.html'
-          }
-        }
+        templateUrl: 'pages/bookHotelList.html'
       })
       .state('roomInfo', {
         url: '/roomInfo/?roomId&hotelId&checkIn&checkOut',
-        views: {
-          '': {
-            templateUrl: 'pages/roomInfo.html'
-          }
-        }
+        templateUrl: 'pages/roomInfo.html'
       })
       .state('bookOrderInfo', {
         url: '/bookOrderInfo/?orderId',
-        views: {
-          '': {
-            templateUrl: 'pages/bookOrderInfo.html'
-          }
-        }
-      })
-      .state('bookRoomSoldOut', {
-        url: '/bookRoomSoldOut',
-        views: {
-          '': {
-            templateUrl: 'pages/bookRoomSoldOut.html'
-          }
-        }
+        templateUrl: 'pages/bookOrderInfo.html'
       })
       .state('memberHome', {
         url: '/memberHome',
-        views: {
-          '': {
-            templateUrl: 'pages/memberHome.html'
-          }
-        }
+        templateUrl: 'pages/memberHome.html'
       })
       .state('memberInfoEdit', {
         url: '/memberInfoEdit/?memberId',
-        views: {
-          '': {
-            templateUrl: 'pages/memberInfoEdit.html'
-          }
-        }
+        templateUrl: 'pages/memberInfoEdit.html'
       })
       .state('roomOrderList', {
         url: '/roomOrderList',
-        views: {
-          '': {
-            templateUrl: 'pages/roomOrderList.html'
-          }
-        }
+        templateUrl: 'pages/roomOrderList.html'
       })
       .state('shopOrderList', {
         url: '/shopOrderList',
-        views: {
-          '': {
-            templateUrl: 'pages/shopOrderList.html'
-          }
-        }
+        templateUrl: 'pages/shopOrderList.html'
       })
       .state('shopHome', {
         url: '/shopHome',
-        views: {
-          '': {
-            templateUrl: 'pages/shopHome.html'
-          }
-        }
+        templateUrl: 'pages/shopHome.html'
       })
       .state('shopProductDetail', {
         url: '/shopProductDetail/?hotelId&productId&hotelName',
-        views: {
-          '': {
-            templateUrl: 'pages/shopProductDetail.html'
-          }
-        }
+        templateUrl: 'pages/shopProductDetail.html'
       })
       .state('shopCart', {
 
         url: '/shopCart/?hotelId&hotelName',
-        views: {
-          '': {
-            templateUrl: 'pages/shopCart.html'
-          }
-        }
+        templateUrl: 'pages/shopCart.html'
       })
       .state('shopOrderInfo', {
         url: '/shopOrderInfo?orderId',
-        views: {
-          '': {
-            templateUrl: 'pages/shopOrderInfo.html'
-          }
-        }
+        templateUrl: 'pages/shopOrderInfo.html'
       })
   }])
 

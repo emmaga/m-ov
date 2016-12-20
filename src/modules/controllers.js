@@ -8,55 +8,13 @@
             var self = this;
 
             self.init = function() {
+
                 self.wxBrowserHack();
 
                 if(BACKEND_CONFIG.test == true) {
                     // 标志已经拿到clearsession和wx初始化
                     self._readystate = true;
                 }
-
-                // root全局变量：
-                // self.params = {};
-                // self.params.appid
-                // self.params.userid
-                // self.params.clear_session
-                // self.params.refresh_token
-                /* self.params.wxUserInfo
-                {    
-                 "openid":" OPENID",  
-                 " nickname": NICKNAME,   
-                 "sex":"1",   
-                 "province":"PROVINCE"   
-                 "city":"CITY",   
-                 "country":"COUNTRY",    
-                 "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
-                4eMsv84eavHiaiceqxibJxCfHe/46",  
-                "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
-                 "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
-                } 
-
-                * self.params.projectInfo
-                {
-                  "projectName": "项目-酒店名字",
-                  "projectImgSrc": "api/img/doodle.html"
-                }
-                 self.params.memberInfo 
-
-                 {
-                   "member": {
-                       "memberId": "123321123312",
-                       "memberLevel": {
-                         "name":"微信会员",
-                         "class":"class1"
-                       },
-                       "score": "100",
-                       "realName":"LiSi",
-                       "mobile": "13783476981",
-                       "idCardNumber": "410181999200000000",
-                       "birthday": "100"
-                    }
-                 }
-                */
 
                 // 获取 code 和 appid
                 var qString = $window.location.search.substring(1);
@@ -224,47 +182,6 @@
                 })
             }
 
-            // wx share
-            self.wxShare = function() {
-                // 1秒后再获取link，不然还是上一个页面的link
-                setTimeout(function() {
-                    // 分享给朋友
-                    wx.onMenuShareAppMessage({
-                        title: '', // 分享标题
-                        desc: '', // 分享描述
-                        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
-                            self.getParams('appid') + '&redirect_uri=' +
-                            encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
-                            '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
-                        imgUrl: '', // 分享图标
-                        type: '', // 分享类型,music、video或link，不填默认为link
-                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                        success: function() {
-                            // 用户确认分享后执行的回调函数
-                        },
-                        cancel: function() {
-                            // 用户取消分享后执行的回调函数
-                        }
-                    });
-
-                    // 分享到朋友圈
-                    wx.onMenuShareTimeline({
-                        title: '', // 分享标题
-                        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
-                            self.getParams('appid') + '&redirect_uri=' +
-                            encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
-                            '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
-                        imgUrl: '', // 分享图标
-                        success: function() {
-                            // 用户确认分享后执行的回调函数
-                        },
-                        cancel: function() {
-                            // 用户取消分享后执行的回调函数
-                        }
-                    });
-                }, 1000);
-            };
-
             // menu modal 弹出
             $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
                 scope: $scope,
@@ -294,9 +211,6 @@
             }
 
             self.init = function() {
-
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -453,9 +367,7 @@
                 }
             }
             self.init = function() {
-                
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+
                 self.hotelId = $stateParams.hotelId;
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
@@ -600,8 +512,7 @@
                 }
             }
             self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                // $scope.root.wxShare();
+
                 self.showLoadingBool = {};
                 self.hotelId = $stateParams.hotelId;
                 self.search();
@@ -651,9 +562,6 @@
                 }
             }
             self.init = function() {
-
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -956,8 +864,6 @@
             console.log($stateParams)
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
                 self.orderId = $stateParams.orderId;
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1105,17 +1011,6 @@
         }
     ])
 
-    .controller('bookRoomSoldOutController', ['$http', '$scope',
-        function($http, $scope) {
-            var self = this;
-
-            self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
-            }
-        }
-    ])
-
     .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
         function($http, $scope, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
@@ -1132,8 +1027,8 @@
             }
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1186,8 +1081,8 @@
             self.memberId = $stateParams.memberId;
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1317,8 +1212,8 @@
             }
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1371,8 +1266,8 @@
             }
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1431,8 +1326,8 @@
             
             self.init = function() {
                 self.showLoadingBool = {};
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
                 self.getHotelLists();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
@@ -1655,8 +1550,8 @@
                 self.showLoadingBool = {};
                 self.buying = false;
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
                 self.search();
             }
 
@@ -1782,8 +1677,6 @@
             }
         }
         self.init = function() {
-          // 注册微信分享朋友和朋友圈
-          $scope.root.wxShare();
 
           // 初始化
           self.hotelId = $stateParams.hotelId;
@@ -2117,8 +2010,6 @@
                  }
              }
             self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 self.orderId = $stateParams.orderId;
                 self.showLoadingBool = {};

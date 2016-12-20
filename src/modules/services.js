@@ -87,6 +87,47 @@
               return false;
           }
       }
+      // 变量：
+      // appid
+      // userid
+      // clear_session
+      // refresh_token
+      /* wxUserInfo
+      {    
+       "openid":" OPENID",  
+       " nickname": NICKNAME,   
+       "sex":"1",   
+       "province":"PROVINCE"   
+       "city":"CITY",   
+       "country":"COUNTRY",    
+       "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
+      4eMsv84eavHiaiceqxibJxCfHe/46",  
+      "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
+       "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
+      } 
+
+      * projectInfo
+      {
+        "projectName": "项目-酒店名字",
+        "projectImgSrc": "api/img/doodle.html"
+      }
+       memberInfo 
+
+       {
+         "member": {
+             "memberId": "123321123312",
+             "memberLevel": {
+               "name":"微信会员",
+               "class":"class1"
+             },
+             "score": "100",
+             "realName":"LiSi",
+             "mobile": "13783476981",
+             "idCardNumber": "410181999200000000",
+             "birthday": "100"
+          }
+       }
+      */
       
       
 
