@@ -6,7 +6,7 @@
     <div class="list mod-has-header">
         <div ng-repeat="order in rol.orderLists track by $index" ui-sref="bookOrderInfo({orderId:order.ID})">
             <div class="item item-divider">
-                <p>{{'orderID'|translate}} #{{order.ID}}</p>
+                <p>{{'orderID'|translate}} #{{order.OrderNum}}</p>
                 <span class="item-note">
                     <p>{{order.Status | orderStatus}}</p>
                 </span>
