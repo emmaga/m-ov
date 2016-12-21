@@ -53,6 +53,10 @@
             <p class="col mod-no-padding">送货地址:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>
+        <div class="row">
+            <p class="col mod-no-padding">所属门店:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.hotelName}}</p>
+        </div>
     </div>
     <div class="item item-divider">
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>

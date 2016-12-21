@@ -196,7 +196,7 @@
                 })
             }
 
-            // menu modal 弹出
+            /*// menu modal 弹出
             $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
                 scope: $scope,
                 animation: 'slide-in-left'
@@ -205,7 +205,7 @@
             });
             self.showMainMenu = function() {
                 $scope.modal.show();
-            }
+            }*/
         }
     ])
 

@@ -72,7 +72,7 @@
 
   "WAITPAY" : "待付款",
   "WAITAPPROVAL": "审核中",
-  "ACCEPT": "订单接收",
+  "ACCEPT": "待入住",
   "DELIVERING": "订单配送",
   "COMPLETED": "订单完成",
   "CANCEL_REFUNDING": "订单取消退款中",
