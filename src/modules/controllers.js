@@ -1142,8 +1142,8 @@
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "memberInfo": {
                         "realName": self.member.realName,
-                        "mobile": self.member.idCardNumber,
-                        "idCardNumber": self.member.mobile
+                        "mobile": self.member.mobile,
+                        "idCardNumber": self.member.idCardNumber
                     }
                 };
                 data = JSON.stringify(data);
