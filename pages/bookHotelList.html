@@ -9,10 +9,12 @@
     <div class=" padding">
         <!-- doodle/海报 -->
 
-        <img class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}" />
+        <img class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}" ng-if="root.params.projectInfo.ProjectLogo"/>
+        <iframe class="mod-doodle" src="dist/img/doodle.html" nf-if="!root.params.projectInfo.ProjectLogo"> </iframe>
         <!-- iframe 加载时，ng有限制 -->
-        <!-- <iframe class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}"> </iframe> -->
+
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
+
         <!-- 筛选/查询 -->
         <div class="list padding mod-inset-forms">
             <div class="item item-input item-stacked-label mod-no-ativated"  ng-click="bhl.showCP(true); cp.init(bhl.cityListContent, bhl.doAfterPickCity)" >
