@@ -9,8 +9,8 @@
     <div class=" padding">
         <!-- doodle/海报 -->
 
-        <img class="mod-doodle" ng-src="{{root.params.projectInfo.ProjectLogo}}" ng-if="root.params.projectInfo.ProjectLogo"/>
-        <iframe class="mod-doodle" src="dist/img/doodle.html" nf-if="!root.params.projectInfo.ProjectLogo"> </iframe>
+        <img class="mod-doodle" ng-src="{{bhl.projectImg}}" ng-if="bhl.projectImg"/>
+        <iframe class="mod-doodle" src="dist/img/doodle.html" ng-if="!bhl.projectImg"> </iframe>
         <!-- iframe 加载时，ng有限制 -->
 
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>

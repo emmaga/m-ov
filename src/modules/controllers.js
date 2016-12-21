@@ -140,9 +140,6 @@
                 })
                 .then(function successCallback(data, status, headers, config) {
                     if (data.data.rescode == '200') {
-                        // 标志已经拿到clearsession和wx开始注册
-                        self._readystate = true;
-
                         self.loadProjectInfo();
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -191,6 +188,8 @@
                 .then(function successCallback(data, status, headers, config) {
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
+                    // 标志已经拿到clearsession,wx开始注册,projectinfo已经拿到
+                    self._readystate = true;
                     setTitle(data.data.data.projectName);
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
@@ -226,6 +225,8 @@
             }
 
             self.init = function() {
+                // 项目图片
+                self.projectImg = $scope.root.getParams('projectInfo').ProjectLogo;
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
