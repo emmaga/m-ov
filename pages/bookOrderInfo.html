@@ -11,15 +11,11 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.CreateTime }}</p>
+                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.CreateTime}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
                 <p class="col mod-no-padding col-75">￥{{bookOrderInfo.roomOrder.Price | fenToYuan}}</p>
-            </div>
-            <div class="row">
-                <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.PayType }}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
@@ -51,7 +47,7 @@
                 <p class="col mod-no-padding col-75">{{good.GoodsNum}}</p>
             </div>
             <div class="row">
-                <p class="col mod-no-padding">{{'contactName'|translate}}:</p>
+                <p class="col mod-no-padding">{{'contackName'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ContactorName}}</p>
             </div>
             <div class="row">
@@ -61,10 +57,6 @@
             <div class="row">
                 <p class="col mod-no-padding">退改说明:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.room.changeDeal}}</p>
-            </div>
-            <div class="row">
-                <p class="col mod-no-padding">简介:</p>
-                <p class="col mod-no-padding col-75">{{good.RoomBasicInfo.Description}}</p>
             </div>
         </div>
     </div>
