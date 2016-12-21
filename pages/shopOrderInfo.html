@@ -49,7 +49,7 @@
             <p class="col mod-no-padding">配送方式:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
-        <div class="row">
+        <div ng-show="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
             <p class="col mod-no-padding">送货地址:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>
