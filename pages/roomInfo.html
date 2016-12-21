@@ -17,8 +17,7 @@
         <div class="list padding mod-inset-forms mod-list">
             <div class="item">
                 <span class="mod-tag" ng-repeat="feature in roomInfo.room.Features">
-                <i class="icon mod-icon {{feature.icon}}"></i>
-                {{feature.Name}}
+                <i class="icon mod-icon {{feature.ImageURL}}"></i>
               </span>
             </div>
             <div class="item">
@@ -38,10 +37,10 @@
             {{roomInfo.room.RoomTypeName}}
         </div>
         <div class="item">
-            {{roomInfo.hotel.Description}}
+            {{roomInfo.room.Description}}
         </div>
         <div class="item">
-            {{roomInfo.checkIn | date:'MM月dd日'}}入住123~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
+            {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
             <div class="input-label">{{'roomQuantity'|translate}}:</div>
@@ -88,9 +87,9 @@
 
 
        
-        <div class="padding">
+        <!-- <div class="padding">
             {{roomInfo.room.changeDeal }}
-        </div>
+        </div> -->
         <div class="item item-divider">
             <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid || roomInfo.submitOrderBool">
         </div>

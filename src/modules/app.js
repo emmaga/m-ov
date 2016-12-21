@@ -21,34 +21,6 @@
       });
   }])
 
-
-  .config(['$httpProvider', function($httpProvider) {
-    $httpProvider.interceptors.push('myInterceptor');
-  }])
-
-  // 7000ms 超时
-  .factory('myInterceptor', ['$q','$filter', function($q, $filter) {
-    var interceptor = {
-      'request' : function(config) {
-        config.timeout = 7000;
-        config.timeStamp = new Date().getTime();
-        return config;
-      },
-      'responseError': function(err) {
-        // console.log(new Date().getTime() - err.config.timeStamp)
-        if(new Date().getTime() - err.config.timeStamp >= 7000) {
-          alert($filter('translate')('serverTimeout') + err.status);
-        }
-        else {
-          alert($filter('translate')('serverError') + err.status);
-        }
-        //阻止下一步
-        return $q.reject(err);
-      }
-    }
-    return interceptor;
-  }])
-
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/index');
     $stateProvider
@@ -118,20 +90,20 @@
       // 滚动到页面顶部
       document.body.scrollTop = 0;
       
-      // 点透
+      /*// 点透
       setTimeout(function(){
-      document.getElementById('pageCover').style.display='none';
-    },300)
+        document.getElementById('pageCover').style.display='none';
+      },300)*/
     })
   }])
 
-  // 每次页面开始跳转时触发
+  /*// 每次页面开始跳转时触发
   .run(['$rootScope', '$timeout', function($rootScope) {
     $rootScope.$on("$viewContentLoading", function(){
       // 点透
       document.getElementById('pageCover').style.display='block';
     })
-  }])
+  }])*/
 
 
   .constant('BACKEND_CONFIG', {

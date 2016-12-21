@@ -1124,7 +1124,6 @@
                        self.member = data.data.data.member;
                        self.member.mobile = data.data.data.member.mobile-0;
                        self.member.idCardNumber = data.data.data.member.idCardNumber-0;
-                       console.log(self.member)
                        self.showLoadingBool.searchBool = true;
                    }, function errorCallback(data, status, headers, config) {
                        self.showLoadingBool.searchBool = true;
@@ -1136,7 +1135,6 @@
             }
             self.updataMemberInfo = function() {
                 self.updataMemberInfoBool = true
-                console.log('updataMemberInfo')
                 var data = {
                     "action": "modifyMemberInfo",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1157,7 +1155,6 @@
                           alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
                       }else {
                           alert('修改成功');
-                          $state.reload();
                       }
                       
                   }, function errorCallback(data, status, headers, config) {
