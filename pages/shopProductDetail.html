@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
-        <a class="button" ng-click="sp.addToCart()">加入购物车</a>
-        <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}">立即购买</a>
+        <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">加入购物车</a>
+        <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">立即购买</a>
     </div>
 </div>

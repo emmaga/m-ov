@@ -44,7 +44,7 @@
     }
     
   }])
-  .factory('util',function(){
+  .factory('util',['$cookies', function($cookies){
     // 时间戳 去掉 时分秒
     function getDayStamp(d) {
          // 时间戳字符串字符串的先转化为数字
@@ -67,12 +67,72 @@
 
       'countDays': function(ms1,ms2){
         return (getDayStamps(ms2)-getDayStamps(ms1))/(24*60*60*1000)
+      },
+      /**
+       * 设置变量
+       */
+      'setParams': function (paramsName, value) {
+          $cookies.put(paramsName, JSON.stringify(value))
+      },
+      /**
+       * 获取变量
+       * @param paramsName
+       * @returns {*}
+       */
+      'getParams': function (paramsName) {
+          if($cookies.get(paramsName)) {
+              return JSON.parse($cookies.get(paramsName));
+          }
+          else {
+              return false;
+          }
       }
+      // 变量：
+      // appid
+      // userid
+      // clear_session
+      // refresh_token
+      /* wxUserInfo
+      {    
+       "openid":" OPENID",  
+       " nickname": NICKNAME,   
+       "sex":"1",   
+       "province":"PROVINCE"   
+       "city":"CITY",   
+       "country":"COUNTRY",    
+       "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
+      4eMsv84eavHiaiceqxibJxCfHe/46",  
+      "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
+       "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
+      } 
+
+      * projectInfo
+      {
+        "projectName": "项目-酒店名字",
+        "projectImgSrc": "api/img/doodle.html"
+      }
+       memberInfo 
+
+       {
+         "member": {
+             "memberId": "123321123312",
+             "memberLevel": {
+               "name":"微信会员",
+               "class":"class1"
+             },
+             "score": "100",
+             "realName":"LiSi",
+             "mobile": "13783476981",
+             "idCardNumber": "410181999200000000",
+             "birthday": "100"
+          }
+       }
+      */
       
       
 
     }
-  })
+  }])
   
   // 设置微信title
   .factory('setTitle',function(){
@@ -93,4 +153,5 @@
         body.appendChild($iframe);
     }
   })
+
 })();

@@ -1,7 +1,7 @@
 <div ng-controller="shopOrderInfoController as shopOrderInfo" ng-init="shopOrderInfo.beforeInit()">
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">订单详情</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
     <div class=" mod-has-header">
         <div class="item mod-no-border-top">
@@ -49,7 +49,7 @@
             <p class="col mod-no-padding">配送方式:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
-        <div class="row">
+        <div ng-show="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
             <p class="col mod-no-padding">送货地址:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>

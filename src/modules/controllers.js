@@ -3,11 +3,12 @@
 (function() {
     var app = angular.module('app.controllers', ['ngCookies'])
 
-    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle',
-        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle) {
+    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle', 'util',
+        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle, util) {
             var self = this;
 
             self.init = function() {
+
                 self.wxBrowserHack();
 
                 if(BACKEND_CONFIG.test == true) {
@@ -15,63 +16,27 @@
                     self._readystate = true;
                 }
 
-                // root全局变量：
-                self.params = {};
-                // self.params.appid
-                // self.params.userid
-                // self.params.clear_session
-                // self.params.refresh_token
-                /* self.params.wxUserInfo
-                {    
-                 "openid":" OPENID",  
-                 " nickname": NICKNAME,   
-                 "sex":"1",   
-                 "province":"PROVINCE"   
-                 "city":"CITY",   
-                 "country":"COUNTRY",    
-                 "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
-                4eMsv84eavHiaiceqxibJxCfHe/46",  
-                "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
-                 "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
-                } 
-
-                * self.params.projectInfo
-                {
-                  "projectName": "项目-酒店名字",
-                  "projectImgSrc": "api/img/doodle.html"
-                }
-                 self.params.memberInfo 
-
-                 {
-                   "member": {
-                       "memberId": "123321123312",
-                       "memberLevel": {
-                         "name":"微信会员",
-                         "class":"class1"
-                       },
-                       "score": "100",
-                       "realName":"LiSi",
-                       "mobile": "13783476981",
-                       "idCardNumber": "410181999200000000",
-                       "birthday": "100"
-                    }
-                 }
-                */
-
                 // 获取 code 和 appid
                 var qString = $window.location.search.substring(1);
                 var qParts = qString.parseQuerystring();
                 var code = qParts.code;
                 var appid = qParts.appid;
 
-                // 将 appid 记在 root params 缓存里
+           
                 self.setParams('appid', appid);
 
                 /* 获取cleartoken（clear_session）和openid
                  * wx注册
                  * 获取项目及会员信息 
+                 * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
                  */
-                self.buildsession(code, appid);
+                if(self.getParams('clear_session')) {
+                    self._readystate = false;
+                    self.WXConfigJSSDK();
+                }
+                else{
+                    self.buildsession(code, appid);
+                }
             }
 
             self.wxBrowserHack = function() {
@@ -92,11 +57,13 @@
             }
 
             self.setParams = function(name, val) {
-                self.params[name] = val;
+                // self.params[name] = val;
+                util.setParams(name, val);
             }
 
             self.getParams = function(name) {
-                return self.params[name];
+                // return self.params[name];
+                return util.getParams(name);
             }
 
             self.buildsession = function(code, appid) {
@@ -143,7 +110,7 @@
                   data: data
                 })
                 .then(function successCallback(data, status, headers, config) {
-                    // 将 wxUserInfo 记在 root params 缓存里
+                    
                     self.setParams('wxUserInfo', data.data);
                     BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
                     self.WXConfigJSSDK();
@@ -159,7 +126,6 @@
                 self.noncestr = Math.random().toString(36).substr(2);
                 self.timestamp = new Date().getTime() + '';
 
-
                 var data = {
                     "appid": self.getParams('appid'),
                     "noncestr": self.noncestr,
@@ -174,9 +140,6 @@
                 })
                 .then(function successCallback(data, status, headers, config) {
                     if (data.data.rescode == '200') {
-                        // 标志已经拿到clearsession和wx初始化
-                        self._readystate = true;
-
                         self.loadProjectInfo();
                         wx.config({
                             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -184,8 +147,24 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
+                        wx.ready(function(){
+                            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                            // 禁用“分享给好友”，“分享到朋友圈”, "在Safari中打开", "邮件","复制链接","分享到QQ","分享到QQ空间"
+                            wx.hideMenuItems({
+                                menuList: [
+                                    'menuItem:share:appMessage', 
+                                    'menuItem:share:timeline', 
+                                    'menuItem:openWithSafari',
+                                    'menuItem:share:email', 
+                                    'menuItem:copyUrl',
+                                    'menuItem:share:qq',
+                                    'menuItem:share:QZone'
+                                ]
+                            });
+                        });
+                        
                     } else {
                         alert($filter('translate')('serverError') + status);
                         $ionicLoading.hide();
@@ -209,52 +188,13 @@
                 .then(function successCallback(data, status, headers, config) {
                     self.projectInfo = data.data.data;
                     self.setParams('projectInfo', self.projectInfo);
-                    setTitle(self.params.projectInfo.projectName)
+                    // 标志已经拿到clearsession,wx开始注册,projectinfo已经拿到
+                    self._readystate = true;
+                    setTitle(data.data.data.projectName);
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })
             }
-
-            // wx share
-            self.wxShare = function() {
-                // 1秒后再获取link，不然还是上一个页面的link
-                setTimeout(function() {
-                    // 分享给朋友
-                    wx.onMenuShareAppMessage({
-                        title: '', // 分享标题
-                        desc: '', // 分享描述
-                        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
-                            self.getParams('appid') + '&redirect_uri=' +
-                            encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
-                            '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
-                        imgUrl: '', // 分享图标
-                        type: '', // 分享类型,music、video或link，不填默认为link
-                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                        success: function() {
-                            // 用户确认分享后执行的回调函数
-                        },
-                        cancel: function() {
-                            // 用户取消分享后执行的回调函数
-                        }
-                    });
-
-                    // 分享到朋友圈
-                    wx.onMenuShareTimeline({
-                        title: '', // 分享标题
-                        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
-                            self.getParams('appid') + '&redirect_uri=' +
-                            encodeURIComponent(window.location.origin + window.location.pathname + window.location.hash) +
-                            '&response_type=code&scope=snsapi_userinfo&state=&component_appid=wx5bfdc86d4b702418#wechat_redirect', // 分享链接
-                        imgUrl: '', // 分享图标
-                        success: function() {
-                            // 用户确认分享后执行的回调函数
-                        },
-                        cancel: function() {
-                            // 用户取消分享后执行的回调函数
-                        }
-                    });
-                }, 1000);
-            };
 
             // menu modal 弹出
             $ionicModal.fromTemplateUrl('pages/mainMenu.html', {
@@ -285,9 +225,8 @@
             }
 
             self.init = function() {
-
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                // 项目图片
+                self.projectImg = $scope.root.getParams('projectInfo').ProjectLogo;
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -444,9 +383,7 @@
                 }
             }
             self.init = function() {
-                
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+
                 self.hotelId = $stateParams.hotelId;
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
@@ -591,8 +528,7 @@
                 }
             }
             self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                // $scope.root.wxShare();
+
                 self.showLoadingBool = {};
                 self.hotelId = $stateParams.hotelId;
                 self.search();
@@ -642,9 +578,6 @@
                 }
             }
             self.init = function() {
-
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -947,8 +880,6 @@
             console.log($stateParams)
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
                 self.orderId = $stateParams.orderId;
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1096,17 +1027,6 @@
         }
     ])
 
-    .controller('bookRoomSoldOutController', ['$http', '$scope',
-        function($http, $scope) {
-            var self = this;
-
-            self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
-            }
-        }
-    ])
-
     .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
         function($http, $scope, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
@@ -1122,9 +1042,6 @@
                 }
             }
             self.init = function() {
-
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1177,9 +1094,6 @@
             self.memberId = $stateParams.memberId;
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
-
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
@@ -1210,7 +1124,6 @@
                        self.member = data.data.data.member;
                        self.member.mobile = data.data.data.member.mobile-0;
                        self.member.idCardNumber = data.data.data.member.idCardNumber-0;
-                       console.log(self.member)
                        self.showLoadingBool.searchBool = true;
                    }, function errorCallback(data, status, headers, config) {
                        self.showLoadingBool.searchBool = true;
@@ -1222,15 +1135,14 @@
             }
             self.updataMemberInfo = function() {
                 self.updataMemberInfoBool = true
-                console.log('updataMemberInfo')
                 var data = {
                     "action": "modifyMemberInfo",
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "memberInfo": {
                         "realName": self.member.realName,
-                        "mobile": self.member.idCardNumber,
-                        "idCardNumber": self.member.mobile
+                        "mobile": self.member.mobile,
+                        "idCardNumber": self.member.idCardNumber
                     }
                 };
                 data = JSON.stringify(data);
@@ -1243,7 +1155,6 @@
                           alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
                       }else {
                           alert('修改成功');
-                          $state.reload();
                       }
                       
                   }, function errorCallback(data, status, headers, config) {
@@ -1308,9 +1219,6 @@
             }
             self.init = function() {
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
-
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 
@@ -1361,9 +1269,6 @@
                 }
             }
             self.init = function() {
-
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
@@ -1422,8 +1327,7 @@
             
             self.init = function() {
                 self.showLoadingBool = {};
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+
                 self.getHotelLists();
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
@@ -1646,8 +1550,8 @@
                 self.showLoadingBool = {};
                 self.buying = false;
 
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
+                
+                
                 self.search();
             }
 
@@ -1773,8 +1677,6 @@
             }
         }
         self.init = function() {
-          // 注册微信分享朋友和朋友圈
-          $scope.root.wxShare();
 
           // 初始化
           self.hotelId = $stateParams.hotelId;
@@ -2108,8 +2010,6 @@
                  }
              }
             self.init = function() {
-                // 注册微信分享朋友和朋友圈
-                $scope.root.wxShare();
 
                 self.orderId = $stateParams.orderId;
                 self.showLoadingBool = {};

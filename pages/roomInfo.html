@@ -2,7 +2,7 @@
     <!-- 头部 -->
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{roomInfo.room.RoomTypeName}}</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
     <!-- 内容 -->
     <div class="padding mod-has-header" style="padding-bottom: 0">
@@ -17,8 +17,7 @@
         <div class="list padding mod-inset-forms mod-list">
             <div class="item">
                 <span class="mod-tag" ng-repeat="feature in roomInfo.room.Features">
-                <i class="icon mod-icon {{feature.icon}}"></i>
-                {{feature.Name}}
+                <i class="icon mod-icon {{feature.ImageURL}}"></i>
               </span>
             </div>
             <div class="item">
@@ -38,10 +37,10 @@
             {{roomInfo.room.RoomTypeName}}
         </div>
         <div class="item">
-            {{roomInfo.hotel.Description}}
+            {{roomInfo.room.Description}}
         </div>
         <div class="item">
-            {{roomInfo.checkIn | date:'MM月dd日'}}入住123~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
+            {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
         </div>
         <div class="item item-input">
             <div class="input-label">{{'roomQuantity'|translate}}:</div>
@@ -73,8 +72,8 @@
         </div>
         <div class="list padding mod-list mod-inset-forms">
             <div class="item">
-                <p ng-repeat="price in roomInfo.PriceInfo.PriceList">
-                    {{price.date | date:'yyyy年MM月dd日'}} {{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}
+                <p ng-repeat="price in roomInfo.priceList">
+                    {{price.date | date:'yyyy年MM月dd日'}} {{price.price | fenToYuan}}&nbsp×&nbsp{{roomInfo.roomNumber}}
                     <br>
                 </p>
             </div>
@@ -88,11 +87,8 @@
 
 
        
-        <div class="padding">
+        <!-- <div class="padding">
             {{roomInfo.room.changeDeal }}
-        </div>
-        <!-- <div class="item item-divider padding">
-            <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
         </div> -->
         <div class="item item-divider">
             <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid || roomInfo.submitOrderBool">
