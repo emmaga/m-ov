@@ -94,6 +94,7 @@
       //   "hotelId": "xx",
       //   "shopId": "xx",
       // }
+      // state
       // appid
       // userid
       // clear_session

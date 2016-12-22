@@ -24,6 +24,7 @@
                 var state = qParts.state;
 
                 self.setParams('appid', appid);
+                self.setParams('state', state);
 
                 /* 获取cleartoken（clear_session）和openid
                  * wx注册
@@ -1343,6 +1344,7 @@
 
                 // 如果缓存里有shopid和门店id和门店名称，获取门店，选中该门店，获取商店
                 if(util.getParams('shopinfo')) {
+                    alert('缓存有shopid')
                     self.hotelId = util.getParams('shopinfo').hotelId;
                     self.hotelName = util.getParams('shopinfo').hotelName;
                     self.shopId = util.getParams('shopinfo').shopId;
@@ -1365,13 +1367,19 @@
                             var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                             // var speed = res.speed; // 速度，以米/每秒计
                             // var accuracy = res.accuracy; // 位置精度
-                            self.getHotelIdByLocation(longitude, latitude);
+                            self.getHotelIdByLocation(latitude, longitude);
                         },
                         cancel: function() {
-                            
+                            self.getHotelList()
+                            .then(function() {
+                                self.getShopIdByHotelId();
+                            });
                         },
                         error: function(e) {
-                            
+                            self.getHotelList()
+                            .then(function() {
+                                self.getShopIdByHotelId();
+                            });
                         }
                     });
                     
@@ -1391,7 +1399,6 @@
             
 
             self.getHotelIdByLocation = function(x, y) {
-                var deferred = $q.defer();
                 var data = {
                     "action": "getNearestHotelID",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1410,8 +1417,8 @@
                     if(data.data.hotelID !== '') {
                         self.hotelId = data.data.hotelID;
                     }
-                    self.getHotelList()
-                    .then(function() {
+                    alert('hahaha');
+                    self.getHotelList().then(function() {
                         self.getShopIdByHotelId();
                     });
 
@@ -1426,20 +1433,16 @@
                 },function errorCallback(data, status, headers, config) {
                     alert($filter('translate')('serverError'));
                 })
-                return deferred.promise;
             }
 
             self.getShopIdByHotelId = function() {
-                var qString = $window.location.search.substring(1);
-                var qParts = qString.parseQuerystring();
-                var shopType = qParts.state;
-
+                alert(util.getParams('state'))
                 var data = {
                     "action": "getShopIDByType",
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "hotelID": self.hotelId,
-                    "shopType": shopType
+                    "shopType": util.getParams('state')
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1476,6 +1479,7 @@
                     "lang": $translate.proposedLanguage() || $translate.use()
                 }
                 data = JSON.stringify(data);
+                alert(data);
                 $http({
                   method: $filter('ajaxMethod')(),
                   url: backendUrl('shopinfo', 'hotelLists'),
@@ -1487,8 +1491,10 @@
                     self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
                     self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
                   }
+                  deferred.resolve();
                 },function errorCallback(data, status, headers, config) {
                     alert($filter('translate')('serverError'));
+                    deferred.reject();
                 });
                 return deferred.promise;
             }
@@ -1559,6 +1565,7 @@
             }
 
             self.searchCategory = function() {
+                alert('searchCategory')
                 var data = {
                     "action": "getProductCategory",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1568,6 +1575,7 @@
                     "shopID": self.shopId
                 };
                 data = JSON.stringify(data);
+                alert(data)
                 $http({
                     method: $filter('ajaxMethod')(),
                     url: backendUrl('shopinfo', 'productCategory'),
@@ -1576,7 +1584,7 @@
                     //加载购物车内容
                     self.loadShopCartInfo();
                     self.categoryList = data.data.data.categoryList;
-               
+                    alert(JSON.stringify(data.data.data))
                     if (self.categoryList.length !=0) {
                         // 默认加载第一个分类
                         self.searchProductList(self.categoryList["0"]["id"],true);
