@@ -21,9 +21,10 @@
 
   "goOnBooking": "继续预定",
 
-
+  "hotelOrder": "酒店订单",
 
   "map": "地图",
+  "memberInfo": "会员资料",
   "minPrice": "起",
   "myOrders": "我的订单",
   "Monday": "一",
@@ -58,6 +59,7 @@
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
   "serverTimeout": "网络不好哟",
+  "shopOrder": "商城订单",
   "submitOrder": "提交订单",
   "Saturday": "六",
   "Sunday": "日",

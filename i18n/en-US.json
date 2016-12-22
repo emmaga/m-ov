@@ -15,7 +15,10 @@
   "fillInOrder": "fill out",
   "Friday": "Fr",
 
+  "hotelOrder": "hotel order",
+
   "map": "location",
+  "memberInfo": "member info",
   "myOrders": "myOrders",
   "Monday": "一",
 
@@ -34,6 +37,7 @@
   "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
   "serverTimeout": "poor network",
+  "shopOrder": "shop order",
   "submitOrder": "submit",
   "Saturday": "Sa",
   "Sunday": "Su",
