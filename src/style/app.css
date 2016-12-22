@@ -737,7 +737,7 @@ small {
 }
 
 .atc-content {
-    padding: 30px 10px;
+    padding: 10px 30px 60px 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -764,8 +764,8 @@ small {
     padding-bottom: 33.33%;
 }
 
-.atc-col6 {
-    width: 66.67%
+.atc-col8 {
+    width: 78.5%
 }
 
 
