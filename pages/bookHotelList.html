@@ -44,7 +44,7 @@
 
 
         <!-- thumbnail item-->
-        <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.ID,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
+        <a class="item item-thumbnail-left mod-no-side-border wx-touch-hack" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.ID,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
             <!-- 封面图 -->
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{hotel.LogoURL}});"></div>
 

@@ -42,14 +42,14 @@
             self.wxBrowserHack = function() {
                 document.addEventListener('touchmove', function(event) {
                     // event.preventDefault();
-                    var l = document.getElementsByClassName('card');
+                    var l = document.getElementsByClassName('wx-touch-hack');
                     for(var i=0; i< l.length; i++) {
                         l[i].style.pointerEvents= "none";
                     }
                 })
                 document.addEventListener('scroll', function(event) {
                     // event.preventDefault();
-                    var l = document.getElementsByClassName('card');
+                    var l = document.getElementsByClassName('wx-touch-hack');
                     for(var i=0; i< l.length; i++) {
                         l[i].style.pointerEvents= "auto";
                     }
