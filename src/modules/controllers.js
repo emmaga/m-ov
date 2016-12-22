@@ -166,7 +166,7 @@
                         });
                         
                     } else {
-                        alert($filter('translate')('serverError'));
+                        alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                         $ionicLoading.hide();
                         // 继续注册
                         $timeout(function(){self.WXConfigJSSDK;},50);
@@ -830,7 +830,7 @@
                                      if (data.rescode == '200') {
                                         self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
                                      } else {
-                                         alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                                         alert($filter('translate')('serverError') + ' ' + data.errInfo);
                                      }
                                 })
                                 .error(function(data, status, headers, config) {
@@ -953,20 +953,20 @@
                         self.roomOrder.Status = 'CANCELED';
                         if(data.data.rescode == '200') {
                           if(data.data.data.RefundRequestACK) {
-                              alert('订单取消成功，预计款项将于24小时内退回，请注意查收');
+                              alert($filter('translate')('cancelSuccess'));
                           }
                           else {
-                              alert('订单取消成功');
+                              alert($filter('translate')('cancelSuccess'));
                           }
                           $state.reload('bookOrderInfo',{orderId: self.orderId-0});
                         }
                         else {
-                            alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                            alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                         }
                     }, function errorCallback(data, status, headers, config) {
                         bookOrderInfo.roomOrder.Status = status;
                         self.cancelOrderBool = false;
-                        alert('取消订单失败，请稍后重试')
+                        alert($filter('translate')('cancelFailure'));
                     });
                 
             }
@@ -995,10 +995,10 @@
 
                            self.wxPay(data.data.data.JS_Pay_API, data.data.data.orderNum);
                         } else {
-                            alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                            alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                         }
                     }, function errorCallback(data, status, headers, config) {
-                        alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
+                        alert($filter('translate')('serverError'));
                     }).finally(function(){
                     });
                 
@@ -1155,9 +1155,9 @@
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
                       if(data.data.rescode != '200') {
-                          alert('修改失败，请重试 ' +data.data.rescode +' '+ errInfo);
+                          alert($filter('translate')('saveFailure'));
                       }else {
-                          alert('修改成功');
+                          alert($filter('translate')('saveSuccess'));
                       }
                       
                   }, function errorCallback(data, status, headers, config) {
@@ -1421,7 +1421,7 @@
                        self.shopName = data.data.data.shopName;
                        self.searchCategory();
                     } else {
-                        alert($filter('translate')('serverError'));
+                        alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                     }
                     
                    
@@ -1589,7 +1589,7 @@
                             self.loadShopCartInfo();
                         }
                         else {
-                            alert(data.data.rescode + data.data.errInfo);
+                            alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                         }
                         
                     }).finally(function(value) {
@@ -1756,7 +1756,7 @@
             .then(
               function successCallback(data, status, headers, config) {
                 if(data.data.rescode != '200') {
-                    alert(errInfo);
+                    alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                 }
               },
               function errorCallback(data, status, headers, config) {
@@ -1788,7 +1788,7 @@
           .then(
             function successCallback(data, status, headers, config) {
                 if(data.data.rescode != '200') {
-                    alert(errInfo);
+                    alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                 }
             },
             function errorCallback(data, status, headers, config) {
@@ -1862,7 +1862,7 @@
               }
             }
             else {
-                alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                alert($filter('translate')('serverError') + data.data.errInfo);
             }
           })
           .finally(function(value){
@@ -1924,7 +1924,7 @@
               }
               //订单生成失败
               else {
-                  alert('订单生成失败，' + data.data.rescode + data.data.errInfo);
+                  alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
               }
             })
             //订单生成结束
@@ -1982,7 +1982,7 @@
                 });
               }
               else {
-                  alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                  alert($filter('translate')('serverError') + data.data.errInfo);
               }
             })
             .finally(function(value){
@@ -2105,7 +2105,7 @@
                     });
                   }
                   else {
-                      alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                      alert($filter('translate')('serverError') + data.data.errInfo);
                   }
                 })
                 .finally(function(value){
@@ -2138,15 +2138,15 @@
                 .then(function successCallback(data, status, headers, config) {
                   if(data.data.rescode == '200') {
                     if(data.data.data.RefundRequestACK) {
-                        alert('订单取消成功，预计款项将于24小时内退回，请注意查收');
+                        alert($filter('translate')('cancelSuccess'));
                     }
                     else {
-                        alert('订单取消成功');
+                        alert($filter('translate')('cancelSuccess'));
                     }
                     $state.reload('shopOrderInfo',{orderId: self.orderId-0});
                   }
                   else {
-                      alert($filter('translate')('serverError') + data.data.rescode + data.data.errInfo);
+                      alert($filter('translate')('serverError') + data.data.errInfo);
                   }
                 })
                 .finally(function(value){

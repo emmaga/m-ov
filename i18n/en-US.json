@@ -6,6 +6,8 @@
   "bookHotel": "bookHotel",
   "bookSoldOut": "sold out",
 
+  "cancelSuccess": "cancel success",
+  "cancelFail": "cancel fail",
   "cancelOrder": "cancel the order",
   "certificateNumber": "certificate number",
   "checkIn": "check in",
@@ -51,6 +53,8 @@
   "roomQuantity" : "rooms",
 
   "save": "save",
+  "saveFailure": "save failure",
+  "saveSuccess": "save success",
   "searchResultA": "Here are",
   "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
@@ -59,6 +63,7 @@
   "shopName": "shop name",
   "shopOrder": "shop order",
   "submitOrder": "submit",
+  "success": "success",
   "Saturday": "Sa",
   "Sunday": "Su",
 
