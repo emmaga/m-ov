@@ -21,7 +21,7 @@
               </span>
             </div>
             <div class="item">
-                {{feature.Name}}
+                {{roomInfo.room.Description}}
             </div>
             <!-- <div class="mod-split-line mod-break-2padding"></div> -->
         </div>
@@ -37,7 +37,6 @@
             {{roomInfo.room.RoomTypeName}}
         </div>
         <div class="item">
-            {{roomInfo.room.Description}}
         </div>
         <div class="item">
             {{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}

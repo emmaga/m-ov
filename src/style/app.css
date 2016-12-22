@@ -53,10 +53,13 @@
 
 
 /*tag*/
-
-.mod-tag {
+.mod-tag-bar{
+    position: absolute;
+    color: #444
+}
+.mod-tag-bar-item {
     position: relative;
-    margin-right: 10px;
+    margin-right: 31px;
 }
 .mod-tag.mod-tag-small {
     margin-right: 5px !important;
@@ -71,6 +74,7 @@
     border-radius: 25px;
     padding: 3px 6px;
 }
+
 
 
 /*content*/
@@ -94,7 +98,34 @@
     overflow: visible !important;
     box-shadow: none !important;
 }
+.mod-card-price {
+    letter-spacing: -1px;
+    display: inline-block;
+    font-size: 20px !important;
+}
+.mod-card-price-soldout {
+    letter-spacing: -1px;
+    display: inline-block;
+    font-size: 16px !important;
+    font-weight: 300 !important;
+    opacity: 0.5
+}
 
+.mod-card-title {
+    display: inline-block;
+    font-size: 20px !important;
+    font-weight: 300 !important;
+}
+.mod-card-title.disabled,.mod-card-text.disabled{
+    /*text-decoration: line-through;*/
+    opacity: 0.5
+}
+
+.mod-card-text{
+    margin-left: 3px;
+    white-space: normal !important;
+    font-weight: 200 !important;
+}
 
 /*item*/
 
@@ -342,12 +373,11 @@
 }
 
 
+
+
 /*价格*/
 
-.mod-member-price {
-    display: inline-block;
-    font-size: 20px !important;
-}
+
 
 .mod-original-price {
     display: inline-block;
@@ -358,29 +388,25 @@
 
 .mod-price-tag {
     position: relative;
-    left: 7px;
-    top: -4px;
-    transform: scale(0.625) translateY(14px);
-    transform-origin: left top;
-    padding: 4px 7px 4px 0px;
+    left: 4px;
+    top: -2px;
+    transform: scale(0.625) skew(-14deg) ;
+    transform-origin: left;
+    padding: 2px 5px 2px 5px;
     margin-bottom: 0px !important;
     display: inline-block;
     font-size: 12px;
     border: solid 1px rgb(151, 151, 151);
-    border-left: none;
     overflow: visible !important;
 }
 
-.mod-price-tag:before {
-    content: ' ';
-    position: absolute;
-    transform: rotate(-45deg) translate(-7px, -7px);
-    height: 20px;
-    width: 20px;
-    border-top: solid 1px rgb(151, 151, 151);
-    border-left: solid 1px rgb(151, 151, 151);
+/*地址*/
+.mod-address-xs{
+    transform: scale(0.8);
+    transform-origin: left;
 }
 
+/*spinner*/
 .mod-spinner-list{
     position: relative;
     /*top: -10px;*/
@@ -395,7 +421,6 @@
 .mod-spinner-page svg{
     fill: rgb(255,255,255);
 }
-
 
 
 
@@ -429,6 +454,8 @@
     background: rgba(255, 0, 0, .5)
 }
 
+
+/*theme*/
 .mod-color-theme {
     /*theme-color*/
     color: rgb(20, 140, 230) !important;
@@ -442,6 +469,11 @@
 }
 
 .mod-color-white {}
+
+.mod-theme-wx-outline{
+    border-color: #41ba63;
+    color:#41ba63 !important;
+}
 
 
 /*display*/
@@ -585,6 +617,7 @@ body {
 }
 
 small {
+    letter-spacing: 0px;
     font-size: 12px !important;
 }
 
@@ -616,6 +649,9 @@ small {
     padding-bottom: 12px !important;
 }
 
+/*.item-thumbnail-left p{
+    margin-bottom: 10px;
+}*/
 
 /*hack*/
 
