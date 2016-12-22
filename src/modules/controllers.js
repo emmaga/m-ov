@@ -153,6 +153,7 @@
                         wx.ready(function(){
                             // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
                             // 禁用“分享给好友”，“分享到朋友圈”, "在Safari中打开", "邮件","复制链接","分享到QQ","分享到QQ空间"
+                            self._wxreadystate = true;
                             wx.hideMenuItems({
                                 menuList: [
                                     'menuItem:share:appMessage', 
@@ -1340,11 +1341,19 @@
             }
             
             self.init = function() {
-                self.showLoadingBool = {};
+                // 默认不显示 loadingIcon
+                self.showLoadingIcon = false;
+                // 商品数组
+                self.productList = [];
+                // 一次加载数量
+                self.perPageCount = 10;
+                // 当前页数
+                self.page = 0;
 
                 // 如果缓存里有shopid和门店id和门店名称，获取门店，选中该门店，获取商店
                 if(util.getParams('shopinfo')) {
                     alert('缓存有shopid')
+                    alert(JSON.stringify(util.getParams('shopinfo')))
                     self.hotelId = util.getParams('shopinfo').hotelId;
                     self.hotelName = util.getParams('shopinfo').hotelName;
                     self.shopId = util.getParams('shopinfo').shopId;
@@ -1359,40 +1368,37 @@
                 }
                 // 否则：获取用户坐标
                 else{
-                    wx.getLocation({
-                        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-                        // 如果成功，用坐标去获取门店id
-                        success: function (res) {
-                            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                            // var speed = res.speed; // 速度，以米/每秒计
-                            // var accuracy = res.accuracy; // 位置精度
-                            self.getHotelIdByLocation(latitude, longitude);
-                        },
-                        cancel: function() {
-                            self.getHotelList()
-                            .then(function() {
-                                self.getShopIdByHotelId();
+                    getLocation();
+                    function getLocation() {
+                        if($scope.root._wxreadystate) {
+                            wx.getLocation({
+                                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                                // 如果成功，用坐标去获取门店id
+                                success: function (res) {
+                                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                                    // var speed = res.speed; // 速度，以米/每秒计
+                                    // var accuracy = res.accuracy; // 位置精度
+                                    self.getHotelIdByLocation(latitude, longitude);
+                                },
+                                cancel: function() {
+                                    self.getHotelList()
+                                    .then(function() {
+                                        self.getShopIdByHotelId();
+                                    });
+                                },
+                                error: function(e) {
+                                    self.getHotelList()
+                                    .then(function() {
+                                        self.getShopIdByHotelId();
+                                    });
+                                }
                             });
-                        },
-                        error: function(e) {
-                            self.getHotelList()
-                            .then(function() {
-                                self.getShopIdByHotelId();
-                            });
+                        }else{
+                            $timeout(function() {getLocation()}, 50);
                         }
-                    });
-                    
+                    }
                 }
-
-                // 默认不显示 loadingIcon
-                self.showLoadingIcon = false;
-                // 商品数组
-                self.productList = [];
-                // 一次加载数量
-                self.perPageCount = 10;
-                // 当前页数
-                self.page = 0;
             }
 
 
@@ -1407,6 +1413,7 @@
                     "LocationY": y
                 }
                 data = JSON.stringify(data);
+                alert(data)
                 $http({
                   method: $filter('ajaxMethod')(),
                   url: backendUrl('shopinfo', ''),
@@ -1453,16 +1460,25 @@
                 .then(function successCallback(data, status, headers, config) {
                   if(data.data.rescode == '200') {
                     self.shopId = data.data.ShopID;
-                    // 记录该shopid和门店id和门店名称到本地缓存
-                    var shopinfo = {
-                        "hotelName": self.hotelName,
-                        "hotelId": self.hotelId,
-                        "shopId": self.shopId
-                    };
-                    util.setParams('shopinfo', shopinfo);
-                    self.getShopName();
+                    if(self.shopId) {
+                        // 记录该shopid和门店id和门店名称到本地缓存
+                        var shopinfo = {
+                            "hotelName": self.hotelName,
+                            "hotelId": self.hotelId,
+                            "shopId": self.shopId
+                        };
+                        util.setParams('shopinfo', shopinfo);
+                        self.getShopName();
+                    } else {
+                        self.shopName = $filter('translate')('noShop');
+                        self.productList = [];
+                        self.categoryList = [];
+                    }
+
                   }else {
-                    self.hotelName = $filter('translate')('noShop');
+                    self.shopName = $filter('translate')('noShop');
+                    self.productList = [];
+                    self.categoryList = [];
                   }
                 },function errorCallback(data, status, headers, config) {
                     alert($filter('translate')('serverError'));
@@ -1490,6 +1506,21 @@
                   if(!self.hotelId) {
                     self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
                     self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
+                  }else{
+                    var hlist = self.hotelLists.hotelLists;
+                    for(var i = 0; i < hlist.length; i++) {
+                        for(var j = 0; j < hlist[i].hotels.length; j++) {
+                            var flag = false;
+                            if (self.hotelId == hlist[i].hotels[j].id) {
+                                self.hotelName = hlist[i].hotels[j].name;
+                                flag = true;
+                                break;
+                            }
+                            if(flag) {
+                                break;
+                            }
+                        }
+                    }
                   }
                   deferred.resolve();
                 },function errorCallback(data, status, headers, config) {
@@ -1565,7 +1596,6 @@
             }
 
             self.searchCategory = function() {
-                alert('searchCategory')
                 var data = {
                     "action": "getProductCategory",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1658,7 +1688,7 @@
                 self.showHP(false);
                 self.hotelId = hotelId;
                 self.hotelName = hotelName;
-                self.getShopName();
+                self.getShopIdByHotelId();
             };
         }
     ])
@@ -1740,7 +1770,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId
+                    "shopID": self.shopId
                 }
                 data = JSON.stringify(data);
                 $http({
