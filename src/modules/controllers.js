@@ -1241,7 +1241,7 @@
                    }).then(function successCallback(data, status, headers, config) {
                        console.log(data)
                        self.orderLists = data.data.data;
-                       self.orderListNum = data.data.data.orderNum;
+                       self.orderListNum = data.data.data.length;
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool)
                    }, function errorCallback(data, status, headers, config) {
@@ -1293,7 +1293,7 @@
                     }).then(function successCallback(data, status, headers, config) {
                        self.orderLists = data.data.data;
                        console.log(data.data.data)
-                       self.orderListNum = data.data.data.orderNum;
+                       self.orderListNum = data.data.data.length;
                        self.showLoadingBool.searchBool = true;
                        loadingService(self.showLoadingBool)
                     }, function errorCallback(data, status, headers, config) {
