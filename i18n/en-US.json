@@ -57,14 +57,14 @@
 
 
 
-  "WAITPAY" : "WAITPAY",
-  "WAITAPPROVAL": "WAITAPPROVAL",
-  "ACCEPT": "ACCEPT",
-  "DELIVERING": "DELIVERING",
-  "COMPLETED": "COMPLETED",
-  "CANCEL_REFUNDING": "CANCEL_REFUNDING",
-  "SELLER_CANCEL_REFUNDING": "SELLER_CANCEL_REFUNDING",
-  "CANCELED": "CANCELED",
+  "WAITPAY" : "wait pay",
+  "WAITAPPROVAL": "wait approval",
+  "ACCEPT": "accept",
+  "DELIVERING": "delivering",
+  "COMPLETED": "completed",
+  "CANCEL_REFUNDING": "cancelled and refunding",
+  "SELLER_CANCEL_REFUNDING": "seller cancelled and refunding",
+  "CANCELED": "cancelled",
   "express": "express",
   "bySelf": "bySelf"
 }

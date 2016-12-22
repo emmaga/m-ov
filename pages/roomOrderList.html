@@ -18,7 +18,7 @@
 
                         <p>{{good.RoomBasicInfo.HotelBasicInfo.HotelName}}</p>
                         
-                        <p>{{good.BookStartDate | date:'MM月dd日'}}{{'checkIn'|translate}}~{{good.BookEndDate | date:'MM月dd日'}}{{'checkOut'|translate}}</p>
+                        <p>{{good.BookStartDate | date:'MM.dd'}}{{'checkIn'|translate}}~{{good.BookEndDate | date:'MM.dd'}}{{'checkOut'|translate}}</p>
 
                     </div>
                     <p>{{'totalPrice'|translate}}:&nbsp￥{{order.Price | fenToYuan}}</p>
@@ -27,7 +27,7 @@
             
         </div>
     </div>
-    <p ng-show="rol.showLoadingBool.searchBool==true && rol.orderListNum ==0 ">很抱歉，暂无订单</p>
+    <p ng-show="rol.showLoadingBool.searchBool==true && rol.orderListNum ==0 ">{{'noResults' | translate}}</p>
 
 
 
