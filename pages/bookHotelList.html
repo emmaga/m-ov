@@ -45,14 +45,14 @@
             </div>
             <div class="item mod-no-border">
                 <h2 class="mod-member-price">￥{{hotel.lowestPrice | fenToYuan}}{{'minPrice'|translate}}</h2>
-                <p class="mod-price-tag mod-member0">微信会员价</p>
+                <p class="mod-price-tag mod-member0">{{'wxMemberPrice'|translate}}</p>
                 <br>
                 <p class="mod-display-inlineblock">{{hotel.Name}}</p>
                 <!-- <span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span> -->
             </div>
             <div class="mod-split-line mod-15shorter"></div>
         </div>
-        <p ng-show="bhl.loadingIcon && bhl.hotelNum==0 ">很抱歉，您选择的条件搜索无结果</p>
+        <p ng-show="bhl.loadingIcon && bhl.hotelNum==0 ">{{'noResults'|translate}}</p>
 
 
     </div>

@@ -30,6 +30,7 @@
   "Monday": "一",
   
   "night": "晚",
+  "noResults": "查无结果",
   
   "orderDetail": "订单详情",
   "orderDate": "下单时间",
@@ -68,6 +69,7 @@
   "Thursday": "四",
   "Tuesday": "二",
 
+  "wxMemberPrice": "微信会员价",
   "Wednesday": "三",
 
   "WAITPAY" : "待付款",

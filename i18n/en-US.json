@@ -1,5 +1,8 @@
 {
-  "all": "All",
+  "all": "all",
+
+  "back": "back",
+  "bookHotel": "bookHotel",
 
   "checkIn": "check in",
   "checkOut": "check out",
@@ -9,19 +12,25 @@
   "myOrders": "myOrders",
   "Monday": "一",
 
-  "night": "night",
+  "night": "night(s)",
+  "noResults": "no results",
 
+  "placeToGo": "destination",
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
 
+  "searchResultA": "Here are",
+  "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
   "serverTimeout": "poor network",
   "Saturday": "Sa",
   "Sunday": "Su",
 
+  "total": "total",
   "Thursday": "Th",
   "Tuesday": "Tu",
 
+  "wxMemberPrice": "weixin member price",
   "Wednesday": "We",
 
 
