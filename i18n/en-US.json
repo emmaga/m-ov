@@ -2,13 +2,19 @@
   "all": "all",
 
   "back": "back",
+  "booking": "book",
   "bookHotel": "bookHotel",
+  "bookSoldOut": "sold out",
 
   "checkIn": "check in",
   "checkOut": "check out",
 
+  "days": "a day",
+  "detail": "detail",
+
   "Friday": "Fr",
 
+  "map": "location",
   "myOrders": "myOrders",
   "Monday": "一",
 
