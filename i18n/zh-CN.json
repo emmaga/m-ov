@@ -6,6 +6,8 @@
   "bookHotel": "订酒店",
   "bookSoldOut": "已订完",
   
+  "cancelSuccess": "取消成功",
+  "cancelFail": "取消失败",
   "cancelOrder": "取消订单",
   "certificateNumber": "证件号码",
   "checkIn": "入住",
@@ -61,6 +63,8 @@
 
 
   "save": "保存",
+  "saveFailure": "保存失败",
+  "saveSuccess": "保存成功",
   "searchResultA": "为您找到",
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
@@ -69,6 +73,7 @@
   "shopName": "所属商城",
   "shopOrder": "商城订单",
   "submitOrder": "提交订单",
+  "success": "成功",
   "Saturday": "六",
   "Sunday": "日",
 
