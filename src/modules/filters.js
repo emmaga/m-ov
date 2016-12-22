@@ -33,7 +33,7 @@
              break;
 
          case 'ACCEPT':
-             flag = '订单接收';
+             flag = '待入住';
              break;
          case 'DELIVERING':
              flag = '订单配送';
