@@ -1,6 +1,6 @@
 <div ng-controller="shopOrderInfoController as shopOrderInfo" ng-init="shopOrderInfo.beforeInit()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">订单详情</h1>
+        <h1 class="title">{{'orderDetail'|translate}}</h1>
         <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
     <div class=" mod-has-header">
@@ -11,11 +11,11 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.dealTime | dateTimeToTimestamp | date:'yyyy.M.d HH:mm:ss'}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.dealTime}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">¥{{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
+                <p class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
             </div>
             <!-- <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
@@ -32,35 +32,39 @@
         <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
             <h2>{{product.name}}</h2>
-            <p>单价:&nbsp￥{{product.price | fenToYuan}}</p>
-            <p>购买数量:&nbsp{{product.GoodsNum}}</p>
+            <p>{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
+            <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
         </a>
     </div>
     <div class="item">
         <div class="row">
-            <p class="col mod-no-padding">联系人:</p>
+            <p class="col mod-no-padding">{{'contackName'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.name}}</p>
         </div>
         <div class="row">
-            <p class="col mod-no-padding">手机号:</p>
+            <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.mobile}}</p>
         </div>
         <div class="row">
-            <p class="col mod-no-padding">配送方式:</p>
+            <p class="col mod-no-padding">{{'deliverWay'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
         <div ng-show="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
-            <p class="col mod-no-padding">送货地址:</p>
+            <p class="col mod-no-padding">{{'shipAdress'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>
         <div class="row">
-            <p class="col mod-no-padding">所属门店:</p>
+            <p class="col mod-no-padding">{{'hotelName'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.hotelName}}</p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">{{'shopName'|translate}}:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.shopName}}</p>
         </div>
     </div>
     <div class="item item-divider">
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
-        <button ng-click="shopOrderInfo.canelOrder()" id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-positive">取消订单</button>
-        <a class="button button-block button-positive" ui-sref="shopHome">继续购物</a>
+        <button ng-click="shopOrderInfo.canelOrder()" id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-positive">{{'cancelOrder'|translate}}</button>
+        <a class="button button-block button-positive" ui-sref="shopHome">{{'goOnShopping'|translate}}</a>
     </div>
 </div>

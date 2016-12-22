@@ -15,12 +15,15 @@
 
   "days": "a day",
   "detail": "detail",
+  "deliverWay": "deliver way",
 
   "fillInOrder": "fill out",
   "Friday": "Fr",
 
   "goOnBooking": "go on booking",
+  "goOnShopping": "go on shopping",
 
+  "hotelName": "hotel name",
   "hotelOrder": "hotel order",
 
   "map": "location",
@@ -42,6 +45,7 @@
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
   "priceDetail" : "price list",
+  "productQuantity": "quantity",
 
   "realName": "real name",
   "roomQuantity" : "rooms",
@@ -51,6 +55,8 @@
   "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
   "serverTimeout": "poor network",
+  "shipAdress": "shipping address",
+  "shopName": "shop name",
   "shopOrder": "shop order",
   "submitOrder": "submit",
   "Saturday": "Sa",
@@ -60,6 +66,8 @@
   "totalPrice": "total price",
   "Thursday": "Th",
   "Tuesday": "Tu",
+
+  "unitPrice": "unit price",
 
   "wxMemberPrice": "weixin member price",
   "Wednesday": "We",

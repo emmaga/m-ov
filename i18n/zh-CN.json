@@ -17,13 +17,16 @@
   "date": "日期",
   "days": "天",
   "detail": "详情",
+  "deliverWay": "配送方式",
 
   "fillInOrder": "填写订单",
   "Friday": "五",
 
 
   "goOnBooking": "继续预定",
+  "goOnShopping": "继续购物",
 
+  "hotelName": "所属门店",
   "hotelOrder": "酒店订单",
 
   "map": "地图",
@@ -43,12 +46,12 @@
 
   "payMethod": "支付方式",
   "payNow": "去支付",
-
   "phoneNumber": "手机号",
   "placeToGo": "目的地",
   "plsSelACheckInDate" : "请选择入住日期",
   "plsSelACheckOutDate" : "请选择离店日期",
   "priceDetail" : "价格明细",
+  "productQuantity": "购买数量",
 
 
   "realName": "真实姓名",
@@ -62,6 +65,8 @@
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
   "serverTimeout": "网络不好哟",
+  "shipAdress": "配送地址",
+  "shopName": "所属商城",
   "shopOrder": "商城订单",
   "submitOrder": "提交订单",
   "Saturday": "六",
@@ -72,6 +77,8 @@
   "totalPrice": "总价",
   "Thursday": "四",
   "Tuesday": "二",
+
+  "unitPrice": "单价",
 
   "wxMemberPrice": "微信会员价",
   "Wednesday": "三",

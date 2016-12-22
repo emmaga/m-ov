@@ -20,40 +20,6 @@
         return s1 + '.' + s2;
     };
   })
-  
-  .filter("orderStatusToChinese",function(){
-    return function(orderStatus){
-      var flag;
-      switch (orderStatus){
-         case 'WAITPAY':
-             flag = '待付款';
-             break;
-         case 'WAITAPPROVAL':
-             flag = '审核中';
-             break;
-
-         case 'ACCEPT':
-             flag = '待入住';
-             break;
-         case 'DELIVERING':
-             flag = '订单配送';
-             break;
-         case 'COMPLETED':
-             flag = '订单完成';
-             break;
-         case 'CANCEL_REFUNDING':
-             flag = '订单取消退款中';
-             break;
-         case 'SELLER_CANCEL_REFUNDING':
-             flag = '订单商家取消退款中';
-             break;
-         case 'CANCELED':
-             flag = '订单取消';
-             break;
-      }
-      return flag;
-    }
-  })
 
   .filter("orderStatus",['$filter', function($filter){
     return function(orderStatus){
@@ -79,9 +45,9 @@
          case 'REFUNDING':
              flag = $filter('translate')('CANCEL_REFUNDING');
              break;
-         // case 'SELLER_CANCEL_REFUNDING':
-         //     flag = $filter('translate')('SELLER_CANCEL_REFUNDING');
-         //     break;
+         case 'SELLER_CANCEL_REFUNDING':
+             flag = $filter('translate')('SELLER_CANCEL_REFUNDING');
+             break;
          case 'CANCELED':
              flag = $filter('translate')('CANCELED');
              break;
