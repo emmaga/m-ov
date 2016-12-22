@@ -6,6 +6,7 @@
   "bookHotel": "订酒店",
   "bookSoldOut": "已订完",
   
+  "certificateNumber": "证件号码",
   "checkIn": "入住",
   "checkInDate": "入住时间",
   "checkOut": "离店",
@@ -48,13 +49,13 @@
   "priceDetail" : "价格明细",
 
 
-
+  "realName": "真实姓名",
   "refundDoc" : "退改说明",
   "roomQuantity" : "房间数",
 
 
 
-  
+  "save": "保存",
   "searchResultA": "为您找到",
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",

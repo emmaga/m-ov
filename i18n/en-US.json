@@ -6,6 +6,7 @@
   "bookHotel": "bookHotel",
   "bookSoldOut": "sold out",
 
+  "certificateNumber": "certificate number",
   "checkIn": "check in",
   "checkOut": "check out",
 
@@ -19,6 +20,7 @@
 
   "map": "location",
   "memberInfo": "member info",
+  "orderID": "order id",
   "myOrders": "myOrders",
   "Monday": "一",
 
@@ -31,8 +33,10 @@
   "plsSelACheckOutDate" : "Please select a check-out date.",
   "priceDetail" : "price list",
 
+  "realName": "real name",
   "roomQuantity" : "rooms",
 
+  "save": "save",
   "searchResultA": "Here are",
   "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
