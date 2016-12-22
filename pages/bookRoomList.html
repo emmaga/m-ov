@@ -47,7 +47,7 @@
             <div class="card mod-flat wx-touch-hack" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
                 <div class="item mod-no-border">
                     <!-- 封面图 -->
-                    <div class="full-image mod-4x3" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
+                    <div class="full-image mod-cover mod-4x3" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
                 </div>
                 <div class="item mod-no-border">
                     <h2 class="mod-member-price">{{room.RoomTypeName}}</h2>
