@@ -6,8 +6,10 @@
   "bookHotel": "bookHotel",
   "bookSoldOut": "sold out",
 
+  "cancelOrder": "cancel the order",
   "certificateNumber": "certificate number",
   "checkIn": "check in",
+  "checkInDate": "check in time",
   "checkOut": "check out",
 
   "days": "a day",
@@ -16,10 +18,13 @@
   "fillInOrder": "fill out",
   "Friday": "Fr",
 
+  "goOnBooking": "go on booking",
+
   "hotelOrder": "hotel order",
 
   "map": "location",
   "memberInfo": "member info",
+  "orderDate": "order time",
   "orderID": "order id",
   "myOrders": "myOrders",
   "Monday": "一",
@@ -27,6 +32,10 @@
   "night": "night(s)",
   "noResults": "no results",
 
+  "orderDetail": "order detail",
+  "orderStatus": "order status",
+  
+  "payNow": "pay now",
   "phoneNumber": "phone",
   "placeToGo": "destination",
   "plsSelACheckInDate" : "Please select a check-in date.",
