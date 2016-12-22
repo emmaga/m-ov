@@ -3,8 +3,8 @@
 (function() {
     var app = angular.module('app.controllers', ['ngCookies'])
 
-    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle', 'util',
-        function($scope, $window, $http, $filter, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle, util) {
+    .controller('RootController', ['$scope', '$window', '$http', '$filter', '$timeout', '$ionicModal', '$translate', 'backendUrl', 'BACKEND_CONFIG', '$ionicLoading', '$ionicGesture', 'setTitle', 'util',
+        function($scope, $window, $http, $filter, $timeout, $ionicModal, $translate, backendUrl, BACKEND_CONFIG, $ionicLoading, $ionicGesture, setTitle, util) {
             var self = this;
 
             self.init = function() {
@@ -142,7 +142,7 @@
                     if (data.data.rescode == '200') {
                         self.loadProjectInfo();
                         wx.config({
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                             appId: self.getParams('appid'), // 必填，公众号的唯一标识
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
@@ -166,11 +166,15 @@
                         });
                         
                     } else {
-                        alert($filter('translate')('serverError') + status);
+                        alert($filter('translate')('serverError'));
                         $ionicLoading.hide();
+                        // 继续注册
+                        $timeout(function(){self.WXConfigJSSDK;},50);
                     }
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
+                    // 继续注册
+                    $timeout(function(){self.WXConfigJSSDK;},50);
                 })
             }
             self.loadProjectInfo = function() {
@@ -830,18 +834,17 @@
                                      }
                                 })
                                 .error(function(data, status, headers, config) {
-                                    alert($filter('translate')('serverError') + status);
+                                    alert($filter('translate')('serverError'));
                                 })
                         }})
                         .error(function(data, status, headers, config) {
-                            alert($filter('translate')('serverError') + status);
+                            alert($filter('translate')('serverError'));
                         })
                
             }
 
             self.wxPay = function(JS_Pay_API, orderId) {
                 var orderId = orderId;
-                console.log(JS_Pay_API.timeStamp + ', ' + JS_Pay_API.nonceStr + ', ' + JS_Pay_API.package + ', ' + JS_Pay_API.signType + ', ' + JS_Pay_API.paySign);
                 wx.chooseWXPay({
                     timestamp: JS_Pay_API.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                     nonceStr: JS_Pay_API.nonceStr, // 支付签名随机串，不长于 32 位
@@ -1418,7 +1421,7 @@
                        self.shopName = data.data.data.shopName;
                        self.searchCategory();
                     } else {
-                        alert($filter('translate')('serverError') + status);
+                        alert($filter('translate')('serverError'));
                     }
                     
                    
