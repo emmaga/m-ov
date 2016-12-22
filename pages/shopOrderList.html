@@ -6,19 +6,19 @@
     <div class="list mod-has-header">
         <div ng-repeat="order in sol.orderLists" >
             <div class="item item-divider">
-                <p>{{'orderID'|translate}} #{{order.OrderNum}} {{order.hotelName}}</p>
+                <p>{{'orderID'|translate}} #{{order.OrderNum}}</p>
             </div>
             <div class="item item-thumbnail-left mod-no-side-border" ng-click="sol.nextState(order.ID)" >
                     <div ng-repeat="goods in order.GoodsList track by $index" class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{goods.img}});"></div>
                     <span class="item-note">
                         <p>{{order.Status | orderStatus}}</p>
                     </span>
-                    <h2>{{order.totalGoods}}件商品</h2>
-                    <p>总价:&nbsp￥{{order.totalPrice | fenToYuan}} </p>
+                    <h2>{{order.totalGoods}}{{'countsProducts'|translate}}<!--件商品--></h2>
+                    <p>{{'totalPrice'|translate}}: &nbsp￥{{order.totalPrice | fenToYuan}} </p>
             </div>
         </div>
     </div>
-    <p ng-show="sol.showLoadingBool.searchBool==true && sol.orderListNum ==0 ">很抱歉，暂无订单</p>
+    <p ng-show="sol.showLoadingBool.searchBool==true && sol.orderListNum ==0 ">{{'noResults'|translate}}</p>
     
 
 </div>

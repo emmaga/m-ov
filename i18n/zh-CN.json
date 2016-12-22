@@ -6,30 +6,37 @@
   "bookHotel": "订酒店",
   "bookSoldOut": "已订完",
   
+  "cancelOrder": "取消订单",
+  "certificateNumber": "证件号码",
   "checkIn": "入住",
   "checkInDate": "入住时间",
   "checkOut": "离店",
   "contackName": "联系人",
+  "countsProducts": "件商品",
 
-
-  "days": "天",
   "date": "日期",
+  "days": "天",
   "detail": "详情",
+  "deliverWay": "配送方式",
 
   "fillInOrder": "填写订单",
   "Friday": "五",
 
 
   "goOnBooking": "继续预定",
+  "goOnShopping": "继续购物",
 
-
+  "hotelName": "所属门店",
+  "hotelOrder": "酒店订单",
 
   "map": "地图",
+  "memberInfo": "会员资料",
   "minPrice": "起",
   "myOrders": "我的订单",
   "Monday": "一",
   
   "night": "晚",
+  "noResults": "查无结果",
   
   "orderDetail": "订单详情",
   "orderDate": "下单时间",
@@ -39,25 +46,28 @@
 
   "payMethod": "支付方式",
   "payNow": "去支付",
-
   "phoneNumber": "手机号",
   "placeToGo": "目的地",
   "plsSelACheckInDate" : "请选择入住日期",
   "plsSelACheckOutDate" : "请选择离店日期",
   "priceDetail" : "价格明细",
+  "productQuantity": "购买数量",
 
 
-
+  "realName": "真实姓名",
   "refundDoc" : "退改说明",
   "roomQuantity" : "房间数",
 
 
 
-  
+  "save": "保存",
   "searchResultA": "为您找到",
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
   "serverTimeout": "网络不好哟",
+  "shipAdress": "配送地址",
+  "shopName": "所属商城",
+  "shopOrder": "商城订单",
   "submitOrder": "提交订单",
   "Saturday": "六",
   "Sunday": "日",
@@ -68,11 +78,14 @@
   "Thursday": "四",
   "Tuesday": "二",
 
+  "unitPrice": "单价",
+
+  "wxMemberPrice": "微信会员价",
   "Wednesday": "三",
 
   "WAITPAY" : "待付款",
   "WAITAPPROVAL": "审核中",
-  "ACCEPT": "待入住",
+  "ACCEPT": "已接收",
   "DELIVERING": "订单配送",
   "COMPLETED": "订单完成",
   "CANCEL_REFUNDING": "订单取消退款中",

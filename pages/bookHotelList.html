@@ -30,12 +30,49 @@
             </div>
             <div class="mod-split-line mod-break-2padding"></div>
         </div>
+
         <!-- 搜索结果 -->
+
+        <!-- loading -->
         <ion-spinner icon="dots" class="mod-spinner-list" ng-hide="bhl.loadingIcon"></ion-spinner>
+
+        <!-- 查无结果 -->
+        <p ng-show="bhl.loadingIcon && bhl.hotelNum==0 ">{{'noResults'|translate}}</p>
+
+        <!-- 标题：搜索结果数量 -->
         <h3 class="mod-font-light mod-text-indent" ng-show="bhl.loadingIcon">{{'searchResultA'|translate}}{{bhl.hotelNum}}{{'searchResultB'|translate}}</h3>
 
-        
-        <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.ID,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
+
+        <!-- thumbnail item-->
+        <a class="item item-thumbnail-left mod-no-side-border wx-touch-hack" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.ID,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
+            <!-- 封面图 -->
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{hotel.LogoURL}});"></div>
+
+            <!-- <span class="item-note">
+                <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.Refund==0),'mod-color-excited':!(room.Refund==0)}">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
+                <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:!brl.roomCheckAvail(room.AvailableNumList,'availableNum'),'button-assertive':brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">
+                    <span class="mod-color-cold" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'bookSoldOut'|translate}}</span>
+                    <span ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'booking'|translate}}</span>
+                    <i ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')" class="icon ion-ios-arrow-right"></i>
+                </button>
+            </span> -->
+            <!-- 标题 -->
+            <h2>￥{{hotel.lowestPrice | fenToYuan}}{{'minPrice'|translate}} · {{hotel.Name}}</h2>
+            <p><i class="icon ion-ios-location"></i>{{hotel.Address}}</p>
+            <p class="mod-price-tag mod-member0">{{'wxMemberPrice'|translate}}</p>
+
+            <!-- <p>
+                <span class="mod-tag mod-tag-small" ng-repeat="feature in room.Features">
+                    <i class="icon {{feature.icon}}">{{feature.Name}}</i>
+                </span>
+            </p> -->
+
+        </a>
+        <!-- thumbnail item end -->
+
+        <!-- 卡片 -->
+
+        <!-- <div class="card mod-flat" ng-repeat="hotel in bhl.hotels"  ui-sref="bookRoomList({hotelId:hotel.ID,checkIn:bhl.checkin,checkOut:bhl.checkout})" ng-show="bhl.loadingIcon">
             <div class="item mod-no-border">
                 <p>
                     <i class="icon ion-ios-location"></i>
@@ -45,14 +82,16 @@
             </div>
             <div class="item mod-no-border">
                 <h2 class="mod-member-price">￥{{hotel.lowestPrice | fenToYuan}}{{'minPrice'|translate}}</h2>
-                <p class="mod-price-tag mod-member0">微信会员价</p>
+                <p class="mod-price-tag mod-member0">{{'wxMemberPrice'|translate}}</p>
                 <br>
                 <p class="mod-display-inlineblock">{{hotel.Name}}</p>
-                <!-- <span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span> -->
+                <!- <span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span> ->
             </div>
             <div class="mod-split-line mod-15shorter"></div>
-        </div>
-        <p ng-show="bhl.loadingIcon && bhl.hotelNum==0 ">很抱歉，您选择的条件搜索无结果</p>
+        </div> -->
+        <!-- 卡片 end -->
+
+
 
 
     </div>

@@ -1,40 +1,88 @@
 {
-  "all": "All",
+  "all": "all",
 
+  "back": "back",
+  "booking": "book",
+  "bookHotel": "bookHotel",
+  "bookSoldOut": "sold out",
+
+  "cancelOrder": "cancel the order",
+  "certificateNumber": "certificate number",
   "checkIn": "check in",
+  "checkInDate": "check in time",
   "checkOut": "check out",
+  "countsProducts": "products",
 
+  "days": "a day",
+  "detail": "detail",
+  "deliverWay": "deliver way",
+
+  "fillInOrder": "fill out",
   "Friday": "Fr",
 
+  "goOnBooking": "go on booking",
+  "goOnShopping": "go on shopping",
+
+  "hotelName": "hotel name",
+  "hotelOrder": "hotel order",
+
+  "map": "location",
+  "memberInfo": "member info",
+  "orderDate": "order time",
+  "orderID": "order id",
   "myOrders": "myOrders",
   "Monday": "一",
 
-  "night": "night",
+  "night": "night(s)",
+  "noResults": "no results",
 
+  "orderDetail": "order detail",
+  "orderStatus": "order status",
+  
+  "payNow": "pay now",
+  "phoneNumber": "phone",
+  "placeToGo": "destination",
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
+  "priceDetail" : "price list",
+  "productQuantity": "quantity",
 
+  "realName": "real name",
+  "roomQuantity" : "rooms",
+
+  "save": "save",
+  "searchResultA": "Here are",
+  "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
   "serverTimeout": "poor network",
+  "shipAdress": "shipping address",
+  "shopName": "shop name",
+  "shopOrder": "shop order",
+  "submitOrder": "submit",
   "Saturday": "Sa",
   "Sunday": "Su",
 
+  "total": "total",
+  "totalPrice": "total price",
   "Thursday": "Th",
   "Tuesday": "Tu",
 
+  "unitPrice": "unit price",
+
+  "wxMemberPrice": "weixin member price",
   "Wednesday": "We",
 
 
 
 
-  "WAITPAY" : "WAITPAY",
-  "WAITAPPROVAL": "WAITAPPROVAL",
-  "ACCEPT": "ACCEPT",
-  "DELIVERING": "DELIVERING",
-  "COMPLETED": "COMPLETED",
-  "CANCEL_REFUNDING": "CANCEL_REFUNDING",
-  "SELLER_CANCEL_REFUNDING": "SELLER_CANCEL_REFUNDING",
-  "CANCELED": "CANCELED",
+  "WAITPAY" : "wait pay",
+  "WAITAPPROVAL": "wait approval",
+  "ACCEPT": "accept",
+  "DELIVERING": "delivering",
+  "COMPLETED": "completed",
+  "CANCEL_REFUNDING": "cancelled and refunding",
+  "SELLER_CANCEL_REFUNDING": "seller cancelled and refunding",
+  "CANCELED": "cancelled",
   "express": "express",
   "bySelf": "bySelf"
 }
