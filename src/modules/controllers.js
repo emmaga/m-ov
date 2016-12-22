@@ -566,8 +566,8 @@
         }
     ])
 
-    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
-        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, loadingService, backendUrl, util, BACKEND_CONFIG) {
+    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
+        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG) {
             console.log("roomInfoController")
             console.log($stateParams);
             var self = this;
@@ -791,8 +791,12 @@
             //     });
             // }
             self.newOrder = function() {
+                
+                $ionicLoading.show({
+                  template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                });
                 self.submitOrderBool = true;
-                var bookTotalPri = self.roomPriPerDay*self.roomNumber
+                var bookTotalPri = self.roomPriPerDay*self.roomNumber;
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "action": "newOrder",
@@ -828,6 +832,7 @@
                                 $http.post(backendUrl('roomorder', '', 'server'), data)
                                 .success(function(data, status, headers, config){
                                      if (data.rescode == '200') {
+                                        
                                         self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
                                      } else {
                                          alert($filter('translate')('serverError') + ' ' + data.rescode + ' ' + data.errInfo);
@@ -853,13 +858,16 @@
                     paySign: JS_Pay_API.paySign, // 支付签名
                     success: function(res) {
                         // 支付成功后的回调函数
-                        $state.go('bookOrderInfo', { orderId: self.bookOrderID })
+                        $state.go('bookOrderInfo', { orderId: self.bookOrderID });
+                        $ionicLoading.hide();
                     },
                     cancel: function() {
-                        $state.go('bookOrderInfo', { orderId: self.bookOrderID })
+                        $state.go('bookOrderInfo', { orderId: self.bookOrderID });
+                        $ionicLoading.hide();
                     },
                     error: function(e) {
-                        $state.go('bookOrderInfo', { orderId: self.bookOrderID })
+                        $state.go('bookOrderInfo', { orderId: self.bookOrderID });
+                        $ionicLoading.hide();
                     }
                 });
             }
