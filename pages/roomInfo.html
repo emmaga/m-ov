@@ -21,7 +21,7 @@
               </span>
             </div>
             <div class="item">
-                {{}}
+                {{feature.Name}}
             </div>
             <!-- <div class="mod-split-line mod-break-2padding"></div> -->
         </div>
@@ -40,7 +40,7 @@
             {{roomInfo.room.Description}}
         </div>
         <div class="item">
-            {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
+            {{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}
         </div>
         <div class="item item-input">
             <div class="input-label">{{'roomQuantity'|translate}}:</div>
@@ -73,17 +73,17 @@
         <div class="list padding mod-list mod-inset-forms">
             <div class="item">
                 <p ng-repeat="price in roomInfo.priceList">
-                    {{price.date | date:'yyyy年MM月dd日'}} {{price.price | fenToYuan}}&nbsp×&nbsp{{roomInfo.roomNumber}}
+                    {{price.date | date:'yyyy.MM.dd'}} {{price.price | fenToYuan}}&nbsp×&nbsp{{roomInfo.roomNumber}}
                     <br>
                 </p>
             </div>
             <div class="item">
-                {{'totalPrice'|translate}}:人民币{{roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}
+                {{'totalPrice'|translate}}: ¥ {{roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}
             </div>
         </div>
-        <div class="item item-divider">
+        <!-- <div class="item item-divider">
             <p>{{'refundDoc'|translate}}</p>
-        </div>
+        </div> -->
 
 
        

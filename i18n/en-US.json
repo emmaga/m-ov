@@ -12,6 +12,7 @@
   "days": "a day",
   "detail": "detail",
 
+  "fillInOrder": "fill out",
   "Friday": "Fr",
 
   "map": "location",
@@ -21,18 +22,24 @@
   "night": "night(s)",
   "noResults": "no results",
 
+  "phoneNumber": "phone",
   "placeToGo": "destination",
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
+  "priceDetail" : "price list",
+
+  "roomQuantity" : "rooms",
 
   "searchResultA": "Here are",
   "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
   "serverTimeout": "poor network",
+  "submitOrder": "submit",
   "Saturday": "Sa",
   "Sunday": "Su",
 
   "total": "total",
+  "totalPrice": "total price",
   "Thursday": "Th",
   "Tuesday": "Tu",
 
