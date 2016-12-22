@@ -43,23 +43,50 @@
         </div>
         <!-- 客房列表 -->
         <div class="list mod-inset-forms">
-
-
+            <!-- 卡片 -->
+            <div class="card mod-flat" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
+                <div class="item mod-no-border">
+                    <!-- <p>
+                        <i class="icon ion-ios-location"></i>
+                        {{hotel.Address}}
+                    </p> -->
+                    <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
+                </div>
+                <div class="item mod-no-border">
+                    <h2 class="mod-member-price">{{room.RoomTypeName}}</h2>
+                    <p class="mod-price-tag mod-member0">{{'wxMemberPrice'|translate}}</p>
+                    <br>
+                    <p class="mod-display-inlineblock">{{room.Description}}</p>
+                    <!-- <span ng-repeat="feature in hotel.features">{{feature.name}}{{feature.icon}}</span> -->
+                    <p>
+                        <span class="mod-tag mod-tag-small" ng-repeat="feature in room.Features">
+                            <i class="icon {{feature.icon}}">{{feature.Name}}</i>
+                        </span>
+                    </p>
+                    <!-- 价格和预订按钮 -->
+                    <span class="item-note">
+                        <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.Refund==0),'mod-color-excited':!(room.Refund==0)}">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
+                        <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:!brl.roomCheckAvail(room.AvailableNumList,'availableNum'),'button-assertive':brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">
+                            <span class="mod-color-cold" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'bookSoldOut'|translate}}</span>
+                            <span ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'booking'|translate}}</span>
+                            <i ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')" class="icon ion-ios-arrow-right"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="mod-split-line mod-15shorter"></div>
+            </div>
+            <!-- 卡片 end -->
+            <!-- thumbnail item-->
+            <!-- 
             <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
                 <span class="item-note">
-
-
-                  
-
                     <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.Refund==0),'mod-color-excited':!(room.Refund==0)}">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
                     <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:!brl.roomCheckAvail(room.AvailableNumList,'availableNum'),'button-assertive':brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">
-
                         <span class="mod-color-cold" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'bookSoldOut'|translate}}</span>
-                        <span ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'booking'|translate}}</span>
-                        <i ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')" class="icon ion-ios-arrow-right"></i>
-
-                    </button>
+                <span ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">{{'booking'|translate}}</span>
+                <i ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')" class="icon ion-ios-arrow-right"></i>
+                </button>
                 </span>
                 <h2>{{room.RoomTypeName}}</h2>
                 <p>{{room.Description}}</p>
@@ -68,7 +95,8 @@
                         <i class="icon {{feature.icon}}">{{feature.Name}}</i>
                     </span>
                 </p>
-            </a>
+            </a> -->
+            <!-- thumbnail item end -->
         </div>
         <p ng-show="brl.showLoadingBool.searchRoomListBool ==true && brl.rooms.length == 0">{{'noResults'|translate}}</p>
         <!-- date picker start-->
