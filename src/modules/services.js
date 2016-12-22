@@ -88,6 +88,12 @@
           }
       }
       // 变量：
+      // shopinfo
+      // {
+      //   "hotelName": "xx",
+      //   "hotelId": "xx",
+      //   "shopId": "xx",
+      // }
       // appid
       // userid
       // clear_session

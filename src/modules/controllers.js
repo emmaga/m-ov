@@ -21,8 +21,8 @@
                 var qParts = qString.parseQuerystring();
                 var code = qParts.code;
                 var appid = qParts.appid;
+                var state = qParts.state;
 
-           
                 self.setParams('appid', appid);
 
                 /* 获取cleartoken（clear_session）和openid
@@ -147,7 +147,7 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                         wx.ready(function(){
                             // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
@@ -792,10 +792,9 @@
             // }
             self.newOrder = function() {
                 
-                $ionicLoading.show({
-                  template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
-                });
-                self.submitOrderBool = true;
+                self.showLoadingBool.waitPayBool = false;
+                loadingService(self.showLoadingBool);
+
                 var bookTotalPri = self.roomPriPerDay*self.roomNumber;
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -816,35 +815,35 @@
                      
                 };
                 data = angular.toJson(data,true);
-                    $http.post(backendUrl('roomorder', '', 'server'), data)
-                        .success(function(data, status, headers, config) {
-                            if (data.rescode == '200') {
-                                var orderID = data.data.orderID;
-                                // 订单id
-                                self.bookOrderID = orderID;
-                                var data = {
-                                    "clear_session": $scope.root.getParams('clear_session'),
-                                    "action": "weixinPay",
-                                    "payType": "JSAPI",
-                                    "orderID": orderID
-                                };
-                                data = angular.toJson(data,true);
-                                $http.post(backendUrl('roomorder', '', 'server'), data)
-                                .success(function(data, status, headers, config){
-                                     if (data.rescode == '200') {
-                                        
-                                        self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
-                                     } else {
-                                         alert($filter('translate')('serverError') + ' ' + data.errInfo);
-                                     }
-                                })
-                                .error(function(data, status, headers, config) {
-                                    alert($filter('translate')('serverError'));
-                                })
-                        }})
-                        .error(function(data, status, headers, config) {
-                            alert($filter('translate')('serverError'));
-                        })
+                $http.post(backendUrl('roomorder', '', 'server'), data)
+                    .success(function(data, status, headers, config) {
+                        if (data.rescode == '200') {
+                            var orderID = data.data.orderID;
+                            // 订单id
+                            self.bookOrderID = orderID;
+                            var data = {
+                                "clear_session": $scope.root.getParams('clear_session'),
+                                "action": "weixinPay",
+                                "payType": "JSAPI",
+                                "orderID": orderID
+                            };
+                            data = angular.toJson(data,true);
+                            $http.post(backendUrl('roomorder', '', 'server'), data)
+                            .success(function(data, status, headers, config){
+                                 if (data.rescode == '200') {
+                                    
+                                    self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
+                                 } else {
+                                     alert($filter('translate')('serverError') + ' ' + data.errInfo);
+                                 }
+                            })
+                            .error(function(data, status, headers, config) {
+                                alert($filter('translate')('serverError'));
+                            })
+                    }})
+                    .error(function(data, status, headers, config) {
+                        alert($filter('translate')('serverError'));
+                    })
                
             }
 
@@ -859,15 +858,18 @@
                     success: function(res) {
                         // 支付成功后的回调函数
                         $state.go('bookOrderInfo', { orderId: self.bookOrderID });
-                        $ionicLoading.hide();
+                        self.showLoadingBool.waitPayBool = true;
+                        loadingService(self.showLoadingBool);
                     },
                     cancel: function() {
                         $state.go('bookOrderInfo', { orderId: self.bookOrderID });
-                        $ionicLoading.hide();
+                        self.showLoadingBool.waitPayBool = true;
+                        loadingService(self.showLoadingBool);
                     },
                     error: function(e) {
                         $state.go('bookOrderInfo', { orderId: self.bookOrderID });
-                        $ionicLoading.hide();
+                        self.showLoadingBool.waitPayBool = true;
+                        loadingService(self.showLoadingBool);
                     }
                 });
             }
@@ -1319,8 +1321,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$scope', '$filter', '$timeout', '$stateParams', '$state', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl) {
+    .controller('shopHomeController', ['$http', '$q', '$scope', '$filter', '$timeout', '$stateParams', '$state', '$translate', 'loadingService', 'backendUrl', 'util',
+        function($http, $q, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl, util) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1339,7 +1341,42 @@
             self.init = function() {
                 self.showLoadingBool = {};
 
-                self.getHotelLists();
+                // 如果缓存里有shopid和门店id和门店名称，获取门店，选中该门店，获取商店
+                if(util.getParams('shopinfo')) {
+                    self.hotelId = util.getParams('shopinfo').hotelId;
+                    self.hotelName = util.getParams('shopinfo').hotelName;
+                    self.shopId = util.getParams('shopinfo').shopId;
+
+                    // 获取门店，选中该门店
+                    self.getHotelList()
+                    .then(function() {
+                        self.getShopName();
+                    });
+
+                    // 获取商店
+                }
+                // 否则：获取用户坐标
+                else{
+                    wx.getLocation({
+                        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                        // 如果成功，用坐标去获取门店id
+                        success: function (res) {
+                            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                            // var speed = res.speed; // 速度，以米/每秒计
+                            // var accuracy = res.accuracy; // 位置精度
+                            self.getHotelIdByLocation(longitude, latitude);
+                        },
+                        cancel: function() {
+                            
+                        },
+                        error: function(e) {
+                            
+                        }
+                    });
+                    
+                }
+
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
                 // 商品数组
@@ -1348,6 +1385,112 @@
                 self.perPageCount = 10;
                 // 当前页数
                 self.page = 0;
+            }
+
+
+            
+
+            self.getHotelIdByLocation = function(x, y) {
+                var deferred = $q.defer();
+                var data = {
+                    "action": "getNearestHotelID",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "LocationX": x,
+                    "LocationY": y
+                }
+                data = JSON.stringify(data);
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopinfo', ''),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    if(data.data.hotelID !== '') {
+                        self.hotelId = data.data.hotelID;
+                    }
+                    self.getHotelList()
+                    .then(function() {
+                        self.getShopIdByHotelId();
+                    });
+
+                  } else {
+                    alert($filter('translate')('serverError'));
+                  }
+                  if(!self.hotelId) {
+                    self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
+                    self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
+                  }
+                  
+                },function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError'));
+                })
+                return deferred.promise;
+            }
+
+            self.getShopIdByHotelId = function() {
+                var qString = $window.location.search.substring(1);
+                var qParts = qString.parseQuerystring();
+                var shopType = qParts.state;
+
+                var data = {
+                    "action": "getShopIDByType",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "hotelID": self.hotelId,
+                    "shopType": shopType
+                }
+                data = JSON.stringify(data);
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopinfo', 'hotelLists'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    self.shopId = data.data.ShopID;
+                    // 记录该shopid和门店id和门店名称到本地缓存
+                    var shopinfo = {
+                        "hotelName": self.hotelName,
+                        "hotelId": self.hotelId,
+                        "shopId": self.shopId
+                    };
+                    util.setParams('shopinfo', shopinfo);
+                    self.getShopName();
+                  }else {
+                    self.hotelName = $filter('translate')('noShop');
+                  }
+                },function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError'));
+                });
+            }
+
+            self.getHotelList = function() {
+                var deferred = $q.defer();
+                var data = {
+                    "action": "getAllShopByLocation",
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "appid": $scope.root.getParams('appid'),
+                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
+                    "lang": $translate.proposedLanguage() || $translate.use()
+                }
+                data = JSON.stringify(data);
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shopinfo', 'hotelLists'),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  self.hotelLists = data.data.data;
+                  if(!self.hotelId) {
+                    self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
+                    self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
+                  }
+                },function errorCallback(data, status, headers, config) {
+                    alert($filter('translate')('serverError'));
+                });
+                return deferred.promise;
             }
 
             self.gotoShopDetail = function(productId) {
@@ -1384,30 +1527,6 @@
                 })
             }
 
-            self.getHotelLists = function() {
-                var data = {
-                    "action": "getAllShopByLocation",
-                    "clear_session": $scope.root.getParams('clear_session'),
-                    "appid": $scope.root.getParams('appid'),
-                    "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
-                    "lang": $translate.proposedLanguage() || $translate.use()
-                }
-                data = JSON.stringify(data);
-                $http({
-                  method: $filter('ajaxMethod')(),
-                  url: backendUrl('shopinfo', 'hotelLists'),
-                  data: data
-                })
-                .then(function successCallback(data, status, headers, config) {
-                  self.hotelLists = data.data.data;
-                  self.hotelId = self.hotelLists.hotelLists[0].hotels[0].id;
-                  self.hotelName = self.hotelLists.hotelLists[0].hotels[0].name;
-                  self.getShopName();
-                },function errorCallback(data, status, headers, config) {
-                
-                })
-            }
-
             // 商城名字
             self.getShopName = function() {
                 var data = {
@@ -1416,7 +1535,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId - 0
+                    "shopID": self.shopId
                     // "hotelId": 1
                 };
                 data = JSON.stringify(data);
@@ -1435,7 +1554,7 @@
                    
                     
                 }, function errorCallback(data, status, headers, config) {
-
+                    alert($filter('translate')('serverError'));
                 });
             }
 
@@ -1446,8 +1565,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId - 0
-                    // "hotelId": 1
+                    "shopID": self.shopId
                 };
                 data = JSON.stringify(data);
                 $http({
@@ -1486,7 +1604,6 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo') && $scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId,
                     "categoryId": self.searchCategoryId,
                     "page": self.page + 1,
                     "count": self.perPageCount
