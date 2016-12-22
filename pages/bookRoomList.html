@@ -58,10 +58,12 @@
                     <!-- 客房价格 -->
                     <h2 class="mod-card-price" ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}&nbsp{{'wxMemberPrice'|translate}}</small></h2>
                     <!-- 已定完 -->
-                    <h2 class="mod-card-price-soldout" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')"><i class="icon ion-android-sad"></i>{{'bookSoldOut'|translate}}</h2>
+                    <h2 class="mod-card-price-soldout" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">
+                        <i class="icon ion-heart-broken"></i>&nbsp{{'bookSoldOut'|translate}}
+                    </h2>
                     <!-- 客房描述 -->
                     <br>
-                    <p class="mod-card-text" ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.Description}}</p>
+                    <p class="mod-card-text" >{{room.Description}}</p>
                 </div>
                 <!-- <div class="mod-split-line mod-15shorter"></div> -->
             </div>
