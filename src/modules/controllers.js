@@ -1412,7 +1412,6 @@
                     "LocationY": y
                 }
                 data = JSON.stringify(data);
-                alert(data)
                 $http({
                   method: $filter('ajaxMethod')(),
                   url: backendUrl('shopinfo', ''),
@@ -1493,7 +1492,6 @@
                     "lang": $translate.proposedLanguage() || $translate.use()
                 }
                 data = JSON.stringify(data);
-                alert(data);
                 $http({
                   method: $filter('ajaxMethod')(),
                   url: backendUrl('shopinfo', 'hotelLists'),
@@ -1610,7 +1608,6 @@
                     //加载购物车内容
                     self.loadShopCartInfo();
                     self.categoryList = data.data.data.categoryList;
-                    alert(JSON.stringify(data.data.data))
                     if (self.categoryList.length !=0) {
                         // 默认加载第一个分类
                         self.searchProductList(self.categoryList["0"]["id"],true);
