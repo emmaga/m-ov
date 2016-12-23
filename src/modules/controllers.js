@@ -1353,8 +1353,6 @@
 
                 // 如果缓存里有shopid和门店id和门店名称，获取门店，选中该门店，获取商店
                 if(util.getParams('shopinfo')) {
-                    alert('缓存有shopid')
-                    alert(JSON.stringify(util.getParams('shopinfo')))
                     self.hotelId = util.getParams('shopinfo').hotelId;
                     self.hotelName = util.getParams('shopinfo').hotelName;
                     self.shopId = util.getParams('shopinfo').shopId;
@@ -1425,7 +1423,6 @@
                     if(data.data.hotelID !== '') {
                         self.hotelId = data.data.hotelID;
                     }
-                    alert('hahaha');
                     self.getHotelList().then(function() {
                         self.getShopIdByHotelId();
                     });
@@ -1532,7 +1529,6 @@
             }
 
             self.gotoShopDetail = function(productId) {
-                console.log('productId' + productId)
                 angular.element(window).off('scroll'); 
                 $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId, hotelName:self.hotelName });
             }
@@ -1606,7 +1602,6 @@
                     "shopID": self.shopId
                 };
                 data = JSON.stringify(data);
-                alert(data)
                 $http({
                     method: $filter('ajaxMethod')(),
                     url: backendUrl('shopinfo', 'productCategory'),
@@ -1694,8 +1689,8 @@
         }
     ])
 
-    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$translate', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl',
-        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $translate, $ionicSlideBoxDelegate, loadingService, backendUrl) {
+    .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$translate', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl', 'util',
+        function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $translate, $ionicSlideBoxDelegate, loadingService, backendUrl, util) {
 
             console.log('shopProductDetailController')
             var self = this;
@@ -1735,7 +1730,6 @@
                             "clear_session": $scope.root.getParams('clear_session'),
                             "openid": $scope.root.getParams('openid'),
                             "lang": $translate.proposedLanguage() || $translate.use(),
-                            "hotelId": self.hotelId,
                             "productId": self.productId - 0
 
                     }
@@ -1771,7 +1765,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "shopID": self.shopId
+                    "shopID": util.getParams('shopinfo').shopId
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1795,7 +1789,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId,
+                    "shopID": util.getParams('shopinfo').shopId,
                     "productId":self.productId
                 }
                 data = JSON.stringify(data);
@@ -1828,8 +1822,8 @@
         }
     ])
 
-    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl',
-      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl) {
+    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl', 'util',
+      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl, util) {
         console.log('shopCartController')
         var self = this;
         self.beforeInit = function() {
@@ -1902,7 +1896,6 @@
                 "appid": $scope.root.getParams('appid'),
                 "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                 "lang": $translate.proposedLanguage() || $translate.use(),
-                "hotelId": self.hotelId,
                 "shoppingCartItems":[
                     {
                         "shoppingCartID":$scope.shopCartList[index].shopCartItemID,
@@ -1936,7 +1929,6 @@
               "appid": $scope.root.getParams('appid'),
               "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
               "lang": $translate.proposedLanguage() || $translate.use(),
-              "hotelId": self.hotelId,
               "shoppingCartIDs":[
                 $scope.shopCartList[index].shopCartItemID
               ]
@@ -1985,7 +1977,7 @@
             "appid": $scope.root.getParams('appid'),
             "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
             "lang": $translate.proposedLanguage() || $translate.use(),
-            "hotelId": self.hotelId,
+            "shopID": util.getParams('shopinfo').shopId
           }
           data = JSON.stringify(data);
           $http({
@@ -2066,6 +2058,7 @@
                 "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                 "lang": $translate.proposedLanguage() || $translate.use(),
                 "hotelId": self.hotelId,
+                "shopID": util.getParams('shopinfo').shopId,
                 "goodsList": goodsList,
                 "delivery":{
                     "deliverWay": deliverWay,
