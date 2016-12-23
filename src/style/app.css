@@ -142,6 +142,9 @@
     font-weight: 200 !important;
 }
 
+.mod-card-title.mod-limited,.mod-card-text.mod-limited{
+    white-space: nowrap !important;
+}
 
 /*item*/
 
@@ -362,6 +365,9 @@
 .mod-split-line.mod-thin {
     transform: scaleY(0.5);
 }
+.mod-split-line.mod-thin.padding{
+    padding: 7px;
+}
 
 /*note*/
 
@@ -530,6 +536,9 @@
 .mod-no-border-top {
     border-top: none !important
 }
+.mod-no-border-bottom {
+    border-bottom: none !important
+}
 
 .mod-bg-transparent {
     background-color: transparent !important;
@@ -573,6 +582,10 @@ form.mod-fixed {
 .mod-fixed.mod-fixed-bottom {
     bottom: 0 !important;
     margin-bottom: 0 !important;
+}
+
+.mod-fixed.mod-fixed-bottom.button-bar>.button{
+    border-radius: 0 !important
 }
 
 

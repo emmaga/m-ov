@@ -11,12 +11,16 @@
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <div class="item">
+            <!-- 库存 -->
             <p class="item-note">{{'stock'|translate}}{{sp.product.invetory}}</p>
-            <h2>{{sp.product.name}}</h2>
-            <h2 class="mod-member-price assertive">{{sp.product.price | fenToYuan}}</h2>
+            <!-- 商品价格 -->
+            <h2 class="mod-card-price assertive"><small>￥</small>{{sp.product.price | fenToYuan}}</h2>
         </div>
-        <div class="padding">
-            <p>{{sp.product.intro}}</p>
+        <div class="item mod-no-border-bottom padding">
+            <!-- 商品名称 -->
+            <h2 class="mod-card-title">{{sp.product.name}}</h2>
+            <!-- 商品介绍 -->
+            <p class="mod-card-text">{{sp.product.intro}}</p>
         </div>
     </div>
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
