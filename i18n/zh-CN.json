@@ -23,10 +23,15 @@
   "detail": "详情",
   "deliverWay": "配送方式",
 
+  "emptyCart":"空荡荡的购物车",
+  "exceedStock": "超过库存",
+  "expressFeeIncluded": "含邮费",
+
   "fillInOrder": "填写订单",
   "Friday": "五",
 
-
+  "goodsOffTheShelf": "十分抱歉，商品已经下架了",
+  "goodsSoldOut": "Oops.. 一不小心卖光了",
   "goOnBooking": "继续预定",
   "goOnShopping": "继续购物",
 
@@ -40,6 +45,7 @@
   "Monday": "一",
   
   "night": "晚",
+  "needDelivering": "需要配送",
   "noMore": "没有更多了",
   "noResults": "查无结果",
   "noShop": "查无商店",
@@ -53,6 +59,7 @@
   "payMethod": "支付方式",
   "payNow": "去支付",
   "phoneNumber": "手机号",
+  "placeOfTakingGoods": "提货地点",
   "placeToGo": "目的地",
   "plsSelACheckInDate" : "请选择入住日期",
   "plsSelACheckOutDate" : "请选择离店日期",

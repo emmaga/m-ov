@@ -21,9 +21,15 @@
   "detail": "detail",
   "deliverWay": "deliver way",
 
+  "emptyCart":"empty cart",
+  "exceedStock": "exceed stock",
+  "expressFeeIncluded": "express fee included",
+
   "fillInOrder": "fill out",
   "Friday": "Fr",
 
+  "goodsOffTheShelf": "sorry, the goods are off the shelf",
+  "goodsSoldOut": "sorry, the goods are sold out",
   "goOnBooking": "go on booking",
   "goOnShopping": "go on shopping",
 
@@ -38,6 +44,7 @@
   "Monday": "一",
 
   "night": "night(s)",
+  "needDelivering": "need delivering",
   "noMore": "no more",
   "noResults": "no results",
   "noShop": "can not find a shop",
@@ -47,6 +54,7 @@
   
   "payNow": "pay now",
   "phoneNumber": "phone",
+  "placeOfTakingGoods": "place of taking goods",
   "placeToGo": "destination",
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
