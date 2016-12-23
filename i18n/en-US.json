@@ -1,10 +1,12 @@
 {
+  "addToCart": "add to cart",
   "all": "all",
 
   "back": "back",
   "booking": "book",
   "bookHotel": "bookHotel",
   "bookSoldOut": "sold out",
+  "buyNow": "buy",
 
   "cancelSuccess": "cancel success",
   "cancelFail": "cancel fail",
@@ -50,6 +52,7 @@
   "plsSelACheckOutDate" : "Please select a check-out date.",
   "priceDetail" : "price list",
   "productQuantity": "quantity",
+  "productDetail": "product detail",
 
   "realName": "real name",
   "roomQuantity" : "rooms",

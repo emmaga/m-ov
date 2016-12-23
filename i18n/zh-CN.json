@@ -1,10 +1,12 @@
 {
+  "addToCart": "加入购物车",
   "all": "全部",
   
   "back": "返回",
   "booking": "预订",
   "bookHotel": "订酒店",
   "bookSoldOut": "已订完",
+  "buyNow": "立即购买",
   
   "cancelSuccess": "取消成功",
   "cancelFail": "取消失败",
@@ -56,6 +58,7 @@
   "plsSelACheckOutDate" : "请选择离店日期",
   "priceDetail" : "价格明细",
   "productQuantity": "购买数量",
+  "productDetail": "商品详情",
 
 
   "realName": "真实姓名",
