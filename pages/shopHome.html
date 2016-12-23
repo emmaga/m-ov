@@ -13,14 +13,17 @@
 
     <!--header-->
     <div class="bar bar-header mod-bg-transparent mod-fixed">
+        
+        <!-- 门店选择按钮 -->
         <button class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
             <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
         </button>
 
+        <!-- 商城名称 -->
         <h1 class="title">{{shopHome.shopName}}</h1>
-      
+        
+        <!-- 购物车按钮 -->
         <button ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
-
             {{shopHome.shopCartItemCount}}
         </button>
 
@@ -41,10 +44,10 @@
                 <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <p class="item-note">库存：{{product.invetory}}</p>
+                <p class="item-note">库存&nbsp{{product.invetory}}</p>
                 <h2>{{product.name}}</h2>
                 <p>{{product.intro}}</p>
-                <h2 class="mod-member-price assertive">￥{{product.price | fenToYuan}}</h2>
+                <h2 class="mod-card-price assertive">￥{{product.price | fenToYuan}}</h2>
             </div>
         </a>
 
