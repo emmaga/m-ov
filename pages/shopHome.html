@@ -31,7 +31,7 @@
 
 
     <!-- 商品列表 -->
-    <div class="list mod-has-tabs-top padding" style="padding-bottom: 40px">
+    <div class="list  mod-has-tabs-top mod-inset-forms" style="padding-bottom: 40px">
 
         <!-- <p class="mod-note">
             <i class="icon ion-android-happy"></i>
@@ -39,15 +39,21 @@
         </p> -->
 
         <!-- 卡片 -->
-        <a class="card mod-flat wx-touch-hack" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
+        <a class="card mod-flat padding wx-touch-hack " ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
+                <!-- 库存 -->
                 <p class="item-note">{{'stock'|translate}}&nbsp{{product.invetory}}</p>
-                <h2>{{product.name}}</h2>
-                <p>{{product.intro}}</p>
-                <h2 class="mod-card-price assertive">￥{{product.price | fenToYuan}}</h2>
+                <!-- 商品价格 -->
+                <!-- <br> -->
+                <h2 class="mod-card-price assertive"><small>￥</small>{{product.price | fenToYuan}}</h2>
+                <div class="mod-split-line mod-thin padding"></div>
+                <!-- 商品名称 -->
+                <h2 class="">{{product.name}}</h2>
+                <!-- 商品介绍 -->
+                <small class="mod-card-text">{{product.intro}}</small>
             </div>
         </a>
 

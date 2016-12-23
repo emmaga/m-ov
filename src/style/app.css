@@ -98,10 +98,14 @@
     margin-top: 91px;
 }
 
+/*row*/
+.mod-row{
+    flex-wrap: wrap;
+}
 
 /*card*/
-
 .card.mod-flat {
+    display: block;
     overflow: visible !important;
     box-shadow: none !important;
 }
@@ -337,7 +341,7 @@
 
 .mod-split-line {
     position: relative;
-    border-bottom: solid 1px rgba(0, 0, 0, 0.125);
+    border-top: solid 1px rgba(0, 0, 0, 0.125);
 }
 
 .mod-split-line.mod-15shorter {
@@ -358,7 +362,6 @@
 .mod-split-line.mod-thin {
     transform: scaleY(0.5);
 }
-
 
 /*note*/
 
