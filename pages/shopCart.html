@@ -39,7 +39,7 @@
         </div>
 
     </form>
-    <div class="" style="/*padding-top: 230px;*/">
+    <div class="list">
         <!-- <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCartList.hasEx"></div> -->
         
         <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
@@ -47,8 +47,10 @@
             {{'emptyCart'|translate}}
         </p>
 
-        <div class="item item-divider" ng-repeat-start="item in shopCartList track by $index"></div>
-        <div class="card mod-flat mod-no-margin-vertical" ng-repeat-end="item in shopCartList track by $index">
+        <!-- 第一个divider -->
+        <div class="item item-divider" ng-if="shopCartList.length >= 1"></div>
+        <!-- 卡片 -->
+        <div class="card mod-flat mod-no-margin-vertical" ng-repeat-start="item in shopCartList track by $index">
 
             <div class="item item-checkbox item-icon-right assertive">
                 <div class="checkbox checkbox-assertive">
@@ -85,5 +87,7 @@
                 </h2>
             </div>
         </div>
+        <div class="item item-divider mod-last" ng-repeat-end="item in shopCartList track by $index" style="{{shopCartList.length == 1 ? 'height: calc(100vh - 486px); ' : ''}}"></div>
+        <!-- 卡片 end -->
     </div>
 </div>

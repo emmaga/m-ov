@@ -665,6 +665,9 @@ small {
     border-left: none !important;
     border-right: none !important;
 }
+.item-divider.mod-last:nth-last-of-type(1) {
+    border-bottom: none !important
+}
 
 .bar-header .ion-ios-cart {
     transform: scale(0.75);
@@ -719,6 +722,7 @@ small {
     z-index: 2000
 }
 
+/*米纸特效*/
 .ricepaper {
     background-color: rgba(255, 255, 255, .95) !important
 }
