@@ -197,6 +197,7 @@
                     // 标志已经拿到clearsession,wx开始注册,projectinfo已经拿到
                     self._readystate = true;
                     setTitle(data.data.data.projectName);
+                    $ionicLoading.hide();
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })
