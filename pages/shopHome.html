@@ -27,15 +27,16 @@
     </div>
 
 
-
+    <!-- 商品列表 -->
     <div class="list mod-has-tabs-top padding" style="padding-bottom: 40px">
 
-        <p class="mod-note">
+        <!-- <p class="mod-note">
             <i class="icon ion-android-happy"></i>
             购买后请到前台取货，需要快递的商品可在购物车里勾选。
-        </p>
+        </p> -->
 
-        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
+        <!-- 卡片 -->
+        <a class="card mod-flat wx-touch-hack" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
