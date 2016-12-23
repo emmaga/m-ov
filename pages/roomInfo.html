@@ -91,10 +91,13 @@
         </div>
 
         <!-- 价格明细表 -->
+        <div class="item item-divider">
+            <p>{{'priceDetail'|translate}}</p>
+        </div>
         <div class="item">
-            <h2>{{'priceDetail'|translate}}</h2>
+            <!-- <h2>{{'priceDetail'|translate}}</h2> -->
             <p ng-repeat="price in roomInfo.priceList">
-                {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
+                {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
             </p>
         <!-- </div> -->
             <div class="mod-split-line" style="margin-top: 7px;margin-bottom: 10px;"></div>
