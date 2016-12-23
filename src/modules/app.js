@@ -74,7 +74,7 @@
       })
       .state('shopCart', {
 
-        url: '/shopCart/?hotelId&hotelName',
+        url: '/shopCart',
         templateUrl: 'pages/shopCart.html'
       })
       .state('shopOrderInfo', {

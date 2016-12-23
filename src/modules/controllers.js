@@ -1440,7 +1440,6 @@
             }
 
             self.getShopIdByHotelId = function() {
-                alert(util.getParams('state'))
                 var data = {
                     "action": "getShopIDByType",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1532,7 +1531,7 @@
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart', {hotelId: self.hotelId, hotelName:self.hotelName});
+                $state.go('shopCart');
             }
 
             self.loadShopCartInfo = function() {
@@ -1544,7 +1543,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "hotelId": self.hotelId - 0
+                    "shopID": util.getParams('shopinfo').shopId
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1715,7 +1714,7 @@
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart', {hotelId: self.hotelId, hotelName: self.hotelName});
+                $state.go('shopCart');
             }
 
             self.search = function() {
@@ -1819,11 +1818,12 @@
         }
     ])
 
-    .controller('shopCartController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl', 'util',
-      function($http, $scope, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl, util) {
+    .controller('shopCartController', ['$http', '$scope', '$timeout', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl', 'util', 
+      function($http, $scope, $timeout, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl, util) {
         console.log('shopCartController')
         var self = this;
         self.beforeInit = function() {
+            
             console.log('beforeInit')
             if($scope.root._readystate) {
                 self.init();
@@ -1835,10 +1835,10 @@
             }
         }
         self.init = function() {
-
+            
           // 初始化
-          self.hotelId = $stateParams.hotelId;
-          self.hotelName = $stateParams.hotelName;
+          self.hotelId = util.getParams('shopinfo').hotelId;
+          self.hotelName = util.getParams('shopinfo').hotelName;
           // self.postage = 1000; //邮费 todo
           self.postage = 1;
           $scope.shopCartList = new Array();
