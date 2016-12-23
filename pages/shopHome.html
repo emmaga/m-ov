@@ -38,7 +38,7 @@
         <!-- 卡片 -->
         <a class="card mod-flat wx-touch-hack" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
             <div class="item mod-no-border">
-                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
+                <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
                 <p class="item-note">库存：{{product.invetory}}</p>
@@ -48,6 +48,7 @@
             </div>
         </a>
 
+        <!-- loading -->
         <ion-spinner icon="dots" class="mod-spinner-list" ng-show="shopHome.showLoadingIcon"></ion-spinner>
         <!-- <a class="button button-light button-block mod-load-more" ng-click="shopHome.moreProduct()"  ng-show="(shopHome.productTotal>shopHome.productList.length) && (!shopHome.showLoadingIcon)">
             显示更多商品
