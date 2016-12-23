@@ -1840,7 +1840,7 @@
           self.hotelId = util.getParams('shopinfo').hotelId;
           self.hotelName = util.getParams('shopinfo').hotelName;
           // self.postage = 1000; //邮费 todo
-          self.postage = 1;
+          self.postage = 0;
           $scope.shopCartList = new Array();
 
           //watch shopCartList
