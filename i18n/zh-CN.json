@@ -38,6 +38,7 @@
   "Monday": "一",
   
   "night": "晚",
+  "noMore": "没有更多了",
   "noResults": "查无结果",
   "noShop": "查无商店",
   
@@ -73,6 +74,7 @@
   "shipAdress": "配送地址",
   "shopName": "所属商城",
   "shopOrder": "商城订单",
+  "stock": "库存",
   "submitOrder": "提交订单",
   "success": "成功",
   "Saturday": "六",

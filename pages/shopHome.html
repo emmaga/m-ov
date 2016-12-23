@@ -44,7 +44,7 @@
                 <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <p class="item-note">库存&nbsp{{product.invetory}}</p>
+                <p class="item-note">{{'stock'|translate}}&nbsp{{product.invetory}}</p>
                 <h2>{{product.name}}</h2>
                 <p>{{product.intro}}</p>
                 <h2 class="mod-card-price assertive">￥{{product.price | fenToYuan}}</h2>
@@ -59,11 +59,11 @@
         </a> -->
         <p class="mod-note-bottomline" ng-show="shopHome.productTotal<=shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
             <i class="icon ion-android-happy"></i>
-            没有更多了
+            {{'noMore'|translate}}
         </p>
         <p class="mod-note-emptylist" ng-show="shopHome.productTotal==0 && shopHome.productList.length==0 && !shopHome.showLoadingIcon">
             <i class="icon ion-android-alert"></i><br>
-            商品正在上架中
+            {{'noResults'|translate}}
         </p>
 
     </div>
