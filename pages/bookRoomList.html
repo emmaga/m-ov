@@ -26,7 +26,7 @@
             <a class="item wx-touch-hack" ui-sref="hotelInfo({hotelId:brl.hotelId})">
 
                 <span class="mod-tag-bar" >
-                    <i ng-repeat="feature in brl.hotel.Features track by $index" ng-if="$index <= 5" class="mod-tag-bar-item icon icon-l {{feature.ImageURL}} "></i>
+                    <i ng-repeat="feature in brl.hotel.Features track by $index" ng-if="$index <= 5" class="mod-tag-bar-item icon {{feature.ImageURL}} mod-icon "></i>
                     <!-- {{feature.Name}} -->
                 </span>
 

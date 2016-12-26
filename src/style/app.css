@@ -67,7 +67,7 @@
 
 .mod-tag-bar-item {
     position: relative;
-    margin-right: 31px;
+    margin-right: 16px;
 }
 
 .mod-tag.mod-tag-small {
@@ -83,6 +83,9 @@
     padding: 3px 6px;
 }
 
+.mod-icon.svg:before{
+    display: inline-block !important;
+}
 
 /*content*/
 
