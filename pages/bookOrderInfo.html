@@ -72,9 +72,17 @@
             </div> -->
         </div>
     </div>
-    <div class="item item-divider">
+    <div class="item item-divider" style="{{!bookOrderInfo.showPayBtn ? 'height: calc(100vh - 433px); ':'' }}">
+        <!-- 支付按钮 -->
         <a class="button button-block button-balanced" ng-click="bookOrderInfo.payNow()" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showPayBtn">{{'payNow'|translate}}</a>
+        <!-- 继续预订按钮 -->
         <a class="button button-block button-positive" ui-sref="bookHotelList" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool">{{'goOnBooking'|translate}}</a>
-        <a class="button button-block button-positive" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showCancelBtn">{{'cancelOrder'|translate}}</a>
+        <!-- 取消订单按钮 -->
+        <a class="button button-block button-light" ng-click="bookOrderInfo.cancelOrder(bookOrderInfo.roomOrder.Status)" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showCancelBtn">{{'cancelOrder'|translate}}</a>
+        
+        <!-- 补色 -->
+        <!-- <div class="item item-divider mod-last mod-no-border-top" ng-show="!bookOrderInfo.showPayBtn" style="height: calc(100vh - 574px)"></div> -->
+        <!-- <div class="item item-divider mod-last mod-no-border-top" ng-show="!bookOrderInfo.showPayBtn || !bookOrderInfo.showCancelBtn" style="height: calc(100vh - 568px)"></div> -->
+
     </div>
 </div>
