@@ -5,36 +5,45 @@
     </div>
     <div class=" mod-has-header">
         <div class="item mod-no-border-top">
+            <!-- 订单号 -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderID'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.OrderNum}}</p>
             </div>
+            <!-- 下单时间 -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.CreateTime}}</p>
             </div>
-            <div class="row">
-                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">￥{{bookOrderInfo.roomOrder.Price | fenToYuan}}</p>
-            </div>
+            <!-- 订单状态 -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.Status|orderStatus}}</p>
+            </div>
+            <!-- 总价 -->
+            <div class="row">
+                <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
+                <p class="col mod-no-padding col-75">￥{{bookOrderInfo.roomOrder.Price | fenToYuan}}</p>
             </div>
         </div>
     </div>
     <div class="item item-divider"></div>
     <div ng-repeat="good in bookOrderInfo.GoodsList ">
+        <!-- thumbnail -->
         <a class="item item-thumbnail-left mod-no-side-border">
+            <!-- 客房图 -->
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{good.RoomBasicInfo.roomImg}});"></div>
+            <!-- 客房名称 -->
             <h2>{{good.RoomBasicInfo.RoomTypeName}}</h2>
+            <!-- 所属门店 -->
             <p>{{good.RoomBasicInfo.HotelBasicInfo.HotelName}}</p>
-            <p>{{good.RoomBasicInfo.Description}}</p>
-            <p>
+            <!-- 客房描述 -->
+            <!-- <small>{{good.RoomBasicInfo.Description}}</small> -->
+            <!--标签 <p>
                 <span class="mod-tag" ng-repeat="feature in bookOrderInfo.roomOrder.roomFeatures">
                     <i class="icon {{feature.icon}}"></i>
                 </span>
-            </p>
+            </p> -->
         </a>
         <div class="item">
             <div class="row">
@@ -42,15 +51,17 @@
                 <p class="col mod-no-padding">{{'checkInDate'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{good.BookStartDate | date:'yyyy.MM.dd'}}~{{good.BookEndDate|date:'yyyy.MM.dd'}}&nbsp·&nbsp{{'total'|translate}}{{bookOrderInfo.countDay(good.BookStartDate,good.BookEndDate)}}{{'days'|translate}}</p>
             </div>
-            
+            <!-- 房间数量 -->
             <div class="row">
                 <p class="col mod-no-padding">{{'roomQuantity'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{good.GoodsNum}}</p>
             </div>
+            <!-- 联系人 -->
             <div class="row">
                 <p class="col mod-no-padding">{{'contackName'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ContactorName}}</p>
             </div>
+            <!-- 手机号 -->
             <div class="row">
                 <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ContactorPhone}}</p>
@@ -61,7 +72,6 @@
             </div> -->
         </div>
     </div>
-    <div class="item item-divider"></div>
     <div class="item item-divider">
         <a class="button button-block button-balanced" ng-click="bookOrderInfo.payNow()" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showPayBtn">{{'payNow'|translate}}</a>
         <a class="button button-block button-positive" ui-sref="bookHotelList" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool">{{'goOnBooking'|translate}}</a>
