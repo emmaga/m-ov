@@ -263,9 +263,16 @@
     right: 0;
     top: 0;
     bottom: 0;
-    mix-blend-mode: exclusion;
+    opacity: 0.05;
     background: -webkit-radial-gradient(top left, 80% 197%, rgba(195, 155, 255, 0) 20%, rgba(195, 155, 255, 0.3) 100%);
     border: none !important;
+}
+
+@supports (mix-blend-mode: exclusion) {
+    .mod-member-card-logo{
+        opacity: 1;
+        mix-blend-mode: exclusion
+    }
 }
 
 .mod-member-card>iframe,
