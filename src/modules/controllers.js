@@ -9,7 +9,12 @@
 
             self.init = function() {
 
-                self.wxBrowserHack();
+                // 苹果手机去除滚动点停后进详情页的问题
+                var u = navigator.userAgent;
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if(isiOS) {
+                    self.wxBrowserHack();
+                }
 
                 if(BACKEND_CONFIG.test == true) {
                     // 标志已经拿到clearsession和wx初始化
@@ -42,14 +47,12 @@
 
             self.wxBrowserHack = function() {
                 document.addEventListener('touchmove', function(event) {
-                    // event.preventDefault();
                     var l = document.getElementsByClassName('wx-touch-hack');
                     for(var i=0; i< l.length; i++) {
                         l[i].style.pointerEvents= "none";
                     }
                 })
                 document.addEventListener('scroll', function(event) {
-                    // event.preventDefault();
                     var l = document.getElementsByClassName('wx-touch-hack');
                     for(var i=0; i< l.length; i++) {
                         l[i].style.pointerEvents= "auto";
