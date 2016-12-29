@@ -1138,8 +1138,10 @@
                        data: data
                    }).then(function successCallback(data, status, headers, config) {
                        self.member = data.data.data.member;
-                       self.member.mobile = data.data.data.member.mobile-0;
-                       self.member.idCardNumber = data.data.data.member.idCardNumber-0;
+                       if(data.data.data.member.mobile - 0 != 0) {
+                         self.member.mobile = data.data.data.member.mobile - 0;
+                       }
+                       self.member.idCardNumber = data.data.data.member.idCardNumber;
                        self.showLoadingBool.searchBool = true;
                    }, function errorCallback(data, status, headers, config) {
                        self.showLoadingBool.searchBool = true;
