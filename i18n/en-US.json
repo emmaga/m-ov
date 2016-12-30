@@ -33,9 +33,12 @@
   "goOnBooking": "go on booking",
   "goOnShopping": "go on shopping",
 
+  "hotelFacilities": "hotel facilities",
   "hotelName": "hotel name",
   "hotelOrder": "hotel order",
 
+  "introduction": "introduction",
+  
   "map": "location",
   "memberInfo": "member info",
   "orderDate": "order time",

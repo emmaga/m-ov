@@ -2035,7 +2035,7 @@
 
             //开始生成订单
             $ionicLoading.show({
-               template: '订单生成中...'
+               template: '...'
             });
             // 支付按钮变为不可点击，防止多次点击
             document.getElementById('payBtn').disabled = true;
@@ -2099,7 +2099,7 @@
             self.orderId = orderId;
             //获取支付参数
             $ionicLoading.show({
-               template: '等待支付...'
+               template: '...'
             });
             // 支付按钮变为不可点击
             document.getElementById('payBtn').disabled = true;

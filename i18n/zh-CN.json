@@ -35,8 +35,11 @@
   "goOnBooking": "继续预定",
   "goOnShopping": "继续购物",
 
+  "hotelFacilities": "酒店设施",
   "hotelName": "所属门店",
   "hotelOrder": "酒店订单",
+
+  "introduction": "介绍",
 
   "map": "地图",
   "memberInfo": "会员资料",
