@@ -13,7 +13,8 @@
   ])
 
   .config(['$translateProvider',function($translateProvider){
-      var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
+      // var lang = navigator.language.indexOf('zh') > -1 ? 'zh-CN' : 'en-US';
+      var lang = 'zh-CN';
       $translateProvider.preferredLanguage(lang);
       $translateProvider.useStaticFilesLoader({
           prefix: 'i18n/',
