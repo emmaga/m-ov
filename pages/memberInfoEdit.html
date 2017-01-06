@@ -7,17 +7,17 @@
             <label class="item item-input">
                 <!--真实姓名-->
                 <span class="input-label">{{'realName'|translate}}:</span>
-                <input type="text" ng-model="mie.member.realName" name="name" required>
+                <input type="text" ng-model="mie.member.realName" name="name" required placeholder="{{'required'|translate}}">
             </label>
             <label class="item item-input">
                 <!--证件号码-->
                 <span class="input-label">{{'certificateNumber'|translate}}:</span>
-                <input type="text" ng-model="mie.member.idCardNumber" required >
+                <input type="text" ng-model="mie.member.idCardNumber" required  placeholder="{{'required'|translate}}">
             </label>
             <label class="item item-input">
                 <!--手机号码-->
                 <span class="input-label">{{'phoneNumber'|translate}}:</span>
-                <input type="number" ng-model="mie.member.mobile" required >
+                <input type="number" ng-model="mie.member.mobile" required  placeholder="{{'required'|translate}}">
             </label>
             <!-- <button ng-click="mie.getAuthCode()" ng-disabled="mie.countAbility"><span ng-show="mie.showTip">免费获取验证码</span> <span ng-show="!mie.showTip">{{mie.countSeconds}}s 后重新发送</span></button>
         <label class="item item-input">

@@ -7736,6 +7736,7 @@ input[type="tel"],
 input[type="color"] {
   display: block;
   padding-top: 2px;
+  padding-top: 6px;/*mod*/
   padding-left: 0;
   height: 34px;
   color: #111;

@@ -22,11 +22,11 @@
 
         <div class="item item-input mod-short">
             <div class="input-label">{{'contackName'|translate}}</div>
-            <input type="text" ng-model="shopCart.address.name" required />
+            <input type="text" ng-model="shopCart.address.name" required placeholder="{{'required'|translate}}"/>
         </div>
         <div class="item item-input mod-short">
             <div class="input-label">{{'phoneNumber'|translate}}</div>
-            <input type="text" ng-model="shopCart.address.mobile" required />
+            <input type="text" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}"/>
         </div>
         <ion-toggle ng-model="shopCartList.hasEx">{{'needDelivering'|translate}}?</ion-toggle>
         <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
@@ -35,7 +35,7 @@
         
         <div class="item item-input mod-short" ng-if="shopCartList.hasEx">
             <div class="input-label">{{'shipAdress'|translate}}</div>
-            <input type="text" ng-model="shopCart.address.address" required/>
+            <input type="text" ng-model="shopCart.address.address" required placeholder="{{'required'|translate}}"/>
         </div>
 
     </form>
