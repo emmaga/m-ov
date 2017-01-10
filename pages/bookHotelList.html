@@ -10,7 +10,7 @@
         <!-- doodle/海报 -->
 
         <img class="mod-doodle" ng-src="{{bhl.projectImg}}" ng-if="bhl.projectImg"/>
-        <iframe class="mod-doodle" src="dist/img/doodle.html" ng-if="!bhl.projectImg"> </iframe>
+        <iframe class="mod-doodle" src="dist/img/doodle.html" ng-if="bhl.hasNoProjectImg"> </iframe>
         <!-- iframe 加载时，ng有限制 -->
 
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>

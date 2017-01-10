@@ -237,6 +237,9 @@
             self.init = function() {
                 // 项目图片
                 self.projectImg = $scope.root.getParams('projectInfo').ProjectLogo;
+                if(!self.projectImg) {
+                    self.hasNoProjectImg = true;
+                }
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
