@@ -15,7 +15,9 @@
         <h5 class="atc-chapter-title atc-col8 atc-spacing">{{'introduction'|translate}}</h5>
         <div class="atc-col8">
 
-            {{hotelInfo.hotel.Description}}
+            <ng-repeat ng-repeat="desc in hotelInfo.hotel.Description">
+            {{desc}}<br>
+            </ng-repeat>
         </div>
     </div>
 

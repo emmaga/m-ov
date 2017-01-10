@@ -565,8 +565,8 @@
                       url: backendUrl('hotelinfo', 'hotelInfo'),
                       data: data
                   }).then(function successCallback(data, status, headers, config) {
-                      console.log(data.data.data)
                       self.hotel = data.data.data;
+                      self.hotel.Description = self.hotel.Description.split('\n');
                       self.showLoadingBool.searchBool = true;
                       loadingService(self.showLoadingBool);
                   }, function errorCallback(data, status, headers, config) {
