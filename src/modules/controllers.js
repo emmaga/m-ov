@@ -415,10 +415,12 @@
 
             self.map = function() {
                 wx.openLocation({
-                    latitude: self.hotel.LocationX, // 纬度，浮点数，范围为90 ~ -90
-                    longitude: self.hotel.LocationY, // 经度，浮点数，范围为180 ~ -180。
-                    name: self.hotel.Name, // 位置名
-                    address: self.hotel.Address, // 地址详情说明
+                    latitude: self.hotel.LocationX-0, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: self.hotel.LocationY-0, // 经度，浮点数，范围为180 ~ -180。
+                    name: decodeURI(encodeURI(self.hotel.Name)), // 位置名
+                    address: decodeURI(encodeURI(self.hotel.Address)), // 地址详情说明
+                    //name: '上海浦东机场门店', // 位置名
+                    //address: '上海 祖冲之路2277弄', // 地址详情说明
                     scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为最大
                     infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                 });
