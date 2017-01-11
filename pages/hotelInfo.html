@@ -16,7 +16,10 @@
         <div class="atc-col8">
 
             <ng-repeat ng-repeat="desc in hotelInfo.hotel.Description">
-            {{desc}}<br>
+              <ng-repeat ng-repeat="frag in desc track by $index">
+                {{frag}}&nbsp;
+              </ng-repeat>
+            <br>
             </ng-repeat>
         </div>
     </div>

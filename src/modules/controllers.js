@@ -567,6 +567,9 @@
                   }).then(function successCallback(data, status, headers, config) {
                       self.hotel = data.data.data;
                       self.hotel.Description = self.hotel.Description.split('\n');
+                      for(var i = 0; i < self.hotel.Description.length; i++) {
+                        self.hotel.Description[i] = self.hotel.Description[i].split('  ');
+                      }
                       self.showLoadingBool.searchBool = true;
                       loadingService(self.showLoadingBool);
                   }, function errorCallback(data, status, headers, config) {
@@ -646,6 +649,11 @@
                             self.searchHotelInfo();
                             self.room = data.data.data;
                             
+                            // 添加空格和换行
+                            self.room.Description = self.room.Description.split('\n');
+                            for(var i = 0; i < self.room.Description.length; i++) {
+                              self.room.Description[i] = self.room.Description[i].split('  ');
+                            }
                             
                             self.priceList = self.room.PriceInfo.PriceList;
                              // 单价
@@ -1747,6 +1755,12 @@
                     }).then(function successCallback(data, status, headers, config) {
                         if(data.data.rescode == '200'){
                             self.product = data.data.data.product;
+                            // 添加空格和换行
+                            self.product.intro = self.product.intro.split('\n');
+                            for(var i = 0; i < self.product.intro.length; i++) {
+                              self.product.intro[i] = self.product.intro[i].split('  ');
+                            }
+
                             // ionic silder update
                             $ionicSlideBoxDelegate.update();
 

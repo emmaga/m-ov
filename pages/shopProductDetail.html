@@ -20,7 +20,15 @@
             <!-- 商品名称 -->
             <h2 class="mod-card-title">{{sp.product.name}}</h2>
             <!-- 商品介绍 -->
-            <p class="mod-card-text">{{sp.product.intro}}</p>
+            <!-- <p class="mod-card-text">{{sp.product.intro}}</p> -->
+            <p class="mod-card-text">
+                <ng-repeat ng-repeat="desc in sp.product.intro">
+                  <ng-repeat ng-repeat="frag in desc track by $index">
+                    {{frag}}&nbsp;
+                  </ng-repeat>
+                  <br>
+                </ng-repeat>
+            </p>
         </div>
     </div>
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">

@@ -29,7 +29,12 @@
             <!-- 客房描述 -->
             <h5 class="atc-chapter-title atc-col8 atc-spacing">介绍</h5>
             <div class="atc-col8">
-                {{roomInfo.room.Description}}
+                <ng-repeat ng-repeat="desc in roomInfo.room.Description">
+                  <ng-repeat ng-repeat="frag in desc track by $index">
+                    {{frag}}&nbsp;
+                  </ng-repeat>
+                <br>
+                </ng-repeat>
             </div>
         </div>
 
