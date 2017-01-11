@@ -501,8 +501,11 @@
                     data: data
 
                 }).then(function successCallback(data, status, headers, config) {
-                    console.log(data)
                     self.rooms = data.data.data;
+                    //Description
+                    for(var i = 0; i < self.rooms.length; i++) {
+                        self.rooms[i].Description = util.cutStr(self.rooms[i].Description, 85);
+                    }
                     // ionic silder update
                     $ionicSlideBoxDelegate.update();
                     self.showLoadingBool.searchRoomListBool = true;
@@ -720,8 +723,9 @@
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         self.member = data.data.data.member;
-                        console.log(self.member)
-                        self.member.mobile -= 0;
+                        if(self.member.mobile != "") {
+                            self.member.mobile = Number(self.member.mobile);
+                        }
                         self.showLoadingBool.searchMemberInfoBool = true;
                         loadingService(self.showLoadingBool);
                         self.searchRoomInfo();
