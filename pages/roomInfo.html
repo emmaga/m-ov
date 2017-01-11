@@ -19,16 +19,16 @@
         <!-- info -->
         <div class="atc-content">
             <!-- 客房标签 -->
-            <h5 class="atc-chapter-title atc-col8 atc-spacing">客房设施</h5>
-            <div class="atc-col8 atc-grid atc-grid4">
+            <h5 class="atc-chapter-title atc-col10 atc-spacing">客房设施</h5>
+            <div class="atc-col10 atc-grid atc-grid4">
                 <div class="atc-grid-item" ng-repeat="feature in roomInfo.room.Features">
                     <i class="icon mod-icon {{feature.ImageURL}}"></i>
                     <p>{{feature.Name}}</p>
                 </div>
             </div>
             <!-- 客房描述 -->
-            <h5 class="atc-chapter-title atc-col8 atc-spacing">介绍</h5>
-            <div class="atc-col8">
+            <h5 class="atc-chapter-title atc-col10 atc-spacing">介绍</h5>
+            <div class="atc-col10">
                 <ng-repeat ng-repeat="desc in roomInfo.room.Description">
                   <ng-repeat ng-repeat="frag in desc track by $index">
                     {{frag}}&nbsp;
