@@ -1,6 +1,6 @@
 <div ng-controller="hotelInfoController as hotelInfo" ng-init="hotelInfo.beforeInit()">
 	<div class="atc-content mod-has-header">
-        <img class="atc-img atc-col4 atc-spacing" src="api/img/hotel-logo.png" ;>
+        <img class="atc-img atc-col4 atc-spacing" src="{{hotelInfo.hotel.LogoURL}}" ;>
         <h5 class="atc-chapter-title atc-col8 atc-spacing">{{'hotelFacilities'|translate}}</h5>
 
         <div class="atc-col8 atc-grid atc-grid4">
