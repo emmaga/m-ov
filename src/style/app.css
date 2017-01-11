@@ -593,6 +593,7 @@ form.mod-fixed {
 .mod-fixed.mod-fixed-bottom {
     bottom: 0 !important;
     margin-bottom: 0 !important;
+    z-index: 2;
 }
 
 .mod-fixed.mod-fixed-bottom.button-bar>.button{
