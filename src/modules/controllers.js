@@ -1870,6 +1870,7 @@
           // self.postage = 1000; //邮费 todo
           self.postage = 0;
           $scope.shopCartList = new Array();
+          self.totalPrice = 0;
 
           //watch shopCartList
           $scope.$watch('shopCartList', function() {

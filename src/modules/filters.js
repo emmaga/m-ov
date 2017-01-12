@@ -20,6 +20,9 @@
           var s2 = s.slice(-2);
           return s1 + '.' + s2;
         }
+        else {
+          return '0.00';
+        }
         
     };
   })
