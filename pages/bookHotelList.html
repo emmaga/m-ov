@@ -36,9 +36,6 @@
         <!-- loading -->
         <ion-spinner icon="dots" class="mod-spinner-list" ng-hide="bhl.loadingIcon"></ion-spinner>
 
-        <!-- 查无结果 -->
-        <p ng-show="bhl.loadingIcon && bhl.hotelNum==0 ">{{'noResults'|translate}}</p>
-
         <!-- 标题：搜索结果数量 -->
         <h3 class="mod-font-light mod-text-indent" ng-show="bhl.loadingIcon">{{'searchResultA'|translate}}{{bhl.hotelNum}}{{'searchResultB'|translate}}</h3>
 
