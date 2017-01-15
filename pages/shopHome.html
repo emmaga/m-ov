@@ -67,7 +67,7 @@
             <i class="icon ion-android-happy"></i>
             {{'noMore'|translate}}
         </p>
-        <p class="mod-note-emptylist" ng-show="shopHome.productTotal==0 && shopHome.productList.length==0 && !shopHome.showLoadingIcon">
+        <p class="mod-note-emptylist" ng-show="(shopHome.productTotal==0 && shopHome.productList.length==0 && !shopHome.showLoadingIcon) || (shopHome.categoryList.length == 0 && !shopHome.showLoadingIcon)">
             <i class="icon ion-android-alert"></i><br>
             {{'noResults'|translate}}
         </p>

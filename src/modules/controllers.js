@@ -1462,6 +1462,9 @@
             }
 
             self.getShopIdByHotelId = function() {
+                self.productList = [];
+                self.categoryList = [];
+
                 var data = {
                     "action": "getShopIDByType",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1670,7 +1673,6 @@
                     self.productList = self.productList.concat(data.data.data.productList);
                     self.productList.length = self.productList.length;
                     self.productTotal = data.data.data.productTotal;
-                    console.log(self.productList + new Date().getTime())
                     self.showLoadingIcon = false;
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingIcon = false;
