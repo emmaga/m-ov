@@ -606,6 +606,8 @@
                 // // self.showLoadingBool.searchMemberInfoBool = false;
                 // self.showLoadingBool.searchHotelInfoBool = false;
 
+                self.mobileRe = /[0-9]{11,}/;
+
                 self.submitOrderBool = false;
                 self.checkIn = $stateParams.checkIn - 0;
                 self.checkOut = $stateParams.checkOut - 0;
@@ -814,7 +816,7 @@
             //     });
             // }
             self.newOrder = function() {
-                
+
                 self.showLoadingBool.waitPayBool = false;
                 loadingService(self.showLoadingBool);
 
@@ -1129,7 +1131,9 @@
             }
             self.memberId = $stateParams.memberId;
             self.init = function() {
-
+                // 至少11位
+                self.mobileRe = /[0-9]{11,}/;
+                
                 // 遮罩层 bool
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
@@ -1866,7 +1870,10 @@
             }
         }
         self.init = function() {
-            
+          
+          // 至少11位
+          self.mobileRe = /[0-9]{11,}/;
+
           // 初始化
           self.hotelId = util.getParams('shopinfo').hotelId;
           self.hotelName = util.getParams('shopinfo').hotelName;
