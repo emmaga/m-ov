@@ -1373,8 +1373,9 @@
                 // 当前页数
                 self.page = 0;
 
-                // 如果缓存里有shopid和门店id和门店名称，获取门店，选中该门店，获取商店
-                if(util.getParams('shopinfo')) {
+                // 如果缓存里有shopid和门店id和门店名称并且商店标识与上次一样,   获取门店，选中该门店，获取商店
+                if(util.getParams('shopinfo') && (util.getParams('shopinfo').state == util.getParams('state'))) {
+
                     self.hotelId = util.getParams('shopinfo').hotelId;
                     self.hotelName = util.getParams('shopinfo').hotelName;
                     self.shopId = util.getParams('shopinfo').shopId;
@@ -1464,7 +1465,6 @@
             self.getShopIdByHotelId = function() {
                 self.productList = [];
                 self.categoryList = [];
-
                 var data = {
                     "action": "getShopIDByType",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1486,7 +1486,8 @@
                         var shopinfo = {
                             "hotelName": self.hotelName,
                             "hotelId": self.hotelId,
-                            "shopId": self.shopId
+                            "shopId": self.shopId,
+                            "state": util.getParams('state')
                         };
                         util.setParams('shopinfo', shopinfo);
                         self.getShopName();
