@@ -19,9 +19,9 @@
                 <span class="input-label">{{'phoneNumber'|translate}}:</span>
                 <input type="text" pattern="[0-9]{11,}" ng-model="mie.member.mobile" required placeholder="{{'required'|translate}}(11位号码)">
                 <!--lh, fix my style-->
-                <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="mie.mobileRe.test(mie.member.mobile)">
+                <!-- <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="mie.mobileRe.test(mie.member.mobile)">
                     <i class="icon ion-ios-checkmark"></i>
-                </div>
+                </div> -->
                 <!--lh, fix my style-->
             </label>
             <!-- <button ng-click="mie.getAuthCode()" ng-disabled="mie.countAbility"><span ng-show="mie.showTip">免费获取验证码</span> <span ng-show="!mie.showTip">{{mie.countSeconds}}s 后重新发送</span></button>
