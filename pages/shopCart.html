@@ -26,9 +26,11 @@
         </div>
         <div class="item item-input mod-short">
             <div class="input-label">{{'phoneNumber'|translate}}</div>
-            <input type="text" pattern="[0-9]{11,}" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}">
+            <input type="text" pattern="[0-9]{11,}" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}(11位号码)">
             <!--lh, fix my style-->
-            <div class="input-label" style="color:red; font-size: 11px;" ng-if="!shopCart.mobileRe.test(shopCart.address.mobile)">至少11位数字</div>
+            <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="shopCart.mobileRe.test(shopCart.address.mobile)">
+                <i class="icon ion-ios-checkmark"></i>
+            </div>
             <!--lh, fix my style-->
         </div>
         <ion-toggle ng-model="shopCartList.hasEx">{{'needDelivering'|translate}}?</ion-toggle>
