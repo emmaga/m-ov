@@ -1368,6 +1368,8 @@
             }
             
             self.init = function() {
+                // 查无结果，默认不显示
+                self.noResults = false;
                 // 默认不显示 loadingIcon
                 self.showLoadingIcon = false;
                 // 商品数组
@@ -1641,6 +1643,9 @@
                         // 默认加载第一个分类
                         self.searchProductList(self.categoryList["0"]["id"],true);
                     }
+                    else {
+                        self.noResults = true;
+                    }
                     
                     
                 }, function errorCallback(data, status, headers, config) {
@@ -1678,6 +1683,9 @@
                     self.productList = self.productList.concat(data.data.data.productList);
                     self.productList.length = self.productList.length;
                     self.productTotal = data.data.data.productTotal;
+                    if(self.productTotal == 0) {
+                        self.noResults = true;
+                    }
                     self.showLoadingIcon = false;
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingIcon = false;
