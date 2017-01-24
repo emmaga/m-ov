@@ -23,7 +23,7 @@
         <h1 class="title">{{shopHome.shopName}}</h1>
         
         <!-- 购物车按钮 -->
-        <button ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
+        <button ng-show="!shopHome.noShop" ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
             {{shopHome.shopCartItemCount}}
         </button>
 

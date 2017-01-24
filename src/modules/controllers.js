@@ -1488,6 +1488,7 @@
                   if(data.data.rescode == '200') {
                     self.shopId = data.data.ShopID;
                     if(self.shopId) {
+                        self.noShop = false;
                         // 记录该shopid和门店id和门店名称到本地缓存
                         var shopinfo = {
                             "hotelName": self.hotelName,
@@ -1498,12 +1499,14 @@
                         util.setParams('shopinfo', shopinfo);
                         self.getShopName();
                     } else {
+                        self.noShop = true;
                         self.shopName = $filter('translate')('noShop');
                         self.productList = [];
                         self.categoryList = [];
                     }
 
                   }else {
+                    self.noShop = true;
                     self.shopName = $filter('translate')('noShop');
                     self.productList = [];
                     self.categoryList = [];
