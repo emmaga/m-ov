@@ -1,139 +1,27 @@
-<div ng-controller="hotelInfoController as hotelInfo" ng-init="hotelInfo.init()">
-	<div class="bar bar-header mod-fixed bar-light">
-	<button class="button button-icon"><small class="positive">继续预订</small></button>
-    </div>
-    <div class="atc-content mod-has-header">
-        <img class="atc-img atc-col4 atc-spacing" src="api/img/hotel-logo.png" ;>
-        <h5 class="atc-chapter-title atc-col6 atc-spacing">酒店设施</h5>
+<div ng-controller="hotelInfoController as hotelInfo" ng-init="hotelInfo.beforeInit()">
+	<div class="atc-content mod-has-header">
+        <img class="atc-img atc-col4 atc-spacing" src="{{hotelInfo.hotel.LogoURL}}" ;>
+        <h5 class="atc-chapter-title atc-col8 atc-spacing">{{'hotelFacilities'|translate}}</h5>
 
-        <div class="atc-col6 atc-grid atc-grid4">
+        <div class="atc-col8 atc-grid atc-grid4">
 
-            <!-- <div class="atc-grid-item" ng-repeat="feature in hotelInfo.hotel.Features">
-	    		<i class="icon mod-icon {{feature.ImageURL}}"></i>
-	    		<p>{{feature.Name}}</p>
-			</div> -->
-
-			<!-- 测试用 -->
-			<div class="atc-grid-item" ng-repeat="feature in hotelInfo.hotel.Features">
-	    		<i class="icon mod-icon {{feature.ImageURL}}"></i>
-	    		<p>{{feature.Name}}</p>
-			</div><div class="atc-grid-item" ng-repeat="feature in hotelInfo.hotel.Features">
-	    		<i class="icon mod-icon {{feature.ImageURL}}"></i>
-	    		<p>{{feature.Name}}</p>
-			</div><div class="atc-grid-item" ng-repeat="feature in hotelInfo.hotel.Features">
+            <div class="atc-grid-item" ng-repeat="feature in hotelInfo.hotel.Features">
 	    		<i class="icon mod-icon {{feature.ImageURL}}"></i>
 	    		<p>{{feature.Name}}</p>
 			</div>
-			<!-- 测试用 -->
 			
 
         </div>
-        <h5 class="atc-chapter-title atc-col6 atc-spacing">介绍</h5>
-        <div class="atc-col6">
+        <h5 class="atc-chapter-title atc-col8 atc-spacing">{{'introduction'|translate}}</h5>
+        <div class="atc-col8">
 
-            苏州河畔、高区景观、室内花园~窗外南京路、陆家嘴的迷人夜景、室内被植物簇拥的清新感受。繁华与自然之间是旅途中满怀期待的你~
-【悬园】是一处经过精心设计的室内花园公寓,愿同你一起分享植物的美好<br><br>街区<br><br>闹中取静~漫步苏州河畔,感受上海的历史和摩登。沿途亦可欣赏不同风格的桥梁,连接苏州河北岸。夜幕降临、灯光开启后景色更是值得期待。南京路步行街8分钟左右的步行距离,购物、餐饮非常便利。晚餐后随着南京路步行街熙熙攘攘的人群散步去外滩,会是一次有趣的体验。附近还有数家24小时便利店。中心地段,公共交通便可通往各景点。<br><br>出行<br><br>地铁8、12号线曲阜路站(500米)<br>地铁 2、1号线(800米)及很多公车线路。
-            {{hotelInfo.hotel.hotelDescription}}
+            <ng-repeat ng-repeat="desc in hotelInfo.hotel.Description">
+              <ng-repeat ng-repeat="frag in desc track by $index">
+                {{frag}}&nbsp;
+              </ng-repeat>
+            <br>
+            </ng-repeat>
         </div>
     </div>
-    <style type="text/css">
-    /*atc == article*/
-    /*layout*/
-    .atc-content>h1,
-    .atc-content>h2,
-    .atc-content>h3,
-    .atc-content>h4,
-    .atc-content>h5,
-    .atc-content>h6 {
-        color: #444 !important;
-    }
-    
-    .atc-content {
-        padding: 30px 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        color: #444;
-    }
-    
-    .atc-content>img,
-    .atc-content>h1,
-    .atc-content>h2,
-    .atc-content>h3,
-    .atc-content>h4,
-    .atc-content>h5,
-    .atc-content>h6,
-    .atc-content>div {
-        flex: 1;
-        margin: auto;
-    }
-    
-    
-    .atc-col4 {
-        width: 33.33%
-    }
-    
-    .atc-col4.atc-1x1 {
-        padding-bottom: 33.33%;
-    }
-    
-    .atc-col6 {
-        width: 66.67%
-    }
-    
 
-
-    /*grid*/
-    .atc-grid{
-    }
-
-    .atc-grid4>.atc-grid-item{
-    	min-width: 24.5%
-    }
-
-	.atc-grid-item{
-		text-align: center;
-		display: inline-block;
-		padding-top: 3px;
-		padding-bottom: 5px;
-	}
-
-
-
-
-	/*component*/
-    .atc-spacing {
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
-    
-    .atc-img {
-        position: relative;
-        background-size: cover;
-        background-position: center center;
-    }
-    .atc-chapter-title {
-        position: relative;
-        text-align: center;
-    }
-    
-    .atc-chapter-title:before {
-        content: ' ';
-        position: absolute;
-        left: 0;
-        right: 0;
-        border-bottom: solid 0.5px rgba(0, 0, 0, .22)
-    }
-    .atc-spacing.atc-chapter-title:before {
-        bottom: 15px;
-    }
-	.atc-grid-item>i{
-		width: 30px;
-		height: 30px;
-		line-height: 30px;
-		display: inline-block;
-		margin-bottom: 3px !important;
-		padding: 0 !important
-	}
-    </style>
 </div>

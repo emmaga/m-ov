@@ -1,8 +1,8 @@
-<div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.init()">
+<div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.beforeInit()">
     <!-- 头部 -->
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">{{roomInfo.room.RoomTypeName['zh-CN']}}</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <h1 class="title">{{roomInfo.room.RoomTypeName}}</h1>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
     <!-- 内容 -->
     <div class="padding mod-has-header" style="padding-bottom: 0">
@@ -13,89 +13,119 @@
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
+
+
+
         <!-- info -->
-        <div class="list padding mod-inset-forms mod-list">
+        <div class="atc-content">
+            <!-- 客房标签 -->
+            <h5 class="atc-chapter-title atc-col10 atc-spacing">客房设施</h5>
+            <div class="atc-col10 atc-grid atc-grid4">
+                <div class="atc-grid-item" ng-repeat="feature in roomInfo.room.Features">
+                    <i class="icon mod-icon {{feature.ImageURL}}"></i>
+                    <p>{{feature.Name}}</p>
+                </div>
+            </div>
+            <!-- 客房描述 -->
+            <h5 class="atc-chapter-title atc-col10 atc-spacing">介绍</h5>
+            <div class="atc-col10">
+                <ng-repeat ng-repeat="desc in roomInfo.room.Description">
+                  <ng-repeat ng-repeat="frag in desc track by $index">
+                    {{frag}}&nbsp;
+                  </ng-repeat>
+                <br>
+                </ng-repeat>
+            </div>
+        </div>
+
+
+        
+<!--         <div class="list padding mod-inset-forms mod-list">
+            <div class="item">
+                {{roomInfo.room.Description}}
+            </div>
             <div class="item">
                 <span class="mod-tag" ng-repeat="feature in roomInfo.room.Features">
-                <i class="icon mod-icon {{feature.icon}}"></i>
-                {{feature.Name}}
+                <i class="icon mod-icon {{feature.ImageURL}}"></i>
               </span>
             </div>
-            <div class="item">
-                {{}}
-            </div>
-            <!-- <div class="mod-split-line mod-break-2padding"></div> -->
         </div>
+ -->
+
     </div>
+
     <div class="item item-divider">
         <p>{{'fillInOrder'|translate}}</p>
     </div>
     <form novalidate class="mod-inset-forms list mod-list padding" name="orderDetail" ng-submit="orderDetail.$valid && roomInfo.newOrder()">
-        <div class="item">
+        <!-- <div class="item">
             {{roomInfo.member.memberLevel.name}}
         </div>
         <div class="item">
-            {{roomInfo.room.RoomTypeName['zh-CN']}}
-        </div>
+        </div> -->
+        <!-- 入住时间 -->
         <div class="item">
-            {{roomInfo.hotel.Description['zh-CN']}}
+            <h2>{{roomInfo.room.RoomTypeName}}</h2>
+            <p>{{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}</p>
         </div>
-        <div class="item">
-            {{roomInfo.checkIn | date:'MM月dd日'}}入住~{{roomInfo.checkOut| date:'MM月dd日'}}离店&nbsp·&nbsp共{{roomInfo.stayDays}}天
-        </div>
+        <!-- 客房数量 -->
         <div class="item item-input">
-            <div class="input-label">{{'roomQuantity'|translate}}:</div>
+            <div class="input-label">{{'roomQuantity'|translate}}</div>
             <a ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light icon ion-ios-minus-empty"></a>
             <span class="mod-input-number">
                 <!-- <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number"> -->
                 {{roomInfo.roomNumber}}
             </span>
-            <!-- <div>
-                <input type="number" ng-model="roomInfo.roomNumber" class="mod-input-number">
-            </div> -->
             <a ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light icon ion-ios-plus-empty"></a>
         </div>
+        <!-- 联系人 -->
         <div class="item item-input">
             <div class="input-label">{{'contackName'|translate}}:</div>
-            <input type="text" ng-model="roomInfo.member.realName" required>
+            <input type="text" ng-model="roomInfo.member.realName" required placeholder="{{'required'|translate}}">
         </div>
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
         <label class="item item-input">
           <span class="input-label" ng-model="roomInfo.authCode">验证码</span>
           <input type="number">
         </label> -->
+
+        <!-- 手机号 -->
         <div class="item item-input">
             <div class="input-label">{{'phoneNumber'|translate}}:</div>
-            <input type="number" ng-model="roomInfo.member.mobile" required>
+            <input type="text" pattern="[0-9]{11,}" ng-model="roomInfo.member.mobile" required placeholder="{{'required'|translate}}(11位号码)">
+            <!--lh, fix my style-->
+            <!-- <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="roomInfo.mobileRe.test(roomInfo.member.mobile)">
+                <i class="icon ion-ios-checkmark"></i>
+            </div> -->
+            <!--lh, fix my style-->
         </div>
+
+        <!-- 价格明细表 -->
         <div class="item item-divider">
             <p>{{'priceDetail'|translate}}</p>
         </div>
-        <div class="list padding mod-list mod-inset-forms">
-            <div class="item">
-                <p ng-repeat="price in roomInfo.priceList">
-                    {{price.date | date:'yyyy年MM月dd日'}} {{price.price}}&nbsp×&nbsp{{roomInfo.roomNumber}}
-                    <br>
-                </p>
-            </div>
-            <div class="item">
-                {{'totalPrice'|translate}}:{{roomInfo.roomPriPerDay*roomInfo.roomNumber}}
-            </div>
+        <div class="item">
+            <!-- <h2>{{'priceDetail'|translate}}</h2> -->
+            <p ng-repeat="price in roomInfo.priceList">
+                {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
+            </p>
+        <!-- </div> -->
+            <div class="mod-split-line" style="margin-top: 7px;margin-bottom: 10px;"></div>
+        <!-- 总价 -->
+        <!-- <div class="item"> -->
+            <h2>{{'totalPrice'|translate}}: ¥ {{roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</h2>
         </div>
-        <div class="item item-divider">
+        <!-- <div class="item item-divider">
             <p>{{'refundDoc'|translate}}</p>
-        </div>
+        </div> -->
 
 
        
-        <div class="padding">
+        <!-- <div class="padding">
             {{roomInfo.room.changeDeal }}
-        </div>
-        <!-- <div class="item item-divider padding">
-            <a class="button button-block button-positive" ng-click="roomInfo.newOrder()">{{'submitOrder'|translate}}</a>
         </div> -->
         <div class="item item-divider">
-            <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid">
+            <input type="submit" value="{{'submitOrder'|translate}}" class="button button-block button-positive" ng-disabled="orderDetail.$invalid || roomInfo.submitOrderBool">
         </div>
     </form>
     

@@ -1,33 +1,57 @@
 {
+  "addToCart": "加入购物车",
+  "all": "全部",
+  
   "back": "返回",
   "booking": "预订",
   "bookHotel": "订酒店",
   "bookSoldOut": "已订完",
+  "buyNow": "立即购买",
   
+  "cancelSuccess": "取消成功",
+  "cancelFail": "取消失败",
+  "cancelOrder": "取消订单",
+  "certificateNumber": "证件号码",
   "checkIn": "入住",
   "checkInDate": "入住时间",
   "checkOut": "离店",
   "contackName": "联系人",
+  "countsProducts": "件商品",
 
-
-  "days": "天",
   "date": "日期",
+  "days": "天",
   "detail": "详情",
+  "deliverWay": "配送方式",
+
+  "emptyCart":"空荡荡的购物车",
+  "exceedStock": "超过库存",
+  "expressFeeIncluded": "含邮费",
 
   "fillInOrder": "填写订单",
   "Friday": "五",
 
-
+  "goodsOffTheShelf": "十分抱歉，商品已经下架了",
+  "goodsSoldOut": "Oops.. 一不小心卖光了",
   "goOnBooking": "继续预定",
+  "goOnShopping": "继续购物",
 
+  "hotelFacilities": "酒店设施",
+  "hotelName": "所属门店",
+  "hotelOrder": "酒店订单",
 
+  "introduction": "介绍",
 
   "map": "地图",
+  "memberInfo": "会员资料",
   "minPrice": "起",
   "myOrders": "我的订单",
   "Monday": "一",
   
   "night": "晚",
+  "needDelivering": "需要配送",
+  "noMore": "没有更多了",
+  "noResults": "查无结果",
+  "noShop": "查无商店",
   
   "orderDetail": "订单详情",
   "orderDate": "下单时间",
@@ -37,26 +61,38 @@
 
   "payMethod": "支付方式",
   "payNow": "去支付",
-
   "phoneNumber": "手机号",
+  "placeOfTakingGoods": "提货地点",
   "placeToGo": "目的地",
   "plsSelACheckInDate" : "请选择入住日期",
   "plsSelACheckOutDate" : "请选择离店日期",
   "priceDetail" : "价格明细",
+  "productQuantity": "购买数量",
+  "productDetail": "商品详情",
 
 
+  "realName": "真实姓名",
 
+  "required": "必填",
+  
   "refundDoc" : "退改说明",
   "roomQuantity" : "房间数",
 
 
 
-  
+  "save": "保存",
+  "saveFailure": "保存失败",
+  "saveSuccess": "保存成功",
   "searchResultA": "为您找到",
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
   "serverTimeout": "网络不好哟",
+  "shipAdress": "配送地址",
+  "shopName": "所属商城",
+  "shopOrder": "商城订单",
+  "stock": "库存",
   "submitOrder": "提交订单",
+  "success": "成功",
   "Saturday": "六",
   "Sunday": "日",
 
@@ -66,7 +102,20 @@
   "Thursday": "四",
   "Tuesday": "二",
 
-  "Wednesday": "三"
+  "unitPrice": "单价",
 
+  "wxMemberPrice": "微信会员价",
+  "Wednesday": "三",
+
+  "WAITPAY" : "待付款",
+  "WAITAPPROVAL": "审核中",
+  "ACCEPT": "已接收",
+  "DELIVERING": "订单配送",
+  "COMPLETED": "订单完成",
+  "CANCEL_REFUNDING": "订单取消退款中",
+  "SELLER_CANCEL_REFUNDING": "订单商家取消退款中",
+  "CANCELED": "订单取消",
+  "express": "快递",
+  "bySelf": "自提"
 
 }

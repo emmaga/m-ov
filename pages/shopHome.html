@@ -1,4 +1,4 @@
-<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  >
+<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.beforeInit()"  >
 <!-- <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  > -->
 
 
@@ -13,52 +13,63 @@
 
     <!--header-->
     <div class="bar bar-header mod-bg-transparent mod-fixed">
+        
+        <!-- 门店选择按钮 -->
         <button class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
             <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
         </button>
 
-        <h1 class="title">商城</h1>
-      
-        <button ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
-
+        <!-- 商城名称 -->
+        <h1 class="title">{{shopHome.shopName}}</h1>
+        
+        <!-- 购物车按钮 -->
+        <button ng-show="!shopHome.noShop" ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
             {{shopHome.shopCartItemCount}}
         </button>
 
     </div>
 
 
+    <!-- 商品列表 -->
+    <div class="list  mod-has-tabs-top mod-inset-forms" style="padding-bottom: 40px">
 
-    <div class="list mod-has-tabs-top padding" style="padding-bottom: 40px">
-
-        <p class="mod-note">
+        <!-- <p class="mod-note">
             <i class="icon ion-android-happy"></i>
             购买后请到前台取货，需要快递的商品可在购物车里勾选。
-        </p>
+        </p> -->
 
-        <a class="card mod-flat" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail()" >
+        <!-- 卡片 -->
+        <a class="card mod-flat padding wx-touch-hack " ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
             <div class="item mod-no-border">
-                <div class="full-image mod-cover mod-radius mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
+                <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
             <div class="item mod-no-border ">
-                <p class="item-note">库存：{{product.availableCount}}</p>
-                <h2>{{product.name}}</h2>
-                <p>{{product.intro}}</p>
-                <h2 class="mod-member-price assertive">￥{{product.price}}</h2>
+                <!-- 库存 -->
+                <p class="item-note">{{'stock'|translate}}&nbsp{{product.invetory}}</p>
+                <!-- 商品价格 -->
+                <!-- <br> -->
+                <h2 class="mod-card-price assertive"><small>￥</small>{{product.price | fenToYuan}}</h2>
+                <div class="mod-split-line mod-thin padding"></div>
+                <!-- 商品名称 -->
+                <h2 class="">{{product.name}}</h2>
+                <!-- 商品介绍 -->
+                <small class="mod-card-text mod-limited">{{product.intro}}</small>
             </div>
         </a>
 
+        <!-- loading -->
         <ion-spinner icon="dots" class="mod-spinner-list" ng-show="shopHome.showLoadingIcon"></ion-spinner>
         <!-- <a class="button button-light button-block mod-load-more" ng-click="shopHome.moreProduct()"  ng-show="(shopHome.productTotal>shopHome.productList.length) && (!shopHome.showLoadingIcon)">
             显示更多商品
             <i class="ion-android-arrow-dropdown"></i>
         </a> -->
-        <p class="mod-note-bottomline" ng-show="shopHome.productTotal==shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
+        <p class="mod-note-bottomline" ng-show="shopHome.productTotal<=shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
             <i class="icon ion-android-happy"></i>
-            没有更多了
+            {{'noMore'|translate}}
         </p>
-        <p class="mod-note-emptylist" ng-show="shopHome.productTotal==0 && shopHome.productList.length==0 && !shopHome.showLoadingIcon">
+        <p class="mod-note-emptylist" ng-show="shopHome.noResults">
             <i class="icon ion-android-alert"></i><br>
-            商品正在上架中
+            {{'noResults'|translate}}
         </p>
 
     </div>

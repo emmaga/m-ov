@@ -1,60 +1,73 @@
-<div ng-controller="shopOrderInfoController as shopOrderInfo" ng-init="shopOrderInfo.init()">
+<div ng-controller="shopOrderInfoController as shopOrderInfo" ng-init="shopOrderInfo.beforeInit()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">订单详情</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <h1 class="title">{{'orderDetail'|translate}}</h1>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
     <div class=" mod-has-header">
         <div class="item mod-no-border-top">
             <div class="row">
                 <p class="col mod-no-padding">{{'orderID'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderId}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.OrderNum}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'orderDate'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderId| date}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.dealTime}}</p>
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.totalPri}}</p>
+                <p class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
                 <p class="col mod-no-padding col-75">微信支付</p>
-            </div>
+            </div> -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.orderStatus}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus}}</p>
             </div>
         </div>
     </div>
     <div class="item item-divider"></div>
     <div class="list padding mod-inset-forms mod-list">
         <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
-            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.imgSrc}});"></div>
+            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
             <h2>{{product.name}}</h2>
-            <p>单价:&nbsp￥{{product.unitPrice}}</p>
-            <p>购买数量:&nbsp{{product.number}}</p>
+            <p>{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
+            <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
         </a>
     </div>
     <div class="item">
         <div class="row">
-            <p class="col mod-no-padding">联系人:</p>
+            <p class="col mod-no-padding">{{'contackName'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.name}}</p>
         </div>
         <div class="row">
-            <p class="col mod-no-padding">手机号:</p>
+            <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.mobile}}</p>
         </div>
         <div class="row">
-            <p class="col mod-no-padding">配送方式:</p>
-            <p class="col mod-no-padding col-75">自提&nbsp+&nbsp快递 </p>
+            <p class="col mod-no-padding">{{'deliverWay'|translate}}:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
-        <div class="row">
-            <p class="col mod-no-padding">送货地址:</p>
+        <div ng-show="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
+            <p class="col mod-no-padding">{{'shipAdress'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>
+        <!-- <div class="row">
+            <p class="col mod-no-padding">{{'hotelName'|translate}}:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.hotelName}}</p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">{{'shopName'|translate}}:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.shopName}}</p>
+        </div> -->
     </div>
-    <div class="item item-divider">
-        <a class="button button-block button-balanced">继续购物</a>
+    <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}">
+        <!-- 去支付按钮 -->
+        <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
+        <!-- 继续购物按钮 -->
+        <a class="button button-block button-positive" ui-sref="shopHome">{{'goOnShopping'|translate}}</a>
+        <!-- 取消订单按钮 -->
+        <button ng-click="shopOrderInfo.canelOrder()" id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-light">{{'cancelOrder'|translate}}</button>
     </div>
 </div>

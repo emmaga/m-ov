@@ -44,28 +44,148 @@
     }
     
   }])
-  .factory('util',function(){
+  .factory('util',['$cookies', function($cookies){
     // 时间戳 去掉 时分秒
     function getDayStamp(d) {
-         // 兼容一下，字符串的先转化为数字
+         // 时间戳字符串字符串的先转化为数字
         var d = d-0;
         var d = new Date(d);
         d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
         return d.getTime();
       }
-      
+    // "2016-11-22" 去掉 时分秒
+    function getDayStamps(d) {
+        var d = new Date(d);
+        d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        return d.getTime();
+      }  
+
     return{
       // 住酒店天数
       'countDay': function(ms1,ms2){
         return (getDayStamp(ms2)-getDayStamp(ms1))/(24*60*60*1000)
       },
-      // date, dateTime to timeStamp
-      'datetimeToTimestamp': function(datetime) {
-        var d = new Date(datetime);
-        return d.getTime();
+
+      'countDays': function(ms1,ms2){
+        return (getDayStamps(ms2)-getDayStamps(ms1))/(24*60*60*1000)
+      },
+      /**
+       * 根据len截取str，超出部分...,否则返回原值，支持中英文
+       */
+      'cutStr': function (str, len) {  
+          var str_length = 0;  
+          var str_len = 0;  
+          var str_cut = new String();  
+          str_len = str.length;  
+          for (var i = 0; i < str_len; i++) {  
+              var a = str.charAt(i);  
+              str_length++;  
+              if (escape(a).length > 4) {  
+                  //中文字符的长度经编码之后大于4
+                  str_length++;  
+              }  
+              str_cut = str_cut.concat(a);  
+              if (str_length >= len) {  
+                  str_cut = str_cut.concat("...");  
+                  return str_cut;  
+              }  
+          }  
+          //如果给定字符串小于指定长度，则返回源字符串；
+          if (str_length < len) {  
+              return str;  
+          }  
+      },
+      /**
+       * 设置变量
+       */
+      'setParams': function (paramsName, value) {
+          $cookies.put(paramsName, JSON.stringify(value))
+      },
+      /**
+       * 获取变量
+       * @param paramsName
+       * @returns {*}
+       */
+      'getParams': function (paramsName) {
+          if($cookies.get(paramsName)) {
+              return JSON.parse($cookies.get(paramsName));
+          }
+          else {
+              return false;
+          }
       }
+      // 变量：
+      // shopinfo
+      // {
+      //   "hotelName": "xx",
+      //   "hotelId": "xx",
+      //   "shopId": "xx",
+      // }
+      // state
+      // appid
+      // userid
+      // clear_session
+      // refresh_token
+      /* wxUserInfo
+      {    
+       "openid":" OPENID",  
+       " nickname": NICKNAME,   
+       "sex":"1",   
+       "province":"PROVINCE"   
+       "city":"CITY",   
+       "country":"COUNTRY",    
+       "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ
+      4eMsv84eavHiaiceqxibJxCfHe/46",  
+      "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],    
+       "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL" 
+      } 
+
+      * projectInfo
+      {
+        "projectName": "项目-酒店名字",
+        "projectImgSrc": "api/img/doodle.html"
+      }
+       memberInfo 
+
+       {
+         "member": {
+             "memberId": "123321123312",
+             "memberLevel": {
+               "name":"微信会员",
+               "class":"class1"
+             },
+             "score": "100",
+             "realName":"LiSi",
+             "mobile": "13783476981",
+             "idCardNumber": "410181999200000000",
+             "birthday": "100"
+          }
+       }
+      */
+      
       
 
     }
+  }])
+  
+  // 设置微信title
+  .factory('setTitle',function(){
+    return function(title){
+        var body = document.body;
+        document.title = title; 
+        var $iframe = document.createElement('iframe');
+        $iframe.src = '/favicon.ico';
+
+        $iframe.style.display = 'none';
+        $iframe.onload = function(){
+          setTimeout(function(){
+            $iframe.onload = null;
+            body.removeChild($iframe);
+          }, 0);
+        };
+
+        body.appendChild($iframe);
+    }
   })
+
 })();

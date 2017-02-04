@@ -1,7 +1,7 @@
-<div ng-controller="bookRoomListController as brl" ng-init="brl.init()">
+<div ng-controller="bookRoomListController as brl" ng-init="brl.beforeInit()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">{{brl.hotel.hotelName}}</h1>
-        <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button>
+        <h1 class="title">{{brl.hotel.Name}}</h1>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
     <!-- 内容 -->
     <div class="padding mod-has-header">
@@ -14,21 +14,24 @@
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- info -->
         <div class="list mod-inset-forms">
-            <a class="item" ui-sref="hotelInfo({hotelId:brl.hotelId})">
-                <span class="mod-tag" ng-repeat="feature in brl.hotel.Features">
-                    <i class="icon mod-icon {{feature.icon}}"></i>
-                    {{feature.Name}}
-                </span>
+            <!-- 酒店地址 -->
+            <a class="item wx-touch-hack" ng-click="brl.map()">
+                <i class="icon ion-ios-location"></i> {{brl.hotel.Address}}
                 <span class="item-note">
-                    {{'detail'|translate}}
+                    {{'map'|translate}}
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>
             </a>
-            <!-- <a class="item" href="{{brl.locationHref}}"> -->
-            <a class="item" ng-click="brl.map()">
-                <i class="icon ion-ios-location-outline"></i> 上海市· 浦东新区· 祖冲之路2277弄
+            <!-- 酒店标签 详情按钮-->
+            <a class="item wx-touch-hack" ui-sref="hotelInfo({hotelId:brl.hotelId})">
+
+                <span class="mod-tag-bar" >
+                    <i ng-repeat="feature in brl.hotel.Features track by $index" ng-if="$index <= 5" class="mod-tag-bar-item icon {{feature.ImageURL}} mod-icon "></i>
+                    <!-- {{feature.Name}} -->
+                </span>
+
                 <span class="item-note">
-                    {{'map'|translate}}
+                    {{'detail'|translate}}
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>
             </a>
@@ -43,34 +46,30 @@
         </div>
         <!-- 客房列表 -->
         <div class="list mod-inset-forms">
-
-
-            <a class="item item-thumbnail-left mod-no-side-border" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.roomId,brl.hotelId,brl.checkIn,brl.checkOut,room.roomRemain)">
-                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{room.LogoImgURL}});"></div>
-                <span class="item-note">
-
-
-                  
-
-                    <h2 class="mod-member-price" ng-class="{'mod-color-cold':(room.roomRemain==0),'mod-color-excited':!(room.roomRemain==0)}">￥{{room.roomAveragePri}}<small>/{{'days'|translate}}</small></h2>
-                    <button class="button button-small button-block mod-no-margin-top"  ng-class="{class1:(room.roomRemain==0),'button-assertive':!(room.roomRemain==0)}">
-
-                        <span class="mod-color-cold" ng-if="room.roomRemain==0">{{'bookSoldOut'|translate}}</span>
-                        <span ng-if="!(room.roomRemain==0)">{{'booking'|translate}}</span>
-                        <i ng-if="!(room.roomRemain==0)" class="icon ion-ios-arrow-right"></i>
-
-                    </button>
-                </span>
-                <h2>{{room.RoomTypeName['zh-CN']}}</h2>
-                <p>{{room.Description['zh-CN']}}</p>
-                <p>
-                    <span class="mod-tag mod-tag-small" ng-repeat="feature in room.roomFeatures">
-                        <i class="icon {{feature.icon}}"></i>
-                    </span>
-                </p>
-            </a>
+            <!-- 卡片 -->
+            <div class="card mod-flat wx-touch-hack" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
+                <div class="item mod-no-border">
+                    <!-- 封面图 -->
+                    <div class="full-image mod-cover mod-4x3" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
+                </div>
+                <div class="item mod-no-border">
+                    <!-- 客房名称 -->
+                    <h2 class="mod-card-title" ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}</h2>
+                    <!-- 客房价格 -->
+                    <h2 class="mod-card-price" ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}&nbsp{{'wxMemberPrice'|translate}}</small></h2>
+                    <!-- 已定完 -->
+                    <h2 class="mod-card-price-soldout" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">
+                        <i class="icon ion-heart-broken"></i>&nbsp{{'bookSoldOut'|translate}}
+                    </h2>
+                    <!-- 客房描述 -->
+                    <br>
+                    <p class="mod-card-text" >{{room.Description}}</p>
+                </div>
+                <!-- <div class="mod-split-line mod-15shorter"></div> -->
+            </div>
+            <!-- 卡片 end -->
         </div>
-        <p ng-show="brl.showLoadingBool.searchRoomListBool ==true && brl.rooms.roomNum == 0">很抱歉，您选择的酒店暂无结果</p>
+        <p ng-show="brl.showLoadingBool.searchRoomListBool ==true && brl.rooms.length == 0">{{'noResults'|translate}}</p>
         <!-- date picker start-->
         <div class="ab-container" ng-show="brl.datePickerShow">
             <div class="bar bar-header">

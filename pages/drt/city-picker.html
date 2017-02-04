@@ -13,11 +13,11 @@
         <div class="list">
             <ng-repeat ng-repeat="cities in cp.cityListContent.cityLists">
               <div id="{{cities.searchInitial}}" class="item item-divider cp-item-divider">
-                  {{cities.searchInitial}}
+                <p>{{cities.searchInitial}}</p>
               </div>
               
               <ul class="list cp-list">
-                  <li ng-repeat="city in cities.cities track by $index" ng-click="cp.callback(city.cityId, city.cityName)" class="item cp-item" ng-class="{'touch-hack-enable': cp.touchHackEnable}">
+                  <li ng-repeat="city in cities.cities track by $index" ng-click="cp.callback(city.cityID, city.cityName)" class="item cp-item" ng-class="{'touch-hack-enable': cp.touchHackEnable}">
                     <div class="row cp-row">
                       <div class="col col-14">
                           {{city.cityName}}

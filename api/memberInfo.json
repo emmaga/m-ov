@@ -1,21 +1,19 @@
 {
-    "rescode": "200",
-    "errInfo": "",
-    "data":{
-        "member": {
-            "memberId": "123321123312",
-            "memberLevel": {
-              "name":"微信会员",
-              "class":"balanced-bg"
-            },
-            "score": "100",
-            "realName":"LiSi",
-            "mobile": "13783476981",
-            "idCardNumber": "410181999200000000",
-            "birthday": "100"
-         }
-    }
-    
+  "data": {
+      "member": {
+          "realName": "",
+          "mobile": "",
+          "memberId": 8,
+          "score": 0,
+          "memberLevel": {
+              "name": "微信会员",
+              "class": "balanced-bg"
+          },
+          "idCardNumber": " "
+      }
+  },
+  "errInfo": "",
+  "rescode": "200"
 }
 
 

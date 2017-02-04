@@ -1,24 +1,112 @@
 {
-  "checkIn": "check in",
-  "checkOut": "check out",
+  "addToCart": "add to cart",
+  "all": "all",
 
+  "back": "back",
+  "booking": "book",
+  "bookHotel": "bookHotel",
+  "bookSoldOut": "sold out",
+  "buyNow": "buy",
+
+  "cancelSuccess": "cancel success",
+  "cancelFail": "cancel fail",
+  "cancelOrder": "cancel the order",
+  "certificateNumber": "certificate number",
+  "checkIn": "check in",
+  "checkInDate": "check in time",
+  "checkOut": "check out",
+  "countsProducts": "products",
+
+  "days": "a day",
+  "detail": "detail",
+  "deliverWay": "deliver way",
+
+  "emptyCart":"empty cart",
+  "exceedStock": "exceed stock",
+  "expressFeeIncluded": "express fee included",
+
+  "fillInOrder": "fill out",
   "Friday": "Fr",
 
+  "goodsOffTheShelf": "sorry, the goods are off the shelf",
+  "goodsSoldOut": "sorry, the goods are sold out",
+  "goOnBooking": "go on booking",
+  "goOnShopping": "go on shopping",
+
+  "hotelFacilities": "hotel facilities",
+  "hotelName": "hotel name",
+  "hotelOrder": "hotel order",
+
+  "introduction": "introduction",
+  
+  "map": "location",
+  "memberInfo": "member info",
+  "orderDate": "order time",
+  "orderID": "order id",
   "myOrders": "myOrders",
   "Monday": "一",
 
-  "night": "night",
+  "night": "night(s)",
+  "needDelivering": "need delivering",
+  "noMore": "no more",
+  "noResults": "no results",
+  "noShop": "can not find a shop",
 
+  "orderDetail": "order detail",
+  "orderStatus": "order status",
+  
+  "payNow": "pay now",
+  "phoneNumber": "phone",
+  "placeOfTakingGoods": "place of taking goods",
+  "placeToGo": "destination",
   "plsSelACheckInDate" : "Please select a check-in date.",
   "plsSelACheckOutDate" : "Please select a check-out date.",
+  "priceDetail" : "price list",
+  "productQuantity": "quantity",
+  "productDetail": "product detail",
 
+  "realName": "real name",
+  "required": "required",
+
+  "roomQuantity" : "rooms",
+
+  "save": "save",
+  "saveFailure": "save failure",
+  "saveSuccess": "save success",
+  "searchResultA": "Here are",
+  "searchResultB": "hotel(s)",
   "serverError": "oops! Sorry it looks like something went wrong.",
   "serverTimeout": "poor network",
+  "shipAdress": "shipping address",
+  "shopName": "shop name",
+  "shopOrder": "shop order",
+  "stock": "stock",
+  "submitOrder": "submit",
+  "success": "success",
   "Saturday": "Sa",
   "Sunday": "Su",
 
+  "total": "total",
+  "totalPrice": "total price",
   "Thursday": "Th",
   "Tuesday": "Tu",
 
-  "Wednesday": "We"
+  "unitPrice": "unit price",
+
+  "wxMemberPrice": "weixin member price",
+  "Wednesday": "We",
+
+
+
+
+  "WAITPAY" : "wait pay",
+  "WAITAPPROVAL": "wait approval",
+  "ACCEPT": "accept",
+  "DELIVERING": "delivering",
+  "COMPLETED": "completed",
+  "CANCEL_REFUNDING": "cancelled and refunding",
+  "SELLER_CANCEL_REFUNDING": "seller cancelled and refunding",
+  "CANCELED": "cancelled",
+  "express": "express",
+  "bySelf": "bySelf"
 }

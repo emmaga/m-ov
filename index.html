@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>清鹤云酒店</title>
+    <title></title>
     <link rel="stylesheet" href="dist/style/app.min.css" />
     <link rel="stylesheet" href="dist/fonts/icon.css" />
+
+
+
 
 </head>
 
 <body ng-app="m-ov" ng-controller="RootController as root" ng-init="root.init()">
     <div ui-view="" style="overflow: hidden;"></div>
-    <div ng-include="'pages/mainMenu.html'" ng-show="root.mainMenuShow"></div>
+    <!-- <div ng-include="'pages/mainMenu.html'" ng-show="root.mainMenuShow"></div> -->
+    <div id="pageCover" class="hidden"></div>
     <script src="lib/ionic.bundle.min.js" ></script>
     <script src="lib/angular-ui-router.js" ></script>
     <script src="lib/angular-cookies.min.js" ></script>
@@ -20,7 +24,7 @@
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js" ></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="dist/js/app.min.js" ></script>
-    <!-- <script src="src/js/util.js" ></script>
+   <!--  <script src="src/js/util.js" ></script>
     <script src='src/modules/controllers.js'></script>
     <script src='src/modules/app.js'></script>
     <script src='src/modules/directives.js'></script>

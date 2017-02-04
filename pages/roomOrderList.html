@@ -1,0 +1,37 @@
+<div ng-controller="roomOrderListController as rol" ng-init="rol.beforeInit()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">{{'myOrders'|translate}}</h1>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
+    </div>
+    <div class="list mod-has-header">
+        <div ng-repeat="order in rol.orderLists track by $index" ui-sref="bookOrderInfo({orderId:order.ID})">
+            <div class="item item-divider">
+                <!-- 订单号 -->
+                <p>{{'orderID'|translate}} #{{order.OrderNum}}</p>
+            </div>
+            <div class="item item-thumbnail-left mod-no-side-border" >
+                <!-- 订单状态 -->
+                <span class="item-note">
+                    <p>{{order.Status | orderStatus}}</p>
+                </span>
+                <div ng-repeat="good in order.GoodsList">
+                    <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{good.RoomBasicInfo.roomImg}});"></div>
+                    <h2>{{good.RoomBasicInfo.RoomTypeName}}×{{good.GoodsNum}}</h2>
+
+                    <p>{{good.RoomBasicInfo.HotelBasicInfo.HotelName}}</p>
+                    
+                    <p>{{good.BookStartDate | date:'MM.dd'}}{{'checkIn'|translate}}~{{good.BookEndDate | date:'MM.dd'}}{{'checkOut'|translate}}</p>
+
+                </div>
+                <p>{{'totalPrice'|translate}}:&nbsp￥{{order.Price | fenToYuan}}</p>
+                    
+            </div>
+            
+        </div>
+    </div>
+    <p ng-show="rol.showLoadingBool.searchBool==true && rol.orderListNum ==0 ">{{'noResults' | translate}}</p>
+
+
+
+</div>
+

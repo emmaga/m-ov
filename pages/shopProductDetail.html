@@ -1,26 +1,38 @@
-<div ng-controller="shopProductDetailController as shopProductDetail" ng-init="shopProductDetail.init()">
+<div ng-controller="shopProductDetailController as sp" ng-init="sp.beforeInit()">
     <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">商品详情</h1>
-        <button ui-sref="shopCart" class="button button-icon icon ion-ios-cart">{{shopProductDetail.shopCartItemCount}}</button>
+        <h1 class="title">{{'productDetail'|translate}}</h1>
+        <button ng-click="sp.gotoShopCart()" class="button button-icon icon ion-ios-cart">{{sp.shopCartItemCount}}</button>
     </div>
     <div class="padding mod-has-header mod-inset-forms">
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide ng-repeat="img in shopProductDetail.product.gallery">
-                <img style="width: 100%; height: 100%;" ng-src="{{img.imgSrc}}">
+            <ion-slide ng-repeat="img in sp.product.imgSrc">
+                <img style="width: 100%; height: 100%;" ng-src="{{img}}">
             </ion-slide>
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <div class="item">
-            <p class="item-note">库存{{shopProductDetail.product.availableCount}}</p>
-            <h2>{{shopProductDetail.product.name}}</h2>
-            <h2 class="mod-member-price assertive">{{shopProductDetail.product.price}}</h2>
+            <!-- 库存 -->
+            <p class="item-note">{{'stock'|translate}}{{sp.product.invetory}}</p>
+            <!-- 商品价格 -->
+            <h2 class="mod-card-price assertive"><small>￥</small>{{sp.product.price | fenToYuan}}</h2>
         </div>
-        <div class="padding">
-            <p>{{shopProductDetail.product.intro}}</p>
+        <div class="item mod-no-border-bottom padding mod-has-footer">
+            <!-- 商品名称 -->
+            <h2 class="mod-card-title">{{sp.product.name}}</h2>
+            <!-- 商品介绍 -->
+            <!-- <p class="mod-card-text">{{sp.product.intro}}</p> -->
+            <p class="mod-card-text">
+                <ng-repeat ng-repeat="desc in sp.product.intro">
+                  <ng-repeat ng-repeat="frag in desc track by $index">
+                    {{frag}}&nbsp;
+                  </ng-repeat>
+                  <br>
+                </ng-repeat>
+            </p>
         </div>
     </div>
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
-        <a class="button" ng-click="shopProductDetail.addToCart()">加入购物车</a>
-        <a class="button button-assertive" ng-click="shopProductDetail.buy()" ng-class="{disabled:shopProductDetail.buying}">立即购买</a>
+        <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
+        <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">{{'buyNow'|translate}}</a>
     </div>
 </div>

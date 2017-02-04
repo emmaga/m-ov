@@ -12,47 +12,85 @@
 
   .filter("fenToYuan", function() {
     return function(fen) {
-        var s = fen + '';
-        if(s.length == 1) { s = '00' + s; }
-        else if(s.length == 2) { s = '0' + s; }
-        var s1 = s.slice(0, -2);
-        var s2 = s.slice(-2);
-        return s1 + '.' + s2;
+        if(fen) {
+          var s = fen + '';
+          if(s.length == 1) { s = '00' + s; }
+          else if(s.length == 2) { s = '0' + s; }
+          var s1 = s.slice(0, -2);
+          var s2 = s.slice(-2);
+          return s1 + '.' + s2;
+        }
+        else {
+          return '0.00';
+        }
+        
     };
   })
-  
-  .filter("orderStatusToChinese",function(){
+
+  .filter("orderStatus",['$filter', function($filter){
     return function(orderStatus){
       var flag;
       switch (orderStatus){
          case 'WAITPAY':
-             flag = '待付款';
+             flag = $filter('translate')('WAITPAY');
              break;
          case 'WAITAPPROVAL':
-             flag = '审核中';
+             flag = $filter('translate')('WAITAPPROVAL');
              break;
 
          case 'ACCEPT':
-             flag = '订单接收';
+             flag = $filter('translate')('ACCEPT');
              break;
          case 'DELIVERING':
-             flag = '订单配送';
+             flag = $filter('translate')('DELIVERING');
              break;
          case 'COMPLETED':
-             flag = '订单完成';
+             flag = $filter('translate')('COMPLETED');
              break;
-         case 'CANCEL_REFUNDING':
-             flag = '订单取消退款中';
+         // 字段名字 
+         case 'REFUNDING':
+             flag = $filter('translate')('CANCEL_REFUNDING');
              break;
          case 'SELLER_CANCEL_REFUNDING':
-             flag = '订单商家取消退款中';
+             flag = $filter('translate')('SELLER_CANCEL_REFUNDING');
              break;
          case 'CANCELED':
-             flag = '订单取消';
+             flag = $filter('translate')('CANCELED');
              break;
       }
       return flag;
     }
+  }])
+
+  .filter("dateTimeToTimestamp", function() {
+    return function(dateTime) {
+      var d = new Date(dateTime);
+      return d.getTime();
+    }
   })
+
+  .filter("deliverWay",['$filter', function($filter){
+    return function(deliverWay){
+      var flag;
+      switch (deliverWay){
+         case 'express':
+             flag = $filter('translate')('express');
+             break;
+         case 'bySelf':
+             flag = $filter('translate')('bySelf');
+             break;
+      }
+      return flag;
+    }
+  }])
+
+
+  // ng 的sec 策略
+  .filter('trustSrc', ['$sce', function($sce) {
+      return function(url) {
+          return $sce.trustAsResourceUrl(url);
+      };
+  }])
+
 
 })();
