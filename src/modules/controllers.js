@@ -17,7 +17,7 @@
                 }
 
                 if(BACKEND_CONFIG.test == true) {
-                    // 标志已经拿到clearsession和wx初始化
+                    // 测试环境下，标志已经拿到clearsession和wx初始化
                     self._readystate = true;
                 }
 
@@ -396,10 +396,10 @@
                 }
             }
             self.init = function() {
-
-                self.hotelId = $stateParams.hotelId;
-                self.checkIn = $stateParams.checkIn - 0;
-                self.checkOut = $stateParams.checkOut - 0;
+                self.hotelId = $stateParams.hotelId ? $stateParams.hotelId : $scope.root.getParams('state');
+                self.checkIn = $stateParams.checkIn ? $stateParams.checkIn - 0 : new Date().getTime();
+                self.checkOut = $stateParams.checkOut ? $stateParams.checkOut - 0 : new Date().getTime() + 24 * 60 * 60 * 1000;
+                
                 // 酒店天数
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
 

@@ -27,7 +27,7 @@
     $stateProvider
       .state('index', {
         url: '/index',
-        templateUrl: 'pages/bookHotelList.html'
+        templateUrl: 'pages/bookRoomList.html'
       })
       .state('bookRoomList', {
         url: '/bookRoomList/?hotelId&checkIn&checkOut',
