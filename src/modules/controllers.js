@@ -915,7 +915,7 @@
                     }, 50);
                 }
             }
-            console.log($stateParams)
+            
             self.init = function() {
 
                 self.orderId = $stateParams.orderId;
@@ -955,8 +955,6 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     });
-
-                
             }
 
             self.countDay = function(startDate,endDate){

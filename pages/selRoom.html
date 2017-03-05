@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>选房</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      .coverLayer {
+        position: absolute;left: 0px; top: 0px;
+      }
+      #selRoom {
+        margin-left:30px; margin-top:50px;
+      }
+      #floors {
+        margin-top: 20px;
+      }
+      #btnSure {
+        margin-left:30px;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="coverLayer">
+        <div id="selRoom">已选：<span id="selRoomId"></span></div>
+        <ul id="floors">
+            <li onclick="javascript:initFloor(0)">1st floor</li>
+            <li onclick="javascript:initFloor(1)">2nd floor</li>
+        </ul>
+        <a onclick="javascript:submit()" id="btnSure">确认选房</a>
+    </div>
+    <script>
+      var map;
+      var floors = [{floor: 1, data:'./../api/floor_1st.json'}, {floor: 2, data:'./../api/floor_2nd.json'}];
+      var curFloor;
+      var curRoom;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 31.11726050014523, lng: 121.69712305068971},
+          zoom: 18
+        });
+
+        initFloor(0);
+      }
+
+      function initFloor(n) {
+        if(curFloor === n) {
+            return;
+        }
+        curRoom = null;
+        curFloor = n;
+        // 清除
+        map.data.forEach(function(feature) {
+            map.data.remove(feature);
+        });
+        document.getElementById('selRoomId').innerHTML = '';
+
+        map.data.loadGeoJson(floors[n].data);
+        map.data.setStyle(function(feature) {
+          return /** @type {google.maps.Data.StyleOptions} */({
+            fillColor: feature.getProperty('roomid') == 105 ? 'gray' : 'blue',
+            strokeWeight: 1
+          });
+        });
+
+        map.data.addListener('click', function(event) {console.log(event.feature.getProperty('roomid'))
+          if (event.feature.getProperty('roomid') != 105 && event.feature.getProperty('roomid')) {
+            curRoom = event.feature.getProperty('roomid');
+            document.getElementById('selRoomId').innerHTML = event.feature.getProperty('roomid');
+            map.data.setStyle(function(feature) {
+              return /** @type {google.maps.Data.StyleOptions} */({
+                fillColor: feature.getProperty('roomid') == 105 ? 'gray' : (feature.getProperty('roomid') == event.feature.getProperty('roomid') ? 'green' : 'blue'),
+                strokeWeight: 1
+              });
+            });
+          }
+        });
+      }
+
+      function submit() {
+        if(curRoom){
+            alert('恭喜您，您已选房 '+curRoom);
+            window.history.back();
+        }else {
+            alert('您还没有选房。');
+        }
+        
+      }
+    </script>
+    <script src="http://ditu.google.cn/maps/api/js?key=AIzaSyDbRxkXuVh1IQTVsQmwCn6jFRo5Gdi-Pg4&callback=initMap"
+    async defer></script>
+  </body>
+</html>
