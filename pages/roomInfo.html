@@ -78,6 +78,7 @@
         <!-- 入住时间 -->
         <div class="item">
             <h2>{{roomInfo.room.RoomTypeName}}</h2>
+            <p ng-if="roomInfo.addPriceId != -1">{{roomInfo.room.PriceInfo.ServicePriceInfo.Name roomInfo.room.PriceInfo.ServicePriceInfo.Desc}}</p>
             <p>{{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}</p>
         </div>
         <!-- 客房数量 -->

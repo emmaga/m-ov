@@ -437,7 +437,7 @@
                 $timeout(function() { self.showDP(false); }, 500);
             };
             // 可以预订 才跳转
-            self.nextState = function(roomId, checkIn, checkOut, AvailableNumList) {
+            self.nextState = function(roomId, checkIn, checkOut, AvailableNumList, addPriceId) {
                     var flag = true;
                     AvailableNumList.forEach(function(value,index,array){
                         if(array[index]['availableNum'] <= 0){
@@ -445,7 +445,7 @@
                             return flag;
                         } 
                     })
-                    flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut })
+                    flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut, addPriceId: addPriceId })
             };
 
             // 住酒店 天数
@@ -481,6 +481,10 @@
                     });
             }
 
+            self.openOrClose = function (n) {
+                self.room[n].isOpen = !self.room[n].isOpen;
+            }
+
             self.searchRoomList = function() {
                 self.showLoadingBool.searchRoomListBool = false;
                 var data = {
@@ -505,6 +509,8 @@
                     //Description
                     for(var i = 0; i < self.rooms.length; i++) {
                         self.rooms[i].Description = util.cutStr(self.rooms[i].Description, 85);
+                        // 是否展开
+                        self.rooms[i].isOpen = false;
                     }
                     // ionic silder update
                     $ionicSlideBoxDelegate.update();
@@ -613,6 +619,7 @@
                 self.checkOut = $stateParams.checkOut - 0;
                 self.roomId = $stateParams.roomId;
                 self.hotelId = $stateParams.hotelId;
+                self.addPriceId = $stateParams.addPriceId;
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
                 self.searchMemberInfo();
@@ -641,7 +648,8 @@
                         "roomId": self.roomId-0,
                         "hotelId": self.hotelId - 0,
                         "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
-                        "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd')
+                        "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
+                        "RoomServiceID": self.addPriceId
                     };
                     data = JSON.stringify(data);
 
@@ -661,6 +669,7 @@
                             }
                             
                             self.priceList = self.room.PriceInfo.PriceList;
+
                              // 单价
                             self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                             // // 房间数 最多 可选
@@ -827,6 +836,7 @@
                     "goodsList":[
                         {
                             "roomID": self.roomId - 0,
+                            "RoomServiceID": self.addPriceId,
                             "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
                             "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
                             "totalPrice":bookTotalPri,

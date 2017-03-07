@@ -37,6 +37,8 @@
             <h2>{{good.RoomBasicInfo.RoomTypeName}}</h2>
             <!-- 所属门店 -->
             <p>{{good.RoomBasicInfo.HotelBasicInfo.HotelName}}</p>
+            <!--变价-->
+            <p>{{good.RoomBasicInfo.ServicePriceInfo.Name good.RoomBasicInfo.ServicePriceInfo.Desc}}</p>
             <!-- 客房描述 -->
             <!-- <small>{{good.RoomBasicInfo.Description}}</small> -->
             <!--标签 <p>
@@ -74,7 +76,7 @@
     </div>
     <div class="item item-divider" style="{{!bookOrderInfo.showPayBtn ? 'height: calc(100vh - 433px); ':'' }}">
         <!-- 我要选房按钮 -->
-        <a class="button button-block button-positive" href="./pages/selRoom.html" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showCancelBtn">我要选房</a>
+        <!-- <a class="button button-block button-positive" href="./pages/selRoom.html" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showCancelBtn">我要选房</a> -->
         <!-- 支付按钮 -->
         <a class="button button-block button-balanced" ng-click="bookOrderInfo.payNow()" ng-disabled="bookOrderInfo.cancelOrderBool || bookOrderInfo.payNowBool" ng-show="bookOrderInfo.showPayBtn">{{'payNow'|translate}}</a>
         <!-- 继续预订按钮 -->
