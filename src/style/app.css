@@ -733,8 +733,9 @@ small {
 }
 
 .item-thumbnail-left {
+    padding-left: 131px !important;
+    min-height: 105px !important;
     padding-top: 10px !important;
-    min-height: 102px !important;
     padding-bottom: 12px !important;
 }
 
