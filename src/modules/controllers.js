@@ -468,7 +468,6 @@
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         self.hotel = data.data.data;
-                        console.log(self.hotel)
                         self.showLoadingBool.searchHotelInfoBool = true;
                         
                         // 酒店 地图 
