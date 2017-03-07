@@ -130,6 +130,14 @@
 .mod-room-price{
     float: right;
 }
+.mod-more-price {
+
+}
+.mod-more-price>.item-note {
+    position: absolute;
+    right: 0;
+    top: 24px;
+}
 
 /*card*/
 .card.mod-flat {

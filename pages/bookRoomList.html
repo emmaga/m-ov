@@ -49,7 +49,7 @@
 
 
             <!-- 客房 -->
-            <div class="item item-thumbnail-left" style="padding-left: 131px;" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
+            <div class="item item-thumbnail-left" style="padding-left: 131px; min-height: 105px !important;" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
 
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
@@ -66,9 +66,39 @@
                 <p class="mod-price-tag mod-theme-wx-outline">{{'wxMemberPrice'|translate}}</p>
 
                 <!-- 展开收起按钮 -->
-                <div style="position: absolute; right: 6px; bottom: 6px;">
+                <div style="position: absolute; right: 6px; top: 76px;">
                     <i class="icon ion-ios-arrow-down mod-icon-sm"></i>
                 </div>
+
+                <!-- 变价列表 -->
+                <ul class="list mod-list mod-inset-forms" style="position: relative; top: 12px; margin-right: -8px; margin-left: -121px; margin-top: 15px; border-top: solid 1px #ddd">
+                    <li class="item mod-more-price">
+                        <h2>豪华双床房</h2>
+                        <p>双早</p>
+                        <div class="item-note">
+                            <h2 style="display: inline-block; color: #ef473a; margin-top: 3px;">￥299</h2>
+                            <button class="button button-assertive button-small" style="display: inline-block;">
+                                &nbsp预定
+                                <i class="icon ion-ios-arrow-right"></i>
+                                &nbsp
+                            </button>
+                        </div>
+                    </li>
+                    <li class="item mod-more-price">
+                        <h2>豪华双床房</h2>
+                        <p>无早</p>
+                        <div class="item-note">
+                            <h2 style="display: inline-block; color: #ef473a; margin-top: 3px;">￥299</h2>
+                            <button class="button button-assertive button-small" style="display: inline-block;">
+                                &nbsp预定
+                                <i class="icon ion-ios-arrow-right"></i>
+                                &nbsp
+                            </button>
+                        </div>
+                    </li>
+
+                </ul>
+                <!-- 变价列表 -->
 
             </div>
             <!-- 客房 end -->
