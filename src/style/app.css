@@ -776,11 +776,12 @@ small {
 @supports (-webkit-backdrop-filter:blur(18px)) {
     .bar.bar-light {
         -webkit-backdrop-filter: blur(18px);
-        background-color: rgba(255, 255, 255, .68) !important
+        border-color: rgba(0,0,0,.12) !important;
+        background: rgba(255, 255, 255, .28) !important
     }
     .ricepaper {
         -webkit-backdrop-filter: blur(18px);
-        background-color: rgba(255, 255, 255, .68) !important
+        background-color: rgba(255, 255, 255, .28) !important
     }
     .ricepaper-dark {
         background-color: rgba(0, 0, 0, .68) !important
