@@ -55,13 +55,21 @@
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
                 
                 <!-- 客房名称/价格 -->
-                <h2 ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}</h2>
+                <h2 ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}·￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}</h2>
+                
+                <!-- 价格 -->
+                <h2 class="mod-room-price"> </h2>
+                
                 <!-- 客房描述 -->
                 <p>{{room.Description}}</p>
-                <!-- 价格 -->
-                <h2> ￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
                 <!-- 标签 -->
                 <p class="mod-price-tag mod-theme-wx-outline">{{'wxMemberPrice'|translate}}</p>
+
+                <!-- 展开收起按钮 -->
+                <div style="position: absolute; right: 6px; bottom: 6px;">
+                    <i class="icon ion-ios-arrow-down mod-icon-sm"></i>
+                </div>
+
             </div>
             <!-- 客房 end -->
 
