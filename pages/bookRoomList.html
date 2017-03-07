@@ -46,28 +46,26 @@
         </div>
         <!-- 客房列表 -->
         <div class="list mod-inset-forms">
-            <!-- 卡片 -->
-            <div class="card mod-flat wx-touch-hack" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
-                <div class="item mod-no-border">
-                    <!-- 封面图 -->
-                    <div class="full-image mod-cover mod-4x3" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0"></div>
-                </div>
-                <div class="item mod-no-border">
-                    <!-- 客房名称 -->
-                    <h2 class="mod-card-title" ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}</h2>
-                    <!-- 客房价格 -->
-                    <h2 class="mod-card-price" ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')">￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}&nbsp{{'wxMemberPrice'|translate}}</small></h2>
-                    <!-- 已定完 -->
-                    <h2 class="mod-card-price-soldout" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">
-                        <i class="icon ion-heart-broken"></i>&nbsp{{'bookSoldOut'|translate}}
-                    </h2>
-                    <!-- 客房描述 -->
-                    <br>
-                    <p class="mod-card-text" >{{room.Description}}</p>
-                </div>
-                <!-- <div class="mod-split-line mod-15shorter"></div> -->
+
+
+            <!-- 客房 -->
+            <div class="item item-thumbnail-left" style="padding-left: 131px;" ng-repeat="room in brl.rooms" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList)">
+
+                <!-- 封面图 -->
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
+                
+                <!-- 客房名称/价格 -->
+                <h2 ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}</h2>
+                <!-- 客房描述 -->
+                <p>{{room.Description}}</p>
+                <!-- 价格 -->
+                <h2> ￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}<small>/{{'days'|translate}}</small></h2>
+                <!-- 标签 -->
+                <p class="mod-price-tag mod-theme-wx-outline">{{'wxMemberPrice'|translate}}</p>
             </div>
-            <!-- 卡片 end -->
+            <!-- 客房 end -->
+
+
         </div>
         <p ng-show="brl.showLoadingBool.searchRoomListBool ==true && brl.rooms.length == 0">{{'noResults'|translate}}</p>
         <!-- date picker start-->
