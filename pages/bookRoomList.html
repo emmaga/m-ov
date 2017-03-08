@@ -57,10 +57,17 @@
 
 
             <!-- 客房 -->
-            <div class="item item-thumbnail-left" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
+            <div class="item item-thumbnail-left" style="padding-left: 131px; min-height: 105px !important;" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
+
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
                 
+                <!--test 订完了 -->
+                <span ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">
+                    订完了
+                </span>
+                <!--test 订完了 -->
+
                 <!-- 客房名称/价格 -->
                 <h2 ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}·￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}</h2>
                 
@@ -79,11 +86,11 @@
 
                 <!-- 变价列表 -->
                 <ul ng-if="room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length > 0 && room.isOpen" class="list mod-list mod-inset-forms" style="position: relative; top: 12px; margin-right: -8px; margin-left: -121px; margin-top: 15px; border-top: solid 1px #ddd">
-                    <li ng-repeat="addPrice in room.PriceInfo.ServicePrice" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, addPrice.ID)" class="item mod-more-price">
+                    <li ng-repeat="addPrice in room.PriceInfo.ServicePrice" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, addPrice.ID); $event.stopPropagation();" class="item mod-more-price">
                         <h2>{{addPrice.Name}}</h2>
                         <p>{{addPrice.Desc}}</p>
                         <div class="item-note">
-                            <h2 style="display: inline-block; color: #ef473a; margin-top: 5px;">￥{{addPrice.Price/100}}</h2>
+                            <h2 style="display: inline-block; color: #ef473a; margin-top: 4px;">￥{{addPrice.Price/100}}</h2>
                             <button class="button button-assertive button-small" style="display: inline-block;">
                                 &nbsp预定
                                 <i class="icon ion-ios-arrow-right"></i>

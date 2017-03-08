@@ -438,7 +438,6 @@
             };
             // 可以预订 才跳转
             self.nextState = function(roomId, checkIn, checkOut, AvailableNumList, addPriceId) {
-                console.log('addPriceId' + addPriceId);
                 var flag = true;
                 AvailableNumList.forEach(function(value,index,array){
                     if(array[index]['availableNum'] <= 0){
