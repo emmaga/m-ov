@@ -438,14 +438,15 @@
             };
             // 可以预订 才跳转
             self.nextState = function(roomId, checkIn, checkOut, AvailableNumList, addPriceId) {
-                    var flag = true;
-                    AvailableNumList.forEach(function(value,index,array){
-                        if(array[index]['availableNum'] <= 0){
-                            flag = false;
-                            return flag;
-                        } 
-                    })
-                    flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut, addPriceId: addPriceId })
+                console.log('addPriceId' + addPriceId);
+                var flag = true;
+                AvailableNumList.forEach(function(value,index,array){
+                    if(array[index]['availableNum'] <= 0){
+                        flag = false;
+                        return flag;
+                    } 
+                })
+                flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut, addPriceId: addPriceId })
             };
 
             // 住酒店 天数
@@ -481,7 +482,7 @@
             }
 
             self.openOrClose = function (n) {
-                self.room[n].isOpen = !self.room[n].isOpen;
+                self.rooms[n].isOpen = !self.rooms[n].isOpen;
             }
 
             self.searchRoomList = function() {
@@ -618,7 +619,7 @@
                 self.checkOut = $stateParams.checkOut - 0;
                 self.roomId = $stateParams.roomId;
                 self.hotelId = $stateParams.hotelId;
-                self.addPriceId = $stateParams.addPriceId;
+                self.addPriceId = $stateParams.addPriceId - 0;
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
                 self.searchMemberInfo();

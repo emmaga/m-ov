@@ -57,7 +57,7 @@
 
 
             <!-- 客房 -->
-            <div class="item item-thumbnail-left" style="padding-left: 131px; min-height: 105px !important;" ng-repeat="room in brl.rooms track by $index" ng-click="room.PriceInfo.ServicePrice.length == 0 ? brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1) : brl.openOrClose($index)">
+            <div class="item item-thumbnail-left" style="padding-left: 131px; min-height: 105px !important;" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
 
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
@@ -74,13 +74,13 @@
                 <p class="mod-price-tag mod-theme-wx-outline">{{'wxMemberPrice'|translate}}</p>
 
                 <!-- 展开收起按钮 -->
-                <div ng-if="room.PriceInfo.ServicePrice.length > 0" style="position: absolute; right: 6px; top: 76px;">
+                <div ng-if="room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length > 0" style="position: absolute; right: 6px; top: 76px;">
                     <i class="icon ion-ios-arrow-{{room.isOpen ? 'up' : 'down'}} mod-icon-sm"></i>
                 </div>
 
                 <!-- 变价列表 -->
-                <ul class="list mod-list mod-inset-forms" style="position: relative; top: 12px; margin-right: -8px; margin-left: -121px; margin-top: 15px; border-top: solid 1px #ddd">
-                    <li ng-repeat="addPrice in room.PriceInfo.ServicePrice" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, addPrice.Price) $event.stopPropagation();" class="item mod-more-price">
+                <ul ng-if="room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length > 0 && room.isOpen" class="list mod-list mod-inset-forms" style="position: relative; top: 12px; margin-right: -8px; margin-left: -121px; margin-top: 15px; border-top: solid 1px #ddd">
+                    <li ng-repeat="addPrice in room.PriceInfo.ServicePrice" ng-click="brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, addPrice.ID)" class="item mod-more-price">
                         <h2>{{addPrice.Name}}</h2>
                         <p>{{addPrice.Desc}}</p>
                         <div class="item-note">
