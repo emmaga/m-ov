@@ -688,8 +688,13 @@ body {
     padding-left: 54px !important;
 }
 
+.slider-pager {
+    pointer-events: none;
+}
+
 .slider-pager .slider-pager-page {
     width: 10px !important;
+    color: white !important;
 }
 
 .ion-record:before {
