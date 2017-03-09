@@ -57,7 +57,7 @@
 
 
             <!-- 客房 -->
-            <div class="item item-thumbnail-left" style="padding-left: 131px; min-height: 105px !important;" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
+            <div class="item item-thumbnail-left" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
 
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
