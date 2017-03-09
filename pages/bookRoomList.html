@@ -8,7 +8,8 @@
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
             <ion-slide ng-repeat="img in brl.hotel.Gallery">
-                <img style="width: 100%; height: 100%;" ng-src="{{img.ImageURL}}">
+                <!-- <img style="width: 100%; height: 100%;" ng-src="{{img.ImageURL}}"> -->
+                <div style="position: absolute; width: 100%; height: 100%; background-image: url({{img.ImageURL}}); background-size: cover; background-position: center center;"></div>
                 <!-- 全景 -->
                 <a ng-if="brl.hotel.ViewURL" ng-href="{{brl.hotel.ViewURL}}" style="text-decoration: none;" >
                     <h1 class="ricepaper" style=" position: absolute; bottom: 6px; right: 20px; height: 24px; font-weight: 400; line-height: 24px; padding: 0px 10px; color: rgba(0,0,0,.7); text-align: center; font-size: 14px; border-radius: 100px">
@@ -21,7 +22,7 @@
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
         <!-- info -->
-        <div class="list mod-inset-forms">
+        <div class="list mod-inset-forms" style="margin-bottom: 0px;">
             <!-- 酒店地址 -->
             <a class="item wx-touch-hack" ng-click="brl.map()">
                 <i class="icon ion-ios-location"></i> {{brl.hotel.Address}}
@@ -46,7 +47,7 @@
             <div class="mod-split-line mod-break-padding"></div>
             <!-- 查询 -->
             <!-- <div class="list padding mod-inset-forms"> -->
-            <div class="item item-input item-stacked-label mod-no-ativated" ng-click="brl.showDP(true); tdp.init(brl.checkIn, brl.checkOut,null , null, brl.doAfterPickDates);">
+            <div class="item item-input item-stacked-label mod-no-ativated" style="margin-top: 20px;" ng-click="brl.showDP(true); tdp.init(brl.checkIn, brl.checkOut,null , null, brl.doAfterPickDates);">
                 <span class="input-label">{{'date'|translate}}</span>
                 <p class="mod-select-input mod-color-theme">{{brl.checkIn | date:'M.d'}}{{'checkIn'|translate}} > {{brl.checkOut | date:'M.d'}}{{'checkOut'|translate}}&nbsp&nbsp{{'total'|translate}}{{brl.stayDays}}{{'night'|translate}}</p>
             </div>
@@ -61,6 +62,12 @@
 
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
+                <!-- 订完 --> 
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail mod-img-in-thumbnail-soldout" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">
+                    <i class="icon ion-heart-broken"></i>
+                    已订完
+                </div>
+                <!-- 订完 -->
                 
 
                 <!-- 客房名称-->
@@ -70,11 +77,6 @@
                 <h2 class="mod-room-price" >
 
                     &nbsp·&nbsp￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}
-                    <!-- 订完 --> 
-                    <small ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')" style="color: initial;">
-                        已订完
-                    </small>
-                    <!-- 订完 -->
                 </h2>
 
                 
