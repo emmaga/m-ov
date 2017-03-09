@@ -62,17 +62,21 @@
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
                 
-                <!--test 订完了 -->
-                <span ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')">
-                    订完了
-                </span>
-                <!--test 订完了 -->
 
-                <!-- 客房名称/价格 -->
-                <h2 ng-class="{'disabled':!brl.roomCheckAvail(room.AvailableNumList,'availableNum')}">{{room.RoomTypeName}}·￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}</h2>
+                <!-- 客房名称-->
+                <h2 class="mod-room-title">{{room.RoomTypeName}}</h2>
                 
                 <!-- 价格 -->
-                <h2 class="mod-room-price"> </h2>
+                <h2 class="mod-room-price" >
+
+                    &nbsp·&nbsp￥{{room.PriceInfo.AvaragePrice  |  fenToYuan}}
+                    <!-- 订完 --> 
+                    <small ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')" style="color: initial;">
+                        已订完
+                    </small>
+                    <!-- 订完 -->
+                </h2>
+
                 
                 <!-- 客房描述 -->
                 <p>{{room.Description}}</p>
@@ -91,11 +95,17 @@
                         <p>{{addPrice.Desc}}</p>
                         <div class="item-note">
                             <h2 style="display: inline-block; color: #ef473a; margin-top: 4px;">￥{{addPrice.Price/100}}</h2>
-                            <button class="button button-assertive button-small" style="display: inline-block;">
+
+                            <!-- 变价预定按钮 -->
+                            <button class="button button-assertive button-small" ng-if="brl.roomCheckAvail(room.AvailableNumList,'availableNum')" style="display: inline-block;">
                                 &nbsp预定
                                 <i class="icon ion-ios-arrow-right"></i>
                                 &nbsp
                             </button>
+                            <!-- 变价已定完示意 -->
+                            <button class="button button-stable button-small" ng-if="!brl.roomCheckAvail(room.AvailableNumList,'availableNum')" style="display: inline-block;">&nbsp已定完&nbsp</button>
+
+
                         </div>
                     </li>
                 </ul>

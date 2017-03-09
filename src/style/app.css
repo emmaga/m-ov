@@ -127,9 +127,17 @@
 }
 
 /*room*/
-.mod-room-price{
-    float: right;
+.mod-room-title {
+    display: inline-block;
 }
+.mod-room-price{
+    display: inline-block;
+    color: #ef473a
+}
+.mod-room-price-soldout {
+    color: rgba(151,151,151);
+}
+
 .mod-more-price {
 
 }
