@@ -131,7 +131,7 @@
     display: inline-block;
 }
 .mod-room-price{
-    display: inline-block;
+    display: block;
     color: #ef473a
 }
 .mod-room-price-soldout {
@@ -471,7 +471,7 @@
 .mod-price-tag {
     position: relative;
     left: 4px;
-    top: 0px;
+    top: -2px;
     transform: scale(0.625) skew(-14deg);
     transform-origin: left;
     padding: 2px 5px 2px 5px;
