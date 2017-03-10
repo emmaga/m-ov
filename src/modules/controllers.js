@@ -421,7 +421,7 @@
                     address: decodeURI(encodeURI(self.hotel.Address)), // 地址详情说明
                     //name: '上海浦东机场门店', // 位置名
                     //address: '上海 祖冲之路2277弄', // 地址详情说明
-                    scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                    scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
                     infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                 });
             }
@@ -955,7 +955,9 @@
                         self.GoodsList =data.data.data.GoodsList;
                         var s = self.roomOrder.Status;
                         self.showPayBtn = (s == 'WAITPAY');
-                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');    
+                        // self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');    
+                        // 鹿安要求：预订成功后 不能取消订单
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');   
                         // 酒店天数
                         // self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
                     }, function errorCallback(data, status, headers, config) {
