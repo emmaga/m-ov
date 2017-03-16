@@ -82,6 +82,10 @@
         url: '/shopOrderInfo?orderId',
         templateUrl: 'pages/shopOrderInfo.html'
       })
+      .state('cardGift', {
+        url: '/cardGift',
+        templateUrl: 'pages/cardGift.html'
+      })
   }])
 
   // 每次页面跳转完成时触发

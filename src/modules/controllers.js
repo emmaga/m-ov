@@ -91,6 +91,7 @@
                     self.setParams('userid', data.data.userid);
                     self.setParams('clear_session', data.data.clear_session);
                     self.setParams('refresh_token', data.data.refresh_token);
+                    self.setParams('access_token', data.data.access_token);
                     self.getWxUserInfo(data.data.access_token, data.data.openid);     
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
@@ -151,7 +152,7 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation', 'addCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                         wx.ready(function(){
                             // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
@@ -2370,5 +2371,96 @@
         }
     ])
     
+    // 测试 卡券 大礼包 列表页面
+    .controller('cardGiftController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1) {
+            console.log('cardGiftController')    
+    
+            var self = this;
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                 self.init();
+                }
+                else {
+                 $timeout(function() {
+                     self.beforeInit();
+                 }, 50);
+                }
+            }
+            
+            self.init = function() {
+                self.gettingCard = false;
+            }
 
+            self.getApiTicket = function () {console.log('click')
+                var data = JSON.stringify({
+                    "appid": $scope.root.getParams('appid')
+                })
+                self.gettingCard = true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('apiticket', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        var apiTicket = data.ticket;
+                        self.addCard(apiTicket);
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.gettingCard = false;
+                });
+            }
+
+            self.addCard  = function (apiTicket) {
+
+                self.gettingCard = true;
+
+                var apiTicket = apiTicket;
+                var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
+                for (var i = 0; i < cards.length; i++) {
+                    var timestamp = parseInt(new Date().getTime()/1000);
+                    var nonce_str = util.randomString(32);
+
+                    // 生成签名
+                    var list = [timestamp, nonce_str, cards[i].cardId, apiTicket];
+                    list = list.sort().reduce(function(a,b){return  a + '' + b});
+                    var signature = SHA1(list);
+
+                    cards[i].cardExt = JSON.stringify({
+                        timestamp: timestamp,
+                        nonce_str: nonce_str,
+                        signature: signature
+                    });
+                }
+
+                var cardList = [];
+
+
+                wx.addCard({
+                    cardList: cards, // 需要添加的卡券列表
+                    success: function (res) {
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log(cardList);
+                        self.gettingCard = false;
+                    },
+                    cancel: function (res) {
+                        console.log("领取卡券 cancel");
+                        self.gettingCard = false;
+                    },
+                    fail:function(res){
+                        console.log("领取卡券 fail");
+                        self.gettingCard = false;
+                    }
+                });
+            }
+        }
+    ])
 })();
