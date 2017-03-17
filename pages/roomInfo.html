@@ -8,9 +8,22 @@
     <div class="padding mod-has-header" style="padding-bottom: 0">
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
+
+            
             <ion-slide ng-repeat="room in roomInfo.room.Gallery">
-                <img style="width: 100%; height: 100%;" ng-src="{{room.ImageURL}}">
+                <div style="position: absolute; width: 100%; height: 100%; background-image: url({{room.ImageURL}}); background-size: cover; background-position: center center;"></div>
+                
+                <!-- <img style="width: 100%; height: 100%;" ng-src="{{room.ImageURL}}"> -->
+                <!-- 全景 -->
+                <a ng-if="roomInfo.room.ViewURL && $index==0 " ng-href="{{roomInfo.room.ViewURL}}" style="text-decoration: none">
+                    <h1 style=" position: absolute; left: 25%; width: 50%; height: 46px; line-height: 43px; text-shadow: 0px 2px 9px rgba(0,0,0,.8); color: white; font-weight: 400; text-align: center; top: 83px; font-size: 20px; border:solid 2px rgb(255,255,255); border-radius: 1000px">
+                        360°全景看房
+                        <i class="icon ion-ios-arrow-forward"></i>
+                    </h1>
+                </a>
+                <!-- 全景 -->
             </ion-slide>
+
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
 
@@ -18,6 +31,7 @@
 
         <!-- info -->
         <div class="atc-content">
+            
             <!-- 客房标签 -->
             <h5 class="atc-chapter-title atc-col10 atc-spacing">客房设施</h5>
             <div class="atc-col10 atc-grid atc-grid4">
@@ -66,6 +80,7 @@
         <!-- 入住时间 -->
         <div class="item">
             <h2>{{roomInfo.room.RoomTypeName}}</h2>
+            <p ng-if="roomInfo.addPriceId != -1">{{roomInfo.room.PriceInfo.ServicePriceInfo.Name}} {{roomInfo.room.PriceInfo.ServicePriceInfo.Desc}}</p>
             <p>{{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}</p>
         </div>
         <!-- 客房数量 -->

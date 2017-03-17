@@ -90,7 +90,9 @@
 
         self.st = st ? st : new Date().getTime();
         //可选日期结束日期默认:今天后的半年
-        self.et = et ? et: self.st + (30*3+31*3)*24*60*60*1000;
+        // self.et = et ? et: self.st + (30*3+31*3)*24*60*60*1000;
+        // 为鹿安项目改为1个月
+        self.et = et ? et: self.st + (31*1)*24*60*60*1000;
         self.checkin = checkin;
         self.checkout = checkout;
         self.dates = [];

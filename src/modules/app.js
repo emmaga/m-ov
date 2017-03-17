@@ -27,7 +27,7 @@
     $stateProvider
       .state('index', {
         url: '/index',
-        templateUrl: 'pages/bookHotelList.html'
+        templateUrl: 'pages/bookRoomList.html'
       })
       .state('bookRoomList', {
         url: '/bookRoomList/?hotelId&checkIn&checkOut',
@@ -42,7 +42,7 @@
         templateUrl: 'pages/bookHotelList.html'
       })
       .state('roomInfo', {
-        url: '/roomInfo/?roomId&hotelId&checkIn&checkOut',
+        url: '/roomInfo/?roomId&hotelId&checkIn&checkOut&addPriceId',
         templateUrl: 'pages/roomInfo.html'
       })
       .state('bookOrderInfo', {
