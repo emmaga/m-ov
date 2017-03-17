@@ -2397,6 +2397,38 @@
 
             }
 
+            // 核销
+            self.consume = function () {
+                if(self.selCards.length <= 0) {return;}
+                
+                var data = JSON.stringify({
+                    "encrypt_code": self.selCards[0].encrypt_code,
+                    "clear_session": $scope.root.getParams('clear_session')
+
+                })
+                self.consuming = true;
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('codeencryptconsumer', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        alert('核销成功');
+                        self.selCards = [];
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.consuming = false;
+                });
+            }
+
             self.chooseCards = function () {
                 console.log('chooseCards');
                 self.getApiTicket('chooseCards').then(function (apiTicket){

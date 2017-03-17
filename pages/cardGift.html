@@ -16,6 +16,6 @@
         {{card.encrypt_code}}
     </div>
     <br>
-    <br>
-    <!-- <button ng-click="cardGift.？()" ng-disabled="cardGift.？">核销</button> -->
+    <br> {{cardGift.consuming}}
+    <button ng-click="cardGift.consume()" ng-disabled="cardGift.consuming">核销</button>
 </div>
