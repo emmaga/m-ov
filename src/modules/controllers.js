@@ -152,7 +152,7 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation', 'addCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation', 'addCard', 'chooseCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                         wx.ready(function(){
                             // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
@@ -2377,6 +2377,10 @@
             console.log('cardGiftController')    
     
             var self = this;
+            self.addingCards = false;
+            self.gettingCards = false;
+            self.selCards = [];
+
             self.beforeInit = function() {
                 console.log('beforeInit')
                 if($scope.root._readystate) {
@@ -2390,14 +2394,76 @@
             }
             
             self.init = function() {
-                self.gettingCard = false;
+
             }
 
-            self.getApiTicket = function () {console.log('click')
+            self.chooseCards = function () {
+                console.log('chooseCards');
+                self.getApiTicket('chooseCards').then(function (apiTicket){
+                    self.wxChooseCards(apiTicket);
+                })
+            }
+
+            self.wxChooseCards = function (apiTicket) {
+                // 1.将 api_ticket、appid、location_id、timestamp、nonce_str、card_id、card_type的value值进行字符串的字典序排序。
+                // 2.将所有参数字符串拼接成一个字符串进行sha1加密，得到cardSign。
+                var timestamp = parseInt(new Date().getTime()/1000);
+                var nonceStr = util.randomString(32);
+                var apiTicket = apiTicket;
+                var appid = $scope.root.getParams('appid');
+
+                var list = [timestamp, nonceStr, appid, apiTicket];
+                list = list.sort().reduce(function(a,b){return  a + '' + b});
+                var cardSign = SHA1(list);
+                console.log('timestamp ' + timestamp + ', nonceStr ' + nonceStr + 
+                                ', apiTicket ' + apiTicket + ', appid ' + appid);
+                console.log('cardSign ' + cardSign);
+
+                wx.chooseCard({
+                    timestamp: timestamp, // 卡券签名时间戳
+                    nonceStr: nonceStr, // 卡券签名随机串
+                    signType: 'SHA1', // 签名方式，默认'SHA1'
+                    cardSign: cardSign, // 卡券签名
+                    success: function (res) {
+                        self.addingCards = false;
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user choose');
+                        console.log(cardList);
+                        $scope.$apply(function () {
+                            self.selCards = JSON.parse(cardList);
+                        });
+                    },
+                    cancel: function (res) {
+                        console.log("选择卡券 cancel");
+                        self.addingCards = false;
+                    },
+                    fail:function(res){
+                        console.log("选择卡券 fail");
+                        self.addingCards = false;
+                    }
+                });
+            }
+
+            self.addCards = function () {
+                console.log('addCards');
+                self.getApiTicket('addCards').then(function (apiTicket){
+                    self.wxAddCard(apiTicket);
+                })
+            }
+
+            self.getApiTicket = function (type) {
+                var deferred = $q.defer();
                 var data = JSON.stringify({
                     "appid": $scope.root.getParams('appid')
                 })
-                self.gettingCard = true;
+
+                if(type == 'chooseCards') {
+                    self.choosingCards = true;
+                }
+                else if(type == 'addCards'){
+                    self.addingCards = true;
+                }
+                
                 $http({
                     method: 'POST',
                     url: backendUrl('apiticket', ''),
@@ -2407,21 +2473,28 @@
                     if (data.rescode == '200') {
                         console.log(data);
                         var apiTicket = data.ticket;
-                        self.addCard(apiTicket);
+                        deferred.resolve(apiTicket);
                     }
                     else {
                         alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
                     }
                 }, function errorCallback(response) {
                     alert('连接服务器出错');
                 }).finally(function(value) {
-                    self.gettingCard = false;
+                    if(type == 'chooseCards') {
+                        self.choosingCards = false;
+                    }
+                    else if(type == 'addCards'){
+                        self.addingCards = false;
+                    }
                 });
+                return deferred.promise;
             }
 
-            self.addCard  = function (apiTicket) {
+            self.wxAddCard = function (apiTicket) {
 
-                self.gettingCard = true;
+                self.addingCards = true;
 
                 var apiTicket = apiTicket;
                 var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
@@ -2448,16 +2521,17 @@
                     cardList: cards, // 需要添加的卡券列表
                     success: function (res) {
                         var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user add');
                         console.log(cardList);
-                        self.gettingCard = false;
+                        self.addingCards = false;
                     },
                     cancel: function (res) {
                         console.log("领取卡券 cancel");
-                        self.gettingCard = false;
+                        self.addingCards = false;
                     },
                     fail:function(res){
                         console.log("领取卡券 fail");
-                        self.gettingCard = false;
+                        self.addingCards = false;
                     }
                 });
             }

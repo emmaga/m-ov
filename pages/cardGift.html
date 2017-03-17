@@ -1,12 +1,21 @@
 <div ng-controller="cardGiftController as cardGift" ng-init="cardGift.beforeInit()">
     <br>
     <br>
+    <br>cardGift.addingCards {{cardGift.addingCards}}
+    <button ng-click="cardGift.addCards()" ng-disabled="cardGift.addingCards">领取卡券</button>
+    <br>
+    <br>cardGift.choosingCards {{cardGift.choosingCards}}
+    <button ng-click="cardGift.chooseCards()" ng-disabled="cardGift.choosingCards">拉取适用卡券列表</button>
     <br>
     <br>
+    已选：<br>
+    <div ng-repeat = "card in cardGift.selCards">
+        card.card_id: <br>
+        {{card.card_id}}<br>
+        card.encrypt_code: <br>
+        {{card.encrypt_code}}
+    </div>
     <br>
     <br>
-    <br>
-    <br>
-    <br>cardGift.gettingCard {{cardGift.gettingCard}}
-    <button ng-click="cardGift.getApiTicket()" ng-disabled="cardGift.gettingCard">领取卡券</button>
+    <!-- <button ng-click="cardGift.？()" ng-disabled="cardGift.？">核销</button> -->
 </div>
