@@ -134,7 +134,18 @@
             <p>{{'refundDoc'|translate}}</p>
         </div> -->
 
+        <!-- 优惠券 -->
+        优惠券：<div ng-if="roomInfo.cardCode" ng-click="roomInfo.getUserCardList()">未使用优惠券 ></div>
 
+        <!-- 微信自有卡券列表 -->
+        <div ng-show="roomInfo.showUserCardList">
+            <div ng-if="roomInfo.loadingUserCardList">获取中</div>
+            <ul>
+                <li ng-repeat="card in roomInfo.cardList" ng-click="roomInfo.selCard(?)">
+                    cardName cardPrice
+                </li>
+            </ul>
+        </div>
        
         <!-- <div class="padding">
             {{roomInfo.room.changeDeal }}

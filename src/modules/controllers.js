@@ -638,6 +638,38 @@
               
             }
 
+            // 获取微信自有卡券列表
+            self.getUserCardList = function () {
+                self.showUserCardList = true;
+                self.loadingUserCardList = true;
+
+                var data = JSON.stringify({
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "keyword": {"abstract":["订房"]},
+                    "action": "user",
+                    "open_id": $scope.root.getParams('open_id')
+                });
+
+                $http({
+                    method: 'POST',
+                    url: backendUrl('card_batchget', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        self.cardList = card_list;
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.loadingUserCardList = false;
+                });
+
+            }
+
 
             self.searchRoomInfo = function() {
                     self.showLoadingBool.searchRoomInfoBool = false;
@@ -653,36 +685,36 @@
                     };
                     data = JSON.stringify(data);
 
-                        $http({
-                            method: $filter('ajaxMethod')(),
-                            url: backendUrl('roominfo', 'roomInfo'),
-                            data: data
-                        }).then(function successCallback(data, status, headers, config) {
-                            console.log(data)
-                            self.searchHotelInfo();
-                            self.room = data.data.data;
-                            
-                            // 添加空格和换行
-                            self.room.Description = self.room.Description.split('\n');
-                            for(var i = 0; i < self.room.Description.length; i++) {
-                              self.room.Description[i] = self.room.Description[i].split('  ');
-                            }
-                            
-                            self.priceList = self.room.PriceInfo.PriceList;
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('roominfo', 'roomInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        console.log(data)
+                        self.searchHotelInfo();
+                        self.room = data.data.data;
+                        
+                        // 添加空格和换行
+                        self.room.Description = self.room.Description.split('\n');
+                        for(var i = 0; i < self.room.Description.length; i++) {
+                          self.room.Description[i] = self.room.Description[i].split('  ');
+                        }
+                        
+                        self.priceList = self.room.PriceInfo.PriceList;
 
-                             // 单价
-                            self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
-                            // // 房间数 最多 可选
-                            // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
-                            
-                            self.showLoadingBool.searchRoomInfoBool = true;
-                            loadingService(self.showLoadingBool);
-                            // ionic silder update
-                            $ionicSlideBoxDelegate.update();
-                        }, function errorCallback(data, status, headers, config) {
-                            self.showLoadingBool.searchRoomInfoBool = true;
-                            loadingService(self.showLoadingBool);
-                        });
+                         // 单价
+                        self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
+                        // // 房间数 最多 可选
+                        // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
+                        
+                        self.showLoadingBool.searchRoomInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                        // ionic silder update
+                        $ionicSlideBoxDelegate.update();
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchRoomInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
                 
             }
              
@@ -2371,7 +2403,7 @@
         }
     ])
     
-    // 测试 卡券 大礼包 列表页面
+    // 测试 卡券 大礼包 测试页面
     .controller('cardGiftController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1',
         function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1) {
             console.log('cardGiftController')    
@@ -2546,6 +2578,157 @@
                     });
                 }
 
+                wx.addCard({
+                    cardList: cards, // 需要添加的卡券列表
+                    success: function (res) {
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user add');
+                        console.log(cardList);
+                        self.gotCard = true;
+                        self.addingCards = false;
+                    },
+                    cancel: function (res) {
+                        console.log("领取卡券 cancel");
+                        self.addingCards = false;
+                    },
+                    fail:function(res){
+                        console.log("领取卡券 fail");
+                        self.addingCards = false;
+                    }
+                });
+            }
+        }
+    ])
+
+    // 卡券关注礼包
+    .controller('cardAttentionGiftBagController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1) {
+            console.log('cardAttentionGiftBagController')    
+    
+            var self = this;
+            self.addingCards = false;
+
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                 self.init();
+                }
+                else {
+                 $timeout(function() {
+                     self.beforeInit();
+                 }, 50);
+                }
+            }
+            
+            self.init = function() {
+
+            }
+
+            self.addCards = function () {
+                console.log('addCards');
+                self.getApiTicket('addCards').then(function (apiTicket){
+                    return self.getCardBatch(apiTicket);
+                }).then(function (rtn) {
+                    self.wxAddCard(rtn.apiTicket, rtn.cardList);
+                })
+            }
+
+            self.getCardBatch = function (apiTicket) {
+                var apiTicket = apiTicket;
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    keywords: {abstract : ["关注"]},
+                    action: "businessman"
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('card_batchget', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        var cardList = data.card_list;
+                        var rtn = {};
+                        rtn.apiTicket = apiTicket;
+                        rtn.cardList = cardList;
+                        deferred.resolve(rtn);
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.addingCards = false;
+                });
+                return deferred.promise;
+            }
+
+            self.getApiTicket = function (type) {
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    "appid": $scope.root.getParams('appid')
+                })
+
+                if(type == 'addCards'){
+                    self.addingCards = true;
+                }
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('apiticket', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        var apiTicket = data.ticket;
+                        deferred.resolve(apiTicket);
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    if(type == 'addCards'){
+                        self.addingCards = false;
+                    }
+                });
+                return deferred.promise;
+            }
+
+            self.wxAddCard = function (apiTicket, cardList) {
+
+                self.addingCards = true;
+
+                var apiTicket = apiTicket;
+                var cards = [];
+                for(var i = 0; i < cardList.length; i++) {
+                    cards.push({cardId: cardList[i].card_id});
+                }
+                // var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
+                for (var i = 0; i < cards.length; i++) {
+                    var timestamp = parseInt(new Date().getTime()/1000);
+                    var nonce_str = util.randomString(32);
+
+                    // 生成签名
+                    var list = [timestamp, nonce_str, cards[i].cardId, apiTicket];
+                    list = list.sort().reduce(function(a,b){return  a + '' + b});
+                    var signature = SHA1(list);
+
+                    cards[i].cardExt = JSON.stringify({
+                        timestamp: timestamp,
+                        nonce_str: nonce_str,
+                        signature: signature
+                    });
+                }
+
                 var cardList = [];
 
 
@@ -2568,5 +2751,5 @@
                 });
             }
         }
-    ])
+    ])   
 })();
