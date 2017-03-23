@@ -138,10 +138,10 @@
         优惠券：<div ng-click="roomInfo.getUserCardList()">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "未使用优惠券 >"}}</div>
 
         <!-- 微信自有卡券列表 -->
-        <div ng-show="roomInfo.showUserCardList">
+        <div ng-if="roomInfo.showUserCardList">
             <div ng-if="roomInfo.loadingUserCardList">获取中</div>
             <ul>
-                <li ng-repeat="card in roomInfo.cardList track by $index" ng-click="roomInfo.selCard(card)">
+                <li ng-repeat="card in roomInfo.cardList" ng-click="roomInfo.selCard(card)">
                     {{card.card_info.cash.base_info.title}}
                 </li>
             </ul>

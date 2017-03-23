@@ -652,7 +652,7 @@
 
                 var data = JSON.stringify({
                     "clear_session": $scope.root.getParams('clear_session'),
-                    "keyword": {"abstract":["订房"]},
+                    "keyword": {"accept_category":["订房"]},
                     "action": "user",
                     "open_id": $scope.root.getParams('wxUserInfo').openid
                 });
@@ -664,7 +664,8 @@
                 }).then(function successCallback(response) {
                     var data = response.data;
                     if (data.rescode == '200') {
-                        self.cardList = card_list;
+                        console && console.log(data);
+                        self.cardList = data.card_list;
                     }
                     else {
                         alert(data.rescode + ' ' + data.errInfo);
@@ -1170,6 +1171,12 @@
                 
                 self.search();
             }
+            
+            // 查看微信卡券
+            self.openCard = function () {
+
+            }
+
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
@@ -2783,7 +2790,7 @@
                 }, function errorCallback(response) {
                     self.addCardFail = true;
                     self.addingCards = false;
-                    alert('getCardBatch 连接服务器出错');
+                    console && console.log('getCardBatch 连接服务器出错');
                 }).finally(function(value) {
                     
                 });
