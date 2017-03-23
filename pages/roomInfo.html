@@ -115,41 +115,53 @@
             <!--lh, fix my style-->
         </div>
 
-        <!-- 价格明细表 -->
+        <!-- 分割块 -->
         <div class="item item-divider">
             <p>{{'priceDetail'|translate}}</p>
         </div>
-        <div class="item">
+
+        <div class="item mod-inset-forms list mod-list padding" style="border-bottom: none">
             <!-- <h2>{{'priceDetail'|translate}}</h2> -->
-            <p ng-repeat="price in roomInfo.priceList">
-                {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
-            </p>
-        <!-- </div> -->
-            <div class="mod-split-line" style="margin-top: 7px;margin-bottom: 10px;"></div>
-        <!-- 总价 -->
+
+            <!-- 价格明细表 -->
+            <div class="item row"  style=" padding-top: 6px; padding-bottom: 7px;">
+                <p ng-repeat="price in roomInfo.priceList" class="row" >
+                    {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
+                </p>
+            </div>
+            
+
+            <!-- 优惠券 -->
+            <div class="item row" ng-click="roomInfo.getUserCardList()" style="margin-top: initial; padding-top: 6px; padding-bottom: 7px;">
+                <div class="col col-25">优惠券:</div>
+                <div class="col col-75 assertive">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "使用优惠券"}}</div>
+            </div>
+
+             <!-- 微信自有卡券列表 -->
+            <div ng-if="roomInfo.showUserCardList">
+                <div ng-if="roomInfo.loadingUserCardList">
+                    <ion-spinner icon="dots" class="mod-spinner-list"></ion-spinner>
+                </div>
+                <ul>
+                    <li class="item" ng-repeat="card in roomInfo.cardList" ng-click="roomInfo.selCard(card)">
+                        {{card.card_info.cash.base_info.title}}
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- 总价 -->
+            <div class="row item "  style="margin-top: initial; padding-top: 6px; padding-bottom: 7px;">
+                <div class="col col-25">{{'totalPrice'|translate}}:</div>
+                <div class="col col-75">¥ {{roomInfo.selCardInfo.card_id ? ((roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) > 1 ? (roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) : 1) :&nbsp&nbsp roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</div>
+            </div>
+            <!-- <div class="mod-split-line" style="margin-top: 7px;margin-bottom: 10px;"></div> -->
         <!-- <div class="item"> -->
-            <h2>{{'totalPrice'|translate}}: ¥ {{roomInfo.selCardInfo.card_id ? ((roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) > 1 ? (roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) : 1) : roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</h2>
-        </div>
-        <!-- <div class="item item-divider">
-            <p>{{'refundDoc'|translate}}</p>
-        </div> -->
-
-        <!-- 优惠券 -->
-        <div class="item" ng-click="roomInfo.getUserCardList()">
-            优惠券：
-            <span class="item-note">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "未使用优惠券 >"}}
-            </span>
+            <!-- <h2>{{'totalPrice'|translate}}: ¥ {{roomInfo.selCardInfo.card_id ? ((roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) > 1 ? (roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) : 1) : roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</h2> -->
         </div>
 
-        <!-- 微信自有卡券列表 -->
-        <div ng-if="roomInfo.showUserCardList">
-            <div ng-if="roomInfo.loadingUserCardList">获取中</div>
-            <ul>
-                <li ng-repeat="card in roomInfo.cardList" ng-click="roomInfo.selCard(card)">
-                    {{card.card_info.cash.base_info.title}}
-                </li>
-            </ul>
-        </div>
+
+       
        
         <!-- <div class="padding">
             {{roomInfo.room.changeDeal }}
