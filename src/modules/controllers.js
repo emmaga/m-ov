@@ -2743,6 +2743,7 @@
 
             self.addCards = function () {
                 console.log('addCards');
+                self.addCardCancel = false;
                 self.getApiTicket('addCards').then(function (apiTicket){
                     return self.getCardBatch(apiTicket);
                 }).then(function (rtn) {
@@ -2774,13 +2775,17 @@
                         deferred.resolve(rtn);
                     }
                     else {
-                        alert(data.rescode + ' ' + data.errInfo);
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        console && console.log(data.rescode + ' ' + data.errInfo);
                         deferred.reject();
                     }
                 }, function errorCallback(response) {
-                    alert('连接服务器出错');
-                }).finally(function(value) {
+                    self.addCardFail = true;
                     self.addingCards = false;
+                    alert('getCardBatch 连接服务器出错');
+                }).finally(function(value) {
+                    
                 });
                 return deferred.promise;
             }
@@ -2843,15 +2848,19 @@
                         deferred.resolve(apiTicket);
                     }
                     else {
-                        alert(data.rescode + ' ' + data.errInfo);
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        console && console.log(data.rescode + ' ' + data.errInfo);
                         deferred.reject();
                     }
                 }, function errorCallback(response) {
-                    alert('连接服务器出错');
-                }).finally(function(value) {
                     if(type == 'addCards'){
                         self.addingCards = false;
                     }
+                    self.addCardFail = true;
+                    console && console.log('获取api_ticket连接服务器出错');
+                }).finally(function(value) {
+                    
                 });
                 return deferred.promise;
             }
@@ -2898,11 +2907,17 @@
                     },
                     cancel: function (res) {
                         console.log("领取卡券 cancel");
-                        self.addingCards = false;
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardCancel = true;
+                        })
                     },
                     fail:function(res){
                         console.log("领取卡券 fail");
-                        self.addingCards = false;
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardFail = true;
+                        })
                     }
                 });
             }

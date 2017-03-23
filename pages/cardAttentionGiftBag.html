@@ -3,6 +3,9 @@
     <br>
     <br>cardAttentionGiftBag.addingCards {{cardAttentionGiftBag.addingCards}}
     <div ng-show="cardAttentionGiftBag.gotCard">已领取</div>
+    <div ng-show="cardAttentionGiftBag.addCardFail">领取失败</div>
+    <button ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">领取卡券</button>
+    <div ng-show="cardAttentionGiftBag.addCardCancel">领取卡券取消</div>
     <br>
     
 </div>
