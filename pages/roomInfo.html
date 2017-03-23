@@ -128,21 +128,21 @@
             <div class="mod-split-line" style="margin-top: 7px;margin-bottom: 10px;"></div>
         <!-- 总价 -->
         <!-- <div class="item"> -->
-            <h2>{{'totalPrice'|translate}}: ¥ {{roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</h2>
+            <h2>{{'totalPrice'|translate}}: ¥ {{roomInfo.selCardInfo.card_id ? ((roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) > 0.01 ? (roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) : 0.01) : roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</h2>
         </div>
         <!-- <div class="item item-divider">
             <p>{{'refundDoc'|translate}}</p>
         </div> -->
 
         <!-- 优惠券 -->
-        优惠券：<div ng-if="roomInfo.cardCode" ng-click="roomInfo.getUserCardList()">未使用优惠券 ></div>
+        优惠券：<div ng-click="roomInfo.getUserCardList()">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "未使用优惠券 >"}}</div>
 
         <!-- 微信自有卡券列表 -->
         <div ng-show="roomInfo.showUserCardList">
             <div ng-if="roomInfo.loadingUserCardList">获取中</div>
             <ul>
-                <li ng-repeat="card in roomInfo.cardList" ng-click="roomInfo.selCard(?)">
-                    cardName cardPrice
+                <li ng-repeat="card in roomInfo.cardList track by $index" ng-click="roomInfo.selCard(card)">
+                    {{card.card_info.cash.base_info.title}}
                 </li>
             </ul>
         </div>

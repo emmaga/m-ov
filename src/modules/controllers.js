@@ -92,6 +92,7 @@
                     self.setParams('clear_session', data.data.clear_session);
                     self.setParams('refresh_token', data.data.refresh_token);
                     self.setParams('access_token', data.data.access_token);
+                    self.setParams('authorizer_access_token', data.data.authorizer_access_token);
                     self.getWxUserInfo(data.data.access_token, data.data.openid);     
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
@@ -638,6 +639,12 @@
               
             }
 
+            // 用户选取卡券
+            self.selCard = function (card) {
+                self.showUserCardList = false;
+                self.selCardInfo = card;
+            }
+
             // 获取微信自有卡券列表
             self.getUserCardList = function () {
                 self.showUserCardList = true;
@@ -647,7 +654,7 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "keyword": {"abstract":["订房"]},
                     "action": "user",
-                    "open_id": $scope.root.getParams('open_id')
+                    "open_id": $scope.root.getParams('wxUserInfo').openid
                 });
 
                 $http({
@@ -856,12 +863,46 @@
             //       
             //     });
             // }
+
+            self.consume = function () {
+                // 核销
+                var data = JSON.stringify({
+                    "code": self.selCardInfo.code,
+                    "clear_session": $scope.root.getParams('clear_session')
+
+                })
+                self.consuming = true;
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('codeconsumer', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log('核销成功');
+                    }
+                    else {
+                        console && console.log('核销失败' + data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.consuming = false;
+                });
+            }
+
             self.newOrder = function() {
 
                 self.showLoadingBool.waitPayBool = false;
                 loadingService(self.showLoadingBool);
 
                 var bookTotalPri = self.roomPriPerDay*self.roomNumber;
+                if(self.selCardInfo.card_id) {
+                    var p = bookTotalPri - self.selCardInfo.card_info.cash.reduce_cost;
+                    // 如果价格比0.01低，就付0.01, 0元后台会报错
+                    bookTotalPri = p > 0.01 ? p : 0.01;
+                }
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "action": "newOrder",
@@ -892,13 +933,14 @@
                                 "clear_session": $scope.root.getParams('clear_session'),
                                 "action": "weixinPay",
                                 "payType": "JSAPI",
-                                "orderID": orderID
+                                "orderID": orderID,
+                                "cardInfo": self.selCardInfo
                             };
                             data = angular.toJson(data,true);
                             $http.post(backendUrl('roomorder', '', 'server'), data)
                             .success(function(data, status, headers, config){
                                  if (data.rescode == '200') {
-                                    
+                                    self.consume();
                                     self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
                                  } else {
                                      alert($filter('translate')('serverError') + ' ' + data.errInfo);
@@ -1107,8 +1149,8 @@
         }
     ])
 
-    .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl) {
+    .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$q', '$stateParams', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $timeout, $filter, $q, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
             var self = this;
             self.beforeInit = function() {
@@ -1139,20 +1181,95 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('shopmember', 'memberInfo'),
-                        data: data
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('shopmember', 'memberInfo'),
+                    data: data
 
-                    }).then(function successCallback(data, status, headers, config) {
-                        self.member = data.data.data.member;
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                    }, function errorCallback(data, status, headers, config) {
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                    });
+                }).then(function successCallback(data, status, headers, config) {
+                    self.member = data.data.data.member;
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool)
+                }, function errorCallback(data, status, headers, config) {
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool)
+                });
                 
+            }
+
+            self.addCard = function () {
+                self.getCardBatch().then(function (cardList) {
+                    self.createCardLandingpage(cardList);
+                })
+            }
+
+            self.createCardLandingpage = function (cardList) {
+                var cardList = cardList;
+                var card_list = [];
+                for(var i = 0; i < cardList.length; i++) {
+                    card_list[i].card_id = cardList[i].card_id;
+                    card_list[i].thumb_url = "http://openvod.cleartv.cn/mgt/dist/imgs/icon-03.png"
+                }
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    banner: "http://openvod.cleartv.cn/mgt/dist/imgs/icon-03.png",
+                    page_title: "hello",
+                    can_share: false,
+                    scene: "SCENE_QRCODE",
+                    card_list: card_list
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('create_card_landingpage', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        var url = data.url;
+                        window.location.href = url;
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.addingCards = false;
+                });
+            }
+
+            self.getCardBatch = function () {
+                var apiTicket = apiTicket;
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    keywords: {abstract : ["长期"]},
+                    action: "businessman"
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('card_batchget', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        var cardList = data.card_list;
+                        deferred.resolve(cardList);
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.addingCards = false;
+                });
+                return deferred.promise;
             }
         }
     ])
@@ -1198,23 +1315,23 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                   $http({
-                       method: $filter('ajaxMethod')(),
-                       url: backendUrl('shopmember', 'memberInfo'),
-                       data: data
-                   }).then(function successCallback(data, status, headers, config) {
-                       self.member = data.data.data.member;
-                       if(data.data.data.member.mobile - 0 != 0) {
-                         self.member.mobile = data.data.data.member.mobile - 0;
-                       }
-                       self.member.idCardNumber = data.data.data.member.idCardNumber;
-                       self.showLoadingBool.searchBool = true;
-                   }, function errorCallback(data, status, headers, config) {
-                       self.showLoadingBool.searchBool = true;
-                   })
-                   .finally(function(value){
-                     loadingService(self.showLoadingBool);
-                   })  ; 
+                $http({
+                   method: $filter('ajaxMethod')(),
+                   url: backendUrl('shopmember', 'memberInfo'),
+                   data: data
+                }).then(function successCallback(data, status, headers, config) {
+                   self.member = data.data.data.member;
+                   if(data.data.data.member.mobile - 0 != 0) {
+                     self.member.mobile = data.data.data.member.mobile - 0;
+                   }
+                   self.member.idCardNumber = data.data.data.member.idCardNumber;
+                   self.showLoadingBool.searchBool = true;
+                }, function errorCallback(data, status, headers, config) {
+                   self.showLoadingBool.searchBool = true;
+                })
+                .finally(function(value){
+                    loadingService(self.showLoadingBool);
+                });
                 
             }
             self.updataMemberInfo = function() {
@@ -2621,7 +2738,7 @@
             }
             
             self.init = function() {
-
+                self.addCards();
             }
 
             self.addCards = function () {
@@ -2667,6 +2784,42 @@
                 });
                 return deferred.promise;
             }
+
+            // self.getCardBatch = function (apiTicket) {
+            //     var apiTicket = apiTicket;
+            //     var deferred = $q.defer();
+            //     var data = JSON.stringify({
+            //       "offset": 0,
+            //       "count": 50, 
+            //       "status_list": ["CARD_STATUS_DISPATCH"]
+            //     })
+            //     self.addingCards =  true;
+            //     $http({
+            //         method: 'POST',
+            //         url: 'https://api.weixin.qq.com/card/batchget?access_token=' + 
+            //               $scope.root.getParams('authorizer_access_token'),
+            //         data: data
+            //     }).then(function successCallback(response) {
+            //         var data = response.data;
+            //         if (data.errcode != 0) {
+            //             console && console.log(data);
+            //             var cardList = data.card_id_list;
+            //             var rtn = {};
+            //             rtn.apiTicket = apiTicket;
+            //             rtn.cardList = cardList;
+            //             deferred.resolve(rtn);
+            //         }
+            //         else {
+            //             alert(data.errcode + ' ' + data.errmsg);
+            //             deferred.reject();
+            //         }
+            //     }, function errorCallback(response) {
+            //         alert('连接服务器出错');
+            //     }).finally(function(value) {
+            //         self.addingCards = false;
+            //     });
+            //     return deferred.promise;
+            // }
 
             self.getApiTicket = function (type) {
                 var deferred = $q.defer();
@@ -2736,9 +2889,12 @@
                     cardList: cards, // 需要添加的卡券列表
                     success: function (res) {
                         var cardList = res.cardList; // 添加的卡券列表信息
-                        console.log('user add');
+                        console.log('user add cards');
                         console.log(cardList);
-                        self.addingCards = false;
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.gotCard = true;
+                        });
                     },
                     cancel: function (res) {
                         console.log("领取卡券 cancel");

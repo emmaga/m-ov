@@ -340,5 +340,15 @@
       return temp.toLowerCase();
     }
   })
+  
+  // 筛选微信卡券
+  // card_id_list: ["p3y-kwzWYkcYie4CUqHd8T7l3IZM", "p3y-kw2wO-22D6NzdTi4JDf-3qs0"]
+  // filter_word: {abstract: 'xx'}
+  // .service('filter_wxcard',['$http',function($http){
+  //   return function(card_id_list, filter_word){
+        
+  //   }
+    
+  // }])
 
 })();
