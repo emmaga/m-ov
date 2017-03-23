@@ -19,11 +19,12 @@
 	    <br>
 
 	    <div class="padding">
-	    	
-	    	<button class="button button-block" ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">领取礼包</button>
+
+	    	<!-- 领取按钮 : 领取成功后消失-->
+	    	<button ng-show="cardAttentionGiftBag.addCardCancel"  class="button button-block button-assertive" ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">领取礼包</button>
 	    	
 			<!-- 领取失败时的按钮 -->
-	    	<button ng-show="cardAttentionGiftBag.addCardFail" class="button button-block" ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">重新领取</button>
+	    	<button ng-show="cardAttentionGiftBag.addCardFail" class="button button-block button-assertive" ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">重新领取</button>
 
 
 	    </div>
@@ -34,17 +35,15 @@
     <style type="text/css">
     	
     	body{
-    		background: #8a1c20;
     	}
     	
     	.guide{
     		font-size: 20px;
-    		color: #fff;
+    		/*color: #fff;*/
     		text-align: center;
     	}
 
     	.button{
-			color: #8a1c20;
     	}
 
 
