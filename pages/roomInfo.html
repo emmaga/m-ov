@@ -135,7 +135,11 @@
         </div> -->
 
         <!-- 优惠券 -->
-        优惠券：<div ng-click="roomInfo.getUserCardList()">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "未使用优惠券 >"}}</div>
+        <div class="item" ng-click="roomInfo.getUserCardList()">
+            优惠券：
+            <span class="item-note">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "未使用优惠券 >"}}
+            </span>
+        </div>
 
         <!-- 微信自有卡券列表 -->
         <div ng-if="roomInfo.showUserCardList">
