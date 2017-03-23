@@ -902,7 +902,7 @@
                 if(self.selCardInfo.card_id) {
                     var p = bookTotalPri - self.selCardInfo.card_info.cash.reduce_cost;
                     // 如果价格比0.01低，就付0.01, 0元后台会报错
-                    bookTotalPri = p > 0.01 ? p : 0.01;
+                    bookTotalPri = p > 1 ? p : 1;
                 }
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
