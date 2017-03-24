@@ -82,6 +82,14 @@
         url: '/shopOrderInfo?orderId',
         templateUrl: 'pages/shopOrderInfo.html'
       })
+      .state('cardAttentionGiftBag', {
+        url: '/cardAttentionGiftBag',
+        templateUrl: 'pages/cardAttentionGiftBag.html'
+      })
+      .state('cardGift', {
+        url: '/cardGift',
+        templateUrl: 'pages/cardGift.html'
+      })
   }])
 
   // 每次页面跳转完成时触发
@@ -108,10 +116,21 @@
 
 
   .constant('BACKEND_CONFIG', {
+    // serverUrl     : 'http://openvoddev.cleartv.cn/backend_wx/v1/',
     serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
     testUrl       : 'api/',
     testExtesion  : '.json',
     test          : false//,
     //mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
+  })
+
+  .constant('PARAM', {
+    cardAttentionGiftKW : '关注',
+    cardAcceptCategoryKW_room : '订房',
+    customize : {
+      luan : {
+        hotelsGuideUrl : "customize/luan/hotels_guide.html"
+      }
+    }
   })
 })();

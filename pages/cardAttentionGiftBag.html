@@ -1,0 +1,54 @@
+<div ng-controller="cardAttentionGiftBagController as cardAttentionGiftBag" ng-init="cardAttentionGiftBag.beforeInit()">
+
+	<div class="padding">
+			
+	    <br>
+	    <br>
+	    
+
+	    <h1 class="guide" ng-show="!cardAttentionGiftBag.addCardCancel && !cardAttentionGiftBag.addCardFail && !cardAttentionGiftBag.gotCard" >正在为您准备大礼包...</h1>
+
+	    <!-- 已领取 -->
+	    <h1 class="guide" ng-show="cardAttentionGiftBag.gotCard">已领取</h1>
+	    <!-- 领取失败 -->
+	    <h1 class="guide" ng-show="cardAttentionGiftBag.addCardFail">似乎出了点问题</h1>
+	    <!-- 领取卡券取消 -->
+	    <h1 class="guide" ng-show="cardAttentionGiftBag.addCardCancel">您有一个大礼包</h1>
+
+		<br>
+	    <br>
+
+	    <div class="padding">
+
+	    	<!-- 领取按钮 : 领取成功后消失-->
+	    	<button ng-show="cardAttentionGiftBag.addCardCancel"  class="button button-block button-assertive" ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">领取礼包</button>
+	    	
+			<!-- 领取失败时的按钮 -->
+	    	<button ng-show="cardAttentionGiftBag.addCardFail" class="button button-block button-assertive" ng-click="cardAttentionGiftBag.addCards()" ng-disabled= "cardAttentionGiftBag.addingCards">重新领取</button>
+
+	        <!-- 去订房 -->
+	        <a  ng-show="cardAttentionGiftBag.gotCard" class="button button-block button-balanced" href="{{cardAttentionGiftBag.roomPageURL}}">去订房</a>
+
+	    </div>
+	    
+	    <br>
+
+	</div>
+    
+    <style type="text/css">
+    	
+    	body{
+    	}
+    	
+    	.guide{
+    		font-size: 20px;
+    		/*color: #fff;*/
+    		text-align: center;
+    	}
+
+    	.button{
+    	}
+
+
+    </style>
+</div>
