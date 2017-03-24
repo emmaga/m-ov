@@ -116,8 +116,8 @@
 
 
   .constant('BACKEND_CONFIG', {
-    serverUrl     : 'http://openvoddev.cleartv.cn/backend_wx/v1/',
-    // serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
+    // serverUrl     : 'http://openvoddev.cleartv.cn/backend_wx/v1/',
+    serverUrl     : 'http://openvod.cleartv.cn/backend_wx/v1/',
     testUrl       : 'api/',
     testExtesion  : '.json',
     test          : false//,

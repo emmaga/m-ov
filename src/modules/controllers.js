@@ -670,7 +670,8 @@
                         self.cardList = data.card_list;
                     }
                     else {
-                        alert(data.rescode + ' ' + data.errInfo);
+                        console && console.log(data.rescode + ' ' + data.errInfo);
+                        alert(data.errInfo);
                     }
                 }, function errorCallback(response) {
                     alert('连接服务器出错');
@@ -2753,6 +2754,7 @@
             self.init = function() {
                 self.addCards();
                 var project = $scope.root.getParams('projectInfo').project;
+                console && console.log(PARAM.customize);
                 self.roomPageURL = PARAM.customize[project].hotelsGuideUrl;
             }
 
