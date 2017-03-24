@@ -123,4 +123,14 @@
     test          : false//,
     //mapUrl        : "http://openvod.cleartv.cn/map/baidumap.html"
   })
+
+  .constant('PARAM', {
+    cardAttentionGiftKW : '关注',
+    cardAcceptCategoryKW_room : '订房',
+    customize : {
+      luan : {
+        hotelsGuideUrl : "customize/luan/hotels_guide.html"
+      }
+    }
+  })
 })();

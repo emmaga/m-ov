@@ -590,8 +590,8 @@
         }
     ])
 
-    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
-        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG) {
+    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG', 'PARAM',
+        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG, PARAM) {
             console.log("roomInfoController")
             console.log($stateParams);
             var self = this;
@@ -609,6 +609,7 @@
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
+                self.selCardInfo = {};
                 // self.showLoadingBool.searchRoomInfoBool = false;
                 // // self.showLoadingBool.searchMemberInfoBool = false;
                 // self.showLoadingBool.searchHotelInfoBool = false;
@@ -649,10 +650,11 @@
             self.getUserCardList = function () {
                 self.showUserCardList = true;
                 self.loadingUserCardList = true;
+                self.cardList = [];
 
                 var data = JSON.stringify({
                     "clear_session": $scope.root.getParams('clear_session'),
-                    "keyword": {"accept_category":["订房"]},
+                    "keyword": {"accept_category":[PARAM.cardAcceptCategoryKW_room]},
                     "action": "user",
                     "open_id": $scope.root.getParams('wxUserInfo').openid
                 });
@@ -866,6 +868,7 @@
             // }
 
             self.consume = function () {
+
                 // 核销
                 var data = JSON.stringify({
                     "code": self.selCardInfo.code,
@@ -907,7 +910,7 @@
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "action": "newOrder",
-                    "cardinfo": self.selCardInfo ? [self.selCardInfo] : [],
+                    "cardinfo": self.selCardInfo.card_id ? [self.selCardInfo] : [],
                     "goodsList":[
                         {
                             "roomID": self.roomId - 0,
@@ -942,7 +945,9 @@
                             $http.post(backendUrl('roomorder', '', 'server'), data)
                             .success(function(data, status, headers, config){
                                  if (data.rescode == '200') {
-                                    self.consume();
+                                    if(self.selCardInfo.card_id) {
+                                       self.consume(); 
+                                    }
                                     self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
                                  } else {
                                      alert($filter('translate')('serverError') + ' ' + data.errInfo);
@@ -1253,7 +1258,7 @@
                 var deferred = $q.defer();
                 var data = JSON.stringify({
                     clear_session: $scope.root.getParams('clear_session'),
-                    keywords: {abstract : ["长期"]},
+                    keyword: {abstract : ["长期"]},
                     action: "businessman"
                 })
                 self.addingCards =  true;
@@ -2726,8 +2731,8 @@
     ])
 
     // 卡券关注礼包
-    .controller('cardAttentionGiftBagController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1',
-        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1) {
+    .controller('cardAttentionGiftBagController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1', 'PARAM',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1, PARAM) {
             console.log('cardAttentionGiftBagController')    
     
             var self = this;
@@ -2747,6 +2752,8 @@
             
             self.init = function() {
                 self.addCards();
+                var project = $scope.root.getParams('projectInfo').project;
+                self.roomPageURL = PARAM.customize[project].hotelsGuideUrl;
             }
 
             self.addCards = function () {
@@ -2764,7 +2771,7 @@
                 var deferred = $q.defer();
                 var data = JSON.stringify({
                     clear_session: $scope.root.getParams('clear_session'),
-                    keywords: {abstract : ["关注"]},
+                    keyword: {abstract : [PARAM.cardAttentionGiftKW]},
                     action: "businessman"
                 })
                 self.addingCards =  true;
