@@ -907,7 +907,7 @@
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "action": "newOrder",
-                    "cardinfo": self.selCardInfo,
+                    "cardinfo": self.selCardInfo ? [self.selCardInfo] : [],
                     "goodsList":[
                         {
                             "roomID": self.roomId - 0,
