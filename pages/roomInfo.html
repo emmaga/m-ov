@@ -124,7 +124,7 @@
             <!-- <h2>{{'priceDetail'|translate}}</h2> -->
 
             <!-- 价格明细表 -->
-            <div class="item row"  style=" padding-top: 6px; padding-bottom: 7px;">
+            <div class="item row"  style=" padding-top: 6px; padding-bottom: 7px; display: block">
                 <p ng-repeat="price in roomInfo.priceList" class="row" >
                     {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
                 </p>
