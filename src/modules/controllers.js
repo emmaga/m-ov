@@ -681,6 +681,31 @@
 
             }
 
+            self.getTommPrice = function () {
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "roomId": self.roomId-0,
+                    "hotelId": self.hotelId - 0,
+                    "bookStartDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
+                    "bookEndDate": $filter('date')(self.checkOut-0+86400000,'yyyy-MM-dd'),
+                    "RoomServiceID": self.addPriceId
+                };
+                data = JSON.stringify(data);
+
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('roominfo', 'roominfo'),
+                    data: data
+                }).then(function successCallback(data, status, headers, config) {
+                    var room = data.data.data;
+                    var price = room.PriceInfo.PriceList;
+                    // 单价
+                    self.tommPrice = self.roomBookPrcFun(price)-0;
+                }, function errorCallback(data, status, headers, config) {
+                    alert('获取门票价格出错, 请刷新页面重试')
+                });
+            }
 
             self.searchRoomInfo = function() {
                     self.showLoadingBool.searchRoomInfoBool = false;
@@ -704,6 +729,10 @@
                         console.log(data)
                         self.searchHotelInfo();
                         self.room = data.data.data;
+                        // 如果含门票，获取第二天价格
+                        if (self.room.RoomFlag == 1) {
+                            self.getTommPrice();
+                        }
                         
                         // 添加空格和换行
                         self.room.Description = self.room.Description.split('\n');
@@ -903,11 +932,18 @@
                 loadingService(self.showLoadingBool);
 
                 var bookTotalPri = self.roomPriPerDay*self.roomNumber;
+
+                if(self.room.RoomFlag == 1 && self.checkOut == self.visitDate) {
+                    bookTotalPri = self.tommPrice;
+                }
+
                 if(self.selCardInfo.card_id) {
                     var p = bookTotalPri - self.selCardInfo.card_info.cash.reduce_cost;
                     // 如果价格比0.01低，就付0.01, 0元后台会报错
                     bookTotalPri = p > 1 ? p : 1;
                 }
+
+
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "action": "newOrder",
@@ -925,7 +961,9 @@
                     ],
                     "totalPrice":bookTotalPri,
                     "contactName": self.member.realName,
-                    "Mobile": self.member.mobile + ''
+                    "Mobile": self.member.mobile + '',
+                    "IDCardNumber": self.IDCard,
+                    "PlayDate": $filter('date')(self.visitDate-0,'yyyy-MM-dd')
                      
                 };
                 data = angular.toJson(data,true);
