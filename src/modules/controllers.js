@@ -625,7 +625,7 @@
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
                 self.searchMemberInfo();
-                // //  验证码 倒计时
+                // 验证码 倒计时
                 // self.countSeconds = 30;
                 // self.showTip = true;
 

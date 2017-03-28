@@ -84,7 +84,7 @@
             <p>{{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}</p>
         </div>
         <!-- 客房数量 -->
-        <div class="item item-input">
+        <div ng-if="roomInfo.room.RoomFlag == 0" class="item item-input">
             <div class="input-label">{{'roomQuantity'|translate}}</div>
             <a ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light icon ion-ios-minus-empty"></a>
             <span class="mod-input-number">
@@ -92,6 +92,12 @@
                 {{roomInfo.roomNumber}}
             </span>
             <a ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light icon ion-ios-plus-empty"></a>
+        </div>
+        <!-- 游玩日期 -->
+        <div ng-if="roomInfo.room.RoomFlag == 1" class="item item-input">
+            <div class="input-label">游玩日期:</div>
+            <input type="radio" ng-model="roomInfo.visitDate" value="roomInfo.checkIn" >{{roomInfo.checkIn | date:'MM.dd'}}
+            <input type="radio" ng-model="roomInfo.visitDate" value="roomInfo.checkOut" >{{roomInfo.checkOut | date:'MM.dd'}}
         </div>
         <!-- 联系人 -->
         <div class="item item-input">
@@ -124,7 +130,7 @@
             <!-- <h2>{{'priceDetail'|translate}}</h2> -->
 
             <!-- 价格明细表 -->
-            <div class="item row"  style=" padding-top: 6px; padding-bottom: 7px; display: block">
+            <div ng-if="roomInfo.room.RoomFlag == 0" class="item row"  style=" padding-top: 6px; padding-bottom: 7px; display: block">
                 <p ng-repeat="price in roomInfo.priceList" class="row" >
                     {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
                 </p>
