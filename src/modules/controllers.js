@@ -13,7 +13,7 @@
                 var u = navigator.userAgent;
                 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
                 if(isiOS) {
-                    self.wxBrowserHack();
+                    // self.wxBrowserHack();
                 }
 
                 if(BACKEND_CONFIG.test == true) {
