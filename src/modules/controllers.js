@@ -933,8 +933,12 @@
 
                 var bookTotalPri = self.roomPriPerDay*self.roomNumber;
 
-                if(self.room.RoomFlag == 1 && self.checkOut == self.visitDate) {
-                    bookTotalPri = self.tommPrice;
+                if(self.room.RoomFlag == 1) {
+                    if(self.visitDate) {
+                        if(self.checkOut == self.visitDate) {
+                            bookTotalPri = self.tommPrice;
+                        }
+                    }
                 }
 
                 if(self.selCardInfo.card_id) {
@@ -962,8 +966,8 @@
                     "totalPrice":bookTotalPri,
                     "contactName": self.member.realName,
                     "Mobile": self.member.mobile + '',
-                    "IDCardNumber": self.IDCard,
-                    "PlayDate": $filter('date')(self.visitDate-0,'yyyy-MM-dd')
+                    "IDCardNumber": self.IDCard ? self.IDCard : "",
+                    "PlayDate": self.visitDate ? $filter('date')(self.visitDate-0,'yyyy-MM-dd') : ""
                      
                 };
                 data = angular.toJson(data,true);
