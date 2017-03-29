@@ -97,8 +97,8 @@
         <div ng-if="roomInfo.room.RoomFlag == 1" class="ng-binding item" style=" display: flex;  padding-top: 6px; padding-bottom: 5px;">
             <div class="input-label">游玩日期:</div>
             <div style=" padding-top: 9px;">
-                <input ng-init="roomInfo.visitDate = roomInfo.checkIn" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkIn" > {{roomInfo.checkIn | date:'MM.dd'}} &nbsp;&nbsp;&nbsp;
-                <input type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkOut" > {{roomInfo.checkOut | date:'MM.dd'}}
+                <input style="transform: scale(1.3); margin-right: 2px" name="visittime" ng-init="roomInfo.visitDate = roomInfo.checkIn" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkIn" > {{roomInfo.checkIn | date:'MM.dd'}} &nbsp;&nbsp;&nbsp;
+                <input style="transform: scale(1.3); margin-right: 2px" name="visittime" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkOut" > {{roomInfo.checkOut | date:'MM.dd'}}
             </div>
         </div>
         <!-- 联系人 -->
