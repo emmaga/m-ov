@@ -3,6 +3,7 @@
         <h1 class="title">{{brl.hotel.Name}}</h1>
         <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
     </div>
+
     <!-- 内容 -->
     <div class="padding mod-has-header">
         <!-- 轮播 -->
@@ -44,6 +45,7 @@
                     <i class="icon ion-ios-arrow-right"></i>
                 </span>
             </a>
+
             <div class="mod-split-line mod-break-padding"></div>
             <!-- 查询 -->
             <!-- <div class="list padding mod-inset-forms"> -->
@@ -58,7 +60,7 @@
 
 
             <!-- 客房 -->
-            <div class="item item-thumbnail-left" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
+            <div ng-if="!((brl.checkOut - brl.checkIn) > 86400000 && room.RoomFlag == 1)" class="item item-thumbnail-left" ng-repeat="room in brl.rooms track by $index" ng-click="(room.PriceInfo.ServicePrice && room.PriceInfo.ServicePrice.length !== 0) ? brl.openOrClose($index) : brl.nextState(room.ID,brl.checkIn,brl.checkOut,room.AvailableNumList, -1)">
 
                 <!-- 封面图 -->
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{img.ImageURL}});" ng-repeat="img in room.Gallery track by $index" ng-if="$index==0" ></div>
