@@ -8,9 +8,22 @@
     <div class="padding mod-has-header" style="padding-bottom: 0">
         <!-- 轮播 -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
+
+            
             <ion-slide ng-repeat="room in roomInfo.room.Gallery">
-                <img style="width: 100%; height: 100%;" ng-src="{{room.ImageURL}}">
+                <div style="position: absolute; width: 100%; height: 100%; background-image: url({{room.ImageURL}}); background-size: cover; background-position: center center;"></div>
+                
+                <!-- <img style="width: 100%; height: 100%;" ng-src="{{room.ImageURL}}"> -->
+                <!-- 全景 -->
+                <a ng-if="roomInfo.room.ViewURL && $index==0 " ng-href="{{roomInfo.room.ViewURL}}" style="text-decoration: none">
+                    <h1 style=" position: absolute; left: 25%; width: 50%; height: 46px; line-height: 43px; text-shadow: 0px 2px 9px rgba(0,0,0,.8); color: white; font-weight: 400; text-align: center; top: 83px; font-size: 20px; border:solid 2px rgb(255,255,255); border-radius: 1000px">
+                        360°全景看房
+                        <i class="icon ion-ios-arrow-forward"></i>
+                    </h1>
+                </a>
+                <!-- 全景 -->
             </ion-slide>
+
         </ion-slide-box>
         <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
 
@@ -18,6 +31,7 @@
 
         <!-- info -->
         <div class="atc-content">
+            
             <!-- 客房标签 -->
             <h5 class="atc-chapter-title atc-col10 atc-spacing">客房设施</h5>
             <div class="atc-col10 atc-grid atc-grid4">
@@ -66,10 +80,11 @@
         <!-- 入住时间 -->
         <div class="item">
             <h2>{{roomInfo.room.RoomTypeName}}</h2>
+            <p ng-if="roomInfo.addPriceId != -1">{{roomInfo.room.PriceInfo.ServicePriceInfo.Name}} {{roomInfo.room.PriceInfo.ServicePriceInfo.Desc}}</p>
             <p>{{roomInfo.checkIn | date:'MM.dd'}}{{'checkIn'|translate}}~{{roomInfo.checkOut| date:'MM.dd'}}{{'checkOut'|translate}}&nbsp·&nbsp{{'total'|translate}}{{roomInfo.stayDays}}{{'night'|translate}}</p>
         </div>
         <!-- 客房数量 -->
-        <div class="item item-input">
+        <div ng-if="roomInfo.room.RoomFlag == 0" class="item item-input">
             <div class="input-label">{{'roomQuantity'|translate}}</div>
             <a ng-click="roomInfo.modifyRoomNum(-1)" class="button button-small button-light icon ion-ios-minus-empty"></a>
             <span class="mod-input-number">
@@ -77,6 +92,14 @@
                 {{roomInfo.roomNumber}}
             </span>
             <a ng-click="roomInfo.modifyRoomNum(1)" class="button button-small button-light icon ion-ios-plus-empty"></a>
+        </div>
+        <!-- 游玩日期 -->
+        <div ng-if="roomInfo.room.RoomFlag == 1" class="ng-binding item" style=" display: flex;  padding-top: 6px; padding-bottom: 5px;">
+            <div class="input-label">游玩日期:</div>
+            <div style=" padding-top: 9px;">
+                <input style="transform: scale(1.3); margin-right: 2px" name="visittime" ng-init="roomInfo.visitDate = roomInfo.checkIn" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkIn" > {{roomInfo.checkIn | date:'MM.dd'}} &nbsp;&nbsp;&nbsp;
+                <input style="transform: scale(1.3); margin-right: 2px" name="visittime" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkOut" > {{roomInfo.checkOut | date:'MM.dd'}}
+            </div>
         </div>
         <!-- 联系人 -->
         <div class="item item-input">
@@ -93,33 +116,61 @@
         <div class="item item-input">
             <div class="input-label">{{'phoneNumber'|translate}}:</div>
             <input type="text" pattern="[0-9]{11,}" ng-model="roomInfo.member.mobile" required placeholder="{{'required'|translate}}(11位号码)">
-            <!--lh, fix my style-->
-            <!-- <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="roomInfo.mobileRe.test(roomInfo.member.mobile)">
-                <i class="icon ion-ios-checkmark"></i>
-            </div> -->
-            <!--lh, fix my style-->
         </div>
 
-        <!-- 价格明细表 -->
+        <!-- 身份证号 -->
+        <div ng-if="roomInfo.room.RoomFlag == 1" class="item item-input">
+            <div class="input-label">身份证:</div>
+            <input type="text" pattern="(^\d{15}$)|(^\d{17}([0-9]|X)$)" ng-model="roomInfo.IDCard" required placeholder="{{'required'|translate}}">
+        </div>        
+
+        <!-- 分割块 -->
         <div class="item item-divider">
             <p>{{'priceDetail'|translate}}</p>
         </div>
-        <div class="item">
+
+        <div class="item mod-inset-forms list mod-list padding" style="border-bottom: none">
             <!-- <h2>{{'priceDetail'|translate}}</h2> -->
-            <p ng-repeat="price in roomInfo.priceList">
-                {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
-            </p>
-        <!-- </div> -->
-            <div class="mod-split-line" style="margin-top: 7px;margin-bottom: 10px;"></div>
-        <!-- 总价 -->
-        <!-- <div class="item"> -->
-            <h2>{{'totalPrice'|translate}}: ¥ {{roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</h2>
+
+            <!-- 价格明细表 -->
+            <div ng-if="roomInfo.room.RoomFlag == 0" class="item row"  style=" padding-top: 6px; padding-bottom: 7px; display: block">
+                <p ng-repeat="price in roomInfo.priceList" class="row" >
+                    {{price.date | date:'yyyy.MM.dd'}}&nbsp&nbsp&nbsp&nbsp￥{{price.price | fenToYuan}}&nbsp&nbsp&nbsp&nbsp×{{roomInfo.roomNumber}}
+                </p>
+            </div>
+            
+
+            <!-- 优惠券 -->
+            <div class="item row" ng-click="roomInfo.getUserCardList()" style="margin-top: initial; padding-top: 6px; padding-bottom: 7px;">
+                <div class="col col-25">优惠券:</div>
+                <div class="col col-75 assertive">{{roomInfo.selCardInfo.card_id ? roomInfo.selCardInfo.card_info.cash.base_info.title : "使用优惠券"}}</div>
+            </div>
+
+             <!-- 微信自有卡券列表 -->
+            <div ng-if="roomInfo.showUserCardList">
+                <div ng-if="roomInfo.loadingUserCardList">
+                    <ion-spinner icon="dots" class="mod-spinner-list"></ion-spinner>
+                </div>
+                <ul>
+                    <li class="item" ng-repeat="card in roomInfo.cardList" ng-click="roomInfo.selCard(card)">
+                        {{card.card_info.cash.base_info.title}}
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- 总价 -->
+            <div class="row item "  style="margin-top: initial; padding-top: 6px; padding-bottom: 7px;">
+                <div class="col col-25">{{'totalPrice'|translate}}:</div>
+                <div class="col col-75">¥ <ng-if ng-if="roomInfo.room.RoomFlag == 0 ||  roomInfo.visitDate == roomInfo.checkIn">{{roomInfo.selCardInfo.card_id ? ((roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) > 1 ? (roomInfo.roomPriPerDay*roomInfo.roomNumber - roomInfo.selCardInfo.card_info.cash.reduce_cost) : 1) :&nbsp&nbsp roomInfo.roomPriPerDay*roomInfo.roomNumber | fenToYuan}}</ng-if>
+                
+                <ng-if ng-if="roomInfo.room.RoomFlag == 1 && roomInfo.visitDate == roomInfo.checkOut">{{roomInfo.selCardInfo.card_id ? ((roomInfo.tommPrice - roomInfo.selCardInfo.card_info.cash.reduce_cost) > 1 ? (roomInfo.tommPrice - roomInfo.selCardInfo.card_info.cash.reduce_cost) : 1) :&nbsp&nbsp roomInfo.tommPrice | fenToYuan}}</ng-if>
+                </div>
+            </div>
         </div>
-        <!-- <div class="item item-divider">
-            <p>{{'refundDoc'|translate}}</p>
-        </div> -->
 
 
+       
        
         <!-- <div class="padding">
             {{roomInfo.room.changeDeal }}

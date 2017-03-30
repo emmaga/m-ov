@@ -13,11 +13,11 @@
                 var u = navigator.userAgent;
                 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
                 if(isiOS) {
-                    self.wxBrowserHack();
+                    // self.wxBrowserHack();
                 }
 
                 if(BACKEND_CONFIG.test == true) {
-                    // 标志已经拿到clearsession和wx初始化
+                    // 测试环境下，标志已经拿到clearsession和wx初始化
                     self._readystate = true;
                 }
 
@@ -91,6 +91,8 @@
                     self.setParams('userid', data.data.userid);
                     self.setParams('clear_session', data.data.clear_session);
                     self.setParams('refresh_token', data.data.refresh_token);
+                    self.setParams('access_token', data.data.access_token);
+                    self.setParams('authorizer_access_token', data.data.authorizer_access_token);
                     self.getWxUserInfo(data.data.access_token, data.data.openid);     
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
@@ -151,7 +153,7 @@
                             timestamp: self.timestamp, // 必填，生成签名的时间戳
                             nonceStr: self.noncestr, // 必填，生成签名的随机串
                             signature: data.data.signature, // 必填，签名，见附录1
-                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation', 'addCard', 'chooseCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         });
                         wx.ready(function(){
                             // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
@@ -396,10 +398,10 @@
                 }
             }
             self.init = function() {
-
-                self.hotelId = $stateParams.hotelId;
-                self.checkIn = $stateParams.checkIn - 0;
-                self.checkOut = $stateParams.checkOut - 0;
+                self.hotelId = $stateParams.hotelId ? $stateParams.hotelId : $scope.root.getParams('state');
+                self.checkIn = $stateParams.checkIn ? $stateParams.checkIn - 0 : new Date().getTime();
+                self.checkOut = $stateParams.checkOut ? $stateParams.checkOut - 0 : new Date().getTime() + 24 * 60 * 60 * 1000;
+                
                 // 酒店天数
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
 
@@ -421,7 +423,7 @@
                     address: decodeURI(encodeURI(self.hotel.Address)), // 地址详情说明
                     //name: '上海浦东机场门店', // 位置名
                     //address: '上海 祖冲之路2277弄', // 地址详情说明
-                    scale: 20, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                    scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
                     infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                 });
             }
@@ -437,15 +439,15 @@
                 $timeout(function() { self.showDP(false); }, 500);
             };
             // 可以预订 才跳转
-            self.nextState = function(roomId, checkIn, checkOut, AvailableNumList) {
-                    var flag = true;
-                    AvailableNumList.forEach(function(value,index,array){
-                        if(array[index]['availableNum'] <= 0){
-                            flag = false;
-                            return flag;
-                        } 
-                    })
-                    flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut })
+            self.nextState = function(roomId, checkIn, checkOut, AvailableNumList, addPriceId) {
+                var flag = true;
+                AvailableNumList.forEach(function(value,index,array){
+                    if(array[index]['availableNum'] <= 0){
+                        flag = false;
+                        return flag;
+                    } 
+                })
+                flag && $state.go('roomInfo', { roomId: roomId, hotelId: self.hotelId, checkIn: checkIn, checkOut: checkOut, addPriceId: addPriceId })
             };
 
             // 住酒店 天数
@@ -468,7 +470,6 @@
                         data: data
                     }).then(function successCallback(data, status, headers, config) {
                         self.hotel = data.data.data;
-                        console.log(self.hotel)
                         self.showLoadingBool.searchHotelInfoBool = true;
                         
                         // 酒店 地图 
@@ -479,6 +480,10 @@
                         self.showLoadingBool.searchHotelInfoBool = true;
                         loadingService(self.showLoadingBool);
                     });
+            }
+
+            self.openOrClose = function (n) {
+                self.rooms[n].isOpen = !self.rooms[n].isOpen;
             }
 
             self.searchRoomList = function() {
@@ -505,6 +510,8 @@
                     //Description
                     for(var i = 0; i < self.rooms.length; i++) {
                         self.rooms[i].Description = util.cutStr(self.rooms[i].Description, 85);
+                        // 是否展开
+                        self.rooms[i].isOpen = false;
                     }
                     // ionic silder update
                     $ionicSlideBoxDelegate.update();
@@ -583,8 +590,8 @@
         }
     ])
 
-    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG',
-        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG) {
+    .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG', 'PARAM',
+        function($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG, PARAM) {
             console.log("roomInfoController")
             console.log($stateParams);
             var self = this;
@@ -602,6 +609,7 @@
 
                 // 遮罩层 bool
                 self.showLoadingBool = {};
+                self.selCardInfo = {};
                 // self.showLoadingBool.searchRoomInfoBool = false;
                 // // self.showLoadingBool.searchMemberInfoBool = false;
                 // self.showLoadingBool.searchHotelInfoBool = false;
@@ -613,10 +621,11 @@
                 self.checkOut = $stateParams.checkOut - 0;
                 self.roomId = $stateParams.roomId;
                 self.hotelId = $stateParams.hotelId;
+                self.addPriceId = $stateParams.addPriceId - 0;
 
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
                 self.searchMemberInfo();
-                // //  验证码 倒计时
+                // 验证码 倒计时
                 // self.countSeconds = 30;
                 // self.showTip = true;
 
@@ -631,6 +640,72 @@
               
             }
 
+            // 用户选取卡券
+            self.selCard = function (card) {
+                self.showUserCardList = false;
+                self.selCardInfo = card;
+            }
+
+            // 获取微信自有卡券列表
+            self.getUserCardList = function () {
+                self.showUserCardList = true;
+                self.loadingUserCardList = true;
+                self.cardList = [];
+
+                var data = JSON.stringify({
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "keyword": {"accept_category":[PARAM.cardAcceptCategoryKW_room]},
+                    "action": "user",
+                    "open_id": $scope.root.getParams('wxUserInfo').openid
+                });
+
+                $http({
+                    method: 'POST',
+                    url: backendUrl('card_batchget', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        self.cardList = data.card_list;
+                    }
+                    else {
+                        console && console.log(data.rescode + ' ' + data.errInfo);
+                        alert(data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.loadingUserCardList = false;
+                });
+
+            }
+
+            self.getTommPrice = function () {
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "roomId": self.roomId-0,
+                    "hotelId": self.hotelId - 0,
+                    "bookStartDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
+                    "bookEndDate": $filter('date')(self.checkOut-0+86400000,'yyyy-MM-dd'),
+                    "RoomServiceID": self.addPriceId
+                };
+                data = JSON.stringify(data);
+
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('roominfo', 'roominfo'),
+                    data: data
+                }).then(function successCallback(data, status, headers, config) {
+                    var room = data.data.data;
+                    var price = room.PriceInfo.PriceList;
+                    // 单价
+                    self.tommPrice = self.roomBookPrcFun(price)-0;
+                }, function errorCallback(data, status, headers, config) {
+                    alert('获取门票价格出错, 请刷新页面重试')
+                });
+            }
 
             self.searchRoomInfo = function() {
                     self.showLoadingBool.searchRoomInfoBool = false;
@@ -641,39 +716,45 @@
                         "roomId": self.roomId-0,
                         "hotelId": self.hotelId - 0,
                         "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
-                        "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd')
+                        "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
+                        "RoomServiceID": self.addPriceId
                     };
                     data = JSON.stringify(data);
 
-                        $http({
-                            method: $filter('ajaxMethod')(),
-                            url: backendUrl('roominfo', 'roomInfo'),
-                            data: data
-                        }).then(function successCallback(data, status, headers, config) {
-                            console.log(data)
-                            self.searchHotelInfo();
-                            self.room = data.data.data;
-                            
-                            // 添加空格和换行
-                            self.room.Description = self.room.Description.split('\n');
-                            for(var i = 0; i < self.room.Description.length; i++) {
-                              self.room.Description[i] = self.room.Description[i].split('  ');
-                            }
-                            
-                            self.priceList = self.room.PriceInfo.PriceList;
-                             // 单价
-                            self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
-                            // // 房间数 最多 可选
-                            // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
-                            
-                            self.showLoadingBool.searchRoomInfoBool = true;
-                            loadingService(self.showLoadingBool);
-                            // ionic silder update
-                            $ionicSlideBoxDelegate.update();
-                        }, function errorCallback(data, status, headers, config) {
-                            self.showLoadingBool.searchRoomInfoBool = true;
-                            loadingService(self.showLoadingBool);
-                        });
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('roominfo', 'roomInfo'),
+                        data: data
+                    }).then(function successCallback(data, status, headers, config) {
+                        console.log(data)
+                        self.searchHotelInfo();
+                        self.room = data.data.data;
+                        // 如果含门票，获取第二天价格
+                        if (self.room.RoomFlag == 1) {
+                            self.getTommPrice();
+                        }
+                        
+                        // 添加空格和换行
+                        self.room.Description = self.room.Description.split('\n');
+                        for(var i = 0; i < self.room.Description.length; i++) {
+                          self.room.Description[i] = self.room.Description[i].split('  ');
+                        }
+                        
+                        self.priceList = self.room.PriceInfo.PriceList;
+
+                         // 单价
+                        self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
+                        // // 房间数 最多 可选
+                        // self.roomMax = Math.min(self.room.roomRemain, self.room.purchaseAbility);
+                        
+                        self.showLoadingBool.searchRoomInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                        // ionic silder update
+                        $ionicSlideBoxDelegate.update();
+                    }, function errorCallback(data, status, headers, config) {
+                        self.showLoadingBool.searchRoomInfoBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
                 
             }
              
@@ -815,18 +896,66 @@
             //       
             //     });
             // }
+
+            self.consume = function () {
+
+                // 核销
+                var data = JSON.stringify({
+                    "code": self.selCardInfo.code,
+                    "clear_session": $scope.root.getParams('clear_session')
+
+                })
+                self.consuming = true;
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('codeconsumer', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log('核销成功');
+                    }
+                    else {
+                        console && console.log('核销失败' + data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.consuming = false;
+                });
+            }
+
             self.newOrder = function() {
 
                 self.showLoadingBool.waitPayBool = false;
                 loadingService(self.showLoadingBool);
 
                 var bookTotalPri = self.roomPriPerDay*self.roomNumber;
+
+                if(self.room.RoomFlag == 1) {
+                    if(self.visitDate) {
+                        if(self.checkOut == self.visitDate) {
+                            bookTotalPri = self.tommPrice;
+                        }
+                    }
+                }
+
+                if(self.selCardInfo.card_id) {
+                    var p = bookTotalPri - self.selCardInfo.card_info.cash.reduce_cost;
+                    // 如果价格比0.01低，就付0.01, 0元后台会报错
+                    bookTotalPri = p > 1 ? p : 1;
+                }
+
+
                 var data = {
                     "clear_session": $scope.root.getParams('clear_session'),
                     "action": "newOrder",
+                    "cardinfo": self.selCardInfo.card_id ? [self.selCardInfo] : [],
                     "goodsList":[
                         {
                             "roomID": self.roomId - 0,
+                            "RoomServiceID": self.addPriceId,
                             "bookStartDate": $filter('date')(self.checkIn-0,'yyyy-MM-dd'),
                             "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd'),
                             "totalPrice":bookTotalPri,
@@ -836,7 +965,9 @@
                     ],
                     "totalPrice":bookTotalPri,
                     "contactName": self.member.realName,
-                    "Mobile": self.member.mobile + ''
+                    "Mobile": self.member.mobile + '',
+                    "IDCardNumber": self.IDCard ? self.IDCard : "",
+                    "PlayDate": self.visitDate ? $filter('date')(self.visitDate-0,'yyyy-MM-dd') : ""
                      
                 };
                 data = angular.toJson(data,true);
@@ -850,13 +981,16 @@
                                 "clear_session": $scope.root.getParams('clear_session'),
                                 "action": "weixinPay",
                                 "payType": "JSAPI",
-                                "orderID": orderID
+                                "orderID": orderID,
+                                "cardInfo": self.selCardInfo
                             };
                             data = angular.toJson(data,true);
                             $http.post(backendUrl('roomorder', '', 'server'), data)
                             .success(function(data, status, headers, config){
                                  if (data.rescode == '200') {
-                                    
+                                    if(self.selCardInfo.card_id) {
+                                       self.consume(); 
+                                    }
                                     self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
                                  } else {
                                      alert($filter('translate')('serverError') + ' ' + data.errInfo);
@@ -915,7 +1049,7 @@
                     }, 50);
                 }
             }
-            console.log($stateParams)
+            
             self.init = function() {
 
                 self.orderId = $stateParams.orderId;
@@ -946,7 +1080,9 @@
                         self.GoodsList =data.data.data.GoodsList;
                         var s = self.roomOrder.Status;
                         self.showPayBtn = (s == 'WAITPAY');
-                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');    
+                        // self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');    
+                        // 鹿安要求：预订成功后 不能取消订单
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');   
                         // 酒店天数
                         // self.stayDays = util.countDay(self.hotel.bookStartDate, self.hotel.bookEndDate);
                     }, function errorCallback(data, status, headers, config) {
@@ -955,8 +1091,6 @@
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     });
-
-                
             }
 
             self.countDay = function(startDate,endDate){
@@ -1065,8 +1199,8 @@
         }
     ])
 
-    .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$stateParams', '$translate', 'loadingService', 'backendUrl',
-        function($http, $scope, $timeout, $filter, $stateParams, $translate, loadingService, backendUrl) {
+    .controller('memberHomeController', ['$http', '$scope', '$timeout', '$filter', '$q', '$stateParams', '$translate', 'loadingService', 'backendUrl',
+        function($http, $scope, $timeout, $filter, $q, $stateParams, $translate, loadingService, backendUrl) {
             console.log("memberHomeController")
             var self = this;
             self.beforeInit = function() {
@@ -1086,6 +1220,12 @@
                 
                 self.search();
             }
+            
+            // 查看微信卡券
+            self.openCard = function () {
+
+            }
+
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
@@ -1097,20 +1237,95 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('shopmember', 'memberInfo'),
-                        data: data
+                $http({
+                    method: $filter('ajaxMethod')(),
+                    url: backendUrl('shopmember', 'memberInfo'),
+                    data: data
 
-                    }).then(function successCallback(data, status, headers, config) {
-                        self.member = data.data.data.member;
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                    }, function errorCallback(data, status, headers, config) {
-                        self.showLoadingBool.searchBool = true;
-                        loadingService(self.showLoadingBool)
-                    });
+                }).then(function successCallback(data, status, headers, config) {
+                    self.member = data.data.data.member;
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool)
+                }, function errorCallback(data, status, headers, config) {
+                    self.showLoadingBool.searchBool = true;
+                    loadingService(self.showLoadingBool)
+                });
                 
+            }
+
+            self.addCard = function () {
+                self.getCardBatch().then(function (cardList) {
+                    self.createCardLandingpage(cardList);
+                })
+            }
+
+            self.createCardLandingpage = function (cardList) {
+                var cardList = cardList;
+                var card_list = [];
+                for(var i = 0; i < cardList.length; i++) {
+                    card_list[i].card_id = cardList[i].card_id;
+                    card_list[i].thumb_url = "http://openvod.cleartv.cn/mgt/dist/imgs/icon-03.png"
+                }
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    banner: "http://openvod.cleartv.cn/mgt/dist/imgs/icon-03.png",
+                    page_title: "hello",
+                    can_share: false,
+                    scene: "SCENE_QRCODE",
+                    card_list: card_list
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('create_card_landingpage', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        var url = data.url;
+                        window.location.href = url;
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.addingCards = false;
+                });
+            }
+
+            self.getCardBatch = function () {
+                var apiTicket = apiTicket;
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    keyword: {abstract : ["长期"]},
+                    action: "businessman"
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('card_batchget', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        var cardList = data.card_list;
+                        deferred.resolve(cardList);
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.addingCards = false;
+                });
+                return deferred.promise;
             }
         }
     ])
@@ -1156,23 +1371,23 @@
                     // "lang": "zh-CN"
                 };
                 data = JSON.stringify(data);
-                   $http({
-                       method: $filter('ajaxMethod')(),
-                       url: backendUrl('shopmember', 'memberInfo'),
-                       data: data
-                   }).then(function successCallback(data, status, headers, config) {
-                       self.member = data.data.data.member;
-                       if(data.data.data.member.mobile - 0 != 0) {
-                         self.member.mobile = data.data.data.member.mobile - 0;
-                       }
-                       self.member.idCardNumber = data.data.data.member.idCardNumber;
-                       self.showLoadingBool.searchBool = true;
-                   }, function errorCallback(data, status, headers, config) {
-                       self.showLoadingBool.searchBool = true;
-                   })
-                   .finally(function(value){
-                     loadingService(self.showLoadingBool);
-                   })  ; 
+                $http({
+                   method: $filter('ajaxMethod')(),
+                   url: backendUrl('shopmember', 'memberInfo'),
+                   data: data
+                }).then(function successCallback(data, status, headers, config) {
+                   self.member = data.data.data.member;
+                   if(data.data.data.member.mobile - 0 != 0) {
+                     self.member.mobile = data.data.data.member.mobile - 0;
+                   }
+                   self.member.idCardNumber = data.data.data.member.idCardNumber;
+                   self.showLoadingBool.searchBool = true;
+                }, function errorCallback(data, status, headers, config) {
+                   self.showLoadingBool.searchBool = true;
+                })
+                .finally(function(value){
+                    loadingService(self.showLoadingBool);
+                });
                 
             }
             self.updataMemberInfo = function() {
@@ -2361,5 +2576,410 @@
         }
     ])
     
+    // 测试 卡券 大礼包 测试页面
+    .controller('cardGiftController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1) {
+            console.log('cardGiftController')    
+    
+            var self = this;
+            self.addingCards = false;
+            self.gettingCards = false;
+            self.selCards = [];
 
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                 self.init();
+                }
+                else {
+                 $timeout(function() {
+                     self.beforeInit();
+                 }, 50);
+                }
+            }
+            
+            self.init = function() {
+
+            }
+
+            // 核销
+            self.consume = function () {
+                if(self.selCards.length <= 0) {return;}
+                
+                var data = JSON.stringify({
+                    "encrypt_code": self.selCards[0].encrypt_code,
+                    "clear_session": $scope.root.getParams('clear_session')
+
+                })
+                self.consuming = true;
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('codeencryptconsumer', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        alert('核销成功');
+                        self.selCards = [];
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    self.consuming = false;
+                });
+            }
+
+            self.chooseCards = function () {
+                console.log('chooseCards');
+                self.getApiTicket('chooseCards').then(function (apiTicket){
+                    self.wxChooseCards(apiTicket);
+                })
+            }
+
+            self.wxChooseCards = function (apiTicket) {
+                // 1.将 api_ticket、appid、location_id、timestamp、nonce_str、card_id、card_type的value值进行字符串的字典序排序。
+                // 2.将所有参数字符串拼接成一个字符串进行sha1加密，得到cardSign。
+                var timestamp = parseInt(new Date().getTime()/1000);
+                var nonceStr = util.randomString(32);
+                var apiTicket = apiTicket;
+                var appid = $scope.root.getParams('appid');
+
+                var list = [timestamp, nonceStr, appid, apiTicket];
+                list = list.sort().reduce(function(a,b){return  a + '' + b});
+                var cardSign = SHA1(list);
+                console.log('timestamp ' + timestamp + ', nonceStr ' + nonceStr + 
+                                ', apiTicket ' + apiTicket + ', appid ' + appid);
+                console.log('cardSign ' + cardSign);
+
+                wx.chooseCard({
+                    timestamp: timestamp, // 卡券签名时间戳
+                    nonceStr: nonceStr, // 卡券签名随机串
+                    signType: 'SHA1', // 签名方式，默认'SHA1'
+                    cardSign: cardSign, // 卡券签名
+                    success: function (res) {
+                        self.addingCards = false;
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user choose');
+                        console.log(cardList);
+                        $scope.$apply(function () {
+                            self.selCards = JSON.parse(cardList);
+                        });
+                    },
+                    cancel: function (res) {
+                        console.log("选择卡券 cancel");
+                        self.addingCards = false;
+                    },
+                    fail:function(res){
+                        console.log("选择卡券 fail");
+                        self.addingCards = false;
+                    }
+                });
+            }
+
+            self.addCards = function () {
+                console.log('addCards');
+                self.getApiTicket('addCards').then(function (apiTicket){
+                    self.wxAddCard(apiTicket);
+                })
+            }
+
+            self.getApiTicket = function (type) {
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    "appid": $scope.root.getParams('appid')
+                })
+
+                if(type == 'chooseCards') {
+                    self.choosingCards = true;
+                }
+                else if(type == 'addCards'){
+                    self.addingCards = true;
+                }
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('apiticket', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        var apiTicket = data.ticket;
+                        deferred.resolve(apiTicket);
+                    }
+                    else {
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    if(type == 'chooseCards') {
+                        self.choosingCards = false;
+                    }
+                    else if(type == 'addCards'){
+                        self.addingCards = false;
+                    }
+                });
+                return deferred.promise;
+            }
+
+            self.wxAddCard = function (apiTicket) {
+
+                self.addingCards = true;
+
+                var apiTicket = apiTicket;
+                var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
+                for (var i = 0; i < cards.length; i++) {
+                    var timestamp = parseInt(new Date().getTime()/1000);
+                    var nonce_str = util.randomString(32);
+
+                    // 生成签名
+                    var list = [timestamp, nonce_str, cards[i].cardId, apiTicket];
+                    list = list.sort().reduce(function(a,b){return  a + '' + b});
+                    var signature = SHA1(list);
+
+                    cards[i].cardExt = JSON.stringify({
+                        timestamp: timestamp,
+                        nonce_str: nonce_str,
+                        signature: signature
+                    });
+                }
+
+                wx.addCard({
+                    cardList: cards, // 需要添加的卡券列表
+                    success: function (res) {
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user add');
+                        console.log(cardList);
+                        self.gotCard = true;
+                        self.addingCards = false;
+                    },
+                    cancel: function (res) {
+                        console.log("领取卡券 cancel");
+                        self.addingCards = false;
+                    },
+                    fail:function(res){
+                        console.log("领取卡券 fail");
+                        self.addingCards = false;
+                    }
+                });
+            }
+        }
+    ])
+
+    // 卡券关注礼包
+    .controller('cardAttentionGiftBagController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1', 'PARAM',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1, PARAM) {
+            console.log('cardAttentionGiftBagController')    
+    
+            var self = this;
+            self.addingCards = false;
+
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                 self.init();
+                }
+                else {
+                 $timeout(function() {
+                     self.beforeInit();
+                 }, 50);
+                }
+            }
+            
+            self.init = function() {
+                self.addCards();
+                var project = $scope.root.getParams('projectInfo').project;
+                console && console.log(PARAM.customize);
+                self.roomPageURL = PARAM.customize[project].hotelsGuideUrl;
+            }
+
+            self.addCards = function () {
+                console.log('addCards');
+                self.addCardCancel = false;
+                self.getApiTicket('addCards').then(function (apiTicket){
+                    return self.getCardBatch(apiTicket);
+                }).then(function (rtn) {
+                    self.wxAddCard(rtn.apiTicket, rtn.cardList);
+                })
+            }
+
+            self.getCardBatch = function (apiTicket) {
+                var apiTicket = apiTicket;
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    keyword: {abstract : [PARAM.cardAttentionGiftKW]},
+                    action: "businessman"
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('card_batchget', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console && console.log(data);
+                        var cardList = data.card_list;
+                        var rtn = {};
+                        rtn.apiTicket = apiTicket;
+                        rtn.cardList = cardList;
+                        deferred.resolve(rtn);
+                    }
+                    else {
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        console && console.log(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    self.addCardFail = true;
+                    self.addingCards = false;
+                    console && console.log('getCardBatch 连接服务器出错');
+                }).finally(function(value) {
+                    
+                });
+                return deferred.promise;
+            }
+
+            // self.getCardBatch = function (apiTicket) {
+            //     var apiTicket = apiTicket;
+            //     var deferred = $q.defer();
+            //     var data = JSON.stringify({
+            //       "offset": 0,
+            //       "count": 50, 
+            //       "status_list": ["CARD_STATUS_DISPATCH"]
+            //     })
+            //     self.addingCards =  true;
+            //     $http({
+            //         method: 'POST',
+            //         url: 'https://api.weixin.qq.com/card/batchget?access_token=' + 
+            //               $scope.root.getParams('authorizer_access_token'),
+            //         data: data
+            //     }).then(function successCallback(response) {
+            //         var data = response.data;
+            //         if (data.errcode != 0) {
+            //             console && console.log(data);
+            //             var cardList = data.card_id_list;
+            //             var rtn = {};
+            //             rtn.apiTicket = apiTicket;
+            //             rtn.cardList = cardList;
+            //             deferred.resolve(rtn);
+            //         }
+            //         else {
+            //             alert(data.errcode + ' ' + data.errmsg);
+            //             deferred.reject();
+            //         }
+            //     }, function errorCallback(response) {
+            //         alert('连接服务器出错');
+            //     }).finally(function(value) {
+            //         self.addingCards = false;
+            //     });
+            //     return deferred.promise;
+            // }
+
+            self.getApiTicket = function (type) {
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    "appid": $scope.root.getParams('appid')
+                })
+
+                if(type == 'addCards'){
+                    self.addingCards = true;
+                }
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('apiticket', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        var apiTicket = data.ticket;
+                        deferred.resolve(apiTicket);
+                    }
+                    else {
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        console && console.log(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    if(type == 'addCards'){
+                        self.addingCards = false;
+                    }
+                    self.addCardFail = true;
+                    console && console.log('获取api_ticket连接服务器出错');
+                }).finally(function(value) {
+                    
+                });
+                return deferred.promise;
+            }
+
+            self.wxAddCard = function (apiTicket, cardList) {
+
+                self.addingCards = true;
+
+                var apiTicket = apiTicket;
+                var cards = [];
+                for(var i = 0; i < cardList.length; i++) {
+                    cards.push({cardId: cardList[i].card_id});
+                }
+                // var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
+                for (var i = 0; i < cards.length; i++) {
+                    var timestamp = parseInt(new Date().getTime()/1000);
+                    var nonce_str = util.randomString(32);
+
+                    // 生成签名
+                    var list = [timestamp, nonce_str, cards[i].cardId, apiTicket];
+                    list = list.sort().reduce(function(a,b){return  a + '' + b});
+                    var signature = SHA1(list);
+
+                    cards[i].cardExt = JSON.stringify({
+                        timestamp: timestamp,
+                        nonce_str: nonce_str,
+                        signature: signature
+                    });
+                }
+
+                var cardList = [];
+
+
+                wx.addCard({
+                    cardList: cards, // 需要添加的卡券列表
+                    success: function (res) {
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user add cards');
+                        console.log(cardList);
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.gotCard = true;
+                        });
+                    },
+                    cancel: function (res) {
+                        console.log("领取卡券 cancel");
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardCancel = true;
+                        })
+                    },
+                    fail:function(res){
+                        console.log("领取卡券 fail");
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardFail = true;
+                        })
+                    }
+                });
+            }
+        }
+    ])   
 })();
