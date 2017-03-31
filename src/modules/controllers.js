@@ -28,6 +28,11 @@
                 var appid = qParts.appid;
                 var state = qParts.state;
 
+                // 判断是否是缓存同一个项目的clear_session, 如果不是：清空缓存中的clear_session
+                if (self.getParams('appid') && (self.getParams('appid') != appid)) {
+                    self.setParams('clear_session', '');
+                }
+
                 self.setParams('appid', appid);
                 self.setParams('state', state);
 
@@ -36,7 +41,7 @@
                  * 获取项目及会员信息 
                  * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
                  */
-                if(self.getParams('clear_session')) {
+                if (self.getParams('clear_session')) {
                     self._readystate = false;
                     self.WXConfigJSSDK();
                 }
@@ -71,7 +76,6 @@
             }
 
             self.buildsession = function(code, appid) {
-                BACKEND_CONFIG.test&&console.log('buildsession');
                 $ionicLoading.show({
                   template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
                 });
