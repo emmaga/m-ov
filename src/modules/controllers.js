@@ -179,7 +179,7 @@
                             });
                         });
                         
-                    } else if (data.data.rescode == '301') {
+                    } else if (data.data.rescode == '401') {
                         self.buildsession(self.getParams('code'), self.getParams('appid'));
                     } else {
                         alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
