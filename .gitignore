@@ -22,3 +22,4 @@ dist/style/app.min.css
 node_modules
 
 .idea/*
+.idea/workspace.xml
