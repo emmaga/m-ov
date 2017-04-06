@@ -20,3 +20,8 @@ dist/style/app.min.css
 
 
 node_modules
+
+*.xml
+
+.idea/*
+.idea/workspace.xml
