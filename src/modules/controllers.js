@@ -3121,6 +3121,7 @@
                     },
                     cancel: function (res) {
                         console.log("领取会员卡 cancel");
+                        alert('cancel啦');
                         $scope.$apply(function () {
                             self.addingCards = false;
                             self.addCardCancel = true;
