@@ -2983,7 +2983,6 @@
             
             self.init = function() {
                 self.addCards();
-                var project = $scope.root.getParams('projectInfo').project;
             }
 
             self.addCards = function () {
