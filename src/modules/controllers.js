@@ -2859,42 +2859,6 @@
                 return deferred.promise;
             }
 
-            // self.getCardBatch = function (apiTicket) {
-            //     var apiTicket = apiTicket;
-            //     var deferred = $q.defer();
-            //     var data = JSON.stringify({
-            //       "offset": 0,
-            //       "count": 50, 
-            //       "status_list": ["CARD_STATUS_DISPATCH"]
-            //     })
-            //     self.addingCards =  true;
-            //     $http({
-            //         method: 'POST',
-            //         url: 'https://api.weixin.qq.com/card/batchget?access_token=' + 
-            //               $scope.root.getParams('authorizer_access_token'),
-            //         data: data
-            //     }).then(function successCallback(response) {
-            //         var data = response.data;
-            //         if (data.errcode != 0) {
-            //             console && console.log(data);
-            //             var cardList = data.card_id_list;
-            //             var rtn = {};
-            //             rtn.apiTicket = apiTicket;
-            //             rtn.cardList = cardList;
-            //             deferred.resolve(rtn);
-            //         }
-            //         else {
-            //             alert(data.errcode + ' ' + data.errmsg);
-            //             deferred.reject();
-            //         }
-            //     }, function errorCallback(response) {
-            //         alert('连接服务器出错');
-            //     }).finally(function(value) {
-            //         self.addingCards = false;
-            //     });
-            //     return deferred.promise;
-            // }
-
             self.getApiTicket = function (type) {
                 var deferred = $q.defer();
                 var data = JSON.stringify({
@@ -2991,5 +2955,182 @@
                 });
             }
         }
-    ])   
+    ])
+
+    // 微信会员页
+    .controller('wxMemberCardController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1', 'PARAM',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1, PARAM) {
+            console.log('wxMemberCardController')    
+    
+            var self = this;
+
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                 self.init();
+                }
+                else {
+                 $timeout(function() {
+                     self.beforeInit();
+                 }, 50);
+                }
+            }
+            
+            self.init = function() {
+                self.addCards();
+                var project = $scope.root.getParams('projectInfo').project;
+            }
+
+            self.addCards = function () {
+                console.log('addCards');
+                self.addCardCancel = false;
+                self.getApiTicket('addCards').then(function (apiTicket){
+                    return self.getCardBatch(apiTicket);
+                }).then(function (rtn) {
+                    self.wxAddCard(rtn.apiTicket, rtn.cardList);
+                })
+            }
+
+            self.getCardBatch = function (apiTicket) {
+                var apiTicket = apiTicket;
+                var deferred = $q.defer();
+                // var data = JSON.stringify({
+                //     clear_session: $scope.root.getParams('clear_session'),
+                //     keyword: {abstract : [PARAM.cardAttentionGiftKW]},
+                //     action: "businessman"
+                // })
+                // self.addingCards =  true;
+                // $http({
+                //     method: 'POST',
+                //     url: backendUrl('card_batchget', ''),
+                //     data: data
+                // }).then(function successCallback(response) {
+                //     var data = response.data;
+                //     if (data.rescode == '200') {
+                //         console && console.log(data);
+                //         var cardList = data.card_list;
+                //         var rtn = {};
+                //         rtn.apiTicket = apiTicket;
+                //         rtn.cardList = cardList;
+                //         deferred.resolve(rtn);
+                //     }
+                //     else {
+                //         self.addCardFail = true;
+                //         self.addingCards = false;
+                //         console && console.log(data.rescode + ' ' + data.errInfo);
+                //         deferred.reject();
+                //     }
+                // }, function errorCallback(response) {
+                //     self.addCardFail = true;
+                //     self.addingCards = false;
+                //     console && console.log('getCardBatch 连接服务器出错');
+                // }).finally(function(value) {
+                    
+                // });
+                
+                var rtn = {};
+                rtn.apiTicket = apiTicket;
+                rtn.cardList = [{card_id: 'pFHqYxJcSG2jRiYXbZ2pQA7eNPNA'}];
+                deferred.resolve(rtn);
+                return deferred.promise;
+            }
+
+            self.getApiTicket = function (type) {
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    "appid": $scope.root.getParams('appid')
+                })
+
+                if(type == 'addCards'){
+                    self.addingCards = true;
+                }
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('apiticket', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        var apiTicket = data.ticket;
+                        deferred.resolve(apiTicket);
+                    }
+                    else {
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        console && console.log(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    if(type == 'addCards'){
+                        self.addingCards = false;
+                    }
+                    self.addCardFail = true;
+                    console && console.log('获取api_ticket连接服务器出错');
+                }).finally(function(value) {
+                    
+                });
+                return deferred.promise;
+            }
+
+            self.wxAddCard = function (apiTicket, cardList) {
+
+                self.addingCards = true;
+
+                var apiTicket = apiTicket;
+                var cards = [];
+                for(var i = 0; i < cardList.length; i++) {
+                    cards.push({cardId: cardList[i].card_id});
+                }
+                // var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
+                for (var i = 0; i < cards.length; i++) {
+                    var timestamp = parseInt(new Date().getTime()/1000);
+                    var nonce_str = util.randomString(32);
+
+                    // 生成签名
+                    var list = [timestamp, nonce_str, cards[i].cardId, apiTicket];
+                    list = list.sort().reduce(function(a,b){return  a + '' + b});
+                    var signature = SHA1(list);
+
+                    cards[i].cardExt = JSON.stringify({
+                        timestamp: timestamp,
+                        nonce_str: nonce_str,
+                        signature: signature
+                    });
+                }
+
+                var cardList = [];
+                console && console.log(cards);
+
+                wx.addCard({
+                    cardList: cards, // 需要添加的卡券列表
+                    success: function (res) {
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user add cards');
+                        console.log(cardList);
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.gotCard = true;
+                        });
+                    },
+                    cancel: function (res) {
+                        console.log("领取会员卡 cancel");
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardCancel = true;
+                        });
+                    },
+                    fail:function(res){
+                        console.log("领取会员卡 fail");
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardFail = true;
+                        })
+                    }
+                });
+            }
+        }
+    ])
+    
 })();

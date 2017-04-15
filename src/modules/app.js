@@ -74,7 +74,6 @@
         templateUrl: 'pages/shopProductDetail.html'
       })
       .state('shopCart', {
-
         url: '/shopCart',
         templateUrl: 'pages/shopCart.html'
       })
@@ -89,6 +88,10 @@
       .state('cardGift', {
         url: '/cardGift',
         templateUrl: 'pages/cardGift.html'
+      })
+      .state('wxMemberCard', {
+        url: '/wxMemberCard',
+        templateUrl: 'pages/wxMemberCard.html'
       })
   }])
 
