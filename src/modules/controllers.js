@@ -447,6 +447,9 @@
                 self.stayDays = util.countDay(self.checkIn, self.checkOut);
                 // 延时半秒隐藏
                 $timeout(function() { self.showDP(false); }, 500);
+
+                // 重新获取roomlist
+                self.searchRoomList();
             };
             // 可以预订 才跳转
             self.nextState = function(roomId, checkIn, checkOut, AvailableNumList, addPriceId) {
@@ -509,6 +512,7 @@
                     "bookEndDate": $filter('date')(self.checkOut-0,'yyyy-MM-dd') 
                 };
                 data = JSON.stringify(data);
+                self.rooms = {};
 
                 $http({
                     method: $filter('ajaxMethod')(),
@@ -530,6 +534,7 @@
                 }, function errorCallback(data, status, headers, config) {
                     self.showLoadingBool.searchHotelInfoBool = true;
                     loadingService(self.showLoadingBool);
+                    alert('连接服务器出错');
                 });
             }
             // 检查是否有房间，有则返回true

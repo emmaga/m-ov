@@ -103,9 +103,14 @@
         </div>
         <!-- 联系人 -->
         <div class="item item-input">
+
             <div class="input-label">{{'contackName'|translate}}:</div>
-            <input type="text" ng-model="roomInfo.member.realName" required placeholder="{{'required'|translate}}">
+            
+            <input type="text" ng-if="roomInfo.room.RoomFlag != 1" ng-model="roomInfo.member.realName" required placeholder="{{'required'|translate}}">
+            <input type="text" ng-if="roomInfo.room.RoomFlag == 1" ng-model="roomInfo.member.realName" required placeholder="请填写一位游客的真实姓名">
+
         </div>
+
         <!-- <button ng-click="roomInfo.getAuthCode()" ng-disabled="roomInfo.countAbility"><span ng-show="roomInfo.showTip">免费获取验证码</span> <span ng-show="!roomInfo.showTip">{{roomInfo.countSeconds}}s 后重新发送</span>  </button>
         <label class="item item-input">
           <span class="input-label" ng-model="roomInfo.authCode">验证码</span>
@@ -121,7 +126,7 @@
         <!-- 身份证号 -->
         <div ng-if="roomInfo.room.RoomFlag == 1" class="item item-input">
             <div class="input-label">身份证:</div>
-            <input type="text" pattern="(^\d{15}$)|(^\d{17}([0-9]|X)$)" ng-model="roomInfo.IDCard" required placeholder="{{'required'|translate}}">
+            <input type="text" pattern="(^\d{15}$)|(^\d{17}([0-9]|X)$)" ng-model="roomInfo.IDCard" required placeholder="请填写同一位游客的身份证号">
         </div>        
 
         <!-- 分割块 -->
