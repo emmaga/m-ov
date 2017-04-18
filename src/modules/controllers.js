@@ -2480,7 +2480,7 @@
                         var s = self.detail.Status;
                         self.showPayBtn = (s == 'WAITPAY');
                         self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');
-                        console.log(self.detail)
+                        self.showConfirm = (s == 'DELIVERING');
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     }, function errorCallback(data, status, headers, config) {
@@ -2545,6 +2545,48 @@
                 .finally(function(value){
                   $ionicLoading.hide();
                   document.getElementById('payBtn').disabled = false;
+                });
+            }
+
+            /*
+            ** 确认收货
+            */
+            self.confirmReceipt = function () {
+                var confirmReceipt = confirm('确认收货？');
+                if ( !confirmReceipt ) {
+                    return;
+                }
+
+                document.getElementById('confirmReceiptBtn').disabled = true;        // 按钮变为不可点击，防止多次点击
+                $ionicLoading.show({
+                   template: '确认中...'
+                });
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "action": "guestOrderCompleted",
+                    "orderID": self.orderId-0
+                }
+                data = JSON.stringify(data);
+
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shoporder', ''),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    $state.reload('shopOrderInfo',{orderId: self.orderId-0});
+                  }
+                  else {
+                      alert($filter('translate')('serverError') + data.data.errInfo);
+                  }
+                }, function errorCallback(data, status, headers, config) {
+                    alert('连接服务器出错');
+                })
+                .finally(function(value){
+                  $ionicLoading.hide();
+                  document.getElementById('confirmReceiptBtn').disabled = false;
                 });
             }
 
