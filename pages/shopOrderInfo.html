@@ -58,14 +58,14 @@
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>
         <!--快递公司-->
-        <div class="row">
+        <div ng-if="shopOrderInfo.detail.ExpressCompany" class="row">
             <p class="col mod-no-padding">{{'expressCompany'|translate}}:</p>
-            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.ExpressCompany}} </p>
         </div>
         <!--快递单号-->
-        <div class="row">
+        <div ng-if="shopOrderInfo.detail.ExpressNum" class="row">
             <p class="col mod-no-padding">{{'expressNo'|translate}}:</p>
-            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.ExpressNum}} </p>
         </div>
         <!-- <div class="row">
             <p class="col mod-no-padding">{{'hotelName'|translate}}:</p>
@@ -80,8 +80,8 @@
         <!-- 去支付按钮 -->
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
         <!-- 确认收货按钮 -->
-        <button id="confirmReceiptBtn" ng-show="shopOrderInfo.showConfirm" ng-click="shopOrderInfo.confirmReceipt()" class="button button-block button-balanced">{{'confirmReceipt'|translate}}</button>
-        <!-- 继续购物按钮 
+        <button id="confirmReceiptBtn" ng-show="shopOrderInfo.delivering" ng-click="shopOrderInfo.confirmReceipt()" class="button button-block button-balanced">{{'confirmReceipt'|translate}}</button>
+        <!-- 继续购物按钮 有bug 没有标注商城标识
         <a class="button button-block button-positive" ui-sref="shopHome">{{'goOnShopping'|translate}}</a>
         -->
         <!-- 取消订单按钮 -->

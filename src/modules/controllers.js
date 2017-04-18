@@ -2480,7 +2480,7 @@
                         var s = self.detail.Status;
                         self.showPayBtn = (s == 'WAITPAY');
                         self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');
-                        self.showConfirm = (s == 'DELIVERING');
+                        self.delivering = (s == 'DELIVERING');
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     }, function errorCallback(data, status, headers, config) {
