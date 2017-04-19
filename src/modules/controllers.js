@@ -1991,13 +1991,12 @@
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                     var data = {
-                            "action": "getProductDetail",
-                            "appid": $scope.root.getParams('appid'),
-                            "clear_session": $scope.root.getParams('clear_session'),
-                            "openid": $scope.root.getParams('openid'),
-                            "lang": $translate.proposedLanguage() || $translate.use(),
-                            "productId": self.productId - 0
-
+                        "action": "getProductDetail",
+                        "appid": $scope.root.getParams('appid'),
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "openid": $scope.root.getParams('openid'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "productId": self.productId - 0
                     }
                     data = JSON.stringify(data);
                     $http({

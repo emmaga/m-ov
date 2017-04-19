@@ -16,7 +16,8 @@
                 <!-- 库存 -->
                 <p class="item-note">{{'stock'|translate}}{{sp.product.invetory}}</p>
                 <!-- 商品价格 -->
-                <h2 class="mod-card-price assertive"><small>￥ <i class="icon ion-ios-pricetag"></i> </small>{{sp.product.price | fenToYuan}} 积分 30</h2>
+                <h2 ng-if="sp.product.price.money.Enable" class="mod-card-price assertive"><small>￥</small>{{sp.product.price.money.price | fenToYuan}}</h2>
+                <h2 ng-if="sp.product.price.point.Enable" class="mod-card-price assertive"><small>积分换购</small>{{sp.product.price.point.point}}</h2>
             </div>
             <div class="item mod-no-border-bottom padding mod-has-footer">
                 <!-- 商品名称 -->
@@ -35,7 +36,14 @@
         </div>
         <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
             <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
-            <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">{{'buyNow'|translate}} 去兑换</a>
+            <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">
+                <ng-if ng-if="sp.product.price.money.Enable">
+                    {{'buyNow'|translate}}
+                </ng-if>
+                <ng-if ng-if="sp.product.price.point.Enable">
+                    去兑换
+                </ng-if>
+            </a>
         </div>
     </div>    
 </div>
