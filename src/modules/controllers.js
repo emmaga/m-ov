@@ -2141,7 +2141,14 @@
             var l = $scope.shopCartList;
             for (var i = 0; i < l.length; i++) {
                 // 商品不下架，商品库存不缺
-                l[i].checked = l[i].status&&(l[i].availableCount - l[i].count)>=0&&l[i].availableCount!=0;
+                // 商品支持目前配送方式
+                var _hasDeliveryWay = false;
+                if(self.hasEx) {
+                    _hasDeliveryWay = (l[i].deliveryType.indexOf('express') !== -1) ? true : false;
+                } else {
+                    _hasDeliveryWay = (l[i].deliveryType.indexOf('bySelf') !== -1) ? true : false;
+                }
+                l[i].checked = l[i].status&&(l[i].availableCount - l[i].count)>=0&&l[i].availableCount!=0 && _hasDeliveryWay;
             }
         }
 

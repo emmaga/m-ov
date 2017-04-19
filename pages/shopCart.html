@@ -27,12 +27,8 @@
         <div class="item item-input mod-short">
             <div class="input-label">{{'phoneNumber'|translate}}</div>
             <input type="text" pattern="[0-9]{11,}" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}(11位号码)">
-            <!--lh, fix my style-->
-            <!-- <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="shopCart.mobileRe.test(shopCart.address.mobile)">
-                <i class="icon ion-ios-checkmark"></i>
-            </div> -->
-            <!--lh, fix my style-->
         </div>
+        <!--需要配送？-->
         <ion-toggle ng-model="shopCartList.hasEx">{{'needDelivering'|translate}}?</ion-toggle>
         <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
             {{'placeOfTakingGoods'|translate}}&nbsp{{shopCart.hotelName}}
@@ -71,6 +67,8 @@
                 <h2>{{item.productName}}</h2>
                 <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
                 <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
+                <p ng-if="['express'].indexOf('express')!==-1">支持配送</p>
+                <p ng-if="item.deliveryType.indexOf('bySelf')!==-1">支持自提</p>
             </div>
             <div class="item item-input">
                 <div class="input-label">
