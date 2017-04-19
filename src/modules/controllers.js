@@ -2331,8 +2331,6 @@
 
         // 提交订单
         self.submitOrder = function() {
-            
-
 
             //开始生成订单
             $ionicLoading.show({
