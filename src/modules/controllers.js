@@ -2231,10 +2231,16 @@
 
         self.countTotalPrice = function() {
           self.totalPrice = 0;
+          self.totalScore = 0;
           if($scope.shopCartList) {
             for (var i = 0; i < $scope.shopCartList.length; i++) {
               if($scope.shopCartList[i].checked == true) {
-                self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
+                var _price = $scope.shopCartList[i].price;
+                if(_price.money.Enable) {
+                    self.totalPrice += (_price.money.price-0) * $scope.shopCartList[i].count;
+                } else if (_price.point.Enable) {
+                    self.totalScore += (_price.point.point-0) * $scope.shopCartList[i].count;
+                }
               }
             } 
           }

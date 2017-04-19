@@ -9,7 +9,7 @@
                 <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
             </button>
             <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 积分 30
+                {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 积分 {{shopCart.totalScore}}
                 <small ng-if="shopCartList.hasEx">
                     (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp)
                     
@@ -61,14 +61,16 @@
                 <div class="checkbox checkbox-assertive">
                     <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
                 </div>
-                ￥ 积分标签 {{item.price*item.count | fenToYuan}}
+                <ng-if ng-if="item.price.money.Enable">￥ {{(item.price.money.price-0)*item.count | fenToYuan}}</ng-if>
+                <ng-if ng-if="item.price.point.Enable">积分 {{item.price.point.point*item.count}}</ng-if>
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
             </div>
 
             <div class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
-                <p>{{'unitPrice'|translate}}:&nbsp￥{{item.price | fenToYuan}}</p>
+                <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
+                <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
             </div>
             <div class="item item-input">
                 <div class="input-label">
