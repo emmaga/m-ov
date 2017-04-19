@@ -54,8 +54,16 @@
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-start="item in shopCartList track by $index">
 
             <div class="item item-checkbox item-icon-right assertive">
-                <div class="checkbox checkbox-assertive">
+                <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') !== -1) || (!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') !== -1)" class="checkbox checkbox-assertive">
                     <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
+                </div>
+                <!--该商品不支持配送-->
+                <div ng-show="shopCartList.hasEx && item.deliveryType.indexOf('express') === -1">
+                    该商品不支持配送
+                </div>
+                <!--该商品不支持自提-->
+                <div ng-show="!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1">
+                    该商品不支持自提
                 </div>
                 <ng-if ng-if="item.price.money.Enable">￥ {{(item.price.money.price-0)*item.count | fenToYuan}}</ng-if>
                 <ng-if ng-if="item.price.point.Enable">积分 {{item.price.point.point*item.count}}</ng-if>
@@ -67,8 +75,10 @@
                 <h2>{{item.productName}}</h2>
                 <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
                 <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
-                <p ng-if="['express'].indexOf('express')!==-1">支持配送</p>
-                <p ng-if="item.deliveryType.indexOf('bySelf')!==-1">支持自提</p>
+                <p>
+                    <ng-if ng-if="item.deliveryType.indexOf('express')!==-1">支持配送 </ng-if>
+                    <ng-if ng-if="item.deliveryType.indexOf('bySelf')!==-1">支持自提</ng-if>
+                </p>
             </div>
             <div class="item item-input">
                 <div class="input-label">

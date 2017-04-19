@@ -2130,11 +2130,25 @@
 
           // watch shopCartList.hasEx
           $scope.$watch('shopCartList.hasEx', function() {
+            self.changeDeliveryWay();
             self.countTotalPrice();
           }, true);
 
           // 获取购物车信息
           self.loadSCInfo();
+        }
+
+        /*
+        ** 去除不支持该配送方式的已选商品
+        */
+        self.changeDeliveryWay = function () {
+            var l = $scope.shopCartList;
+            for (var i = 0; i < l.length; i++) {
+                if(l[i].checked) {
+                    l[i].checked = (self.hasEx && l[i].deliveryType.indexOf('express') !== -1) || 
+                    (!self.hasEx && l[i].deliveryType.indexOf('bySelf') !== -1);
+                }
+            }
         }
 
         self.selectAll = function() {
