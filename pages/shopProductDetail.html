@@ -32,6 +32,9 @@
                       <br>
                     </ng-repeat>
                 </p>
+                <!-- 配送方式 -->
+                <ng-if ng-if="sp.product.deliveryType.indexOf('express') !== -1">支持配送 </ng-if>
+                <ng-if ng-if="sp.product.deliveryType.indexOf('bySelf') !== -1">支持自提</ng-if>
             </div>
         </div>
         <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">

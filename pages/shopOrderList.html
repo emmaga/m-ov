@@ -14,6 +14,8 @@
                     <p>{{order.Status | orderStatus}}</p>
                 </span>
                 <h2>{{order.totalGoods}}{{'countsProducts'|translate}}<!--件商品--></h2>
+                <!-- 配送方式 -->
+                配送方式：{{order.DeliveryType == 'bySelf' ? '自提' : '快递'}}
                 <p ng-if="order.PayBy.indexOf('price') !== -1">{{'totalPrice'|translate}}: &nbsp￥{{order.totalPrice | fenToYuan}}</p>
                 <p ng-if="order.PayBy.indexOf('point') !== -1">积分: &nbsp{{order.totalPoint}}</p>
             </div>

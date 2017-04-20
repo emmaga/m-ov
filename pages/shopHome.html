@@ -54,6 +54,9 @@
                 <h2 class="">{{product.name}}</h2>
                 <!-- 商品介绍 -->
                 <small class="mod-card-text mod-limited">{{product.intro}}</small>
+                <!-- 配送方式 -->
+                <p ng-if="product.deliveryType.indexOf('express') !== -1">支持配送 </p>
+                <p ng-if="product.deliveryType.indexOf('bySelf') !== -1">支持自提</p>
             </div>
         </a>
 
