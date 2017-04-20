@@ -2145,8 +2145,8 @@
             var l = $scope.shopCartList;
             for (var i = 0; i < l.length; i++) {
                 if(l[i].checked) {
-                    l[i].checked = (self.hasEx && l[i].deliveryType.indexOf('express') !== -1) || 
-                    (!self.hasEx && l[i].deliveryType.indexOf('bySelf') !== -1);
+                    l[i].checked = ($scope.shopCartList.hasEx && l[i].deliveryType.indexOf('express') !== -1) || 
+                    (!$scope.shopCartList.hasEx && l[i].deliveryType.indexOf('bySelf') !== -1);
                 }
             }
         }
@@ -2157,7 +2157,7 @@
                 // 商品不下架，商品库存不缺
                 // 商品支持目前配送方式
                 var _hasDeliveryWay = false;
-                if(self.hasEx) {
+                if($scope.shopCartList.hasEx) {
                     _hasDeliveryWay = (l[i].deliveryType.indexOf('express') !== -1) ? true : false;
                 } else {
                     _hasDeliveryWay = (l[i].deliveryType.indexOf('bySelf') !== -1) ? true : false;
