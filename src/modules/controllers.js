@@ -2381,23 +2381,31 @@
               //订单生成失败
               else {
                   alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                  $ionicLoading.hide();
+                  // 支付按钮变为可点击
+                  document.getElementById('payBtn').disabled = false;
               }
+            }, function errorCallback(data, status, headers, config) {
+                alert('连接服务器出错');
+                $ionicLoading.hide();
+                // 支付按钮变为可点击
+                document.getElementById('payBtn').disabled = false;
             })
             //订单生成结束
             .finally(function(value){
-              $ionicLoading.hide();
-              // 支付按钮变为可点击
-              document.getElementById('payBtn').disabled = false;
+              // $ionicLoading.hide();
+              // // 支付按钮变为可点击
+              // document.getElementById('payBtn').disabled = false;
             });
         }
 
         // 支付
         self.pay = function(orderId) {
             self.orderId = orderId;
-            //获取支付参数
-            $ionicLoading.show({
-               template: '...'
-            });
+            // //获取支付参数
+            // $ionicLoading.show({
+            //    template: '...'
+            // });
             // 支付按钮变为不可点击
             document.getElementById('payBtn').disabled = true;
             var data = {
@@ -2454,9 +2462,12 @@
                     alert($filter('translate')('serverError') + data.data.errInfo);
                   }
               }
+            }, function errorCallback(data, status, headers, config) {
+                alert('连接服务器出错');
             })
             .finally(function(value){
               $ionicLoading.hide();
+              document.getElementById('payBtn').disabled = false;
             });
 
             
