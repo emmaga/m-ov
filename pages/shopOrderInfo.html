@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p ng-if="shopOrderInfo.detail.PayBy.indexOf('price') !== -1" class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
+                <p ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1" class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
                 <p ng-if="shopOrderInfo.detail.PayBy.indexOf('point') !== -1" class="col mod-no-padding col-75">积分 {{shopOrderInfo.detail.totalPoint}}</p>
             </div>
             <!-- <div class="row">
@@ -33,8 +33,8 @@
         <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
             <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
             <h2>{{product.name}}</h2>
-            <p ng-if="product.PayBy === 'price'">{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
-            <p ng-if="product.PayBy === 'point'">积分:&nbsp￥{{product.point}}</p>
+            <p ng-if="product.PayBy === 'money'">{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
+            <p ng-if="product.PayBy === 'point'">积分:&nbsp{{product.point}}</p>
             <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
         </a>
     </div>

@@ -1659,9 +1659,6 @@
                 }
             }
 
-
-            
-
             self.getHotelIdByLocation = function(x, y) {
                 var data = {
                     "action": "getNearestHotelID",
@@ -2348,6 +2345,7 @@
                     goodsList[goodsList_n].shopCartItemID = l[i].shopCartItemID;
                     goodsList[goodsList_n].shopGoodsID = l[i].productID;
                     goodsList[goodsList_n].goodsCount = l[i].count;
+                    goodsList[goodsList_n].payType = l[i].price.money.Enable ? 'money' : 'point';
                     goodsList_n++;
                 }
             }
@@ -2420,6 +2418,12 @@
             })
             .then(function successCallback(data, status, headers, config) {
               if(data.data.rescode == '200') {
+                // 如果支付为0元，只需支付积分，处理积分支付成功的情况
+                if(data.data.data.completed) {
+                    $state.go('shopOrderInfo', { orderId: self.orderId });
+                    return;
+                }
+
                 var wxP = data.data.data.JS_Pay_API;
                 wx.chooseWXPay({
                     timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
@@ -2440,7 +2444,15 @@
                 });
               }
               else {
-                  alert($filter('translate')('serverError') + data.data.errInfo);
+                  if(data.data.errInfo === 'get WX Member info failed.') {
+                    alert('您还未领取会员卡，赶紧去领取吧！');
+                  } 
+                  else if(data.data.errInfo === 'get WX Member info failed.') {
+                    alert('您的积分余额不足。');
+                  } 
+                  else {
+                    alert($filter('translate')('serverError') + data.data.errInfo);
+                  }
               }
             })
             .finally(function(value){
@@ -2503,7 +2515,7 @@
                         self.detail = data.data.data.detail;
                         var s = self.detail.Status;
                         self.showPayBtn = (s == 'WAITPAY');
-                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
                         self.delivering = (s == 'DELIVERING');
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
