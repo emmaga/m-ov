@@ -1,22 +1,31 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()">
 
-    <form class="light-bg list  padding mod-inset-forms" style="padding-top: 72px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
+    <form class="light-bg list  padding mod-inset-forms" style="padding-top: 40px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
 
-        <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)">
-            
-            <button id="payBtn" class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;">
+        <div class="bar bar-header mod-bg-transparent mod-fixed bar-assertive" style=" background-color: #e42112 !important">
+            <h1 class="title" style="color: white !important">购物车</h1>
+            <!-- <button id="payBtn" class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;"> -->
+            <button id="payBtn" class="button button-icon icon icon-right ion-ios-arrow-right" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit">
                 <!-- {{'payNow' | translate}} -->去结算
-                <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
+                <!-- <i class="icon " style="position: relative; top: 2px;"></i> -->
             </button>
-            <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 积分 {{shopCart.totalScore}}
+        </div>
+
+        <!-- <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)"> -->
+            
+            <h3 class="mod-font-light mod-text-indent" style="width:100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 
+                <ng-show ng-show="shopCart.totalScore!=0">
+                    + {{shopCart.totalScore}}
+                    <small>积分</small>
+                </ng-show>
                 <small ng-if="shopCartList.hasEx">
                     (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp)
                     
                 </small>
             </h3>
             <!-- <div class="mod-split-line mod-break-padding"></div> -->
-        </div>
+        <!-- </div> -->
 
 
 
@@ -76,8 +85,12 @@
                 <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
                 <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
                 <p>
-                    <ng-if ng-if="item.deliveryType.indexOf('express')!==-1">支持配送 </ng-if>
-                    <ng-if ng-if="item.deliveryType.indexOf('bySelf')!==-1">支持自提</ng-if>
+                    <small ng-if="item.deliveryType.indexOf('express')!==-1">
+                        <i class="icon ion-checkmark-circled"></i> 配送
+                    </small>
+                    <small ng-if="item.deliveryType.indexOf('bySelf')!==-1">
+                        <i class="icon ion-checkmark-circled"></i> 自提
+                    </small>
                 </p>
             </div>
             <div class="item item-input">
