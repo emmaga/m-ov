@@ -70,12 +70,11 @@
         templateUrl: 'pages/shopHome.html'
       })
       .state('shopProductDetail', {
-        url: '/shopProductDetail/?hotelId&productId&hotelName',
+        url: '/shopProductDetail/?hotelId&shopId&productId&hotelName',
         templateUrl: 'pages/shopProductDetail.html'
       })
       .state('shopCart', {
-
-        url: '/shopCart',
+        url: '/shopCart/?shopId',
         templateUrl: 'pages/shopCart.html'
       })
       .state('shopOrderInfo', {

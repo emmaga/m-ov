@@ -31,7 +31,7 @@
     <div class="item item-divider"></div>
     <div class="list padding mod-inset-forms mod-list">
         <div class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
-            <div ui-sref="shopProductDetail({hotelId: product.HotelID, productId: product.GoodsID, hotelName: product.HotelName})">
+            <div ui-sref="shopProductDetail({hotelId: product.HotelID, shopId:product.ShopID, productId: product.GoodsID, hotelName: product.HotelName})">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
                 <h2>{{product.name}}</h2>
                 <p ng-if="product.PayBy === 'money'">{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>

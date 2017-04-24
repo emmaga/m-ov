@@ -127,7 +127,13 @@
         <div ng-if="roomInfo.room.RoomFlag == 1" class="item item-input">
             <div class="input-label">身份证:</div>
             <input type="text" pattern="(^\d{15}$)|(^\d{17}([0-9]|X)$)" ng-model="roomInfo.IDCard" required placeholder="请填写同一位游客的身份证号">
-        </div>        
+        </div>
+        
+        <!-- 备注 -->
+        <div class="item item-input">
+            <div class="input-label">备注:</div>
+            <textarea type="text" ng-model="roomInfo.comment" ng-maxlength="256" placeholder="请填写预计到店时间，以及您的其他需求，我们将竭尽为您服务。"></textarea>
+        </div>
 
         <!-- 分割块 -->
         <div class="item item-divider">

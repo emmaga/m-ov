@@ -979,6 +979,7 @@
                         }
                     ],
                     "totalPrice":bookTotalPri,
+                    "Comment": self.comment,
                     "contactName": self.member.realName,
                     "Mobile": self.member.mobile + '',
                     "IDCardNumber": self.IDCard ? self.IDCard : "",
@@ -1789,11 +1790,11 @@
 
             self.gotoShopDetail = function(productId) {
                 angular.element(window).off('scroll'); 
-                $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId, hotelName:self.hotelName });
+                $state.go('shopProductDetail', { hotelId: self.hotelId, shopId: self.shopId, productId:productId, hotelName:self.hotelName });
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart');
+                $state.go('shopCart', {shopId: self.shopId});
             }
 
             self.loadShopCartInfo = function() {
@@ -1971,6 +1972,7 @@
             self.init = function() {
                 self.hotelId = $stateParams.hotelId;
                 self.hotelName = $stateParams.hotelName;
+                self.shopId = $stateParams.shopId;
                 self.productId = $stateParams.productId;
                 self.showLoadingBool = {};
                 self.buying = false;
@@ -1981,7 +1983,7 @@
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart');
+                $state.go('shopCart', {shopId: self.shopId});
             }
 
             self.search = function() {
@@ -2033,7 +2035,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "shopID": util.getParams('shopinfo').shopId
+                    "shopID": self.shopId
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -2057,7 +2059,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "shopID": util.getParams('shopinfo').shopId,
+                    "shopID": self.shopId,
                     "productId":self.productId
                 }
                 data = JSON.stringify(data);
@@ -2114,6 +2116,7 @@
           // 初始化
           self.hotelId = util.getParams('shopinfo').hotelId;
           self.hotelName = util.getParams('shopinfo').hotelName;
+          self.shopId = $stateParams.shopId;
           // self.postage = 1000; //邮费 todo
           self.postage = 0;
           $scope.shopCartList = new Array();
@@ -2277,7 +2280,7 @@
             "appid": $scope.root.getParams('appid'),
             "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
             "lang": $translate.proposedLanguage() || $translate.use(),
-            "shopID": util.getParams('shopinfo').shopId
+            "shopID": self.shopId
           }
           data = JSON.stringify(data);
           $http({
@@ -2357,7 +2360,7 @@
                 "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                 "lang": $translate.proposedLanguage() || $translate.use(),
                 "hotelId": self.hotelId,
-                "shopID": util.getParams('shopinfo').shopId,
+                "shopID": self.shopId,
                 "goodsList": goodsList,
                 "delivery":{
                     "deliverWay": deliverWay,
