@@ -1,6 +1,6 @@
 <div ng-controller="shopProductDetailController as sp" ng-init="sp.beforeInit()">
-    该商品已下架
-    <div>
+    <div ng-if="sp.product.status === 0">抱歉，该商品已下架</div>
+    <div ng-if="sp.product.status === 1">
         <div class="bar bar-header bar-light mod-fixed">
             <h1 class="title">{{'productDetail'|translate}}</h1>
             <button ng-click="sp.gotoShopCart()" class="button button-icon icon ion-ios-cart">{{sp.shopCartItemCount}}</button>

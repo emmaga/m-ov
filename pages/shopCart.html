@@ -79,7 +79,7 @@
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
             </div>
 
-            <div class="item item-thumbnail-left">
+            <div ui-sref="shopProductDetail({hotelId: shopCart.hotelId, productId: item.productID, hotelName: shopCart.hotelName})" class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
                 <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
