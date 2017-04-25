@@ -13,16 +13,19 @@
 
         <!-- <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)"> -->
             
+            <!-- 总价 -->
             <h3 class="mod-font-light mod-text-indent" style="width:100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                 {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 
                 <ng-show ng-show="shopCart.totalScore!=0">
                     <small>和</small>
-                     {{shopCart.totalScore}}
+                    <!-- 积分 -->
+                    &nbsp{{shopCart.totalScore}}
                     <small>积分</small>
                 </ng-show>
+                <!-- 邮费 -->
                 <small ng-if="shopCartList.hasEx">
-                    (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp)
-                    
+                    <!-- (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp) -->
+                    (免邮费)
                 </small>
             </h3>
             <!-- <div class="mod-split-line mod-break-padding"></div> -->
