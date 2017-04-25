@@ -5,23 +5,27 @@
         <div class="bar bar-header mod-bg-transparent mod-fixed bar-assertive" style=" background-color: #e42112 !important">
             <h1 class="title" style="color: white !important">购物车</h1>
             <!-- <button id="payBtn" class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;"> -->
-            <button id="payBtn" class="button button-icon icon icon-right ion-ios-arrow-right" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit">
+            <button id="payBtn" class="button button-icon icon" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit">
                 <!-- {{'payNow' | translate}} -->去结算
-                <!-- <i class="icon " style="position: relative; top: 2px;"></i> -->
+                <i class="icon  ion-ios-arrow-right" style="font-size: 14px;"></i>
             </button>
         </div>
 
         <!-- <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)"> -->
             
+            <!-- 总价 -->
             <h3 class="mod-font-light mod-text-indent" style="width:100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                 {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 
                 <ng-show ng-show="shopCart.totalScore!=0">
-                    + {{shopCart.totalScore}}
+                    <small>和</small>
+                    <!-- 积分 -->
+                    &nbsp{{shopCart.totalScore}}
                     <small>积分</small>
                 </ng-show>
+                <!-- 邮费 -->
                 <small ng-if="shopCartList.hasEx">
-                    (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp)
-                    
+                    <!-- (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp) -->
+                    (免邮费)
                 </small>
             </h3>
             <!-- <div class="mod-split-line mod-break-padding"></div> -->
@@ -63,20 +67,24 @@
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-start="item in shopCartList track by $index">
 
             <div class="item item-checkbox item-icon-right assertive">
+                <!-- CHECKBOX -->
                 <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') !== -1) || (!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') !== -1)" class="checkbox checkbox-assertive">
                     <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
                 </div>
-                <!--该商品不支持配送-->
-                <div ng-show="shopCartList.hasEx && item.deliveryType.indexOf('express') === -1">
-                    该商品不支持配送
-                </div>
-                <!--该商品不支持自提-->
-                <div ng-show="!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1">
-                    该商品不支持自提
-                </div>
+                <!-- CHECKBOX-disabled -->
+                <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') === -1 || !shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1)" class="checkbox" style="pointer-events: none"><input type="checkbox"></div>
+                <!-- 价格 -->
                 <ng-if ng-if="item.price.money.Enable">￥ {{(item.price.money.price-0)*item.count | fenToYuan}}</ng-if>
+
+                <!-- 积分 -->
                 <ng-if ng-if="item.price.point.Enable">积分 {{item.price.point.point*item.count}}</ng-if>
+                <!-- 删除商品 -->
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
+                
+                <!--该商品不支持配送-->
+                <small ng-show="shopCartList.hasEx && item.deliveryType.indexOf('express') === -1"><br>该商品不支持配送</small>
+                <!--该商品不支持自提-->
+                <small ng-show="!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1"><br>该商品不支持自提</small>
             </div>
 
             <div ui-sref="shopProductDetail({hotelId: shopCart.hotelId, shopId: shopCart.shopId, productId: item.productID, hotelName: shopCart.hotelName})" class="item item-thumbnail-left">

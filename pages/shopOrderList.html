@@ -10,14 +10,19 @@
             </div>
             <div class="item item-thumbnail-left mod-no-side-border" ng-click="sol.nextState(order.ID)" >
                 <div ng-repeat="goods in order.GoodsList track by $index" class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{goods.img}});"></div>
+                <!-- 订单状态 -->
                 <span class="item-note">
                     <p>{{order.Status | orderStatus}}</p>
                 </span>
                 <h2>{{order.totalGoods}}{{'countsProducts'|translate}}<!--件商品--></h2>
                 <!-- 配送方式 -->
-                配送方式：{{order.DeliveryType == 'bySelf' ? '自提' : '快递'}}
-                <p ng-if="order.PayBy.indexOf('money') !== -1">{{'totalPrice'|translate}}: &nbsp￥{{order.totalPrice | fenToYuan}}</p>
-                <p ng-if="order.PayBy.indexOf('point') !== -1">积分: &nbsp{{order.totalPoint}}</p>
+                <p>配送方式：{{order.DeliveryType == 'bySelf' ? '自提' : '快递'}}</p>
+                <p>
+                    {{'totalPrice'|translate}}: 
+                    <ng-if ng-if="order.PayBy.indexOf('money') !== -1">&nbsp￥{{order.totalPrice | fenToYuan}}</ng-if>
+                    <ng-if ng-if="order.PayBy.indexOf('money') !== -1 && order.PayBy.indexOf('point') !== -1">和</ng-if>
+                    <ng-if ng-if="order.PayBy.indexOf('point') !== -1">{{order.totalPoint}}积分</ng-if>
+                </p>
             </div>
         </div>
     </div>
