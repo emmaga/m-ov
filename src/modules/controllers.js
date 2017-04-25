@@ -3117,10 +3117,10 @@
                             self.addingCards = false;
                             self.gotCard = true;
                         });
+                        alert('已添加会员卡');
                     },
                     cancel: function (res) {
-                        console.log("领取会员卡 cancel");
-                        alert('cancel啦');
+                        WeixinJSBridge.call('closeWindow');
                         $scope.$apply(function () {
                             self.addingCards = false;
                             self.addCardCancel = true;
