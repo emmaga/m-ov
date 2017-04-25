@@ -89,6 +89,10 @@
         url: '/cardGift',
         templateUrl: 'pages/cardGift.html'
       })
+      .state('wxMemberCard', {
+        url: '/wxMemberCard',
+        templateUrl: 'pages/wxMemberCard.html'
+      })
   }])
 
   // 每次页面跳转完成时触发
