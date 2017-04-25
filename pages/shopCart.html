@@ -16,7 +16,8 @@
             <h3 class="mod-font-light mod-text-indent" style="width:100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                 {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 
                 <ng-show ng-show="shopCart.totalScore!=0">
-                    + {{shopCart.totalScore}}
+                    <small>和</small>
+                     {{shopCart.totalScore}}
                     <small>积分</small>
                 </ng-show>
                 <small ng-if="shopCartList.hasEx">
