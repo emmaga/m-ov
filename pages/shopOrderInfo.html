@@ -15,8 +15,13 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1" class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
-                <p ng-if="shopOrderInfo.detail.PayBy.indexOf('point') !== -1" class="col mod-no-padding col-75">积分 {{shopOrderInfo.detail.totalPoint}}</p>
+                <p class="col mod-no-padding col-75">
+                    <!-- 总价 -->
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</ng-if>
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1 && shopOrderInfo.detail.PayBy.indexOf('point') !== -1">和</ng-if>
+                    <!-- 花费积分 -->
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('point') !== -1"> {{shopOrderInfo.detail.totalPoint}}积分</ng-if>
+                </p>
             </div>
             <!-- <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
@@ -33,7 +38,7 @@
         <div class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
             <div ui-sref="shopProductDetail({hotelId: product.HotelID, shopId:product.ShopID, productId: product.GoodsID, hotelName: product.HotelName})">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
-                <h2>{{product.name}}</h2>
+                <h2>{{product.GoodsName}}</h2>
                 <p ng-if="product.PayBy === 'money'">{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
                 <p ng-if="product.PayBy === 'point'">积分:&nbsp{{product.point}}</p>
                 <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
@@ -80,7 +85,9 @@
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.shopName}}</p>
         </div> -->
     </div>
-    <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}">
+    <!-- <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}"> -->
+    <div class="item item-divider" style="min-height: calc(100vh - 410px)">
+
         <!-- 去支付按钮 -->
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
         <!-- 确认收货按钮 -->

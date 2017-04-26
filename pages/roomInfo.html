@@ -1,4 +1,9 @@
 <div ng-controller="roomInfoController as roomInfo" ng-init="roomInfo.beforeInit()">
+    <style type="text/css">
+        .input-label{
+            width: 26%;
+        }
+    </style>
     <!-- 头部 -->
     <div class="bar bar-header bar-light mod-fixed">
         <h1 class="title">{{roomInfo.room.RoomTypeName}}</h1>
@@ -96,7 +101,7 @@
         <!-- 游玩日期 -->
         <div ng-if="roomInfo.room.RoomFlag == 1" class="ng-binding item" style=" display: flex;  padding-top: 6px; padding-bottom: 5px;">
             <div class="input-label">游玩日期:</div>
-            <div style=" padding-top: 9px;">
+            <div style=" padding-top: 9px; padding-left: 8px;">
                 <input style="transform: scale(1.3); margin-right: 2px" name="visittime" ng-init="roomInfo.visitDate = roomInfo.checkIn" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkIn" > {{roomInfo.checkIn | date:'MM.dd'}} &nbsp;&nbsp;&nbsp;
                 <input style="transform: scale(1.3); margin-right: 2px" name="visittime" type="radio" ng-model="roomInfo.visitDate" ng-value="roomInfo.checkOut" > {{roomInfo.checkOut | date:'MM.dd'}}
             </div>
@@ -107,7 +112,7 @@
             <div class="input-label">{{'contackName'|translate}}:</div>
             
             <input type="text" ng-if="roomInfo.room.RoomFlag != 1" ng-model="roomInfo.member.realName" required placeholder="{{'required'|translate}}">
-            <input type="text" ng-if="roomInfo.room.RoomFlag == 1" ng-model="roomInfo.member.realName" required placeholder="请填写一位游客的真实姓名">
+            <input type="text" ng-if="roomInfo.room.RoomFlag == 1" ng-model="roomInfo.member.realName" required placeholder="请填写一位游客的真实姓名({{'required'|translate}})">
 
         </div>
 
@@ -120,19 +125,19 @@
         <!-- 手机号 -->
         <div class="item item-input">
             <div class="input-label">{{'phoneNumber'|translate}}:</div>
-            <input type="text" pattern="[0-9]{11,}" ng-model="roomInfo.member.mobile" required placeholder="{{'required'|translate}}(11位号码)">
+            <input type="text" pattern="[0-9]{11,}" ng-model="roomInfo.member.mobile" required placeholder="11位号码({{'required'|translate}})">
         </div>
 
         <!-- 身份证号 -->
         <div ng-if="roomInfo.room.RoomFlag == 1" class="item item-input">
             <div class="input-label">身份证:</div>
-            <input type="text" pattern="(^\d{15}$)|(^\d{17}([0-9]|X)$)" ng-model="roomInfo.IDCard" required placeholder="请填写同一位游客的身份证号">
+            <input type="text" pattern="(^\d{15}$)|(^\d{17}([0-9]|X)$)" ng-model="roomInfo.IDCard" required placeholder="请填写一位游客的身份证号({{'required'|translate}})">
         </div>
         
         <!-- 备注 -->
         <div class="item item-input">
             <div class="input-label">备注:</div>
-            <textarea type="text" ng-model="roomInfo.comment" ng-maxlength="256" placeholder="请填写预计到店时间，以及您的其他需求，我们将竭尽为您服务。" style="padding-right: 54px; height: 4em;"></textarea>
+            <textarea type="text" ng-model="roomInfo.comment" ng-maxlength="256" placeholder="可填写预计到店时间以及其他需求和偏好，我们将竭诚为您服务。" style="padding-right: 23px; height: 3.3em;"></textarea>
         </div>
 
         <!-- 分割块 -->

@@ -1,5 +1,9 @@
 <div ng-controller="shopProductDetailController as sp" ng-init="sp.beforeInit()">
-    <div ng-if="sp.product.status === 0 || sp.product.status===2">抱歉，该商品已下架</div>
+    <!-- 已下架提示 -->
+    <div ng-if="sp.product.status === 0 || sp.product.status===2" style="text-align: center; padding-top: 30%; opacity: 0.5">
+        <h1><i class="icon ion-sad-outline"></i></h1>
+        <h3>抱歉，该商品已下架</h3>
+    </div>
     <div ng-if="sp.product.status === 1">
         <div class="bar bar-header bar-light mod-fixed">
             <h1 class="title">{{'productDetail'|translate}}</h1>
@@ -51,7 +55,7 @@
                 </p>
             </div>
         </div>
-        <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
+        <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style="background: white">
             <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
             <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">
                 <ng-if ng-if="sp.product.price.money.Enable">

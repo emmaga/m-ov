@@ -85,8 +85,12 @@
                 <small ng-show="shopCartList.hasEx && item.deliveryType.indexOf('express') === -1"><br>该商品不支持配送</small>
                 <!--该商品不支持自提-->
                 <small ng-show="!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1"><br>该商品不支持自提</small>
-            </div>
+                <!-- 卖光 -->
+                <small ng-if="item.status!=0 && item.availableCount==0"><br>暂时无货</small>
+                <small ng-if="item.status!=0 && item.availableCount!=0 && (item.availableCount - item.count) < 0"><br>库存不足,请减少购买数量</small>
 
+            </div>
+            <!-- 单个商品信息 -->
             <div ui-sref="shopProductDetail({hotelId: shopCart.hotelId, shopId: shopCart.shopId, productId: item.productID, hotelName: shopCart.hotelName})" class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
@@ -103,8 +107,10 @@
             </div>
             <div class="item item-input">
                 <div class="input-label">
+                    <!-- 购买数量 -->
                     <div ng-if="(item.availableCount - item.count) >= 0">{{'productQuantity'|translate}}</div>
-                    <div ng-if="(item.availableCount - item.count) < 0" class="assertive">{{'exceedStock'|translate}}{{item.count - item.availableCount}}</div>
+                    <!-- 超过库存 -->
+                    <div ng-if="(item.availableCount - item.count) < 0" class="assertive">剩余库存{{item.availableCount}}</div>
                 </div>
                 <a class="button button-small button-light icon ion-ios-minus-empty" ng-class="{disabled:( item.count <= 1)}" ng-click="shopCart.minusOne($index)"></a>
                 <span class="mod-input-number">
@@ -113,13 +119,18 @@
                 <a class="button button-small button-light icon ion-ios-plus-empty" ng-class="{disabled:((item.availableCount - item.count) <= 0)}" ng-click="shopCart.plusOne($index)"></a>
             </div>
             <!-- <ion-toggle ng-model="item.dist">此商品需要配送？</ion-toggle> -->
-            <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0">
+
+            <!-- 卖光提示 -->
+            <!-- <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0" > -->
+            <div class="mod-cart-prod-disabled" ng-show="item.status==0" >
+
+                <!-- 删除商品 -->
                 <a class="icon ion-ios-trash dark" ng-click="shopCart.delete($index)" style="position: absolute; font-size: 24px; right: 0; color: white; float: right; margin: 10px 30px; z-index: 2;"></a>
                 <h2>
                     <i class="icon ion-heart-broken"></i>
                     <br>
                     <small ng-if="item.status==0">{{'goodsOffTheShelf'|translate}}</small>
-                    <small ng-if="item.status!=0 && item.availableCount==0">{{'goodsSoldOut'|translate}}</small>
+                    
                 </h2>
             </div>
         </div>
