@@ -80,7 +80,9 @@
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.shopName}}</p>
         </div> -->
     </div>
-    <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}">
+    <!-- <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}"> -->
+    <div class="item item-divider" style="min-height: calc(100vh - 420px)">
+
         <!-- 去支付按钮 -->
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
         <!-- 确认收货按钮 -->

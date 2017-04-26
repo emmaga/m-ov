@@ -77,13 +77,15 @@
             显示更多商品
             <i class="ion-android-arrow-dropdown"></i>
         </a> -->
+        <!-- 没有更多 -->
         <p class="mod-note-bottomline" ng-show="shopHome.productTotal<=shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
             <i class="icon ion-android-happy"></i>
             {{'noMore'|translate}}
         </p>
+        <!-- 查无结果 -->
         <p class="mod-note-emptylist" ng-show="shopHome.noResults">
             <i class="icon ion-android-alert"></i><br>
-            {{'noResults'|translate}}
+            该分类暂无商品
         </p>
 
     </div>
