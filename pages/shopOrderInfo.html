@@ -15,8 +15,13 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1" class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
-                <p ng-if="shopOrderInfo.detail.PayBy.indexOf('point') !== -1" class="col mod-no-padding col-75">积分 {{shopOrderInfo.detail.totalPoint}}</p>
+                <p class="col mod-no-padding col-75">
+                    <!-- 总价 -->
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</ng-if>
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1 && shopOrderInfo.detail.PayBy.indexOf('point') !== -1">和</ng-if>
+                    <!-- 花费积分 -->
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('point') !== -1"> {{shopOrderInfo.detail.totalPoint}}积分</ng-if>
+                </p>
             </div>
             <!-- <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
@@ -81,7 +86,7 @@
         </div> -->
     </div>
     <!-- <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}"> -->
-    <div class="item item-divider" style="min-height: calc(100vh - 420px)">
+    <div class="item item-divider" style="min-height: calc(100vh - 410px)">
 
         <!-- 去支付按钮 -->
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
