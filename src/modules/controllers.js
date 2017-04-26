@@ -1666,7 +1666,8 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "LocationX": x,
-                    "LocationY": y
+                    "LocationY": y,
+                    "ShopType": util.getParams('state')
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1751,7 +1752,8 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
-                    "lang": $translate.proposedLanguage() || $translate.use()
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "ShopType": util.getParams('state')
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -3090,44 +3092,37 @@
             self.getCardBatch = function (apiTicket) {
                 var apiTicket = apiTicket;
                 var deferred = $q.defer();
-                // var data = JSON.stringify({
-                //     clear_session: $scope.root.getParams('clear_session'),
-                //     keyword: {abstract : [PARAM.cardAttentionGiftKW]},
-                //     action: "businessman"
-                // })
-                // self.addingCards =  true;
-                // $http({
-                //     method: 'POST',
-                //     url: backendUrl('card_batchget', ''),
-                //     data: data
-                // }).then(function successCallback(response) {
-                //     var data = response.data;
-                //     if (data.rescode == '200') {
-                //         console && console.log(data);
-                //         var cardList = data.card_list;
-                //         var rtn = {};
-                //         rtn.apiTicket = apiTicket;
-                //         rtn.cardList = cardList;
-                //         deferred.resolve(rtn);
-                //     }
-                //     else {
-                //         self.addCardFail = true;
-                //         self.addingCards = false;
-                //         console && console.log(data.rescode + ' ' + data.errInfo);
-                //         deferred.reject();
-                //     }
-                // }, function errorCallback(response) {
-                //     self.addCardFail = true;
-                //     self.addingCards = false;
-                //     console && console.log('getCardBatch 连接服务器出错');
-                // }).finally(function(value) {
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    action: "getCardID"
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('membercard', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        var cardList = data.card_list;
+                        var rtn = {};
+                        rtn.apiTicket = apiTicket;
+                        rtn.cardList = [{card_id: data.data.ID}];
+                        deferred.resolve(rtn);
+                    }
+                    else {
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    self.addCardFail = true;
+                    self.addingCards = false;
+                    alert('连接服务器出错');
+                }).finally(function(value) {
                     
-                // });
-                
-                var rtn = {};
-                rtn.apiTicket = apiTicket;
-                rtn.cardList = [{card_id: 'pFHqYxJcSG2jRiYXbZ2pQA7eNPNA'}];
-                deferred.resolve(rtn);
+                });
                 return deferred.promise;
             }
 
