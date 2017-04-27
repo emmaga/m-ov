@@ -2529,9 +2529,10 @@
                         console.log(data)
                         self.detail = data.data.data.detail;
                         var s = self.detail.Status;
+                        var d = self.detail.deliverWay;
                         self.showPayBtn = (s == 'WAITPAY');
                         self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
-                        self.delivering = (s == 'DELIVERING');
+                        self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     }, function errorCallback(data, status, headers, config) {

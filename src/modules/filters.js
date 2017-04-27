@@ -40,7 +40,12 @@
              break;
 
          case 'ACCEPT':
-             flag = $filter('translate')('ACCEPT');
+             if(deliverWay === 'bySelf') {
+                flag = "请前往酒店自提";
+             } 
+             else {
+                flag = $filter('translate')('ACCEPT');
+             }
              break;
          case 'DELIVERING':
              if(deliverWay === 'bySelf') {
