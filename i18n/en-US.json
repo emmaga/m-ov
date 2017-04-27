@@ -15,6 +15,7 @@
   "checkIn": "check in",
   "checkInDate": "check in time",
   "checkOut": "check out",
+  "confirmReceipt": "confirm receipt",
   "countsProducts": "products",
 
   "days": "a day",
@@ -24,6 +25,8 @@
   "emptyCart":"empty cart",
   "exceedStock": "exceed stock",
   "expressFeeIncluded": "express fee included",
+  "expressCompany": "express company",
+  "expressNo": "express number",
 
   "fillInOrder": "fill out",
   "Friday": "Fr",
@@ -87,7 +90,7 @@
   "Sunday": "Su",
 
   "total": "total",
-  "totalPrice": "total price",
+  "totalPrice": "total",
   "Thursday": "Th",
   "Tuesday": "Tu",
 

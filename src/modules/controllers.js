@@ -979,6 +979,7 @@
                         }
                     ],
                     "totalPrice":bookTotalPri,
+                    "Comment": self.comment,
                     "contactName": self.member.realName,
                     "Mobile": self.member.mobile + '',
                     "IDCardNumber": self.IDCard ? self.IDCard : "",
@@ -1659,16 +1660,14 @@
                 }
             }
 
-
-            
-
             self.getHotelIdByLocation = function(x, y) {
                 var data = {
                     "action": "getNearestHotelID",
                     "clear_session": $scope.root.getParams('clear_session'),
                     "lang": $translate.proposedLanguage() || $translate.use(),
                     "LocationX": x,
-                    "LocationY": y
+                    "LocationY": y,
+                    "ShopType": util.getParams('state')
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1753,7 +1752,8 @@
                     "clear_session": $scope.root.getParams('clear_session'),
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
-                    "lang": $translate.proposedLanguage() || $translate.use()
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "ShopType": util.getParams('state')
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -1792,11 +1792,11 @@
 
             self.gotoShopDetail = function(productId) {
                 angular.element(window).off('scroll'); 
-                $state.go('shopProductDetail', { hotelId: self.hotelId, productId:productId, hotelName:self.hotelName });
+                $state.go('shopProductDetail', { hotelId: self.hotelId, shopId: self.shopId, productId:productId, hotelName:self.hotelName });
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart');
+                $state.go('shopCart', {shopId: self.shopId});
             }
 
             self.loadShopCartInfo = function() {
@@ -1974,6 +1974,7 @@
             self.init = function() {
                 self.hotelId = $stateParams.hotelId;
                 self.hotelName = $stateParams.hotelName;
+                self.shopId = $stateParams.shopId;
                 self.productId = $stateParams.productId;
                 self.showLoadingBool = {};
                 self.buying = false;
@@ -1984,20 +1985,19 @@
             }
 
             self.gotoShopCart = function() {
-                $state.go('shopCart');
+                $state.go('shopCart', {shopId: self.shopId});
             }
 
             self.search = function() {
                 self.showLoadingBool.searchBool = false;
                 loadingService(self.showLoadingBool);
                     var data = {
-                            "action": "getProductDetail",
-                            "appid": $scope.root.getParams('appid'),
-                            "clear_session": $scope.root.getParams('clear_session'),
-                            "openid": $scope.root.getParams('openid'),
-                            "lang": $translate.proposedLanguage() || $translate.use(),
-                            "productId": self.productId - 0
-
+                        "action": "getProductDetail",
+                        "appid": $scope.root.getParams('appid'),
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "openid": $scope.root.getParams('openid'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "productId": self.productId - 0
                     }
                     data = JSON.stringify(data);
                     $http({
@@ -2037,7 +2037,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "shopID": util.getParams('shopinfo').shopId
+                    "shopID": self.shopId
                 }
                 data = JSON.stringify(data);
                 $http({
@@ -2061,7 +2061,7 @@
                     "appid": $scope.root.getParams('appid'),
                     "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                     "lang": $translate.proposedLanguage() || $translate.use(),
-                    "shopID": util.getParams('shopinfo').shopId,
+                    "shopID": self.shopId,
                     "productId":self.productId
                 }
                 data = JSON.stringify(data);
@@ -2118,6 +2118,7 @@
           // 初始化
           self.hotelId = util.getParams('shopinfo').hotelId;
           self.hotelName = util.getParams('shopinfo').hotelName;
+          self.shopId = $stateParams.shopId;
           // self.postage = 1000; //邮费 todo
           self.postage = 0;
           $scope.shopCartList = new Array();
@@ -2131,6 +2132,7 @@
 
           // watch shopCartList.hasEx
           $scope.$watch('shopCartList.hasEx', function() {
+            self.changeDeliveryWay();
             self.countTotalPrice();
           }, true);
 
@@ -2138,11 +2140,31 @@
           self.loadSCInfo();
         }
 
+        /*
+        ** 去除不支持该配送方式的已选商品
+        */
+        self.changeDeliveryWay = function () {
+            var l = $scope.shopCartList;
+            for (var i = 0; i < l.length; i++) {
+                if(l[i].checked) {
+                    l[i].checked = ($scope.shopCartList.hasEx && l[i].deliveryType.indexOf('express') !== -1) || 
+                    (!$scope.shopCartList.hasEx && l[i].deliveryType.indexOf('bySelf') !== -1);
+                }
+            }
+        }
+
         self.selectAll = function() {
             var l = $scope.shopCartList;
             for (var i = 0; i < l.length; i++) {
                 // 商品不下架，商品库存不缺
-                l[i].checked = l[i].status&&(l[i].availableCount - l[i].count)>=0&&l[i].availableCount!=0;
+                // 商品支持目前配送方式
+                var _hasDeliveryWay = false;
+                if($scope.shopCartList.hasEx) {
+                    _hasDeliveryWay = (l[i].deliveryType.indexOf('express') !== -1) ? true : false;
+                } else {
+                    _hasDeliveryWay = (l[i].deliveryType.indexOf('bySelf') !== -1) ? true : false;
+                }
+                l[i].checked = l[i].status&&(l[i].availableCount - l[i].count)>=0&&l[i].availableCount!=0 && _hasDeliveryWay;
             }
         }
 
@@ -2232,10 +2254,16 @@
 
         self.countTotalPrice = function() {
           self.totalPrice = 0;
+          self.totalScore = 0;
           if($scope.shopCartList) {
             for (var i = 0; i < $scope.shopCartList.length; i++) {
               if($scope.shopCartList[i].checked == true) {
-                self.totalPrice += $scope.shopCartList[i].price * $scope.shopCartList[i].count;
+                var _price = $scope.shopCartList[i].price;
+                if(_price.money.Enable) {
+                    self.totalPrice += (_price.money.price-0) * $scope.shopCartList[i].count;
+                } else if (_price.point.Enable) {
+                    self.totalScore += (_price.point.point-0) * $scope.shopCartList[i].count;
+                }
               }
             } 
           }
@@ -2254,7 +2282,7 @@
             "appid": $scope.root.getParams('appid'),
             "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
             "lang": $translate.proposedLanguage() || $translate.use(),
-            "shopID": util.getParams('shopinfo').shopId
+            "shopID": self.shopId
           }
           data = JSON.stringify(data);
           $http({
@@ -2305,8 +2333,6 @@
 
         // 提交订单
         self.submitOrder = function() {
-            
-
 
             //开始生成订单
             $ionicLoading.show({
@@ -2324,6 +2350,7 @@
                     goodsList[goodsList_n].shopCartItemID = l[i].shopCartItemID;
                     goodsList[goodsList_n].shopGoodsID = l[i].productID;
                     goodsList[goodsList_n].goodsCount = l[i].count;
+                    goodsList[goodsList_n].payType = l[i].price.money.Enable ? 'money' : 'point';
                     goodsList_n++;
                 }
             }
@@ -2335,7 +2362,7 @@
                 "openid": $scope.root.getParams('wxUserInfo')&&$scope.root.getParams('wxUserInfo').openid,
                 "lang": $translate.proposedLanguage() || $translate.use(),
                 "hotelId": self.hotelId,
-                "shopID": util.getParams('shopinfo').shopId,
+                "shopID": self.shopId,
                 "goodsList": goodsList,
                 "delivery":{
                     "deliverWay": deliverWay,
@@ -2359,23 +2386,31 @@
               //订单生成失败
               else {
                   alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                  $ionicLoading.hide();
+                  // 支付按钮变为可点击
+                  document.getElementById('payBtn').disabled = false;
               }
+            }, function errorCallback(data, status, headers, config) {
+                alert('连接服务器出错');
+                $ionicLoading.hide();
+                // 支付按钮变为可点击
+                document.getElementById('payBtn').disabled = false;
             })
             //订单生成结束
             .finally(function(value){
-              $ionicLoading.hide();
-              // 支付按钮变为可点击
-              document.getElementById('payBtn').disabled = false;
+              // $ionicLoading.hide();
+              // // 支付按钮变为可点击
+              // document.getElementById('payBtn').disabled = false;
             });
         }
 
         // 支付
         self.pay = function(orderId) {
             self.orderId = orderId;
-            //获取支付参数
-            $ionicLoading.show({
-               template: '...'
-            });
+            // //获取支付参数
+            // $ionicLoading.show({
+            //    template: '...'
+            // });
             // 支付按钮变为不可点击
             document.getElementById('payBtn').disabled = true;
             var data = {
@@ -2396,6 +2431,12 @@
             })
             .then(function successCallback(data, status, headers, config) {
               if(data.data.rescode == '200') {
+                // 如果支付为0元，只需支付积分，处理积分支付成功的情况
+                if(data.data.data.completed) {
+                    $state.go('shopOrderInfo', { orderId: self.orderId });
+                    return;
+                }
+
                 var wxP = data.data.data.JS_Pay_API;
                 wx.chooseWXPay({
                     timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
@@ -2416,11 +2457,22 @@
                 });
               }
               else {
-                  alert($filter('translate')('serverError') + data.data.errInfo);
+                  if(data.data.errInfo === 'get WX Member info failed.') {
+                    alert('您还未领取会员卡，赶紧去领取吧！');
+                  } 
+                  else if(data.data.errInfo === 'point not enough.') {
+                    alert('您的积分不足。');
+                  } 
+                  else {
+                    alert($filter('translate')('serverError') + data.data.errInfo);
+                  }
               }
+            }, function errorCallback(data, status, headers, config) {
+                alert('连接服务器出错');
             })
             .finally(function(value){
               $ionicLoading.hide();
+              document.getElementById('payBtn').disabled = false;
             });
 
             
@@ -2447,7 +2499,6 @@
                  }
              }
             self.init = function() {
-
                 self.orderId = $stateParams.orderId;
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;
@@ -2478,9 +2529,10 @@
                         console.log(data)
                         self.detail = data.data.data.detail;
                         var s = self.detail.Status;
+                        var d = self.detail.deliverWay;
                         self.showPayBtn = (s == 'WAITPAY');
-                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL' || s == 'ACCEPT');
-                        console.log(self.detail)
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
+                        self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
                         self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     }, function errorCallback(data, status, headers, config) {
@@ -2538,13 +2590,61 @@
                         }
                     });
                   }
-                  else {
+                  else if(data.data.errInfo === 'get WX Member info failed.') {
+                    alert('您还未领取会员卡，赶紧去领取吧！');
+                  } 
+                  else if(data.data.errInfo === 'point not enough.') {
+                    alert('您的积分不足。');
+                  }
+                  else{
                       alert($filter('translate')('serverError') + data.data.errInfo);
                   }
                 })
                 .finally(function(value){
                   $ionicLoading.hide();
                   document.getElementById('payBtn').disabled = false;
+                });
+            }
+
+            /*
+            ** 确认收货
+            */
+            self.confirmReceipt = function () {
+                var confirmReceipt = confirm('确认收货？');
+                if ( !confirmReceipt ) {
+                    return;
+                }
+
+                document.getElementById('confirmReceiptBtn').disabled = true;        // 按钮变为不可点击，防止多次点击
+                $ionicLoading.show({
+                   template: '确认中...'
+                });
+                var data = {
+                    "clear_session": $scope.root.getParams('clear_session'),
+                    "lang": $translate.proposedLanguage() || $translate.use(),
+                    "action": "guestOrderCompleted",
+                    "orderID": self.orderId-0
+                }
+                data = JSON.stringify(data);
+
+                $http({
+                  method: $filter('ajaxMethod')(),
+                  url: backendUrl('shoporder', ''),
+                  data: data
+                })
+                .then(function successCallback(data, status, headers, config) {
+                  if(data.data.rescode == '200') {
+                    $state.reload('shopOrderInfo',{orderId: self.orderId-0});
+                  }
+                  else {
+                      alert($filter('translate')('serverError') + data.data.errInfo);
+                  }
+                }, function errorCallback(data, status, headers, config) {
+                    alert('连接服务器出错');
+                })
+                .finally(function(value){
+                  $ionicLoading.hide();
+                  document.getElementById('confirmReceiptBtn').disabled = false;
                 });
             }
 
@@ -2864,42 +2964,6 @@
                 return deferred.promise;
             }
 
-            // self.getCardBatch = function (apiTicket) {
-            //     var apiTicket = apiTicket;
-            //     var deferred = $q.defer();
-            //     var data = JSON.stringify({
-            //       "offset": 0,
-            //       "count": 50, 
-            //       "status_list": ["CARD_STATUS_DISPATCH"]
-            //     })
-            //     self.addingCards =  true;
-            //     $http({
-            //         method: 'POST',
-            //         url: 'https://api.weixin.qq.com/card/batchget?access_token=' + 
-            //               $scope.root.getParams('authorizer_access_token'),
-            //         data: data
-            //     }).then(function successCallback(response) {
-            //         var data = response.data;
-            //         if (data.errcode != 0) {
-            //             console && console.log(data);
-            //             var cardList = data.card_id_list;
-            //             var rtn = {};
-            //             rtn.apiTicket = apiTicket;
-            //             rtn.cardList = cardList;
-            //             deferred.resolve(rtn);
-            //         }
-            //         else {
-            //             alert(data.errcode + ' ' + data.errmsg);
-            //             deferred.reject();
-            //         }
-            //     }, function errorCallback(response) {
-            //         alert('连接服务器出错');
-            //     }).finally(function(value) {
-            //         self.addingCards = false;
-            //     });
-            //     return deferred.promise;
-            // }
-
             self.getApiTicket = function (type) {
                 var deferred = $q.defer();
                 var data = JSON.stringify({
@@ -2996,5 +3060,175 @@
                 });
             }
         }
-    ])   
+    ])
+
+    // 微信会员页
+    .controller('wxMemberCardController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', '$q', 'backendUrl', 'util', 'SHA1', 'PARAM',
+        function($http, $scope, $state, $filter, $stateParams, $timeout, $q, backendUrl, util, SHA1, PARAM) {
+            console.log('wxMemberCardController')    
+    
+            var self = this;
+
+            self.beforeInit = function() {
+                console.log('beforeInit')
+                if($scope.root._readystate) {
+                 self.init();
+                }
+                else {
+                 $timeout(function() {
+                     self.beforeInit();
+                 }, 50);
+                }
+            }
+            
+            self.init = function() {
+                self.addCards();
+            }
+
+            self.addCards = function () {
+                console.log('addCards');
+                self.addCardCancel = false;
+                self.getApiTicket('addCards').then(function (apiTicket){
+                    return self.getCardBatch(apiTicket);
+                }).then(function (rtn) {
+                    self.wxAddCard(rtn.apiTicket, rtn.cardList);
+                })
+            }
+
+            self.getCardBatch = function (apiTicket) {
+                var apiTicket = apiTicket;
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    clear_session: $scope.root.getParams('clear_session'),
+                    action: "getCardID"
+                })
+                self.addingCards =  true;
+                $http({
+                    method: 'POST',
+                    url: backendUrl('membercard', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        var cardList = data.card_list;
+                        var rtn = {};
+                        rtn.apiTicket = apiTicket;
+                        rtn.cardList = [{card_id: data.data.ID}];
+                        deferred.resolve(rtn);
+                    }
+                    else {
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        alert(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    self.addCardFail = true;
+                    self.addingCards = false;
+                    alert('连接服务器出错');
+                }).finally(function(value) {
+                    
+                });
+                return deferred.promise;
+            }
+
+            self.getApiTicket = function (type) {
+                var deferred = $q.defer();
+                var data = JSON.stringify({
+                    "appid": $scope.root.getParams('appid')
+                })
+
+                if(type == 'addCards'){
+                    self.addingCards = true;
+                }
+                
+                $http({
+                    method: 'POST',
+                    url: backendUrl('apiticket', ''),
+                    data: data
+                }).then(function successCallback(response) {
+                    var data = response.data;
+                    if (data.rescode == '200') {
+                        console.log(data);
+                        var apiTicket = data.ticket;
+                        deferred.resolve(apiTicket);
+                    }
+                    else {
+                        self.addCardFail = true;
+                        self.addingCards = false;
+                        console && console.log(data.rescode + ' ' + data.errInfo);
+                        deferred.reject();
+                    }
+                }, function errorCallback(response) {
+                    if(type == 'addCards'){
+                        self.addingCards = false;
+                    }
+                    self.addCardFail = true;
+                    console && console.log('获取api_ticket连接服务器出错');
+                }).finally(function(value) {
+                    
+                });
+                return deferred.promise;
+            }
+
+            self.wxAddCard = function (apiTicket, cardList) {
+
+                self.addingCards = true;
+
+                var apiTicket = apiTicket;
+                var cards = [];
+                for(var i = 0; i < cardList.length; i++) {
+                    cards.push({cardId: cardList[i].card_id});
+                }
+                // var cards = [{cardId: 'p3y-kwzWYkcYie4CUqHd8T7l3IZM'}, {cardId: 'p3y-kw47m4BRF9QToGsfKlSpb0Gg'}];
+                for (var i = 0; i < cards.length; i++) {
+                    var timestamp = parseInt(new Date().getTime()/1000);
+                    var nonce_str = util.randomString(32);
+
+                    // 生成签名
+                    var list = [timestamp, nonce_str, cards[i].cardId, apiTicket];
+                    list = list.sort().reduce(function(a,b){return  a + '' + b});
+                    var signature = SHA1(list);
+
+                    cards[i].cardExt = JSON.stringify({
+                        timestamp: timestamp,
+                        nonce_str: nonce_str,
+                        signature: signature
+                    });
+                }
+
+                var cardList = [];
+                console && console.log(cards);
+
+                wx.addCard({
+                    cardList: cards, // 需要添加的卡券列表
+                    success: function (res) {
+                        var cardList = res.cardList; // 添加的卡券列表信息
+                        console.log('user add cards');
+                        console.log(cardList);
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.gotCard = true;
+                        });
+                        alert('已添加会员卡');
+                    },
+                    cancel: function (res) {
+                        WeixinJSBridge.call('closeWindow');
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardCancel = true;
+                        });
+                    },
+                    fail:function(res){
+                        console.log("领取会员卡 fail");
+                        $scope.$apply(function () {
+                            self.addingCards = false;
+                            self.addCardFail = true;
+                        })
+                    }
+                });
+            }
+        }
+    ])
+    
 })();

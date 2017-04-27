@@ -15,7 +15,13 @@
             </div>
             <div class="row">
                 <p class="col mod-no-padding">{{'totalPrice'|translate}}:</p>
-                <p class="col mod-no-padding col-75">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</p>
+                <p class="col mod-no-padding col-75">
+                    <!-- 总价 -->
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1">¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}</ng-if>
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('money') !== -1 && shopOrderInfo.detail.PayBy.indexOf('point') !== -1">和</ng-if>
+                    <!-- 花费积分 -->
+                    <ng-if ng-if="shopOrderInfo.detail.PayBy.indexOf('point') !== -1"> {{shopOrderInfo.detail.totalPoint}}积分</ng-if>
+                </p>
             </div>
             <!-- <div class="row">
                 <p class="col mod-no-padding">{{'payMethod'|translate}}:</p>
@@ -23,35 +29,52 @@
             </div> -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus : shopOrderInfo.detail.deliverWay}}</p>
             </div>
         </div>
     </div>
     <div class="item item-divider"></div>
     <div class="list padding mod-inset-forms mod-list">
-        <a class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
-            <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
-            <h2>{{product.name}}</h2>
-            <p>{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
-            <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
-        </a>
+        <div class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
+            <div ui-sref="shopProductDetail({hotelId: product.HotelID, shopId:product.ShopID, productId: product.GoodsID, hotelName: product.HotelName})">
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
+                <h2>{{product.GoodsName}}</h2>
+                <p ng-if="product.PayBy === 'money'">{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
+                <p ng-if="product.PayBy === 'point'">积分:&nbsp{{product.point}}</p>
+                <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
+            </div>    
+        </div>
     </div>
     <div class="item">
+        <!--联系人-->
         <div class="row">
             <p class="col mod-no-padding">{{'contackName'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.name}}</p>
         </div>
+        <!--手机号-->
         <div class="row">
             <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.mobile}}</p>
         </div>
+        <!--配送方式-->
         <div class="row">
             <p class="col mod-no-padding">{{'deliverWay'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
+        <!--配送地址-->
         <div ng-show="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
             <p class="col mod-no-padding">{{'shipAdress'|translate}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
+        </div>
+        <!--快递公司-->
+        <div ng-if="shopOrderInfo.detail.ExpressCompany" class="row">
+            <p class="col mod-no-padding">{{'expressCompany'|translate}}:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.ExpressCompany}} </p>
+        </div>
+        <!--快递单号-->
+        <div ng-if="shopOrderInfo.detail.ExpressNum" class="row">
+            <p class="col mod-no-padding">{{'expressNo'|translate}}:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.ExpressNum}} </p>
         </div>
         <!-- <div class="row">
             <p class="col mod-no-padding">{{'hotelName'|translate}}:</p>
@@ -62,11 +85,16 @@
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.shopName}}</p>
         </div> -->
     </div>
-    <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}">
+    <!-- <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}"> -->
+    <div class="item item-divider" style="min-height: calc(100vh - 410px)">
+
         <!-- 去支付按钮 -->
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
-        <!-- 继续购物按钮 -->
+        <!-- 确认收货按钮 -->
+        <button id="confirmReceiptBtn" ng-show="shopOrderInfo.delivering" ng-click="shopOrderInfo.confirmReceipt()" class="button button-block button-balanced">{{'confirmReceipt'|translate}}</button>
+        <!-- 继续购物按钮 有bug 没有标注商城标识
         <a class="button button-block button-positive" ui-sref="shopHome">{{'goOnShopping'|translate}}</a>
+        -->
         <!-- 取消订单按钮 -->
         <button ng-click="shopOrderInfo.canelOrder()" id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-light">{{'cancelOrder'|translate}}</button>
     </div>

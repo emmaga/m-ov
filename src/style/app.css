@@ -449,7 +449,7 @@
 
 .mod-note-emptylist {
     text-align: center !important;
-    padding-top: 20px;
+    padding-top: 40px;
     line-height: 1.6;
     opacity: 0.5
 }
@@ -480,6 +480,11 @@
     font-size: 12px;
     border: solid 1px rgb(151, 151, 151);
     overflow: visible !important;
+}
+
+/*服务*/
+.mod-service-tag{
+    display: inline-block;
 }
 
 

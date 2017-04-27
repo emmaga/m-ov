@@ -1,22 +1,35 @@
 <div ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()">
 
-    <form class="light-bg list  padding mod-inset-forms" style="padding-top: 72px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
+    <form class="light-bg list  padding mod-inset-forms" style="padding-top: 40px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
 
-        <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)">
-            
-            <button id="payBtn" class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;">
-                {{'payNow' | translate}}
-                <i class="icon ion-ios-arrow-right" style="position: relative; top: 2px;"></i>
+        <div class="bar bar-header mod-bg-transparent mod-fixed bar-assertive" style=" background-color: #e42112 !important">
+            <h1 class="title" style="color: white !important">购物车</h1>
+            <!-- <button id="payBtn" class="button button-assertive" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit" style="position: absolute; text-indent: 3px; top: 14px; right: 12px; padding-bottom: 0px;line-height: 42px; height: 42px;min-height: 42px;"> -->
+            <button id="payBtn" class="button button-icon icon" ng-class="{disabled: !shopCart.checked || !orderForm.$valid}" type="submit">
+                <!-- {{'payNow' | translate}} -->去结算
+                <i class="icon  ion-ios-arrow-right" style="font-size: 14px;"></i>
             </button>
-            <h3 class="mod-font-light mod-text-indent" style="width: calc(100% - 77px); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                {{'totalPrice' | translate}}:&nbsp¥{{shopCart.totalPrice | fenToYuan}}
+        </div>
+
+        <!-- <div class="ricepaper" style="position: fixed; padding: 10px;padding-bottom: 0; z-index: 10; top: 0; left: 0;width: 100%; background-color: rgba(255, 255, 255, .95)"> -->
+            
+            <!-- 总价 -->
+            <h3 class="mod-font-light mod-text-indent" style="width:100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                {{'totalPrice' | translate}}:&nbsp¥ {{shopCart.totalPrice | fenToYuan}} 
+                <ng-show ng-show="shopCart.totalScore!=0">
+                    <small>和</small>
+                    <!-- 积分 -->
+                    &nbsp{{shopCart.totalScore}}
+                    <small>积分</small>
+                </ng-show>
+                <!-- 邮费 -->
                 <small ng-if="shopCartList.hasEx">
-                    (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp)
-                    
+                    <!-- (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp) -->
+                    (免邮费)
                 </small>
             </h3>
             <!-- <div class="mod-split-line mod-break-padding"></div> -->
-        </div>
+        <!-- </div> -->
 
 
 
@@ -27,12 +40,8 @@
         <div class="item item-input mod-short">
             <div class="input-label">{{'phoneNumber'|translate}}</div>
             <input type="text" pattern="[0-9]{11,}" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}(11位号码)">
-            <!--lh, fix my style-->
-            <!-- <div class="input-label" style="color:rgb(48, 194, 115); font-size: 19px;" ng-if="shopCart.mobileRe.test(shopCart.address.mobile)">
-                <i class="icon ion-ios-checkmark"></i>
-            </div> -->
-            <!--lh, fix my style-->
         </div>
+        <!--需要配送？-->
         <ion-toggle ng-model="shopCartList.hasEx">{{'needDelivering'|translate}}?</ion-toggle>
         <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
             {{'placeOfTakingGoods'|translate}}&nbsp{{shopCart.hotelName}}
@@ -58,22 +67,50 @@
         <div class="card mod-flat mod-no-margin-vertical" ng-repeat-start="item in shopCartList track by $index">
 
             <div class="item item-checkbox item-icon-right assertive">
-                <div class="checkbox checkbox-assertive">
+                <!-- CHECKBOX -->
+                <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') !== -1) || (!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') !== -1)" class="checkbox checkbox-assertive">
                     <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
                 </div>
-                ￥{{item.price*item.count | fenToYuan}}
-                <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
-            </div>
+                <!-- CHECKBOX-disabled -->
+                <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') === -1 || !shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1)" class="checkbox" style="pointer-events: none"><input type="checkbox"></div>
+                <!-- 价格 -->
+                <ng-if ng-if="item.price.money.Enable">￥ {{(item.price.money.price-0)*item.count | fenToYuan}}</ng-if>
 
-            <div class="item item-thumbnail-left">
+                <!-- 积分 -->
+                <ng-if ng-if="item.price.point.Enable">积分 {{item.price.point.point*item.count}}</ng-if>
+                <!-- 删除商品 -->
+                <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
+                
+                <!--该商品不支持配送-->
+                <small ng-show="shopCartList.hasEx && item.deliveryType.indexOf('express') === -1"><br>该商品不支持配送</small>
+                <!--该商品不支持自提-->
+                <small ng-show="!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1"><br>该商品不支持自提</small>
+                <!-- 卖光 -->
+                <small ng-if="item.status!=0 && item.availableCount==0"><br>暂时无货</small>
+                <small ng-if="item.status!=0 && item.availableCount!=0 && (item.availableCount - item.count) < 0"><br>库存不足,请减少购买数量</small>
+
+            </div>
+            <!-- 单个商品信息 -->
+            <div ui-sref="shopProductDetail({hotelId: shopCart.hotelId, shopId: shopCart.shopId, productId: item.productID, hotelName: shopCart.hotelName})" class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
-                <p>{{'unitPrice'|translate}}:&nbsp￥{{item.price | fenToYuan}}</p>
+                <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
+                <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
+                <p>
+                    <small ng-if="item.deliveryType.indexOf('express')!==-1">
+                        <i class="icon ion-checkmark-circled"></i> 配送
+                    </small>
+                    <small ng-if="item.deliveryType.indexOf('bySelf')!==-1">
+                        <i class="icon ion-checkmark-circled"></i> 自提
+                    </small>
+                </p>
             </div>
             <div class="item item-input">
                 <div class="input-label">
+                    <!-- 购买数量 -->
                     <div ng-if="(item.availableCount - item.count) >= 0">{{'productQuantity'|translate}}</div>
-                    <div ng-if="(item.availableCount - item.count) < 0" class="assertive">{{'exceedStock'|translate}}{{item.count - item.availableCount}}</div>
+                    <!-- 超过库存 -->
+                    <div ng-if="(item.availableCount - item.count) < 0" class="assertive">剩余库存{{item.availableCount}}</div>
                 </div>
                 <a class="button button-small button-light icon ion-ios-minus-empty" ng-class="{disabled:( item.count <= 1)}" ng-click="shopCart.minusOne($index)"></a>
                 <span class="mod-input-number">
@@ -82,13 +119,18 @@
                 <a class="button button-small button-light icon ion-ios-plus-empty" ng-class="{disabled:((item.availableCount - item.count) <= 0)}" ng-click="shopCart.plusOne($index)"></a>
             </div>
             <!-- <ion-toggle ng-model="item.dist">此商品需要配送？</ion-toggle> -->
-            <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0">
+
+            <!-- 卖光提示 -->
+            <!-- <div class="mod-cart-prod-disabled" ng-show="item.status==0 || item.availableCount==0" > -->
+            <div class="mod-cart-prod-disabled" ng-show="item.status==0" >
+
+                <!-- 删除商品 -->
                 <a class="icon ion-ios-trash dark" ng-click="shopCart.delete($index)" style="position: absolute; font-size: 24px; right: 0; color: white; float: right; margin: 10px 30px; z-index: 2;"></a>
                 <h2>
                     <i class="icon ion-heart-broken"></i>
                     <br>
                     <small ng-if="item.status==0">{{'goodsOffTheShelf'|translate}}</small>
-                    <small ng-if="item.status!=0 && item.availableCount==0">{{'goodsSoldOut'|translate}}</small>
+                    
                 </h2>
             </div>
         </div>

@@ -1,38 +1,70 @@
 <div ng-controller="shopProductDetailController as sp" ng-init="sp.beforeInit()">
-    <div class="bar bar-header bar-light mod-fixed">
-        <h1 class="title">{{'productDetail'|translate}}</h1>
-        <button ng-click="sp.gotoShopCart()" class="button button-icon icon ion-ios-cart">{{sp.shopCartItemCount}}</button>
+    <!-- 已下架提示 -->
+    <div ng-if="sp.product.status === 0 || sp.product.status===2" style="text-align: center; padding-top: 30%; opacity: 0.5">
+        <h1><i class="icon ion-sad-outline"></i></h1>
+        <h3>抱歉，该商品已下架</h3>
     </div>
-    <div class="padding mod-has-header mod-inset-forms">
-        <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
-            <ion-slide ng-repeat="img in sp.product.imgSrc">
-                <img style="width: 100%; height: 100%;" ng-src="{{img}}">
-            </ion-slide>
-        </ion-slide-box>
-        <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
-        <div class="item">
-            <!-- 库存 -->
-            <p class="item-note">{{'stock'|translate}}{{sp.product.invetory}}</p>
-            <!-- 商品价格 -->
-            <h2 class="mod-card-price assertive"><small>￥</small>{{sp.product.price | fenToYuan}}</h2>
+    <div ng-if="sp.product.status === 1">
+        <div class="bar bar-header bar-light mod-fixed">
+            <h1 class="title">{{'productDetail'|translate}}</h1>
+            <button ng-click="sp.gotoShopCart()" class="button button-icon icon ion-ios-cart">{{sp.shopCartItemCount}}</button>
         </div>
-        <div class="item mod-no-border-bottom padding mod-has-footer">
-            <!-- 商品名称 -->
-            <h2 class="mod-card-title">{{sp.product.name}}</h2>
-            <!-- 商品介绍 -->
-            <!-- <p class="mod-card-text">{{sp.product.intro}}</p> -->
-            <p class="mod-card-text">
-                <ng-repeat ng-repeat="desc in sp.product.intro">
-                  <ng-repeat ng-repeat="frag in desc track by $index">
-                    {{frag}}&nbsp;
-                  </ng-repeat>
-                  <br>
-                </ng-repeat>
-            </p>
+        <div class="padding mod-has-header mod-inset-forms">
+            <ion-slide-box on-slide-changed="slideHasChanged($index)" class="mod-doodle">
+                <ion-slide ng-repeat="img in sp.product.imgSrc">
+                    <img style="width: 100%; height: 100%;" ng-src="{{img}}">
+                </ion-slide>
+            </ion-slide-box>
+            <div class="mod-split-line mod-thin mod-break-padding" style="margin-top: 10px;"></div>
+            <div class="item">
+                <!-- 库存 -->
+                <p class="item-note">{{'stock'|translate}}{{sp.product.invetory}}</p>
+                <!-- 商品价格 -->
+                <h2 ng-if="sp.product.price.money.Enable" class="mod-card-price assertive">
+                    <small>￥</small>
+                    {{sp.product.price.money.price | fenToYuan}}
+                </h2>
+                <h2 ng-if="sp.product.price.point.Enable" class="mod-card-price assertive">
+                    {{sp.product.price.point.point}}
+                    <small>积分换购</small>
+                </h2>
+            </div>
+            <div class="item mod-no-border-bottom padding mod-has-footer">
+                <!-- 商品名称 -->
+                <h2 class="mod-card-title">{{sp.product.name}}</h2>
+                <!-- 配送方式 -->
+                <br>
+                <small ng-if="sp.product.deliveryType.indexOf('express') !== -1">
+                    <i class="icon ion-checkmark-circled"></i> 配送
+                </small>
+                <small ng-if="sp.product.deliveryType.indexOf('bySelf') !== -1">
+                    <i class="icon ion-checkmark-circled"></i> 自提
+                </small>
+                <br>
+                <br>
+                
+                <!-- 商品介绍 -->
+                <!-- <p class="mod-card-text">{{sp.product.intro}}</p> -->
+                <p class="mod-card-text">
+                    <ng-repeat ng-repeat="desc in sp.product.intro">
+                      <ng-repeat ng-repeat="frag in desc track by $index">
+                        {{frag}}&nbsp;
+                      </ng-repeat>
+                      <br>
+                    </ng-repeat>
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="button-bar bar-footer mod-fixed mod-fixed-bottom ">
-        <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
-        <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">{{'buyNow'|translate}}</a>
-    </div>
+        <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style="background: white">
+            <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
+            <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">
+                <ng-if ng-if="sp.product.price.money.Enable">
+                    {{'buyNow'|translate}}
+                </ng-if>
+                <ng-if ng-if="sp.product.price.point.Enable">
+                    去兑换
+                </ng-if>
+            </a>
+        </div>
+    </div>    
 </div>

@@ -67,7 +67,13 @@
             <div class="row">
                 <p class="col mod-no-padding">{{'phoneNumber'|translate}}:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.roomOrder.ContactorPhone}}</p>
-            </div><!-- 
+            </div>
+            <!-- 备注 -->
+            <div class="row">
+                <p class="col mod-no-padding">备注:</p>
+                <p class="col mod-no-padding col-75" style="white-space: normal;">{{bookOrderInfo.roomOrder.Comment}}</p>
+            </div>
+            <!-- 
             <div class="row">
                 <p class="col mod-no-padding">退改说明:</p>
                 <p class="col mod-no-padding col-75">{{bookOrderInfo.room.changeDeal}}</p>

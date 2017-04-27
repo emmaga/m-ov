@@ -15,6 +15,7 @@
   "checkIn": "入住",
   "checkInDate": "入住时间",
   "checkOut": "离店",
+  "confirmReceipt": "确认收货",
   "contackName": "联系人",
   "countsProducts": "件商品",
 
@@ -26,6 +27,8 @@
   "emptyCart":"空荡荡的购物车",
   "exceedStock": "超过库存",
   "expressFeeIncluded": "含邮费",
+  "expressCompany": "快递公司",
+  "expressNo": "快递单号",
 
   "fillInOrder": "填写订单",
   "Friday": "五",
@@ -98,7 +101,7 @@
 
 
   "total": "共",
-  "totalPrice": "总价",
+  "totalPrice": "总计",
   "Thursday": "四",
   "Tuesday": "二",
 
@@ -109,7 +112,7 @@
 
   "WAITPAY" : "待付款",
   "WAITAPPROVAL": "审核中",
-  "ACCEPT": "已接收",
+  "ACCEPT": "已接受",
   "DELIVERING": "订单配送",
   "COMPLETED": "订单完成",
   "CANCEL_REFUNDING": "订单取消退款中",
