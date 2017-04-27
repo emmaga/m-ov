@@ -26,7 +26,11 @@
             </div>
         </div>
     </div>
-    <p ng-show="sol.showLoadingBool.searchBool==true && sol.orderListNum ==0 ">{{'noResults'|translate}}</p>
-    
+
+    <!-- 查无结果 -->
+    <div ng-show="sol.showLoadingBool.searchBool==true && sol.orderListNum ==0 " style="text-align: center; padding-top: 30%; opacity: 0.5">
+        <h1><i class="icon ion-sad-outline"></i></h1>
+        <h3>{{'noResults' | translate}}</h3>
+    </div>
 
 </div>
