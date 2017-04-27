@@ -2460,8 +2460,8 @@
                   if(data.data.errInfo === 'get WX Member info failed.') {
                     alert('您还未领取会员卡，赶紧去领取吧！');
                   } 
-                  else if(data.data.errInfo === 'get WX Member info failed.') {
-                    alert('您的积分余额不足。');
+                  else if(data.data.errInfo === 'point not enough.') {
+                    alert('您的积分不足。');
                   } 
                   else {
                     alert($filter('translate')('serverError') + data.data.errInfo);
@@ -2589,7 +2589,13 @@
                         }
                     });
                   }
-                  else {
+                  else if(data.data.errInfo === 'get WX Member info failed.') {
+                    alert('您还未领取会员卡，赶紧去领取吧！');
+                  } 
+                  else if(data.data.errInfo === 'point not enough.') {
+                    alert('您的积分不足。');
+                  }
+                  else{
                       alert($filter('translate')('serverError') + data.data.errInfo);
                   }
                 })
