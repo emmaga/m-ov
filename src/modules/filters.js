@@ -28,7 +28,8 @@
   })
 
   .filter("orderStatus",['$filter', function($filter){
-    return function(orderStatus){
+    return function(orderStatus, deliverWay){
+      console.log(deliverWay)
       var flag;
       switch (orderStatus){
          case 'WAITPAY':
@@ -42,7 +43,12 @@
              flag = $filter('translate')('ACCEPT');
              break;
          case 'DELIVERING':
-             flag = $filter('translate')('DELIVERING');
+             if(deliverWay === 'bySelf') {
+                flag = "请前往酒店自提";
+             } 
+             else {
+                flag = $filter('translate')('DELIVERING');
+             }
              break;
          case 'COMPLETED':
              flag = $filter('translate')('COMPLETED');

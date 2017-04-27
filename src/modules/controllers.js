@@ -2499,7 +2499,6 @@
                  }
              }
             self.init = function() {
-
                 self.orderId = $stateParams.orderId;
                 self.showLoadingBool = {};
                 self.showLoadingBool.searchBool = false;

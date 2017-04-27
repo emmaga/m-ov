@@ -29,7 +29,7 @@
             </div> -->
             <div class="row">
                 <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
-                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus}}</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus : shopOrderInfo.detail.deliverWay}}</p>
             </div>
         </div>
     </div>
