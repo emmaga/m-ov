@@ -1031,19 +1031,19 @@
                     paySign: JS_Pay_API.paySign, // 支付签名
                     success: function(res) {
                         // 支付成功后的回调函数
-                        $state.go('bookOrderInfo', { orderId: self.bookOrderID });
-                        self.showLoadingBool.waitPayBool = true;
-                        loadingService(self.showLoadingBool);
+                        $state.go('bookOrderInfo', { orderId: orderId });
+                        // self.showLoadingBool.waitPayBool = true;
+                        // loadingService(self.showLoadingBool);
                     },
                     cancel: function() {
-                        $state.go('bookOrderInfo', { orderId: self.bookOrderID });
-                        self.showLoadingBool.waitPayBool = true;
-                        loadingService(self.showLoadingBool);
+                        $state.go('bookOrderInfo', { orderId: orderId });
+                        // self.showLoadingBool.waitPayBool = true;
+                        // loadingService(self.showLoadingBool);
                     },
                     error: function(e) {
-                        $state.go('bookOrderInfo', { orderId: self.bookOrderID });
-                        self.showLoadingBool.waitPayBool = true;
-                        loadingService(self.showLoadingBool);
+                        $state.go('bookOrderInfo', { orderId: orderId });
+                        // self.showLoadingBool.waitPayBool = true;
+                        // loadingService(self.showLoadingBool);
                     }
                 });
             }
