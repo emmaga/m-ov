@@ -1007,7 +1007,7 @@
                                     if(self.selCardInfo.card_id) {
                                        self.consume(); 
                                     }
-                                    self.wxPay(data.data.JS_Pay_API, data.data.orderNum);
+                                    self.wxPay(data.data.JS_Pay_API, data.data.orderID);
                                  } else {
                                      alert($filter('translate')('serverError') + ' ' + data.errInfo);
                                  }
