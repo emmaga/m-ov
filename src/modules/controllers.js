@@ -2136,7 +2136,7 @@
             }
         }
         self.init = function() {
-          
+
           // 至少11位
           self.mobileRe = /[0-9]{11,}/;
 
@@ -2318,7 +2318,7 @@
           .then(function successCallback(data, status, headers, config) {
             $scope.shopCartList = data.data.data.list;
             self.loadExInfo();
-            $scope.shopCartList.hasEx = false; //含快递货品
+            $scope.shopCartList.hasEx = true; //需要配送开启
             self.selectAll(); // 默认选上所有的物品
           })
           .finally(function(value){
