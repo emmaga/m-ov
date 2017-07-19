@@ -2285,7 +2285,7 @@
               if($scope.shopCartList[i].checked == true) {
                 var _price = $scope.shopCartList[i].price;
                 if(_price.money.Enable) {
-                    self.totalPrice += (_price.money.price-0) * $scope.shopCartList[i].count;
+                    self.totalPrice += ((_price.money.price-0)-(_price.money.Decline-0)) * $scope.shopCartList[i].count;
                 } else if (_price.point.Enable) {
                     self.totalScore += (_price.point.point-0) * $scope.shopCartList[i].count;
                 }
