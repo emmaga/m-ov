@@ -1943,6 +1943,8 @@
                     self.productTotal = data.data.data.productTotal;
                     if(self.productTotal == 0) {
                         self.noResults = true;
+                    } else {
+                        self.noResults = false;
                     }
                     self.showLoadingIcon = false;
                 }, function errorCallback(data, status, headers, config) {
