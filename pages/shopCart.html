@@ -74,8 +74,7 @@
                 <!-- CHECKBOX-disabled -->
                 <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') === -1 || !shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1)" class="checkbox" style="pointer-events: none"><input type="checkbox"></div>
                 <!-- 价格 -->
-                <ng-if ng-if="item.price.money.Enable">￥ {{(item.price.money.price-0)*item.count | fenToYuan}}</ng-if>
-
+                <ng-if ng-if="item.price.money.Enable">￥ {{((item.price.money.price-0)-(item.price.money.Decline-0))*item.count | fenToYuan}}</ng-if>
                 <!-- 积分 -->
                 <ng-if ng-if="item.price.point.Enable">积分 {{item.price.point.point*item.count}}</ng-if>
                 <!-- 删除商品 -->
@@ -94,7 +93,11 @@
             <div ui-sref="shopProductDetail({hotelId: shopCart.hotelId, shopId: shopCart.shopId, productId: item.productID, hotelName: shopCart.hotelName})" class="item item-thumbnail-left">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.thumbnailSrc}});"></div>
                 <h2>{{item.productName}}</h2>
+                <!-- 单价 -->
                 <p ng-if="item.price.money.Enable">{{'unitPrice'|translate}}:&nbsp￥{{(item.price.money.price-0) | fenToYuan}}</p>
+                <!-- 立减 -->
+                <p ng-if="item.price.money.Enable && (item.price.money.Decline-0) > 0" style="color: #ef473a;">立减:&nbsp￥{{(item.price.money.Decline-0) | fenToYuan}}</p>
+                <!-- 积分 -->
                 <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
                 <p>
                     <small ng-if="item.deliveryType.indexOf('express')!==-1">

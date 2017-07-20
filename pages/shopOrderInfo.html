@@ -39,7 +39,11 @@
             <div ui-sref="shopProductDetail({hotelId: product.HotelID, shopId:product.ShopID, productId: product.GoodsID, hotelName: product.HotelName})">
                 <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
                 <h2>{{product.GoodsName}}</h2>
+                <!-- 单价 -->
                 <p ng-if="product.PayBy === 'money'">{{'unitPrice'|translate}}:&nbsp￥{{product.price | fenToYuan}}</p>
+                <!-- 立减 -->
+                <p ng-if="product.PayBy === 'money' && product.Decline > 0">立减:&nbsp￥{{product.Decline | fenToYuan}}</p>
+                <!-- 积分 -->
                 <p ng-if="product.PayBy === 'point'">积分:&nbsp{{product.point}}</p>
                 <p>{{'productQuantity'|translate}}:&nbsp{{product.GoodsNum}}</p>
             </div>    

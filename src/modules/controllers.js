@@ -27,6 +27,12 @@
                 var code = qParts.code;
                 var appid = qParts.appid;
                 var state = qParts.state;
+                var state_arr = state.split(';')
+                var state_obj = {}
+                for(var i = 0; i < state_arr.length; i++) {
+                    var temp = state_arr[i].split(',')
+                    state_obj[temp[0]] = temp[1]
+                }
 
                 // 判断是否是缓存同一个项目的clear_session, 如果不是：清空缓存中的clear_session
                 if (self.getParams('appid') && (self.getParams('appid') != appid)) {
@@ -34,7 +40,17 @@
                 }
 
                 self.setParams('appid', appid);
-                self.setParams('state', state);
+                // shoptype
+                // 适配鹿安项目，如果state只有一个参数就赋值给shoptype“state”
+                if (state.indexOf(',') === -1) {
+                    self.setParams('state', state); 
+                } else if (state_obj.shop) {
+                  self.setParams('state', state_obj.shop);  
+                }
+                // hotelId
+                if (state_obj.hotelId) {
+                  self.setParams('hotelId', state_obj.hotelId);  
+                }
                 self.setParams('code', code);
 
                 /* 获取cleartoken（clear_session）和openid
@@ -83,6 +99,7 @@
 
                 var data = {
                     "appid": appid,
+                    // "project_appid": util.getParams('pjt_appid') ? util.getParams('pjt_appid') : appid,
                     "code": code
                 };
                 data = JSON.stringify(data);
@@ -1581,8 +1598,8 @@
         }
     ])
 
-    .controller('shopHomeController', ['$http', '$q', '$scope', '$filter', '$timeout', '$stateParams', '$state', '$translate', 'loadingService', 'backendUrl', 'util',
-        function($http, $q, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl, util) {
+    .controller('shopHomeController', ['$http', '$window', '$q', '$scope', '$filter', '$timeout', '$stateParams', '$state', '$translate', 'loadingService', 'backendUrl', 'util',
+        function($http, $window, $q, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl, util) {
 
             console.log('shopHomeController')
             var self = this;
@@ -1609,10 +1626,13 @@
                 self.perPageCount = 10;
                 // 当前页数
                 self.page = 0;
+                // 如果search参数中指定了hotelId，此时为清鹤公众号嵌入，不显示多个门店列表
+                self.mutiHotels = util.getParams('hotelId') ? false : true
 
                 // 如果缓存里有shopid和门店id和门店名称并且商店标识与上次一样,   获取门店，选中该门店，获取商店
-                if(util.getParams('shopinfo') && (util.getParams('shopinfo').state == util.getParams('state'))) {
-
+                if (util.getParams('shopinfo')
+                   && (util.getParams('shopinfo').state == util.getParams('state'))
+                   && (!util.getParams('hotelId') || util.getParams('shopinfo').hotelId == util.getParams('hotelId'))) {
                     self.hotelId = util.getParams('shopinfo').hotelId;
                     self.hotelName = util.getParams('shopinfo').hotelName;
                     self.shopId = util.getParams('shopinfo').shopId;
@@ -1622,8 +1642,13 @@
                     .then(function() {
                         self.getShopName();
                     });
-
-                    // 获取商店
+                }
+                // 否则：如果参数中有指定hotelId
+                else if (util.getParams('hotelId')) {
+                    self.hotelId = util.getParams('hotelId')
+                    self.getHotelList().then(function() {
+                        self.getShopIdByHotelId();
+                    });
                 }
                 // 否则：获取用户坐标
                 else{
@@ -1918,6 +1943,8 @@
                     self.productTotal = data.data.data.productTotal;
                     if(self.productTotal == 0) {
                         self.noResults = true;
+                    } else {
+                        self.noResults = false;
                     }
                     self.showLoadingIcon = false;
                 }, function errorCallback(data, status, headers, config) {
@@ -2111,7 +2138,7 @@
             }
         }
         self.init = function() {
-          
+
           // 至少11位
           self.mobileRe = /[0-9]{11,}/;
 
@@ -2260,7 +2287,7 @@
               if($scope.shopCartList[i].checked == true) {
                 var _price = $scope.shopCartList[i].price;
                 if(_price.money.Enable) {
-                    self.totalPrice += (_price.money.price-0) * $scope.shopCartList[i].count;
+                    self.totalPrice += ((_price.money.price-0)-(_price.money.Decline-0)) * $scope.shopCartList[i].count;
                 } else if (_price.point.Enable) {
                     self.totalScore += (_price.point.point-0) * $scope.shopCartList[i].count;
                 }
@@ -2293,7 +2320,7 @@
           .then(function successCallback(data, status, headers, config) {
             $scope.shopCartList = data.data.data.list;
             self.loadExInfo();
-            $scope.shopCartList.hasEx = false; //含快递货品
+            $scope.shopCartList.hasEx = true; //需要配送开启
             self.selectAll(); // 默认选上所有的物品
           })
           .finally(function(value){

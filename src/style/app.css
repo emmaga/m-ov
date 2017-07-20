@@ -750,6 +750,25 @@ small {
     box-shadow: none
 }
 
+.card-half{
+    width: calc(50% - 4px);
+    margin: 2px 2px 2px 2px !important;
+    display: inline-block !important;
+}
+
+.card-half .mod-cover:after{
+    display: none
+}
+
+.card-half>.item.mod-no-border:first-child{
+    padding: 0 0 10px 0 !important;
+}
+.card-half>.item.mod-no-border:nth-of-type(2)>.item-note{
+    position: relative;
+    top: 5px;
+    font-size: 11px;
+}
+
 .item-thumbnail-left {
     padding-left: 131px !important;
     min-height: 105px !important;

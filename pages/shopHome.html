@@ -1,7 +1,11 @@
-<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.beforeInit()"  >
+<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.beforeInit()" >
 <!-- <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  > -->
 
-
+    <style type="text/css">
+        body{
+            background: rgb(244,244,244)
+        }
+    </style>
     <!-- 分类 -->
     <div class="bar bar-light tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0; height: 93px;">
         <div class="tabs mod-bg-transparent">
@@ -15,7 +19,7 @@
     <div class="bar bar-header mod-bg-transparent mod-fixed">
         
         <!-- 门店选择按钮 -->
-        <button class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
+        <button ng-show="shopHome.mutiHotels" class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
             <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
         </button>
 
@@ -31,7 +35,7 @@
 
 
     <!-- 商品列表 -->
-    <div class="list  mod-has-tabs-top mod-inset-forms" style="padding-bottom: 40px">
+    <div class="list  mod-has-tabs-top mod-inset-forms" style="margin-left:-2px;margin-right:-2px; padding-bottom: 40px; ">
 
         <!-- <p class="mod-note">
             <i class="icon ion-android-happy"></i>
@@ -39,7 +43,7 @@
         </p> -->
 
         <!-- 卡片 -->
-        <a class="card mod-flat padding wx-touch-hack " ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
+        <a class="card mod-flat wx-touch-hack card-half" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
@@ -70,7 +74,6 @@
                 </small>
             </div>
         </a>
-
         <!-- loading -->
         <ion-spinner icon="dots" class="mod-spinner-list" ng-show="shopHome.showLoadingIcon"></ion-spinner>
         <!-- <a class="button button-light button-block mod-load-more" ng-click="shopHome.moreProduct()"  ng-show="(shopHome.productTotal>shopHome.productList.length) && (!shopHome.showLoadingIcon)">
