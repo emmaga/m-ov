@@ -1850,6 +1850,7 @@
 
             // 商城名字
             self.getShopName = function() {
+                self.showLoadingIcon = true
                 var data = {
                     "action": "getShopName",
                     "clear_session": $scope.root.getParams('clear_session'),
@@ -1865,16 +1866,15 @@
                     url: backendUrl('shopinfo', 'productCategory'),
                     data: data
                 }).then(function successCallback(data, status, headers, config) {
+                    self.showLoadingIcon = false
                     if (data.data.rescode == '200') {
                        self.shopName = data.data.data.shopName;
                        self.searchCategory();
                     } else {
                         alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                     }
-                    
-                   
-                    
                 }, function errorCallback(data, status, headers, config) {
+                    self.showLoadingIcon = false
                     alert($filter('translate')('serverError'));
                 });
             }
