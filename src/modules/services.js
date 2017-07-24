@@ -99,8 +99,7 @@
        * 设置变量
        */
       'setParams': function (paramsName, value) {
-          // $cookies.put(paramsName, JSON.stringify(value))
-          sessionStorage && sessionStorage.setItem(paramsName, JSON.stringify(value));
+          $cookies.put(paramsName, JSON.stringify(value))
       },
       /**
        * 获取随机数
@@ -121,16 +120,11 @@
        * @returns {*}
        */
       'getParams': function (paramsName) {
-          // if($cookies.get(paramsName)) {
-          //     return JSON.parse($cookies.get(paramsName));
-          // }
-          // else {
-          //     return false;
-          // }
-          if(sessionStorage && sessionStorage.getItem(paramsName)) {
-            return JSON.parse(sessionStorage.getItem(paramsName));
-          } else {
-            return false;
+          if($cookies.get(paramsName)) {
+              return JSON.parse($cookies.get(paramsName));
+          }
+          else {
+              return false;
           }
       }
       // 变量：
