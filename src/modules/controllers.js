@@ -115,7 +115,10 @@
                     self.setParams('refresh_token', data.data.refresh_token);
                     self.setParams('access_token', data.data.access_token);
                     self.setParams('authorizer_access_token', data.data.authorizer_access_token);
-                    self.getWxUserInfo(data.data.access_token, data.data.openid);     
+                    var wxUserInfo = {openid: data.data.openid}
+                    self.setParams('wxUserInfo', wxUserInfo);
+                    self.getWxUserInfo(data.data.access_token, data.data.openid);
+                    self.WXConfigJSSDK();
                 }, function errorCallback(data, status, headers, config) {
                     alert($filter('translate')('serverError'));
                     $ionicLoading.hide();
@@ -138,11 +141,8 @@
                   url: backendUrl('wxuserinfo', '', 'server'),
                   data: data
                 })
-                .then(function successCallback(data, status, headers, config) {
-                    
+                .then(function successCallback(data, status, headers, config) { 
                     self.setParams('wxUserInfo', data.data);
-                    BACKEND_CONFIG.test&&console.log(JSON.stringify(data));
-                    self.WXConfigJSSDK();
                 }, function errorCallback(data, status, headers, config) {
                     $ionicLoading.hide();
                 })
