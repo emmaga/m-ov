@@ -1008,30 +1008,38 @@
                     .success(function(data, status, headers, config) {
                         if (data.rescode == '200') {
                             var orderID = data.data.orderID;
-                            // 订单id
-                            self.bookOrderID = orderID;
-                            var data = {
-                                "clear_session": $scope.root.getParams('clear_session'),
-                                "action": "weixinPay",
-                                "payType": "JSAPI",
-                                "orderID": orderID,
-                                "cardInfo": self.selCardInfo
-                            };
-                            data = angular.toJson(data,true);
-                            $http.post(backendUrl('roomorder', '', 'server'), data)
-                            .success(function(data, status, headers, config){
-                                 if (data.rescode == '200') {
-                                    if(self.selCardInfo.card_id) {
-                                       self.consume(); 
-                                    }
-                                    self.wxPay(data.data.JS_Pay_API, data.data.orderID);
-                                 } else {
-                                     alert($filter('translate')('serverError') + ' ' + data.errInfo);
-                                 }
-                            })
-                            .error(function(data, status, headers, config) {
-                                alert($filter('translate')('serverError'));
-                            })
+                            // 在原公众号支付
+                            // self.bookOrderID = orderID;
+                            // var data = {
+                            //     "clear_session": $scope.root.getParams('clear_session'),
+                            //     "action": "weixinPay",
+                            //     "payType": "JSAPI",
+                            //     "orderID": orderID,
+                            //     "cardInfo": self.selCardInfo
+                            // };
+                            // data = angular.toJson(data,true);
+                            // $http.post(backendUrl('roomorder', '', 'server'), data)
+                            // .success(function(data, status, headers, config){
+                            //      if (data.rescode == '200') {
+                            //         if(self.selCardInfo.card_id) {
+                            //            self.consume(); 
+                            //         }
+                            //         self.wxPay(data.data.JS_Pay_API, data.data.orderID);
+                            //      } else {
+                            //          alert($filter('translate')('serverError') + ' ' + data.errInfo);
+                            //      }
+                            // })
+                            // .error(function(data, status, headers, config) {
+                            //     alert($filter('translate')('serverError'));
+                            // })
+
+                            // 在自有公众号支付测试
+                            // localStorage.setItem('selCardInfo', JSON.stringify(self.selCardInfo))
+                            window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' + 
+                            'appid=wx966d7c1152bbb8ad&redirect_uri=http://openvoddev.cleartv.cn/wx/bus/%23/pay' + 
+                            '&response_type=code&scope=snsapi_base&state=oid,' + orderID + ';ocs,' + 
+                            util.getParams('clear_session') + '&component_appid=wxc6e8a3fab4f25a4f#wechat_redirect'
+
                     }})
                     .error(function(data, status, headers, config) {
                         alert($filter('translate')('serverError'));
