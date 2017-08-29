@@ -737,7 +737,8 @@ small {
     border-bottom: none !important
 }
 
-.bar-header .ion-ios-cart {
+.bar-header .ion-ios-cart,
+.bar-header .ion-home {
     transform: scale(0.75);
 }
 

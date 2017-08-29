@@ -44,7 +44,7 @@
     }
     
   }])
-  .factory('util',['$cookies', function($cookies){
+  .factory('util',['$cookies', '$window', function($cookies, $window){
     // 时间戳 去掉 时分秒
     function getDayStamp(d) {
          // 时间戳字符串字符串的先转化为数字
@@ -94,6 +94,21 @@
           if (str_length < len) {  
               return str;  
           }  
+      },
+      /**
+       * 获取state参数
+       */
+      'getStateParams': function (paramsName) {
+        var qString = $window.location.search.substring(1);
+        var qParts = qString.parseQuerystring();
+        var state = qParts.state;
+        var state_arr = state.split(';')
+        var state_obj = {}
+        for(var i = 0; i < state_arr.length; i++) {
+            var temp = state_arr[i].split(',')
+            state_obj[temp[0]] = temp[1]
+        } 
+        return state_obj[paramsName] ? state_obj[paramsName] : false
       },
       /**
        * 设置变量

@@ -1817,7 +1817,7 @@
 
             self.gotoShopDetail = function(productId) {
                 angular.element(window).off('scroll'); 
-                $state.go('shopProductDetail', { hotelId: self.hotelId, shopId: self.shopId, productId:productId, hotelName:self.hotelName });
+                $state.go('shopProductDetail', { shopId: self.shopId, productId:productId });
             }
 
             self.gotoShopCart = function() {
@@ -1999,10 +1999,18 @@
                 }
             }
             self.init = function() {
-                self.hotelId = $stateParams.hotelId;
-                self.hotelName = $stateParams.hotelName;
-                self.shopId = $stateParams.shopId;
-                self.productId = $stateParams.productId;
+                // 如果是直接访问商品详情页，直接从url中获取
+                console.log(util.getStateParams('shopId'))
+                if(util.getStateParams('shopId')) {
+                    self.shopId = util.getStateParams('shopId')
+                } else {
+                    self.shopId = $stateParams.shopId;
+                }
+                if(util.getStateParams('productId')) {
+                    self.productId = util.getStateParams('productId')
+                } else {
+                    self.productId = $stateParams.productId;
+                }
                 self.showLoadingBool = {};
                 self.buying = false;
 
@@ -2011,8 +2019,12 @@
                 self.search();
             }
 
-            self.gotoShopCart = function() {
+            self.gotoShopCart = function () {
                 $state.go('shopCart', {shopId: self.shopId});
+            }
+
+            self.gotoShop = function () {
+                $state.go('shopHome', {shopId: self.shopId});
             }
 
             self.search = function() {
@@ -2143,9 +2155,13 @@
           self.mobileRe = /[0-9]{11,}/;
 
           // 初始化
-          self.hotelId = util.getParams('shopinfo').hotelId;
-          self.hotelName = util.getParams('shopinfo').hotelName;
+          // self.hotelId = util.getParams('shopinfo').hotelId;
+          // self.hotelName = util.getParams('shopinfo').hotelName;
           self.shopId = $stateParams.shopId;
+
+          // 获取hotelId和hotelName by shopId
+          self.getHotelInfo(self.shopId);
+
           // self.postage = 1000; //邮费 todo
           self.postage = 0;
           $scope.shopCartList = new Array();
@@ -2165,6 +2181,38 @@
 
           // 获取购物车信息
           self.loadSCInfo();
+        }
+
+        /*
+        ** 获取hotelId和hotelName by shopId
+        */
+        self.getHotelInfo = function (shopId) {
+            var data = {
+                "action": "getHotelInfo",
+                "clear_session": $scope.root.getParams('clear_session'),
+                "lang": $translate.proposedLanguage() || $translate.use(),
+                "ShopID": shopId
+            }
+            data = JSON.stringify(data);
+
+            $http({
+              method: $filter('ajaxMethod')(),
+              url: backendUrl('shopinfo', ''),
+              data: data
+            })
+            .then(
+              function successCallback(data, status, headers, config) {
+                if(data.data.rescode != '200') {
+                    alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                } else {
+                    self.hotelId = data.data.HotelID
+                    self.hotelName = data.data.HotelName
+                }
+              },
+              function errorCallback(data, status, headers, config) {
+                alert($filter('translate')('serverError'))
+              }
+            )
         }
 
         /*

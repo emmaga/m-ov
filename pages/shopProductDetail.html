@@ -6,6 +6,7 @@
     </div>
     <div ng-if="sp.product.status === 1">
         <div class="bar bar-header bar-light mod-fixed">
+            <button ng-click="sp.gotoShop()" class="button button-icon icon ion-home">首页</button>
             <h1 class="title">{{'productDetail'|translate}}</h1>
             <button ng-click="sp.gotoShopCart()" class="button button-icon icon ion-ios-cart">{{sp.shopCartItemCount}}</button>
         </div>
