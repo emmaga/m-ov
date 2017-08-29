@@ -66,7 +66,7 @@
         templateUrl: 'pages/shopOrderList.html'
       })
       .state('shopHome', {
-        url: '/shopHome/?shopId',
+        url: '/shopHome',
         templateUrl: 'pages/shopHome.html'
       })
       .state('shopProductDetail', {

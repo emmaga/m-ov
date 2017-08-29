@@ -14,4 +14,4 @@
 #####2.商城订单地址示例
 	https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxeae127ff98a4c844&redirect_uri=http://openvoddev.cleartv.cn/wx/index.html%23/shopOrderList&response_type=code&scope=snsapi_base&state=123&component_appid=wxc6e8a3fab4f25a4f#wechat_redirect
 #####3.商品详情页示例
-  https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxeae127ff98a4c844&redirect_uri=http://openvoddev.cleartv.cn/wx_emma/index.html%23/shopProductDetail/&response_type=code&scope=snsapi_base&state=shopId,72;productId,70&component_appid=wxc6e8a3fab4f25a4f#wechat_redirect
+    https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxeae127ff98a4c844&redirect_uri=http://openvoddev.cleartv.cn/wx_emma/index.html%23/shopProductDetail/&response_type=code&scope=snsapi_base&state=shopId,72;productId,70&component_appid=wxc6e8a3fab4f25a4f#wechat_redirect

@@ -1601,7 +1601,6 @@
     .controller('shopHomeController', ['$http', '$window', '$q', '$scope', '$filter', '$timeout', '$stateParams', '$state', '$translate', 'loadingService', 'backendUrl', 'util',
         function($http, $window, $q, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl, util) {
 
-            console.log('shopHomeController')
             var self = this;
             
             self.beforeInit = function() {
@@ -1626,6 +1625,11 @@
                 self.perPageCount = 10;
                 // 当前页数
                 self.page = 0;
+                // 如果有url参数里有shopId，说明该链接为商品详情页跳转回来的链接，只显示该商店的信息
+                if(util.getStateParams('shopId')) {
+                    self.loadInfoByShopId(util.getStateParams('shopId'))
+                    return
+                }
                 // 如果search参数中指定了hotelId，此时为清鹤公众号嵌入，不显示多个门店列表
                 self.mutiHotels = util.getParams('hotelId') ? false : true
 
@@ -1683,6 +1687,31 @@
                         }
                     }
                 }
+            }
+
+            self.loadInfoByShopId = function (shopId) {
+              if(shopId) {
+                self.shopId = shopId
+                if(self.shopId) {
+                    self.noShop = false;
+                    // 记录该shopid
+                    var shopinfo = {
+                        "shopId": self.shopId
+                    };
+                    util.setParams('shopinfo', shopinfo);
+                    self.getShopName();
+                } else {
+                    self.noShop = true;
+                    self.shopName = $filter('translate')('noShop');
+                    self.productList = [];
+                    self.categoryList = [];
+                }
+              }else {
+                self.noShop = true;
+                self.shopName = $filter('translate')('noShop');
+                self.productList = [];
+                self.categoryList = [];
+              }
             }
 
             self.getHotelIdByLocation = function(x, y) {
@@ -1912,7 +1941,6 @@
             }
             self.searchProductList = function(id, bool) {
                 self.showLoadingIcon = true
-                console.log(id);
                 // 记录当前点击的商品分类的id
                 self.searchCategoryId = id;
                 self.showLoadingIcon = true;
@@ -1985,7 +2013,6 @@
     .controller('shopProductDetailController', ['$http', '$q', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$translate', '$ionicSlideBoxDelegate', 'loadingService', 'backendUrl', 'util',
         function($http, $q, $scope, $filter, $state, $stateParams, $timeout, $translate, $ionicSlideBoxDelegate, loadingService, backendUrl, util) {
 
-            console.log('shopProductDetailController')
             var self = this;
             self.beforeInit = function() {
                 console.log('beforeInit')
@@ -1999,17 +2026,16 @@
                 }
             }
             self.init = function() {
-                // 如果是直接访问商品详情页，直接从url中获取
-                console.log(util.getStateParams('shopId'))
-                if(util.getStateParams('shopId')) {
-                    self.shopId = util.getStateParams('shopId')
-                } else {
+                // 如果StateParams无shopid和productid，直接从url中获取
+                if($stateParams.shopId) {
                     self.shopId = $stateParams.shopId;
-                }
-                if(util.getStateParams('productId')) {
-                    self.productId = util.getStateParams('productId')
                 } else {
+                    self.shopId = util.getStateParams('shopId')
+                }
+                if($stateParams.productId) {
                     self.productId = $stateParams.productId;
+                } else {
+                    self.productId = util.getStateParams('productId')
                 }
                 self.showLoadingBool = {};
                 self.buying = false;
@@ -2024,7 +2050,7 @@
             }
 
             self.gotoShop = function () {
-                $state.go('shopHome', {shopId: self.shopId});
+                $state.go('shopHome');
             }
 
             self.search = function() {
