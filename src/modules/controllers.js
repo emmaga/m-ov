@@ -117,6 +117,8 @@
                             self.setParams('authorizer_access_token', data.data.authorizer_access_token);
                             var wxUserInfo = {openid: data.data.openid}
                             self.setParams('wxUserInfo', wxUserInfo);
+                            self.setParams('openid', data.data.openid);
+                            console.error(util.getParams('openid'))
                             self.getWxUserInfo(data.data.access_token, data.data.openid);
                             self.WXConfigJSSDK();
                         }, function errorCallback (data, status, headers, config) {
@@ -635,8 +637,8 @@
             }
         ])
 
-        .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG', 'PARAM',
-            function ($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG, PARAM) {
+        .controller('roomInfoController', ['$location', '$scope', '$http', '$filter', '$state', '$translate', '$stateParams', '$timeout', '$ionicSlideBoxDelegate', '$ionicLoading', 'loadingService', 'backendUrl', 'util', 'BACKEND_CONFIG', 'PAY_CONFIG', 'PARAM',
+            function ($location, $scope, $http, $filter, $state, $translate, $stateParams, $timeout, $ionicSlideBoxDelegate, $ionicLoading, loadingService, backendUrl, util, BACKEND_CONFIG, PAY_CONFIG, PARAM) {
                 console.log("roomInfoController")
                 console.log($stateParams);
                 var self = this;
@@ -651,7 +653,7 @@
                     }
                 }
                 self.init = function () {
-
+                    self.checkPayId()
                     // 遮罩层 bool
                     self.showLoadingBool = {};
                     self.selCardInfo = {};
@@ -670,6 +672,7 @@
 
                     self.stayDays = util.countDay(self.checkIn, self.checkOut);
                     self.searchMemberInfo();
+
                     // 验证码 倒计时
                     // self.countSeconds = 30;
                     // self.showTip = true;
@@ -686,6 +689,7 @@
                     }, 1000);
 
                 }
+
 
                 // 用户选取卡券
                 self.selCard = function (card) {
@@ -973,6 +977,39 @@
                     });
                 }
 
+
+                var payJump = false;
+                // 获取订房支付商户的appid
+                self.checkPayId = function () {
+                    var data = JSON.stringify({
+                        "clear_session": $scope.root.getParams('clear_session')
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('roomwxpayappid', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.newAppId = data.appid
+                            if (self.newAppId === $scope.root.getParams('appid')) {
+                                payJump = false
+                            } else {
+                                payJump = true
+                            }
+                        }
+                        else {
+                            console && console.log(data.rescode + ' ' + data.errInfo);
+                            alert(data.errInfo);
+                        }
+                    }, function errorCallback (response) {
+                        // alert('连接服务器出错');
+                    }).finally(function (value) {
+                        self.loadingUserCardList = false;
+                    });
+                }
+
                 self.newOrder = function () {
 
                     self.showLoadingBool.waitPayBool = false;
@@ -1019,34 +1056,54 @@
 
                     };
                     data = angular.toJson(data, true);
+
+                    var jumpUrl, compID;
+                    if (PAY_CONFIG.test) {
+                        jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                        compID = PAY_CONFIG.testConfig.compID
+                    } else {
+                        jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                        compID = PAY_CONFIG.onlineConfig.compID
+                    }
+
                     $http.post(backendUrl('roomorder', '', 'server'), data)
                         .success(function (data, status, headers, config) {
                             if (data.rescode == '200') {
                                 var orderID = data.data.orderID;
-                                // 订单id
-                                self.bookOrderID = orderID;
-                                var data = {
-                                    "clear_session": $scope.root.getParams('clear_session'),
-                                    "action": "weixinPay",
-                                    "payType": "JSAPI",
-                                    "orderID": orderID,
-                                    "cardInfo": self.selCardInfo
-                                };
-                                data = angular.toJson(data, true);
-                                $http.post(backendUrl('roomorder', '', 'server'), data)
-                                    .success(function (data, status, headers, config) {
-                                        if (data.rescode == '200') {
-                                            if (self.selCardInfo.card_id) {
-                                                self.consume();
+                                // 是否需要跳转支付
+                                if (payJump) {
+                                    localStorage.setItem('selCardInfo', JSON.stringify(self.selCardInfo))
+                                    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                                        'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/pay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + orderID + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                                } else {
+                                    // 在原公众号支付
+                                    self.bookOrderID = orderID;
+                                    var data = {
+                                        "clear_session": $scope.root.getParams('clear_session'),
+                                        "action": "weixinPay",
+                                        "payType": "JSAPI",
+                                        "orderID": orderID
+                                    };
+                                    data = angular.toJson(data, true);
+                                    $http.post(backendUrl('roomorder', '', 'server'), data)
+                                        .success(function (data, status, headers, config) {
+                                            if (data.rescode == '200') {
+                                                if (self.selCardInfo.card_id) {
+                                                    self.consume();
+                                                }
+                                                self.wxPay(data.data.JS_Pay_API, data.data.orderID);
+                                            } else {
+                                                alert($filter('translate')('serverError') + ' ' + data.errInfo);
                                             }
-                                            self.wxPay(data.data.JS_Pay_API, data.data.orderID);
-                                        } else {
-                                            alert($filter('translate')('serverError') + ' ' + data.errInfo);
-                                        }
-                                    })
-                                    .error(function (data, status, headers, config) {
-                                        alert($filter('translate')('serverError'));
-                                    })
+                                        })
+                                        .error(function (data, status, headers, config) {
+                                            alert($filter('translate')('serverError'));
+                                        })
+                                }
+
+                                // 在自有公众号支付测试
+                                // localStorage.setItem('selCardInfo', JSON.stringify(self.selCardInfo))
+
                             }
                         })
                         .error(function (data, status, headers, config) {
@@ -1084,8 +1141,8 @@
             }
         ])
 
-        .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', '$state', 'loadingService', 'backendUrl', 'util',
-            function ($scope, $http, $timeout, $filter, $stateParams, $translate, $state, loadingService, backendUrl, util) {
+        .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', '$state', 'loadingService', 'backendUrl', 'util','PAY_CONFIG',
+            function ($scope, $http, $timeout, $filter, $stateParams, $translate, $state, loadingService, backendUrl, util,PAY_CONFIG) {
                 console.log("bookOrderInfoController")
                 var self = this;
                 self.beforeInit = function () {
@@ -1107,6 +1164,7 @@
                     self.showLoadingBool.searchBool = false;
 
                     self.search();
+                    self.checkPayId();
                 }
                 self.search = function () {
                     self.showLoadingBool.searchBool = false;
@@ -1189,37 +1247,79 @@
 
                 }
 
+                var payJump = false;
+                // 获取订房支付商户的appid
+                self.checkPayId = function () {
+                    var data = JSON.stringify({
+                        "clear_session": $scope.root.getParams('clear_session')
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('roomwxpayappid', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.newAppId = data.appid
+                            if (self.newAppId === $scope.root.getParams('appid')) {
+                                payJump = false
+                            } else {
+                                payJump = true
+                            }
+                        }
+                        else {
+                            console && console.log(data.rescode + ' ' + data.errInfo);
+                            alert(data.errInfo);
+                        }
+                    }, function errorCallback (response) {
+                        // alert('连接服务器出错');
+                    }).finally(function (value) {
+                        self.loadingUserCardList = false;
+                    });
+                }
+
+                var jumpUrl, compID;
+                if (PAY_CONFIG.test) {
+                    jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                    compID = PAY_CONFIG.testConfig.compID
+                } else {
+                    jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                    compID = PAY_CONFIG.onlineConfig.compID
+                }
                 // 去支付
                 self.payNow = function (status) {
+                    if (payJump) {
+                        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                            'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/pay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (self.orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                    } else {
+                        self.payNowBool = true;
+                        var data = {
+                            "action": "weixinPay",
+                            "clear_session": $scope.root.getParams('clear_session'),
+                            "lang": $translate.proposedLanguage() || $translate.use(),
+                            "payType": "JSAPI",
+                            // 假数据
+                            // "orderID": 187
+                            "orderID": self.orderId - 0
 
-                    self.payNowBool = true;
-                    var data = {
-                        "action": "weixinPay",
-                        "clear_session": $scope.root.getParams('clear_session'),
-                        "lang": $translate.proposedLanguage() || $translate.use(),
-                        "payType": "JSAPI",
-                        // 假数据
-                        // "orderID": 187
-                        "orderID": self.orderId - 0
-
-                    };
-                    data = JSON.stringify(data);
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('roomorder', 'orderInfo'),
-                        data: data
-                    }).then(function successCallback (data, status, headers, config) {
-                        if (data.data.rescode == '200') {
-
-                            self.wxPay(data.data.data.JS_Pay_API, data.data.data.orderNum);
-                        } else {
-                            alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
-                        }
-                    }, function errorCallback (data, status, headers, config) {
-                        alert($filter('translate')('serverError'));
-                    }).finally(function () {
-                    });
-
+                        };
+                        data = JSON.stringify(data);
+                        $http({
+                            method: $filter('ajaxMethod')(),
+                            url: backendUrl('roomorder', 'orderInfo'),
+                            data: data
+                        }).then(function successCallback (data, status, headers, config) {
+                            if (data.data.rescode == '200') {
+                                self.wxPay(data.data.data.JS_Pay_API, data.data.data.orderNum);
+                            } else {
+                                alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                            }
+                        }, function errorCallback (data, status, headers, config) {
+                            alert($filter('translate')('serverError'));
+                        }).finally(function () {
+                        });
+                    }
                 }
 
 
