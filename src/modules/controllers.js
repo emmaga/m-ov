@@ -118,7 +118,6 @@
                             var wxUserInfo = {openid: data.data.openid}
                             self.setParams('wxUserInfo', wxUserInfo);
                             self.setParams('openid', data.data.openid);
-                            console.error(util.getParams('openid'))
                             self.getWxUserInfo(data.data.access_token, data.data.openid);
                             self.WXConfigJSSDK();
                         }, function errorCallback (data, status, headers, config) {
@@ -1074,7 +1073,7 @@
                                 if (payJump) {
                                     localStorage.setItem('selCardInfo', JSON.stringify(self.selCardInfo))
                                     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
-                                        'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/pay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + orderID + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                                        'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/roomPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + orderID + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
                                 } else {
                                     // 在原公众号支付
                                     self.bookOrderID = orderID;
@@ -1141,8 +1140,8 @@
             }
         ])
 
-        .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', '$state', 'loadingService', 'backendUrl', 'util','PAY_CONFIG',
-            function ($scope, $http, $timeout, $filter, $stateParams, $translate, $state, loadingService, backendUrl, util,PAY_CONFIG) {
+        .controller('bookOrderInfoController', ['$scope', '$http', '$timeout', '$filter', '$stateParams', '$translate', '$state', 'loadingService', 'backendUrl', 'util', 'PAY_CONFIG',
+            function ($scope, $http, $timeout, $filter, $stateParams, $translate, $state, loadingService, backendUrl, util, PAY_CONFIG) {
                 console.log("bookOrderInfoController")
                 var self = this;
                 self.beforeInit = function () {
@@ -1291,7 +1290,7 @@
                 self.payNow = function (status) {
                     if (payJump) {
                         window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
-                            'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/pay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (self.orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                            'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/roomPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (self.orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
                     } else {
                         self.payNowBool = true;
                         var data = {
@@ -2279,8 +2278,8 @@
             }
         ])
 
-        .controller('shopCartController', ['$http', '$scope', '$timeout', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl', 'util',
-            function ($http, $scope, $timeout, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl, util) {
+        .controller('shopCartController', ['$http', '$scope', '$timeout', '$filter', '$state', '$stateParams', '$ionicLoading', '$translate', 'backendUrl', 'PAY_CONFIG', 'util',
+            function ($http, $scope, $timeout, $filter, $state, $stateParams, $ionicLoading, $translate, backendUrl, PAY_CONFIG, util) {
                 console.log('shopCartController')
                 var self = this;
                 self.beforeInit = function () {
@@ -2327,6 +2326,9 @@
 
                     // 获取购物车信息
                     self.loadSCInfo();
+
+                    // 是否跳转支付，检查支付的appid
+                    self.checkPayId();
                 }
 
                 /*
@@ -2627,6 +2629,50 @@
                         });
                 }
 
+
+                var payJump = false;
+                // 获取订房支付商户的appid
+                self.checkPayId = function () {
+                    console.error(util.getParams('shopinfo'))
+                    var data = JSON.stringify({
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "shopID": util.getParams('shopinfo').shopId
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('shopwxpayappid', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.newAppId = data.appid
+                            if (self.newAppId === $scope.root.getParams('appid')) {
+                                payJump = false
+                            } else {
+                                payJump = true
+                            }
+                        }
+                        else {
+                            console && console.log(data.rescode + ' ' + data.errInfo);
+                            alert(data.errInfo);
+                        }
+                    }, function errorCallback (response) {
+                        // alert('连接服务器出错');
+                    }).finally(function (value) {
+                        self.loadingUserCardList = false;
+                    });
+                }
+
+                var jumpUrl, compID;
+                console.log(PAY_CONFIG)
+                if (PAY_CONFIG.test) {
+                    jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                    compID = PAY_CONFIG.testConfig.compID
+                } else {
+                    jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                    compID = PAY_CONFIG.onlineConfig.compID
+                }
                 // 支付
                 self.pay = function (orderId) {
                     self.orderId = orderId;
@@ -2659,25 +2705,29 @@
                                     $state.go('shopOrderInfo', {orderId: self.orderId});
                                     return;
                                 }
-
-                                var wxP = data.data.data.JS_Pay_API;
-                                wx.chooseWXPay({
-                                    timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                                    nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
-                                    package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-                                    signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                                    paySign: wxP.paySign, // 支付签名
-                                    success: function (res) {
-                                        // 支付后跳转到订单详情页面
-                                        $state.go('shopOrderInfo', {orderId: self.orderId});
-                                    },
-                                    cancel: function () {
-                                        $state.go('shopOrderInfo', {orderId: self.orderId});
-                                    },
-                                    error: function (e) {
-                                        $state.go('shopOrderInfo', {orderId: self.orderId});
-                                    }
-                                });
+                                if (payJump) {
+                                    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                                        'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/shopPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + orderId + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                                } else {
+                                    var wxP = data.data.data.JS_Pay_API;
+                                    wx.chooseWXPay({
+                                        timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                                        nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
+                                        package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                                        signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                                        paySign: wxP.paySign, // 支付签名
+                                        success: function (res) {
+                                            // 支付后跳转到订单详情页面
+                                            $state.go('shopOrderInfo', {orderId: self.orderId});
+                                        },
+                                        cancel: function () {
+                                            $state.go('shopOrderInfo', {orderId: self.orderId});
+                                        },
+                                        error: function (e) {
+                                            $state.go('shopOrderInfo', {orderId: self.orderId});
+                                        }
+                                    });
+                                }
                             }
                             else {
                                 if (data.data.errInfo === 'get WX Member info failed.') {
@@ -2705,13 +2755,12 @@
         ])
 
 
-        .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl',
-            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl) {
+        .controller('shopOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'util',
+            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, util) {
                 console.log('shopOrderInfoController')
 
                 var self = this;
                 self.beforeInit = function () {
-                    console.log('beforeInit')
                     if ($scope.root._readystate) {
                         self.init();
                     }
@@ -2728,6 +2777,7 @@
                     self.showCancelBtn = false;
                     self.showPayBtn = false;
                     self.search();
+                    self.checkPayId();
                 }
 
 
@@ -2764,68 +2814,115 @@
 
                 }
 
+                var payJump = false;
+                // 获取订房支付商户的appid
+                self.checkPayId = function () {
+                    console.error(util.getParams('shopinfo'))
+                    var data = JSON.stringify({
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "shopID": util.getParams('shopinfo').shopId
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('shopwxpayappid', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.newAppId = data.appid
+                            if (self.newAppId === $scope.root.getParams('appid')) {
+                                payJump = false
+                            } else {
+                                payJump = true
+                            }
+                        }
+                        else {
+                            console && console.log(data.rescode + ' ' + data.errInfo);
+                            alert(data.errInfo);
+                        }
+                    }, function errorCallback (response) {
+                        // alert('连接服务器出错');
+                    }).finally(function (value) {
+                        self.loadingUserCardList = false;
+                    });
+                }
+
+                var jumpUrl, compID;
+                console.log(PAY_CONFIG)
+                if (PAY_CONFIG.test) {
+                    jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                    compID = PAY_CONFIG.testConfig.compID
+                } else {
+                    jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                    compID = PAY_CONFIG.onlineConfig.compID
+                }
                 self.pay = function () {
                     // 等待支付
                     // 支付按钮变为不可点击，防止多次点击
                     document.getElementById('payBtn').disabled = true;
 
-
-                    //获取支付参数
-                    $ionicLoading.show({
-                        template: '等待支付...'
-                    });
-                    var data = {
-                        "action": "weixinPay",
-                        "clear_session": $scope.root.getParams('clear_session'),
-                        "appid": $scope.root.getParams('appid'),
-                        "openid": $scope.root.getParams('wxUserInfo') && $scope.root.getParams('wxUserInfo').openid,
-                        "lang": $translate.proposedLanguage() || $translate.use(),
-                        "hotelId": self.hotelId,
-                        "orderID": self.orderId - 0,
-                        "payType": "JSAPI"
-                    }
-                    data = JSON.stringify(data);
-
-                    $http({
-                        method: $filter('ajaxMethod')(),
-                        url: backendUrl('shoporder', 'memberAddress'),
-                        data: data
-                    })
-                        .then(function successCallback (data, status, headers, config) {
-                            if (data.data.rescode == '200') {
-                                var wxP = data.data.data.JS_Pay_API;
-                                wx && wx.chooseWXPay({
-                                    timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                                    nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
-                                    package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-                                    signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                                    paySign: wxP.paySign, // 支付签名
-                                    success: function (res) {
-                                        // 支付后跳转到订单详情页面
-                                        $state.reload();
-                                    },
-                                    cancel: function () {
-                                        $state.reload();
-                                    },
-                                    error: function (e) {
-                                        $state.reload();
-                                    }
-                                });
-                            }
-                            else if (data.data.errInfo === 'get WX Member info failed.') {
-                                alert('您还未领取会员卡，赶紧去领取吧！');
-                            }
-                            else if (data.data.errInfo === 'point not enough.') {
-                                alert('您的积分不足。');
-                            }
-                            else {
-                                alert($filter('translate')('serverError') + data.data.errInfo);
-                            }
-                        })
-                        .finally(function (value) {
-                            $ionicLoading.hide();
-                            document.getElementById('payBtn').disabled = false;
+                    if (payJump) {
+                        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                            'appid=' + self.newAppId + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/shopPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (self.orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                    } else {
+                        //获取支付参数
+                        $ionicLoading.show({
+                            template: '等待支付...'
                         });
+                        var data = {
+                            "action": "weixinPay",
+                            "clear_session": $scope.root.getParams('clear_session'),
+                            "appid": $scope.root.getParams('appid'),
+                            "openid": $scope.root.getParams('wxUserInfo') && $scope.root.getParams('wxUserInfo').openid,
+                            "lang": $translate.proposedLanguage() || $translate.use(),
+                            "hotelId": self.hotelId,
+                            "orderID": self.orderId - 0,
+                            "payType": "JSAPI"
+                        }
+                        data = JSON.stringify(data);
+
+                        $http({
+                            method: $filter('ajaxMethod')(),
+                            url: backendUrl('shoporder', 'memberAddress'),
+                            data: data
+                        })
+                            .then(function successCallback (data, status, headers, config) {
+                                if (data.data.rescode == '200') {
+                                    var wxP = data.data.data.JS_Pay_API;
+                                    wx && wx.chooseWXPay({
+                                        timestamp: wxP.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                                        nonceStr: wxP.nonceStr, // 支付签名随机串，不长于 32 位
+                                        package: wxP.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                                        signType: wxP.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                                        paySign: wxP.paySign, // 支付签名
+                                        success: function (res) {
+                                            // 支付后跳转到订单详情页面
+                                            $state.reload();
+                                        },
+                                        cancel: function () {
+                                            $state.reload();
+                                        },
+                                        error: function (e) {
+                                            $state.reload();
+                                        }
+                                    });
+                                }
+                                else if (data.data.errInfo === 'get WX Member info failed.') {
+                                    alert('您还未领取会员卡，赶紧去领取吧！');
+                                }
+                                else if (data.data.errInfo === 'point not enough.') {
+                                    alert('您的积分不足。');
+                                }
+                                else {
+                                    alert($filter('translate')('serverError') + data.data.errInfo);
+                                }
+                            })
+                            .finally(function (value) {
+                                $ionicLoading.hide();
+                                document.getElementById('payBtn').disabled = false;
+                            });
+                    }
                 }
 
                 /*

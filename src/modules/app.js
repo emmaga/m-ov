@@ -130,7 +130,8 @@
         .constant('PAY_CONFIG', {
             test: true,
             testConfig: {
-                jumpUrl: 'http://openvoddev.cleartv.cn/wx',
+                // jumpUrl: 'http://openvoddev.cleartv.cn/wx',
+                jumpUrl: 'http://openvoddev.cleartv.cn/wx_caizb',
                 compID: 'wxc6e8a3fab4f25a4f'
             },
             onlineConfig: {
