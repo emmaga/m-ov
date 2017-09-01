@@ -1778,8 +1778,6 @@
                         getLocation();
 
                         function getLocation () {
-                            alert('$scope.root._wxreadystate')
-                            alert($scope.root._wxreadystate)
                             if ($scope.root._wxreadystate) {
                                 wx.getLocation({
                                     type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -2126,7 +2124,6 @@
                 };
 
                 self.doAfterPickHotel = function (hotelId, hotelName) {
-                    console.log('111111111')
                     self.showHP(false);
                     self.hotelId = hotelId;
                     self.hotelName = hotelName;
