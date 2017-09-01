@@ -2786,6 +2786,9 @@
                     self.search();
                 }
 
+                self.gotoShop = function () {
+                    $state.go('shopHome2', {shopId: self.shopId});
+                }
 
                 self.search = function () {
                     self.showLoadingBool.searchBool = false;

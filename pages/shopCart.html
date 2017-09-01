@@ -31,15 +31,23 @@
             <!-- <div class="mod-split-line mod-break-padding"></div> -->
         <!-- </div> -->
 
-
+        <style>
+            .warning{color:#ef473a; padding-top: 5px;}
+        </style>
 
         <div class="item item-input mod-short">
             <div class="input-label">{{'contackName'|translate}}</div>
-            <input type="text" ng-model="shopCart.address.name" required placeholder="{{'required'|translate}}"/>
+            <input type="text" name="user" ng-model="shopCart.address.name" required placeholder="{{'required'|translate}}"/>
+        </div>
+        <div ng-show="orderForm.user.$dirty && orderForm.user.$invalid" class="item-input mod-short warning">
+            <div class="input-label"></div>请输入联系人
         </div>
         <div class="item item-input mod-short">
             <div class="input-label">{{'phoneNumber'|translate}}</div>
-            <input type="text" pattern="[0-9]{11,}" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}(11位号码)">
+            <input type="text" name="tel" pattern="[0-9]{11,}" ng-model="shopCart.address.mobile" required placeholder="{{'required'|translate}}(11位号码)">
+        </div>
+        <div ng-show="orderForm.tel.$dirty && orderForm.tel.$invalid" class="item-input mod-short warning">
+            <div class="input-label"></div>请输入正确的手机号
         </div>
         <!--需要配送？-->
         <ion-toggle ng-model="shopCartList.hasEx">{{'needDelivering'|translate}}?</ion-toggle>
@@ -49,7 +57,10 @@
         
         <div class="item item-input mod-short" ng-if="shopCartList.hasEx">
             <div class="input-label">{{'shipAdress'|translate}}</div>
-            <input type="text" ng-model="shopCart.address.address" required placeholder="{{'required'|translate}}"/>
+            <input type="text" name="address" ng-model="shopCart.address.address" required placeholder="{{'required'|translate}}"/>
+        </div>
+        <div ng-show="orderForm.address.$dirty && orderForm.address.$invalid" class="item-input mod-short warning">
+            <div class="input-label"></div>请输入配送地址
         </div>
 
     </form>
