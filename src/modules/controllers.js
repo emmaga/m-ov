@@ -1747,7 +1747,7 @@
                         return
                     }
                     // 如果search参数中指定了hotelId，此时为清鹤公众号嵌入，不显示多个门店列表
-                    self.mutiHotels = util.getParams('hotelId') ? false : true
+                    self.mutiHotels = util.getStateParams('hotelId') ? false : true
 
                     // 如果缓存里有shopid和门店id和门店名称并且商店标识与上次一样,   获取门店，选中该门店，获取商店
                     if (util.getParams('shopinfo')
@@ -2121,6 +2121,7 @@
                 };
 
                 self.doAfterPickHotel = function (hotelId, hotelName) {
+                    console.log('111111111')
                     self.showHP(false);
                     self.hotelId = hotelId;
                     self.hotelName = hotelName;
