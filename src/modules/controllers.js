@@ -1717,7 +1717,6 @@
             function ($http, $window, $q, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl, util) {
 
                 var self = this;
-
                 self.beforeInit = function () {
                     if ($scope.root._readystate) {
                         self.init();
@@ -1740,9 +1739,14 @@
                     self.perPageCount = 10;
                     // 当前页数
                     self.page = 0;
-                    // 如果有url参数里有shopId，说明该链接为商品详情页跳转回来的链接，只显示该商店的信息
+                    // 如果有url参数里有shopId，只显示该商店的信息
                     if (util.getStateParams('shopId')) {
                         self.loadInfoByShopId(util.getStateParams('shopId'))
+                        return
+                    }
+                    // 如果有$stateParams参数里有shopId，只显示该商店的信息
+                    if ($stateParams.shopId) {
+                        self.loadInfoByShopId($stateParams.shopId)
                         return
                     }
                     // 如果search参数中指定了hotelId，此时为清鹤公众号嵌入，不显示多个门店列表
@@ -1774,6 +1778,8 @@
                         getLocation();
 
                         function getLocation () {
+                            alert('$scope.root._wxreadystate')
+                            alert($scope.root._wxreadystate)
                             if ($scope.root._wxreadystate) {
                                 wx.getLocation({
                                     type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -2168,7 +2174,7 @@
                 }
 
                 self.gotoShop = function () {
-                    $state.go('shopHome');
+                    $state.go('shopHome2', {shopId: self.shopId});
                 }
 
                 self.search = function () {

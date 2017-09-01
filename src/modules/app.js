@@ -69,6 +69,10 @@
                     url: '/shopHome',
                     templateUrl: 'pages/shopHome.html'
                 })
+                .state('shopHome2', {
+                    url: '/shopHome/?shopId',
+                    templateUrl: 'pages/shopHome.html'
+                })
                 .state('shopProductDetail', {
                     url: '/shopProductDetail/?hotelId&shopId&productId&hotelName',
                     templateUrl: 'pages/shopProductDetail.html'
