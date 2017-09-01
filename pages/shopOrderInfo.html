@@ -96,9 +96,9 @@
         <button id="payBtn" ng-show="shopOrderInfo.showPayBtn" class="button button-block button-balanced" ng-click="shopOrderInfo.pay()">{{'payNow'|translate}}</button>
         <!-- 确认收货按钮 -->
         <button id="confirmReceiptBtn" ng-show="shopOrderInfo.delivering" ng-click="shopOrderInfo.confirmReceipt()" class="button button-block button-balanced">{{'confirmReceipt'|translate}}</button>
-        <!-- 继续购物按钮 有bug 没有标注商城标识
+        <!-- 继续购物按钮 有bug 没有标注商城标识 -->
         <a class="button button-block button-positive" ui-sref="shopHome">{{'goOnShopping'|translate}}</a>
-        -->
+
         <!-- 取消订单按钮 -->
         <button ng-click="shopOrderInfo.canelOrder()" id="cancelBtn" ng-show="shopOrderInfo.showCancelBtn" class="button button-block button-light">{{'cancelOrder'|translate}}</button>
     </div>
