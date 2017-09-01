@@ -2784,7 +2784,6 @@
                     self.showCancelBtn = false;
                     self.showPayBtn = false;
                     self.search();
-                    self.checkPayId();
                 }
 
 
@@ -2805,10 +2804,12 @@
                         url: backendUrl('shoporder', 'shopOrderInfo'),
                         data: data
                     }).then(function successCallback (data, status, headers, config) {
-                        console.log(data)
+                        console.error(data)
                         self.detail = data.data.data.detail;
                         var s = self.detail.Status;
                         var d = self.detail.deliverWay;
+                        self.shopId=self.detail.ShopID;
+                        self.checkPayId();
                         self.showPayBtn = (s == 'WAITPAY');
                         self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
                         self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
@@ -2824,10 +2825,10 @@
                 var payJump = false;
                 // 获取订房支付商户的appid
                 self.checkPayId = function () {
-                    console.error(util.getParams('shopinfo'))
+                    console.error(self.shopId)
                     var data = JSON.stringify({
                         "clear_session": $scope.root.getParams('clear_session'),
-                        "shopID": util.getParams('shopinfo').shopId
+                        "shopID": self.shopId
                     })
 
                     $http({
