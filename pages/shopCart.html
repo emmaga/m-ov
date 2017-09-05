@@ -1,4 +1,4 @@
-<div ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()">
+<element ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()">
 
     <form class="light-bg list  padding mod-inset-forms" style="padding-top: 40px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
 
@@ -63,10 +63,42 @@
             <div class="input-label"></div>请输入配送地址
         </div>
 
+        <!--需要发票？-->
+        <ion-toggle ng-model="shopCartList.hasBill">需要发票？</ion-toggle>
+        <div class="item mod-short" ng-if-start="shopCartList.hasBill">
+            <span>发票类型</span>
+            <span style=" padding-top: 9px; padding-left: 8px;">
+                <label><input style="transform: scale(1.3)" type="radio" name="billType" ng-model="shopCart.bill.type" ng-value="0"> 个人</label>&nbsp;&nbsp;&nbsp;
+                <label><input style="transform: scale(1.3)"  type="radio" name="billType" ng-model="shopCart.bill.type" ng-value="1"> 公司</label>
+            </span>
+        </div>
+        <div class="item item-input mod-short">
+            <div class="input-label">发票抬头</div>
+            <input type="text" name="billHead" ng-model="shopCart.bill.header" required placeholder="必填" ng-if="shopCart.bill.type"/>
+            <span ng-if="!shopCart.bill.type">个人</span>
+        </div>
+        <div ng-show="orderForm.billHead.$dirty && orderForm.billHead.$invalid" class="item-input mod-short warning">
+            <div class="input-label"></div>请输入公司抬头
+        </div>
+        <div class="item item-input mod-short" ng-if="shopCart.bill.type">
+            <div class="input-label">发票税号</div>
+            <input type="text" name="billNumber" ng-model="shopCart.bill.number" required placeholder="必填"/>
+        </div>
+        <div ng-show="orderForm.billNumber.$dirty && orderForm.billNumber.$invalid" class="item-input mod-short warning">
+            <div class="input-label"></div>请输入税号
+        </div>
+        <div class="item item-input mod-short">
+            <div class="input-label">发票备注</div>
+            <textarea type="text" name="billNote" ng-model="shopCart.bill.note" placeholder="填写备注信息"></textarea>
+        </div>
+        <div class="item item-input mod-short" style="color: red" ng-if-end>
+            提醒：<span ng-if="!shopCartList.hasEx">请至酒店前台进行开票</span>
+            <span ng-if="shopCartList.hasEx">发票与货物将分开寄送，请注意查收</span>
+        </div>
     </form>
     <div class="list">
         <!-- <div class="item mod-ghost" style="height: 46px !important" ng-if="shopCartList.hasEx"></div> -->
-        
+
         <p class="mod-note-emptylist" ng-show="shopCartList.length == 0">
             <i class="icon ion-ios-cart-outline"></i><br>
             {{'emptyCart'|translate}}

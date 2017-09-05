@@ -89,6 +89,31 @@
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.shopName}}</p>
         </div> -->
     </div>
+    <!--发票信息-->
+    <div class="item">
+        <div class="row">
+            <p class="col mod-no-padding">发票状态:</p>
+            <p class="col mod-no-padding col-75" ng-show="shopOrderInfo.detail.InvoiceStatus==0">不需要发票</p>
+            <p class="col mod-no-padding col-75" ng-show="shopOrderInfo.detail.InvoiceStatus==1">待开发票</p>
+            <p class="col mod-no-padding col-75" ng-show="shopOrderInfo.detail.InvoiceStatus==2">已开发票</p>
+        </div>
+        <div class="row" ng-if="shopOrderInfo.detail.InvoiceStatus!=0">
+            <p class="col mod-no-padding">发票类型:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.InvoiceType==1?'公司':'个人'}}</p>
+        </div>
+        <div class="row" ng-if-start="shopOrderInfo.detail.InvoiceType==1">
+            <p class="col mod-no-padding">发票抬头:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.InvoiceTitle}}</p>
+        </div>
+        <div class="row" ng-if-end>
+            <p class="col mod-no-padding">发票税号:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.TaxID}}</p>
+        </div>
+        <div class="row" ng-if="shopOrderInfo.detail.InvoiceStatus!=0 && shopOrderInfo.detail.InvoiceRemark">
+            <p class="col mod-no-padding">发票备注:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.InvoiceRemark}}</p>
+        </div>
+    </div>
     <!-- <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}"> -->
     <div class="item item-divider" style="min-height: calc(100vh - 410px)">
 
