@@ -2315,6 +2315,8 @@
                     self.postage = 0;
                     $scope.shopCartList = new Array();
                     self.totalPrice = 0;
+                    self.bill = {}
+                    self.bill.type = 0  // 发票类型，0为个人，1为公司
 
                     //watch shopCartList
                     $scope.$watch('shopCartList', function () {
@@ -2330,7 +2332,6 @@
 
                     // 获取购物车信息
                     self.loadSCInfo();
-
                     // 是否跳转支付，检查支付的appid
                     self.checkPayId();
                 }
@@ -2523,6 +2524,7 @@
                             $scope.shopCartList = data.data.data.list;
                             self.loadExInfo();
                             $scope.shopCartList.hasEx = true; //需要配送开启
+                            $scope.shopCartList.hasBill = false; //需要发票
                             self.selectAll(); // 默认选上所有的物品
                         })
                         .finally(function (value) {
@@ -2598,7 +2600,12 @@
                             "contactName": self.address.name,
                             "mobile": self.address.mobile,
                             "address": $scope.shopCartList.hasEx ? self.address.address : ''
-                        }
+                        },
+                        "NeedInvoice": $scope.shopCartList.hasBill,
+                        "InvoiceType": self.bill.type,
+                        "InvoiceTitle": self.bill.header,
+                        "TaxID": self.bill.number,
+                        "InvoiceRemark": self.bill.note
                     }
                     data = JSON.stringify(data);
                     $http({
@@ -2637,10 +2644,9 @@
                 var payJump = false;
                 // 获取订房支付商户的appid
                 self.checkPayId = function () {
-                    console.error(util.getParams('shopinfo'))
                     var data = JSON.stringify({
                         "clear_session": $scope.root.getParams('clear_session'),
-                        "shopID": util.getParams('shopinfo').shopId
+                        "shopID": $stateParams.shopId
                     })
 
                     $http({
@@ -2669,7 +2675,6 @@
                 }
 
                 var jumpUrl, compID;
-                console.log(PAY_CONFIG)
                 if (PAY_CONFIG.test) {
                     jumpUrl = PAY_CONFIG.testConfig.jumpUrl
                     compID = PAY_CONFIG.testConfig.compID
@@ -2804,11 +2809,10 @@
                         url: backendUrl('shoporder', 'shopOrderInfo'),
                         data: data
                     }).then(function successCallback (data, status, headers, config) {
-                        console.error(data)
                         self.detail = data.data.data.detail;
                         var s = self.detail.Status;
                         var d = self.detail.deliverWay;
-                        self.shopId=self.detail.ShopID;
+                        self.shopId = self.detail.ShopID;
                         self.checkPayId();
                         self.showPayBtn = (s == 'WAITPAY');
                         self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
@@ -2825,7 +2829,6 @@
                 var payJump = false;
                 // 获取订房支付商户的appid
                 self.checkPayId = function () {
-                    console.error(self.shopId)
                     var data = JSON.stringify({
                         "clear_session": $scope.root.getParams('clear_session'),
                         "shopID": self.shopId
