@@ -2332,7 +2332,6 @@
 
                     // 获取购物车信息
                     self.loadSCInfo();
-
                     // 是否跳转支付，检查支付的appid
                     self.checkPayId();
                 }
@@ -2647,7 +2646,7 @@
                 self.checkPayId = function () {
                     var data = JSON.stringify({
                         "clear_session": $scope.root.getParams('clear_session'),
-                        "shopID": util.getParams('shopinfo').shopId
+                        "shopID": $stateParams.shopId
                     })
 
                     $http({
@@ -2676,7 +2675,6 @@
                 }
 
                 var jumpUrl, compID;
-                console.log(PAY_CONFIG)
                 if (PAY_CONFIG.test) {
                     jumpUrl = PAY_CONFIG.testConfig.jumpUrl
                     compID = PAY_CONFIG.testConfig.compID
