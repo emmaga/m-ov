@@ -671,7 +671,9 @@
 
                     self.stayDays = util.countDay(self.checkIn, self.checkOut);
                     self.searchMemberInfo();
-
+                    self.cityNumberShow = false
+                    self.cityInfo = {code: 86, name: '中国大陆'}
+                    self.searchCityNumberLists();
                     // 验证码 倒计时
                     // self.countSeconds = 30;
                     // self.showTip = true;
@@ -689,6 +691,67 @@
 
                 }
 
+                // 获取城市
+                self.searchCityNumberLists = function () {
+                    $http({
+                        method: 'get',
+                        url: 'api/cityNumberLists.json'
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.cityListContent = data.data.countryInfoList
+
+                        // 获取拼音首字母
+                        var getFirstLetter = function (x) {
+                            return R.head(x.py)
+                        }
+
+                        // 获取排序字母分类
+                        var getFirstLetterList = R.compose(R.uniq, R.map(getFirstLetter))(self.cityListContent).sort()
+
+                        // 按字母进行分组
+                        var result = []
+                        R.forEach(function (letter) {
+                            var item = {}
+                            item.head = letter
+                            item.cities = []
+                            item.cities = R.filter(function (i) {
+                                return getFirstLetter(i) === letter
+                            })(self.cityListContent)
+                            result.push(item)
+                        })(getFirstLetterList)
+
+                        // 获取热门国家
+                        var hotList = {'head': '热门', 'cities': []}
+                        hotList.cities = R.filter(function (i) {
+                            return i.heat > 96
+                        })(self.cityListContent)
+
+                        // 新增热门列表
+                        result.unshift(hotList)
+                        self.cityListContent = result
+
+                        // 新增热门分类
+                        getFirstLetterList.unshift('热门')
+                        self.cityListContent.searchInitialList = getFirstLetterList
+
+                    }, function errorCallback (data, status, headers, config) {
+
+                    });
+                }
+
+                self.doAfterPickCity = function (cityCode, cityName) {
+                    self.cityInfo = {code: cityCode, name: cityName};
+                    self.showCP(false);
+                };
+
+                // 显示／隐藏城市选择器
+                self.showCP = function (boo) {
+                    self.cityNumberShow = boo ? boo : false;
+                    if (boo == false) {
+                        // 点击穿透
+                        // 将日期点击变成不可点的状态
+                        $scope.cp.touchHackEnable = true;
+                    }
+                };
 
                 // 用户选取卡券
                 self.selCard = function (card) {
@@ -1049,7 +1112,7 @@
                         "totalPrice": bookTotalPri,
                         "Comment": self.comment,
                         "contactName": self.member.realName,
-                        "Mobile": self.member.mobile + '',
+                        "Mobile": self.cityInfo.code + '-' + self.member.mobile + '',
                         "IDCardNumber": self.IDCard ? self.IDCard : "",
                         "PlayDate": self.visitDate ? $filter('date')(self.visitDate - 0, 'yyyy-MM-dd') : ""
 

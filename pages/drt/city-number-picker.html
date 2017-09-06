@@ -1,0 +1,27 @@
+<div ng-controller="cityNumberPickerController as cp">
+    <div class="cp-side cp-wrapper">
+        <div class="cp-cell ricepaper">
+            <a ng-repeat="cityInitial in cp.cityListContent.searchInitialList" ng-click="cp.scrollTo(cityInitial)"><small>{{cityInitial}}</small><br /></a>
+        </div>
+    </div>
+
+    <ion-content delegate-handle="cityInitial" id="cp-city-list" class="content has-header">
+        <div class="list">
+            <ng-repeat ng-repeat="cities in cp.cityListContent">
+              <div id="{{cities.head}}" class="item item-divider cp-item-divider">
+                <p>{{cities.head}}</p>
+              </div>
+
+              <ul class="list cp-list">
+                  <li ng-repeat="city in cities.cities track by $index" ng-click="cp.callback(city.code, city.cn)" class="item cp-item" ng-class="{'touch-hack-enable': cp.touchHackEnable}">
+                    <div class="row cp-row">
+                      <div class="col col-14">
+                          <span>{{city.cn}}</span><i>{{city.code}}</i>
+                      </div>
+                    </div>
+                  </li>
+              </ul>
+          </ng-repeat>
+        </div>
+    </ion-content>
+</div>

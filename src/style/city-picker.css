@@ -10,6 +10,16 @@
   height: 40px;
   line-height: 40px;
 }
+
+.cp-row .col span{
+    display: inline-block;
+    width: 180px;
+}
+
+.cp-row .col i{
+    color: #999;
+}
+
 .cp-item .row{
   padding: 0;
 }
@@ -44,6 +54,10 @@
     padding: 3px 6px;
     box-shadow: 0px 1px 3px 1px rgba(0,0,0,.08);
     text-align: center; 
+}
+
+.cp-cell a{
+    display: block;
 }
 
 #cp-city-list {

@@ -12,6 +12,7 @@ module.exports = function(grunt) {
                     {
                         src: [
                             'src/js/util.js',
+                            'src/js/ramda.min.js', // http://ramda.cn/docs/#
                             'src/modules/controllers.js',
                             'src/modules/directives.js',
                             'src/modules/services.js',
