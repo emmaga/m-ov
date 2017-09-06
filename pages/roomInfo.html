@@ -133,12 +133,20 @@
 
         <!-- 手机号 -->
         <div class="item item-input">
-            <div class="input-label">{{'phoneNumber'|translate}}:</div>
-            <input type="tel" name="tel" pattern="[0-9]{11}" ng-model="roomInfo.member.mobile" required placeholder="11位号码({{'required'|translate}})">
+            <div class="input-label" ng-click="roomInfo.showCP(true);cp.init(roomInfo.cityListContent, roomInfo.doAfterPickCity)">{{roomInfo.cityInfo.name=='中国大陆'?'大陆手机':'境外手机'}} : </div>
+            <span style="vertical-align: middle;display: inline-block" ng-click="roomInfo.showCP(true);cp.init(roomInfo.cityListContent, roomInfo.doAfterPickCity)">+ {{roomInfo.cityInfo.code}} <i class="icon ion-ios-arrow-down" style="font-size: 16px;"></i> - &nbsp;</span>
+            <input type="tel" ng-if="roomInfo.cityInfo.name=='中国大陆'" name="tel" pattern="[0-9]{11}" ng-model="roomInfo.member.mobile" required placeholder="11位号码({{'required'|translate}})">
+            <input type="tel" ng-if="roomInfo.cityInfo.name!='中国大陆'" name="tel2" ng-model="roomInfo.member.mobile" required placeholder="{{'required'|translate}}">
         </div>
+
+        <!--手机号错误提示-->
         <div ng-show="orderDetail.tel.$dirty && orderDetail.tel.$invalid" class="warning item-input">
             <div class="input-label"></div>请输入11位数字手机号码
         </div>
+        <div ng-show="orderDetail.tel2.$dirty && orderDetail.tel2.$invalid" class="warning item-input">
+            <div class="input-label"></div>请输入手机号码
+        </div>
+
         <!-- 身份证号 -->
         <div ng-if="roomInfo.room.RoomFlag == 1" class="item item-input">
             <div class="input-label">身份证:</div>
@@ -209,5 +217,10 @@
         </div>
     </form>
 
-
+    <div class="ab-container" ng-show="roomInfo.cityNumberShow">
+        <div class="bar bar-header">
+            <button class="button button-clear button-positive" ng-click="roomInfo.showCP(false)">{{'back'|translate}}</button>
+        </div>
+        <city-number></city-number>
+    </div>
 </div>

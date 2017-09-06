@@ -33,6 +33,36 @@
 
   }])
 
+  .directive("cityNumber", function () {
+      return {
+          restrict: 'EA',
+          templateUrl: 'pages/drt/city-number-picker.html',
+          replace: true
+      }
+  })
+
+  .controller('cityNumberPickerController', ['$scope', '$ionicScrollDelegate', '$timeout',
+      function($scope, $ionicScrollDelegate, $timeout) {
+          console.log('cityNumberPickerController')
+          var self = this;
+
+          self.init = function(cityListContent, callback) {
+              self.callback = callback;
+              self.cityListContent = cityListContent;
+              // 防止点透
+              // 将城市点击变成可点的状态
+              $timeout(function() {self.touchHackEnable = false;}, 1000);
+          }
+
+          self.scrollTo = function(pos) {
+              var offset = document.getElementById(pos).offsetTop;
+              /*console.log(offset);
+              document.getElementById('cp-city-list').scrollTop = offset;*/
+              $ionicScrollDelegate.$getByHandle('cityInitial').scrollTo(0, offset, true);
+          }
+
+      }])
+
   // ===============================================================
 
   .directive("hotelPicker", function () {
@@ -97,7 +127,7 @@
         self.checkout = checkout;
         self.dates = [];
         self.callback = callback;
-        
+
         self.setDateData();
 
         // 防止点透
@@ -117,8 +147,8 @@
           "weeks" : [
             [null, null, 1472739426000, 1472825826000, 1472912226000, 1472998626000, 1473085026000],
             [1473171426000, 1473257826000, 1473344226000, 1473430626000, 1473517026000, 1473603426000, 1473689826000],
-            [1473776226000, 1473862626000, 1473949026000, 1474035426000, 1474121826000, 1474208226000, 1474294626000], 
-            [1474381026000, 1474467426000, 1474553826000, 1474640226000, 1474726626000, 1474813026000, 1474899426000], 
+            [1473776226000, 1473862626000, 1473949026000, 1474035426000, 1474121826000, 1474208226000, 1474294626000],
+            [1474381026000, 1474467426000, 1474553826000, 1474640226000, 1474726626000, 1474813026000, 1474899426000],
             [1474985826000, 1475072226000, 1475158626000, 1475245026000, null, null, null]
           ]
         }
@@ -127,7 +157,7 @@
         // 月份数量＝结束日期的所在月份总数－开始..＋1
         var mC = getMonCnt(self.et) - getMonCnt(self.st) + 1;
         var st = new Date(self.st);
-        
+
         for(var i = 0; i < mC; i++) {
 
           // 设置年月，例如：2015年5月
@@ -137,11 +167,11 @@
           // 设置日期，设置1个月的星期，位置要按星期日开始的来排
           self.dates[i].weeks = [];
 
-          var last = new Date(st.getFullYear(), st.getMonth() + 1, 0); // 获取当前月最后一天时间    
-          var y = last.getFullYear();    
+          var last = new Date(st.getFullYear(), st.getMonth() + 1, 0); // 获取当前月最后一天时间
+          var y = last.getFullYear();
           var m = last.getMonth() + 1;
           var wC = weekCnt(y, m);
-          
+
           var d = new Date(st.getFullYear(), st.getMonth(), 1);
           var startNullCnt = d.getDay();
 
@@ -163,7 +193,7 @@
               else {
                 self.dates[i].weeks[k][j] = d.getTime();
                 d.setTime(new Date(addDs(d.getTime(), 1)).getTime());
-              } 
+              }
             }
           }
 
@@ -212,7 +242,7 @@
             self.callback(self.checkin, self.checkout);
           }
         }
-        // 如果checkin和checkout都为空，暂时用不到 
+        // 如果checkin和checkout都为空，暂时用不到
         else{
           self.checkin = date;
         }
@@ -280,7 +310,7 @@
         d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
         return d.getTime();
       }
-      
+
       // 获取一个月有几个星期
       // month_number is in the range 1..12
       function weekCnt(year, month_number) {
@@ -311,7 +341,7 @@
             else {
               d.setTime(addDs(d.getTime(), 28));
             }
-            break;  
+            break;
           // 如果下个月是4，6，9，11，＋30天
           case 3:
           case 5:
@@ -345,7 +375,7 @@
 
       // 判断y是否为闰年
       function isLeapYear(y) {
-        return (y % 4 == 0) && (y % 400 == 0 || y % 100 != 0);  
+        return (y % 4 == 0) && (y % 400 == 0 || y % 100 != 0);
       }
 
   }])
