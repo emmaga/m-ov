@@ -134,7 +134,7 @@
         <!-- 手机号 -->
         <div class="item item-input">
             <div class="input-label" ng-click="roomInfo.showCP(true);cp.init(roomInfo.cityListContent, roomInfo.doAfterPickCity)">{{roomInfo.cityInfo.name=='中国大陆'?'大陆手机':'境外手机'}} : </div>
-            <span style="vertical-align: middle;display: inline-block" ng-click="roomInfo.showCP(true);cp.init(roomInfo.cityListContent, roomInfo.doAfterPickCity)">+ {{roomInfo.cityInfo.code}} <i class="icon ion-ios-arrow-down" style="font-size: 16px;"></i> - &nbsp;</span>
+            <span style="vertical-align: middle;display: inline-block" ng-click="roomInfo.showCP(true);cp.init(roomInfo.cityListContent, roomInfo.doAfterPickCity)">+ {{roomInfo.cityInfo.code}} <i class="icon ion-ios-arrow-down" style="font-size: 16px;"></i> &nbsp;&nbsp;- &nbsp;</span>
             <input type="tel" ng-if="roomInfo.cityInfo.name=='中国大陆'" name="tel" pattern="[0-9]{11}" ng-model="roomInfo.member.mobile" required placeholder="11位号码({{'required'|translate}})">
             <input type="tel" ng-if="roomInfo.cityInfo.name!='中国大陆'" name="tel2" ng-model="roomInfo.member.mobile" required placeholder="{{'required'|translate}}">
         </div>
