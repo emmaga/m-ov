@@ -2114,14 +2114,23 @@
                         self.loadShopCartInfo();
                         self.categoryList = data.data.data.categoryList;
                         if (self.categoryList.length != 0) {
-                            // 默认加载第一个分类
-                            self.searchProductList(self.categoryList["0"]["id"], true);
-                        }
-                        else {
+                            // 如果传入分类信息，切换分类
+                            if ($stateParams.shopId) {
+                                self.searchProductList(self.categoryList["0"]["id"], true);
+                            } else {
+                                if (util.getStateParams('cateId')) {
+                                    self.searchCategoryId=self.categoryList["0"]["id"]
+                                    setTimeout(function(){
+                                        self.searchProductList(util.getStateParams('cateId'), true)
+                                    },0)
+                                } else {
+                                    // 默认加载第一个分类
+                                    self.searchProductList(self.categoryList["0"]["id"], true);
+                                }
+                            }
+                        } else {
                             self.noResults = true;
                         }
-
-
                     }, function errorCallback (data, status, headers, config) {
 
                     });
