@@ -90,10 +90,9 @@
         </div> -->
     </div>
     <!--发票信息-->
-    <div class="item">
+    <div class="item" ng-if="shopOrderInfo.detail.InvoiceStatus!=0">
         <div class="row">
             <p class="col mod-no-padding">发票状态:</p>
-            <p class="col mod-no-padding col-75" ng-show="shopOrderInfo.detail.InvoiceStatus==0">不需要发票</p>
             <p class="col mod-no-padding col-75" ng-show="shopOrderInfo.detail.InvoiceStatus==1">待开发票</p>
             <p class="col mod-no-padding col-75" ng-show="shopOrderInfo.detail.InvoiceStatus==2">已开发票</p>
         </div>
