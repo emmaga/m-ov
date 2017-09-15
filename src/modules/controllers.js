@@ -1785,6 +1785,7 @@
                 var self = this;
                 // 正在营业
                 self.isOpening = true
+                self.shopAllDay = true
 
                 self.beforeInit = function () {
                     if ($scope.root._readystate) {
@@ -2097,8 +2098,13 @@
                         if (data.data.rescode == '200') {
                             console.info(JSON.parse(data.data.data['ShopName']))
                             self.shopName = JSON.parse(data.data.data['ShopName'])["zh-CN"];
-                            self.shopStartTime = data.data.data.ServiceStartTime.slice(0,5);
-                            self.shopEndTime = data.data.data.ServiceEndTime.slice(0,5);
+                            self.shopStartTime = data.data.data.ServiceStartTime.slice(0, 5);
+                            self.shopEndTime = data.data.data.ServiceEndTime.slice(0, 5);
+                            if (self.shopStartTime == '00:00' && self.shopEndTime == '23:59') {
+                                self.shopAllDay = true;
+                            }else{
+                                self.shopAllDay = false;
+                            }
                             // 是否正在营业
                             isShopOpen();
                             self.searchCategory();
@@ -2232,7 +2238,7 @@
 
                     if (now > self.shopStartTime && now < self.shopEndTime) {
                         self.isOpening = true
-                    }else{
+                    } else {
                         self.isOpening = false
                     }
                 }
@@ -2440,17 +2446,6 @@
                     self.loadSCInfo();
                     // 是否跳转支付，检查支付的appid
                     self.checkPayId();
-                }
-
-
-                self.checkDeType = function () {
-                    if ($scope.shopCartList.selectedDeType == '') {
-                        alert('请选择收货方式')
-                        var l = $scope.shopCartList;
-                        for (var i = 0; i < l.length; i++) {
-                            l[i].checked = false;
-                        }
-                    }
                 }
 
                 /*
@@ -2762,8 +2757,8 @@
                             }
                             //订单生成失败
                             else {
-                                if(data.data.errInfo=='not in service time.'){
-                                    data.data.errInfo='当前不在营业时间'
+                                if (data.data.errInfo == 'not in service time.') {
+                                    data.data.errInfo = '当前不在营业时间'
                                 }
                                 alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                                 $ionicLoading.hide();
@@ -2925,7 +2920,7 @@
                     } else {
                         $scope.shopCartList.selectedDeType = typeObj[0] ? typeObj[0].val : ''
                     }
-                    return typeObj.sort(function(a,b){
+                    return typeObj.sort(function (a, b) {
                         return a.sort - b.sort
                     })
                 }

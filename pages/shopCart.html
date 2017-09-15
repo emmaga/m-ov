@@ -50,7 +50,7 @@
             <div class="input-label"></div>请输入正确的手机号
         </div>
         <!--需要配送？-->
-        <div class="item item-input item-select">
+        <div class="item item-input"  ng-class="{'item-select':shopCart.deType.length>1}">
             <div class="input-label">收货方式</div>
             <span ng-show="shopCart.deType.length<=1" class="selectOnlyOne">
                 {{shopCart.deType[0]['name']}}

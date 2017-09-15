@@ -109,7 +109,7 @@
 }
 
 .mod-has-tabs-top {
-    margin-top: 113px !important;
+    margin-top: 93px !important;
 }
 
 .mod-has-tabs-top {
@@ -953,10 +953,20 @@ small {
 
 /*商城首页*/
 .shop-home .shop-top-bar {
-    padding: 0;
+    height: 93px;
+}
+
+.shop-home.notAllDay .shop-top-bar {
     height: 113px;
 }
 
+.shop-home.notAllDay .tabs-top > .tabs {
+    top: 64px;
+}
+
+.shop-home.notAllDay .mod-has-tabs-top{
+    margin-top:113px !important;
+}
 .shop-home .shop-time {
     position: fixed;
     top: 43px;
@@ -968,10 +978,6 @@ small {
     line-height: 20px;
     background: #F4F4F4;
     color: #ef473a;
-}
-
-.shop-home .tabs-top > .tabs {
-    top: 64px;
 }
 
 .shop-home .time-mask {
@@ -1001,7 +1007,7 @@ small {
     border-right: none !important;
 }
 /*购物车select只有一个选择*/
-.item-select .selectOnlyOne {
+.item .selectOnlyOne {
     position: absolute;
     right: 0;
     padding: 0 48px 0 16px;
