@@ -1073,7 +1073,10 @@
                 }
 
                 self.newOrder = function () {
-
+                    if (!self.visitDate) {
+                        alert('请选择游玩日期');
+                        return
+                    }
                     self.showLoadingBool.waitPayBool = false;
                     loadingService(self.showLoadingBool);
 
@@ -1780,6 +1783,10 @@
             function ($http, $window, $q, $scope, $filter, $timeout, $stateParams, $state, $translate, loadingService, backendUrl, util) {
 
                 var self = this;
+                // 正在营业
+                self.isOpening = true
+                self.shopAllDay = true
+
                 self.beforeInit = function () {
                     if ($scope.root._readystate) {
                         self.init();
@@ -1802,6 +1809,8 @@
                     self.perPageCount = 10;
                     // 当前页数
                     self.page = 0;
+
+
                     // 如果有url参数里有shopId，只显示该商店的信息
                     if (util.getStateParams('shopId')) {
                         self.loadInfoByShopId(util.getStateParams('shopId'))
@@ -1812,6 +1821,7 @@
                         self.loadInfoByShopId($stateParams.shopId)
                         return
                     }
+
                     // 如果search参数中指定了hotelId，此时为清鹤公众号嵌入，不显示多个门店列表
                     self.mutiHotels = util.getStateParams('hotelId') ? false : true
 
@@ -1822,11 +1832,10 @@
                         self.hotelId = util.getParams('shopinfo').hotelId;
                         self.hotelName = util.getParams('shopinfo').hotelName;
                         self.shopId = util.getParams('shopinfo').shopId;
-
                         // 获取门店，选中该门店
                         self.getHotelList()
                             .then(function () {
-                                self.getShopName();
+                                self.getShopInfo();
                             });
                     }
                     // 否则：如果参数中有指定hotelId
@@ -1884,7 +1893,7 @@
                                 "shopId": self.shopId
                             };
                             util.setParams('shopinfo', shopinfo);
-                            self.getShopName();
+                            self.getShopInfo();
                         } else {
                             self.noShop = true;
                             self.shopName = $filter('translate')('noShop');
@@ -1962,10 +1971,14 @@
                                         "hotelName": self.hotelName,
                                         "hotelId": self.hotelId,
                                         "shopId": self.shopId,
-                                        "state": util.getParams('state')
+                                        "state": util.getParams('state'),
+                                        "ServiceStartTime": data.data.ServiceStartTime,
+                                        "ServiceEndTime": data.data.ServiceEndTime,
+                                        "SupportInvoice": data.data.SupportInvoice
                                     };
                                     util.setParams('shopinfo', shopinfo);
-                                    self.getShopName();
+                                    self.getShopInfo();
+                                    // isShopOpen();
                                 } else {
                                     self.noShop = true;
                                     self.shopName = $filter('translate')('noShop');
@@ -2064,11 +2077,10 @@
                         })
                 }
 
-                // 商城名字
-                self.getShopName = function () {
+                self.getShopInfo = function () {
                     self.showLoadingIcon = true
                     var data = {
-                        "action": "getShopName",
+                        "action": "getShopInfo",
                         "clear_session": $scope.root.getParams('clear_session'),
                         "appid": $scope.root.getParams('appid'),
                         "openid": $scope.root.getParams('wxUserInfo') && $scope.root.getParams('wxUserInfo').openid,
@@ -2084,7 +2096,17 @@
                     }).then(function successCallback (data, status, headers, config) {
                         self.showLoadingIcon = false
                         if (data.data.rescode == '200') {
-                            self.shopName = data.data.data.shopName;
+                            console.info(JSON.parse(data.data.data['ShopName']))
+                            self.shopName = JSON.parse(data.data.data['ShopName'])["zh-CN"];
+                            self.shopStartTime = data.data.data.ServiceStartTime.slice(0, 5);
+                            self.shopEndTime = data.data.data.ServiceEndTime.slice(0, 5);
+                            if (self.shopStartTime == '00:00' && self.shopEndTime == '23:59') {
+                                self.shopAllDay = true;
+                            }else{
+                                self.shopAllDay = false;
+                            }
+                            // 是否正在营业
+                            isShopOpen();
                             self.searchCategory();
                         } else {
                             alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
@@ -2119,10 +2141,10 @@
                                 self.searchProductList(self.categoryList["0"]["id"], true);
                             } else {
                                 if (util.getStateParams('cateId')) {
-                                    self.searchCategoryId=self.categoryList["0"]["id"]
-                                    setTimeout(function(){
+                                    self.searchCategoryId = self.categoryList["0"]["id"]
+                                    setTimeout(function () {
                                         self.searchProductList(util.getStateParams('cateId'), true)
-                                    },0)
+                                    }, 0)
                                 } else {
                                     // 默认加载第一个分类
                                     self.searchProductList(self.categoryList["0"]["id"], true);
@@ -2201,6 +2223,25 @@
                     self.hotelName = hotelName;
                     self.getShopIdByHotelId();
                 };
+
+                function isShopOpen () {
+                    var date = new Date();
+                    var hour = date.getHours();
+                    if (hour >= 0 && hour <= 9) {
+                        hour = "0" + hour;
+                    }
+                    var mins = date.getMinutes();
+                    if (mins >= 0 && mins <= 9) {
+                        mins = "0" + mins;
+                    }
+                    var now = hour + ':' + mins;
+
+                    if (now > self.shopStartTime && now < self.shopEndTime) {
+                        self.isOpening = true
+                    } else {
+                        self.isOpening = false
+                    }
+                }
             }
         ])
 
@@ -2382,22 +2423,21 @@
 
                     // 获取hotelId和hotelName by shopId
                     self.getHotelInfo(self.shopId);
-
+                    self.getShopInfo(self.shopId);
                     // self.postage = 1000; //邮费 todo
                     self.postage = 0;
                     $scope.shopCartList = new Array();
                     self.totalPrice = 0;
                     self.bill = {}
                     self.bill.type = 0  // 发票类型，0为个人，1为公司
-
                     //watch shopCartList
                     $scope.$watch('shopCartList', function () {
                         self.judgeChecked();
                         self.countTotalPrice();
                     }, true);
 
-                    // watch shopCartList.hasEx
-                    $scope.$watch('shopCartList.hasEx', function () {
+                    // watch shopCartList.selectedDeType
+                    $scope.$watch('shopCartList.selectedDeType', function () {
                         self.changeDeliveryWay();
                         self.countTotalPrice();
                     }, true);
@@ -2409,8 +2449,8 @@
                 }
 
                 /*
-        ** 获取hotelId和hotelName by shopId
-        */
+                ** 获取hotelId和hotelName by shopId
+                */
                 self.getHotelInfo = function (shopId) {
                     var data = {
                         "action": "getHotelInfo",
@@ -2440,15 +2480,41 @@
                         )
                 }
 
+
+                // 商城信息
+                self.getShopInfo = function (shopId) {
+                    var data = {
+                        "action": "getShopInfo",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "appid": $scope.root.getParams('appid'),
+                        "openid": $scope.root.getParams('wxUserInfo') && $scope.root.getParams('wxUserInfo').openid,
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "shopID": shopId
+                    };
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('shopinfo', 'productCategory'),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        if (data.data.rescode == '200') {
+                            self.invoiceEnable = data.data.data.SupportInvoice
+                        } else {
+                            alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                        }
+                    }, function errorCallback (data, status, headers, config) {
+                        alert($filter('translate')('serverError'));
+                    });
+                }
                 /*
-        ** 去除不支持该配送方式的已选商品
-        */
+                ** 去除不支持该配送方式的已选商品
+                */
                 self.changeDeliveryWay = function () {
                     var l = $scope.shopCartList;
+                    if (l.length < 1) return;
                     for (var i = 0; i < l.length; i++) {
                         if (l[i].checked) {
-                            l[i].checked = ($scope.shopCartList.hasEx && l[i].deliveryType.indexOf('express') !== -1) ||
-                                (!$scope.shopCartList.hasEx && l[i].deliveryType.indexOf('bySelf') !== -1);
+                            l[i].checked = l[i].deliveryType.indexOf($scope.shopCartList.selectedDeType) !== -1
                         }
                     }
                 }
@@ -2459,11 +2525,7 @@
                         // 商品不下架，商品库存不缺
                         // 商品支持目前配送方式
                         var _hasDeliveryWay = false;
-                        if ($scope.shopCartList.hasEx) {
-                            _hasDeliveryWay = (l[i].deliveryType.indexOf('express') !== -1) ? true : false;
-                        } else {
-                            _hasDeliveryWay = (l[i].deliveryType.indexOf('bySelf') !== -1) ? true : false;
-                        }
+                        _hasDeliveryWay = l[i].deliveryType.indexOf($scope.shopCartList.selectedDeType) !== -1
                         l[i].checked = l[i].status && (l[i].availableCount - l[i].count) >= 0 && l[i].availableCount != 0 && _hasDeliveryWay;
                     }
                 }
@@ -2546,7 +2608,9 @@
                             function successCallback (data, status, headers, config) {
                                 if (data.data.rescode != '200') {
                                     alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                                    return
                                 }
+                                self.deType = getDeTye($scope.shopCartList);
                             },
                             function errorCallback (data, status, headers, config) {
 
@@ -2569,7 +2633,7 @@
                             }
                         }
                     }
-                    if ($scope.shopCartList.hasEx) {
+                    if ($scope.shopCartList.selectedDeType !== 'bySelf') {
                         self.totalPrice += self.postage;
                     }
                 }
@@ -2595,8 +2659,8 @@
                         .then(function successCallback (data, status, headers, config) {
                             $scope.shopCartList = data.data.data.list;
                             self.loadExInfo();
-                            $scope.shopCartList.hasEx = true; //需要配送开启
                             $scope.shopCartList.hasBill = false; //需要发票
+                            self.deType = getDeTye($scope.shopCartList);
                             self.selectAll(); // 默认选上所有的物品
                         })
                         .finally(function (value) {
@@ -2657,7 +2721,7 @@
                             goodsList_n++;
                         }
                     }
-                    var deliverWay = $scope.shopCartList.hasEx ? 'express' : 'bySelf';
+                    var deliverWay = $scope.shopCartList.selectedDeType;
                     var data = {
                         "action": "newShopOrder",
                         "clear_session": $scope.root.getParams('clear_session'),
@@ -2671,7 +2735,7 @@
                             "deliverWay": deliverWay,
                             "contactName": self.address.name,
                             "mobile": self.address.mobile,
-                            "address": $scope.shopCartList.hasEx ? self.address.address : ''
+                            "address": $scope.shopCartList.selectedDeType != 'bySelf' ? self.address.address : ''
                         },
                         "NeedInvoice": $scope.shopCartList.hasBill,
                         "InvoiceType": self.bill.type,
@@ -2693,6 +2757,9 @@
                             }
                             //订单生成失败
                             else {
+                                if (data.data.errInfo == 'not in service time.') {
+                                    data.data.errInfo = '当前不在营业时间'
+                                }
                                 alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
                                 $ionicLoading.hide();
                                 // 支付按钮变为可点击
@@ -2832,6 +2899,31 @@
 
                 }
 
+                // 获取配送方式
+                function getDeTye (list) {
+                    var deType = []
+                    R.forEach(function (item) {
+                        deType.push(item.deliveryType)
+                    })(list)
+                    deType = R.uniq(R.unnest(deType))
+                    var typeObj = []
+                    R.forEach(function (type) {
+                        var obj = {}
+                        obj.val = type
+                        obj.name = type == 'express' ? '快递' : (type == 'bySelf' ? '自提' : '送至房间')
+                        obj.sort = type == 'express' ? 0 : (type == 'bySelf' ? 1 : 2)   // 排序设置
+                        typeObj.push(obj)
+                    })(deType)
+                    if (deType.length > 1) {
+                        typeObj.unshift({'name': '请选择', 'val': ''})
+                        $scope.shopCartList.selectedDeType = ''
+                    } else {
+                        $scope.shopCartList.selectedDeType = typeObj[0] ? typeObj[0].val : ''
+                    }
+                    return typeObj.sort(function (a, b) {
+                        return a.sort - b.sort
+                    })
+                }
             }
         ])
 

@@ -1,4 +1,4 @@
-<div ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()">
+<div ng-controller="shopCartController as shopCart" ng-init="shopCart.beforeInit()" class="shop-cart">
 
     <form class="light-bg list  padding mod-inset-forms" style="padding-top: 40px;padding-bottom: 0 !important; margin-bottom: 0 !important" name="orderForm" ng-submit="orderForm.$valid && shopCartList.length>0 && shopCart.submitOrder()">
 
@@ -50,50 +50,59 @@
             <div class="input-label"></div>请输入正确的手机号
         </div>
         <!--需要配送？-->
-        <ion-toggle ng-model="shopCartList.hasEx">{{'needDelivering'|translate}}?</ion-toggle>
-        <div class="item" ng-if="!(shopCartList.hasEx)" style="height: 46px; line-height: 14px;">
+        <div class="item item-input"  ng-class="{'item-select':shopCart.deType.length>1}">
+            <div class="input-label">收货方式</div>
+            <span ng-show="shopCart.deType.length<=1" class="selectOnlyOne">
+                {{shopCart.deType[0]['name']}}
+            </span>
+            <select style="top: 1px;" ng-show="shopCart.deType.length>1" ng-model="shopCartList.selectedDeType" ng-options="item.val as item.name for item in shopCart.deType"></select>
+        </div>
+
+        <div class="item" ng-if="shopCartList.selectedDeType=='bySelf'" style="height: 46px; line-height: 14px;">
             {{'placeOfTakingGoods'|translate}}&nbsp{{shopCart.hotelName}}
         </div>
         
-        <div class="item item-input mod-short" ng-if="shopCartList.hasEx">
-            <div class="input-label">{{'shipAdress'|translate}}</div>
-            <input type="text" name="address" ng-model="shopCart.address.address" required placeholder="{{'required'|translate}}"/>
+        <div class="item item-input mod-short" ng-if="shopCartList.selectedDeType!='bySelf'&&shopCartList.selectedDeType!=''">
+            <div class="input-label">收货地点</div>
+            <input type="text" name="address" ng-model="shopCart.address.address" required placeholder="请输入收货地址或房间号"/>
         </div>
         <div ng-show="orderForm.address.$dirty && orderForm.address.$invalid" class="item-input mod-short warning">
-            <div class="input-label"></div>请输入配送地址
+            <div class="input-label"></div>请输入配送地址或房间号：8102(客房号)、V1(棋牌室)、KTV-1(KTV房间号)
         </div>
 
         <!--需要发票？-->
-        <ion-toggle ng-model="shopCartList.hasBill">需要发票？</ion-toggle>
-        <div class="item mod-short" ng-if-start="shopCartList.hasBill">
-            <span>发票类型</span>
-            <span style=" padding-top: 9px; padding-left: 8px;">
-                <label><input style="transform: scale(1.3)" type="radio" name="billType" ng-model="shopCart.bill.type" ng-value="0"> 个人</label>&nbsp;&nbsp;&nbsp;
-                <label><input style="transform: scale(1.3)"  type="radio" name="billType" ng-model="shopCart.bill.type" ng-value="1"> 公司</label>
-            </span>
-        </div>
-        <div class="item item-input mod-short">
-            <div class="input-label">发票抬头</div>
-            <input type="text" name="billHead" ng-model="shopCart.bill.header" required placeholder="必填" ng-if="shopCart.bill.type"/>
-            <span ng-if="!shopCart.bill.type">个人</span>
-        </div>
-        <div ng-show="orderForm.billHead.$dirty && orderForm.billHead.$invalid" class="item-input mod-short warning">
-            <div class="input-label"></div>请输入公司抬头
-        </div>
-        <div class="item item-input mod-short" ng-if="shopCart.bill.type">
-            <div class="input-label">发票税号</div>
-            <input type="text" name="billNumber" ng-model="shopCart.bill.number" required placeholder="必填"/>
-        </div>
-        <div ng-show="orderForm.billNumber.$dirty && orderForm.billNumber.$invalid" class="item-input mod-short warning">
-            <div class="input-label"></div>请输入税号
-        </div>
-        <div class="item item-input mod-short">
-            <div class="input-label">发票备注</div>
-            <textarea type="text" name="billNote" ng-model="shopCart.bill.note" placeholder="填写备注信息"></textarea>
-        </div>
-        <div class="item item-input mod-short" style="color: red" ng-if-end>
-            提醒：<span ng-if="!shopCartList.hasEx">请至酒店前台进行开票</span>
-            <span ng-if="shopCartList.hasEx">发票与货物将分开寄送，请注意查收</span>
+        <div ng-if="shopCart.invoiceEnable" class="invoice-list">
+            <ion-toggle ng-model="shopCartList.hasBill">需要发票？</ion-toggle>
+            <div class="item mod-short" ng-if-start="shopCartList.hasBill">
+                <span>发票类型</span>
+                <span style=" padding-top: 9px; padding-left: 8px;">
+                    <label><input style="transform: scale(1.3)" type="radio" name="billType" ng-model="shopCart.bill.type" ng-value="0"> 个人</label>&nbsp;&nbsp;&nbsp;
+                    <label><input style="transform: scale(1.3)"  type="radio" name="billType" ng-model="shopCart.bill.type" ng-value="1"> 公司</label>
+                </span>
+            </div>
+            <div class="item item-input mod-short">
+                <div class="input-label">发票抬头</div>
+                <input type="text" name="billHead" ng-model="shopCart.bill.header" required placeholder="必填" ng-if="shopCart.bill.type"/>
+                <span ng-if="!shopCart.bill.type">个人</span>
+            </div>
+            <div ng-show="orderForm.billHead.$dirty && orderForm.billHead.$invalid" class="item-input mod-short warning">
+                <div class="input-label"></div>请输入公司抬头
+            </div>
+            <div class="item item-input mod-short" ng-if="shopCart.bill.type">
+                <div class="input-label">发票税号</div>
+                <input type="text" name="billNumber" ng-model="shopCart.bill.number" required placeholder="必填"/>
+            </div>
+            <div ng-show="orderForm.billNumber.$dirty && orderForm.billNumber.$invalid" class="item-input mod-short warning">
+                <div class="input-label"></div>请输入税号
+            </div>
+            <div class="item item-input mod-short">
+                <div class="input-label">发票备注</div>
+                <textarea type="text" name="billNote" ng-model="shopCart.bill.note" placeholder="填写备注信息"></textarea>
+            </div>
+            <div class="item item-input mod-short" style="color: red" ng-if-end>
+                提醒：<span ng-if="!shopCartList.hasEx">请至酒店前台进行开票</span>
+                <span ng-if="shopCartList.hasEx">发票与货物将分开寄送，请注意查收</span>
+            </div>
         </div>
     </form>
     <div class="list">
@@ -111,22 +120,23 @@
 
             <div class="item item-checkbox item-icon-right assertive">
                 <!-- CHECKBOX -->
-                <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') !== -1) || (!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') !== -1)" class="checkbox checkbox-assertive">
+                <div ng-show="item.deliveryType.indexOf(shopCartList.selectedDeType)!=-1" class="checkbox checkbox-assertive">
                     <input ng-disabled="!item.status || item.availableCount==0 || (item.availableCount - item.count)<0" ng-model="item.checked" type="checkbox">
                 </div>
                 <!-- CHECKBOX-disabled -->
-                <div ng-show="(shopCartList.hasEx && item.deliveryType.indexOf('express') === -1 || !shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1)" class="checkbox" style="pointer-events: none"><input type="checkbox"></div>
+                <div ng-show="item.deliveryType.indexOf(shopCartList.selectedDeType)==-1" class="checkbox" style="pointer-events: none"><input type="checkbox"></div>
                 <!-- 价格 -->
                 <ng-if ng-if="item.price.money.Enable">￥ {{((item.price.money.price-0)-(item.price.money.Decline-0))*item.count | fenToYuan}}</ng-if>
                 <!-- 积分 -->
                 <ng-if ng-if="item.price.point.Enable">积分 {{item.price.point.point*item.count}}</ng-if>
                 <!-- 删除商品 -->
                 <a class="icon ion-ios-trash-outline dark" ng-click="shopCart.delete($index)" style="font-size: 24px; z-index: 10"></a>
-                
-                <!--该商品不支持配送-->
-                <small ng-show="shopCartList.hasEx && item.deliveryType.indexOf('express') === -1"><br>该商品不支持配送</small>
-                <!--该商品不支持自提-->
-                <small ng-show="!shopCartList.hasEx && item.deliveryType.indexOf('bySelf') === -1"><br>该商品不支持自提</small>
+                <small ng-show="!(item.deliveryType.indexOf(shopCartList.selectedDeType)!=-1||shopCartList.selectedDeType=='')">
+                    <span><br>该商品不支持{{shopCartList.selectedDeType == 'express' ? '快递' : (shopCartList.selectedDeType == 'bySelf' ? '自提' : '送至房间')}}</span>
+                </small>
+                <small ng-show="shopCartList.selectedDeType==''">
+                    <span><br>请先选择收货方式</span>
+                </small>
                 <!-- 卖光 -->
                 <small ng-if="item.status!=0 && item.availableCount==0"><br>暂时无货</small>
                 <small ng-if="item.status!=0 && item.availableCount!=0 && (item.availableCount - item.count) < 0"><br>库存不足,请减少购买数量</small>
@@ -144,10 +154,13 @@
                 <p ng-if="item.price.point.Enable">积分:&nbsp{{item.price.point.point}}</p>
                 <p>
                     <small ng-if="item.deliveryType.indexOf('express')!==-1">
-                        <i class="icon ion-checkmark-circled"></i> 配送
+                        <i class="icon ion-cube"></i> 快递
                     </small>
                     <small ng-if="item.deliveryType.indexOf('bySelf')!==-1">
-                        <i class="icon ion-checkmark-circled"></i> 自提
+                        <i class="icon ion-cube"></i> 自提
+                    </small>
+                    <small ng-if="item.deliveryType.indexOf('homeDelivery')!==-1">
+                        <i class="icon ion-cube"></i> 送至房间
                     </small>
                 </p>
             </div>

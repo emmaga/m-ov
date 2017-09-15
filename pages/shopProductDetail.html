@@ -37,10 +37,13 @@
                 <!-- 配送方式 -->
                 <br>
                 <small ng-if="sp.product.deliveryType.indexOf('express') !== -1">
-                    <i class="icon ion-checkmark-circled"></i> 配送
+                    <i class="icon ion-cube"></i> 快递
                 </small>
                 <small ng-if="sp.product.deliveryType.indexOf('bySelf') !== -1">
-                    <i class="icon ion-checkmark-circled"></i> 自提
+                    <i class="icon ion-cube"></i> 自提
+                </small>
+                <small ng-if="sp.product.deliveryType.indexOf('homeDelivery') !== -1">
+                    <i class="icon ion-cube"></i> 送货至房间
                 </small>
                 <br>
                 <br>
@@ -58,7 +61,7 @@
             </div>
         </div>
         <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style="background: white">
-            <a class="button" ng-click="sp.addToCart()" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
+            <a class="button button-addCartButton" ng-click="sp.addToCart();spBall.drop($event)" ng-disabled="sp.product.invetory == 0">{{'addToCart'|translate}}</a>
             <a class="button button-assertive" ng-click="sp.buy()" ng-class="{disabled:sp.buying}" ng-disabled="sp.product.invetory == 0">
                 <ng-if ng-if="sp.product.price.money.Enable">
                     {{'buyNow'|translate}}
@@ -68,5 +71,6 @@
                 </ng-if>
             </a>
         </div>
-    </div>    
+    </div>
+    <shop-cart-ball></shop-cart-ball>
 </div>
