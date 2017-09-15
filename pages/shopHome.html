@@ -1,41 +1,54 @@
-<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.beforeInit()" >
-<!-- <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  > -->
+<div ng-controller="shopHomeController as shopHome" ng-init="shopHome.beforeInit()" class="shop-home"
+     ng-class="{'notAllDay':!shopHome.shopAllDay}">
+    <!-- <div ng-controller="shopHomeController as shopHome" ng-init="shopHome.init()"  > -->
 
     <style type="text/css">
-        body{
-            background: rgb(244,244,244)
+        body {
+            background: rgb(244, 244, 244)
         }
     </style>
+
     <!-- 分类 -->
-    <div class="bar bar-light tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top" style="padding: 0; height: 93px;">
+    <div class="bar bar-light tabs-striped tabs-top tabs-background-light tabs-color-assertive mod-fixed mod-fixed-top shop-top-bar">
         <div class="tabs mod-bg-transparent">
-            <a class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id" ng-click="shopHome.searchProductList(category.id,true)" ng-class="{active:(shopHome.searchCategoryId==category.id)}">
-            {{category.name}}
-          </a>
+            <a class="tab-item" ng-repeat="category in shopHome.categoryList track  by category.id"
+               ng-click="shopHome.searchProductList(category.id,true)"
+               ng-class="{active:(shopHome.searchCategoryId==category.id)}">
+                {{category.name}}
+            </a>
         </div>
     </div>
 
     <!--header-->
     <div class="bar bar-header mod-bg-transparent mod-fixed">
-        
+
         <!-- 门店选择按钮 -->
-        <button ng-show="shopHome.mutiHotels" class="button button-icon" ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
-            <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{shopHome.hotelName}}<i class="icon ion-ios-arrow-down" style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i></small>
+        <button ng-show="shopHome.mutiHotels" class="button button-icon"
+                ng-click="shopHome.showHP(true); hp.init(shopHome.hotelLists, shopHome.doAfterPickHotel)">
+            <small style=" display: inline-block; max-width: 11em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                {{shopHome.hotelName}}<i class="icon ion-ios-arrow-down"
+                                         style="transform: scale(0.5); position: absolute; right: -12px; top: 2px;"></i>
+            </small>
         </button>
 
         <!-- 商城名称 -->
         <h1 class="title">{{shopHome.shopName}}</h1>
-        
+
         <!-- 购物车按钮 -->
-        <button ng-show="!shopHome.noShop" ng-click="shopHome.gotoShopCart()" class="button button-icon icon ion-ios-cart">
+        <button ng-show="!shopHome.noShop" ng-click="shopHome.gotoShopCart()"
+                class="button button-icon icon ion-ios-cart">
             {{shopHome.shopCartItemCount}}
         </button>
 
     </div>
 
+    <div class="shop-time" ng-show="!shopHome.shopAllDay">
+        <small>营业时间：{{shopHome.shopStartTime}}-{{shopHome.shopEndTime}}</small>
+    </div>
 
     <!-- 商品列表 -->
-    <div class="list  mod-has-tabs-top mod-inset-forms" style="margin-left:-2px;margin-right:-2px; padding-bottom: 40px; ">
+    <div class="list  mod-has-tabs-top mod-inset-forms"
+         style="margin-left:-2px;margin-right:-2px; padding-bottom: 40px; ">
 
         <!-- <p class="mod-note">
             <i class="icon ion-android-happy"></i>
@@ -43,7 +56,9 @@
         </p> -->
 
         <!-- 卡片 -->
-        <a class="card mod-flat wx-touch-hack card-half" ng-repeat='product in shopHome.productList' scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()" ng-click="shopHome.gotoShopDetail(product.productId)" >
+        <a class="card mod-flat wx-touch-hack card-half" ng-repeat='product in shopHome.productList'
+           scrolly=" shopHome.productTotal>shopHome.productList.length && shopHome.moreProduct()"
+           ng-click="shopHome.gotoShopDetail(product.productId)">
             <div class="item mod-no-border">
                 <div class="full-image mod-cover mod-4x3" style="background-image: url({{product.imgSrc}});"></div>
             </div>
@@ -67,10 +82,13 @@
                 <!-- 配送方式 -->
                 <br>
                 <small ng-if="product.deliveryType.indexOf('express') !== -1" class="mod-service-tag">
-                    <i class="icon ion-checkmark-circled"></i> 配送
+                    <i class="icon ion-cube"></i> 快递
                 </small>
                 <small ng-if="product.deliveryType.indexOf('bySelf') !== -1" class="mod-service-tag">
-                    <i class="icon ion-checkmark-circled"></i> 自提
+                    <i class="icon ion-cube"></i> 自提
+                </small>
+                <small ng-if="product.deliveryType.indexOf('homeDelivery') !== -1" class="mod-service-tag">
+                    <i class="icon ion-cube"></i> 送至房间
                 </small>
             </div>
         </a>
@@ -81,7 +99,8 @@
             <i class="ion-android-arrow-dropdown"></i>
         </a> -->
         <!-- 没有更多 -->
-        <p class="mod-note-bottomline" ng-show="shopHome.productTotal<=shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon" >
+        <p class="mod-note-bottomline"
+           ng-show="shopHome.productTotal<=shopHome.productList.length && shopHome.productTotal!=0 && !shopHome.showLoadingIcon">
             <i class="icon ion-android-happy"></i>
             {{'noMore'|translate}}
         </p>
@@ -92,14 +111,21 @@
         </p>
 
     </div>
-      
+
     <!-- hotel picker start-->
     <div class="ab-container" ng-show="shopHome.hotelPickerShow">
         <div class="bar bar-header">
-            <button class="button button-clear button-positive" ng-click="shopHome.showHP(false)">{{'back'|translate}}</button>
+            <button class="button button-clear button-positive" ng-click="shopHome.showHP(false)">{{'back'|translate}}
+            </button>
         </div>
         <hotel-picker></hotel-picker>
     </div>
     <!-- hotel picker end-->
- 
+
+    <div class="time-mask" ng-show="!shopHome.isOpening">
+        <span>
+            <i class="icon ion-android-happy" style="font-size:80px; line-height: 1.4"></i>
+            <br>营业时间为：{{shopHome.shopStartTime}}-{{shopHome.shopEndTime}}<br>请明日再来
+        </span>
+    </div>
 </div>

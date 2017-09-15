@@ -1,0 +1,9 @@
+<div ng-controller="shopCartBallController as spBall" class="ball-wrap">
+    <!--{{spBall.balls}} <br>-->
+    <!--{{spBall.dropBalls}}-->
+    <div ng-repeat="item in spBall.balls">
+        <div ng-style="item.style" class="ball">
+            <div class="inner" ng-style="item.innerstyle"></div>
+        </div>
+    </div>
+</div>
