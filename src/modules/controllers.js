@@ -1073,18 +1073,21 @@
                 }
 
                 self.newOrder = function () {
-                    self.showLoadingBool.waitPayBool = false;
-                    loadingService(self.showLoadingBool);
-
                     var bookTotalPri = self.roomPriPerDay * self.roomNumber;
-
                     if (self.room.RoomFlag == 1) {
                         if (self.visitDate) {
                             if (self.checkOut == self.visitDate) {
                                 bookTotalPri = self.tommPrice;
                             }
                         }
+                        if (!self.visitDate) {
+                            alert('请选择游玩日期');
+                            return
+                        }
                     }
+
+                    self.showLoadingBool.waitPayBool = false;
+                    loadingService(self.showLoadingBool);
 
                     if (self.selCardInfo.card_id) {
                         var p = bookTotalPri - self.selCardInfo.card_info.cash.reduce_cost;
