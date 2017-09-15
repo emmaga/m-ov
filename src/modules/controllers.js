@@ -1073,10 +1073,6 @@
                 }
 
                 self.newOrder = function () {
-                    if (!self.visitDate) {
-                        alert('请选择游玩日期');
-                        return
-                    }
                     self.showLoadingBool.waitPayBool = false;
                     loadingService(self.showLoadingBool);
 
