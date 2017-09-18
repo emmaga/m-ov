@@ -23,7 +23,7 @@
         else {
           return '0.00';
         }
-        
+
     };
   })
 
@@ -42,7 +42,7 @@
          case 'ACCEPT':
              if(deliverWay === 'bySelf') {
                 flag = "请前往酒店自提";
-             } 
+             }
              else {
                 flag = $filter('translate')('ACCEPT');
              }
@@ -50,7 +50,7 @@
          case 'DELIVERING':
              if(deliverWay === 'bySelf') {
                 flag = "请前往酒店自提";
-             } 
+             }
              else {
                 flag = $filter('translate')('DELIVERING');
              }
@@ -58,7 +58,7 @@
          case 'COMPLETED':
              flag = $filter('translate')('COMPLETED');
              break;
-         // 字段名字 
+         // 字段名字
          case 'REFUNDING':
              flag = $filter('translate')('CANCEL_REFUNDING');
              break;
@@ -89,6 +89,9 @@
              break;
          case 'bySelf':
              flag = $filter('translate')('bySelf');
+             break;
+         case 'homeDelivery':
+             flag = $filter('translate')('homeDelivery');
              break;
       }
       return flag;

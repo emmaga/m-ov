@@ -149,7 +149,10 @@
             cardAcceptCategoryKW_room: '订房',
             customize: {
                 luan: {
-                    hotelsGuideUrl: "customize/luan/hotels_guide.html"
+                    hotelsGuideUrl: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6794da9bbcb25912&redirect_uri=http://openvod.cleartv.cn/wx/index.html&response_type=code&scope=snsapi_base&state=31&component_appid=wx5bfdc86d4b702418#wechat_redirect"
+                },
+                nanqinghuameida: {
+                    hotelsGuideUrl: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa411409f3b573dfe&redirect_uri=http://openvod.cleartv.cn/wx/index.html&response_type=code&scope=snsapi_base&state=29&component_appid=wx5bfdc86d4b702418#wechat_redirect"
                 }
             }
         })
