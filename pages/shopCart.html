@@ -23,7 +23,7 @@
                     <small>积分</small>
                 </ng-show>
                 <!-- 邮费 -->
-                <small ng-if="shopCartList.hasEx">
+                <small ng-if="shopCartList.selectedDeType=='express'">
                     <!-- (&nbsp{{'expressFeeIncluded' | translate}}¥{{shopCart.postage | fenToYuan}}&nbsp) -->
                     (免邮费)
                 </small>
@@ -100,8 +100,8 @@
                 <textarea type="text" name="billNote" ng-model="shopCart.bill.note" placeholder="填写备注信息"></textarea>
             </div>
             <div class="item item-input mod-short" style="color: red" ng-if-end>
-                提醒：<span ng-if="!shopCartList.hasEx">请至酒店前台进行开票</span>
-                <span ng-if="shopCartList.hasEx">发票与货物将分开寄送，请注意查收</span>
+                提醒：<span ng-if="shopCartList.selectedDeType!='express'">请至酒店前台进行开票</span>
+                <span ng-if="shopCartList.selectedDeType=='express'">发票与货物将分开寄送，请注意查收</span>
             </div>
         </div>
     </form>
