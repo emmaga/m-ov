@@ -66,8 +66,8 @@
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.deliverWay | deliverWay}} </p>
         </div>
         <!--配送地址-->
-        <div ng-show="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
-            <p class="col mod-no-padding">{{'shipAdress'|translate}}:</p>
+        <div ng-if="!(shopOrderInfo.detail.deliverWay == 'bySelf')" class="row">
+            <p class="col mod-no-padding">{{shopOrderInfo.detail.deliverWay == 'homeDelivery'?'房间号':'收货地址'}}:</p>
             <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
         </div>
         <!--快递公司-->
