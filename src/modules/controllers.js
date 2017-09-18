@@ -2095,13 +2095,12 @@
                     }).then(function successCallback (data, status, headers, config) {
                         self.showLoadingIcon = false
                         if (data.data.rescode == '200') {
-                            console.info(JSON.parse(data.data.data['ShopName']))
                             self.shopName = JSON.parse(data.data.data['ShopName'])["zh-CN"];
                             self.shopStartTime = data.data.data.ServiceStartTime.slice(0, 5);
                             self.shopEndTime = data.data.data.ServiceEndTime.slice(0, 5);
                             if (self.shopStartTime == '00:00' && self.shopEndTime == '23:59') {
                                 self.shopAllDay = true;
-                            }else{
+                            } else {
                                 self.shopAllDay = false;
                             }
                             // 是否正在营业
@@ -2428,6 +2427,7 @@
                     $scope.shopCartList = new Array();
                     self.totalPrice = 0;
                     self.bill = {}
+                    self.address={}
                     self.bill.type = 0  // 发票类型，0为个人，1为公司
                     //watch shopCartList
                     $scope.$watch('shopCartList', function () {
@@ -2436,9 +2436,15 @@
                     }, true);
 
                     // watch shopCartList.selectedDeType
-                    $scope.$watch('shopCartList.selectedDeType', function () {
+                    $scope.$watch('shopCartList.selectedDeType', function (val) {
+                        if (val == 'homeDelivery') {
+                            self.address.address=''
+                        }else{
+                            self.address.address=self.expressAddress
+                        }
                         self.changeDeliveryWay();
                         self.countTotalPrice();
+                        self.selectAll();
                     }, true);
 
                     // 获取购物车信息
@@ -2659,8 +2665,6 @@
                             $scope.shopCartList = data.data.data.list;
                             self.loadExInfo();
                             $scope.shopCartList.hasBill = false; //需要发票
-                            self.deType = getDeTye($scope.shopCartList);
-                            self.selectAll(); // 默认选上所有的物品
                         })
                         .finally(function (value) {
                             $ionicLoading.hide();
@@ -2686,6 +2690,14 @@
                             if (data.data.rescode == '200') {
                                 if (data.data.data.list.length > 0) {
                                     self.address = data.data.data.list[0];
+                                    self.expressAddress = self.address.address;
+                                }
+                                self.deType = getDeTye($scope.shopCartList);
+                                self.selectAll(); // 默认选上所有的物品
+                                if ($scope.shopCartList.selectedDeType == 'homeDelivery') {
+                                    self.address.address=''
+                                }else{
+                                    self.address.address=self.expressAddress
                                 }
                             }
                             else {

@@ -63,11 +63,11 @@
         </div>
         
         <div class="item item-input mod-short" ng-if="shopCartList.selectedDeType!='bySelf'&&shopCartList.selectedDeType!=''">
-            <div class="input-label">收货地点</div>
-            <input type="text" name="address" ng-model="shopCart.address.address" required placeholder="请输入收货地址或房间号"/>
+            <div class="input-label">{{shopCartList.selectedDeType=='express'?'收货地址':'房间号'}}</div>
+            <input type="text" name="address" ng-model="shopCart.address.address" required placeholder="{{shopCartList.selectedDeType=='express'?'请输入收货地址':'请输入房间号'}}"/>
         </div>
         <div ng-show="orderForm.address.$dirty && orderForm.address.$invalid" class="item-input mod-short warning">
-            <div class="input-label"></div>请输入配送地址或房间号：8102(客房号)、V1(棋牌室)、KTV-1(KTV房间号)
+            <div class="input-label"></div>{{shopCartList.selectedDeType=='express'?'请输入收货地址':'请输入房间号：8102(客房号)、V1(棋牌室)、KTV-1(KTV房间号)'}}
         </div>
 
         <!--需要发票？-->

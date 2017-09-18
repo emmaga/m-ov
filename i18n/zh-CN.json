@@ -22,7 +22,7 @@
   "date": "日期",
   "days": "天",
   "detail": "详情",
-  "deliverWay": "配送方式",
+  "deliverWay": "收货方式",
 
   "emptyCart":"空荡荡的购物车",
   "exceedStock": "超过库存",
@@ -90,7 +90,7 @@
   "searchResultB": "个酒店",
   "serverError": "哎哟，出错了",
   "serverTimeout": "网络不好哟",
-  "shipAdress": "配送地址",
+  "shipAdress": "收货地址",
   "shopName": "所属商城",
   "shopOrder": "商城订单",
   "stock": "库存",
@@ -119,6 +119,6 @@
   "SELLER_CANCEL_REFUNDING": "订单商家取消退款中",
   "CANCELED": "订单取消",
   "express": "快递",
-  "bySelf": "自提"
-
+  "bySelf": "自提",
+  "homeDelivery": "送至房间"
 }
