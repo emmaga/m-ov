@@ -7564,7 +7564,7 @@ textarea {
   position: relative;
   overflow: hidden;
   padding: 6px 0 5px 16px; }
-  .item-input input {
+  .item-input input[type=text] {
     -webkit-border-radius: 0;
     border-radius: 0;
     -webkit-box-flex: 1;

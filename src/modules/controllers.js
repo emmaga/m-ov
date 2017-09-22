@@ -2926,7 +2926,6 @@
                         typeObj.push(obj)
                     })(deType)
                     if (deType.length > 1) {
-                        typeObj.unshift({'name': '请选择', 'val': ''})
                         $scope.shopCartList.selectedDeType = ''
                     } else {
                         $scope.shopCartList.selectedDeType = typeObj[0] ? typeObj[0].val : ''
