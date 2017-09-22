@@ -50,12 +50,17 @@
             <div class="input-label"></div>请输入正确的手机号
         </div>
         <!--需要配送？-->
-        <div class="item item-input"  ng-class="{'item-select':shopCart.deType.length>1}">
-            <div class="input-label">收货方式</div>
+        <div class="item item-input">
+            <div class="input-label" style="width: auto">收货方式</div>
             <span ng-show="shopCart.deType.length<=1" class="selectOnlyOne">
                 {{shopCart.deType[0]['name']}}
             </span>
-            <select style="top: 1px;" ng-show="shopCart.deType.length>1" ng-model="shopCartList.selectedDeType" ng-options="item.val as item.name for item in shopCart.deType"></select>
+            <!--<select style="top: 1px;" ng-show="shopCart.deType.length>1" ng-model="shopCartList.selectedDeType" ng-options="item.val as item.name for item in shopCart.deType"></select>-->
+            <span ng-show="shopCart.deType.length>1">
+                <label ng-repeat="item in shopCart.deType" style="margin-right: 20px">
+                    <input style="transform: scale(1.3); margin-right: 2px" name="express" type="radio" ng-model="shopCartList.selectedDeType" ng-value="item.val" > {{item.name}}
+                </label>
+            </span>
         </div>
 
         <div class="item" ng-if="shopCartList.selectedDeType=='bySelf'" style="height: 46px; line-height: 14px;">
