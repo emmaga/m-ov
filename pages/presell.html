@@ -1,11 +1,68 @@
 <div ng-controller="presellController as presell" ng-init="presell.beforeInit()">
-    <div class="atc-content mod-has-header">
+<!-- 
+{{presell.productInfo.
+    {{presell.shopInfo.
+ -->
+
+    <!-- 顶部分享提示 -->
+    <div class="bar bar-header mod-fixed bar-light">
+        <h1 class="title">{{'bookHotel'|translate}}</h1>
+
+        {{presell.productInfo.commission}}
+    </div>
+
+    
+
+    <!-- 大标题 -->
+    {{presell.productInfo.title}}
+
+    <!-- 门店名称 -->
+    {{presell.shopInfo.ShopName['zh-CN']}}
+
+    <!-- 门店二维码 -->
+    <img src="presell.shopInfo.QrCodeURL"/>
+
+    <!-- 主图 -->
+    <img src="presell.productInfo.img" />
+
+    <!-- 详情介绍 -->
+    {{presell.productInfo.name}}
+    {{presell.productInfo.intro}}
+    <div ng-bind-html="presell.productInfo.htmlIntro | unsafe">
+        
+    </div>
+   
+    
+    <!-- 多图 -->
+    <!-- repeat -->
+    <div ng-repeat="img in presell.productInfo.imgSrc">
+        <img ng-src="img" />
+    </div>
+
+    <!-- 购买须知 -->
+    {{presell.productInfo.buyNotes['zh-CN']}}
+
+    <!-- 联系我们 -->
+
+
+    <!-- 弹窗 -->
         已经支付？{{presell.paid}}
+    <div class="atc-content mod-has-header">
         <span ng-show="!presell.soldout && presell.leftSaleStartTime > 0">离抢购开始时间还剩{{presell.leftSaleStartTime | timeToDHMS}}</span>
         <span ng-show="!presell.soldout && presell.leftSaleStartTime <= 0">离抢购结束时间还剩{{presell.leftSaleEndTime | timeToDHMS}}</span>
+        
+
+
+        <!-- 订单 -->
+
         库存{{presell.productInfo.invetory}}
         手机号：<input type="number" ng-model="presell.phoneNumber">
         数量：<input type="number" ng-model="presell.goodsCount">
+
+
+
+        <!-- 下单按钮 -->
+
         <button ng-show="!presell.soldout && presell.leftSaleStartTime > 0">离开抢还剩{{presell.leftSaleStartTime | timeToDHMS}}</button>
         <button ng-show="!presell.soldout && presell.leftSaleStartTime <= 0" id="payBtn" ng-click="presell.submitOrder()">立即抢购</button>
         <button ng-show="presell.soldout">已下架</button>
