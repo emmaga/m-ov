@@ -1,0 +1,19 @@
+<div ng-controller="presellController as presell" ng-init="presell.beforeInit()">
+    <div class="atc-content mod-has-header">
+        已经支付？{{presell.paid}}
+        <span ng-show="!presell.soldout && presell.leftSaleStartTime > 0">离抢购开始时间还剩{{presell.leftSaleStartTime | timeToDHMS}}</span>
+        <span ng-show="!presell.soldout && presell.leftSaleStartTime <= 0">离抢购结束时间还剩{{presell.leftSaleEndTime | timeToDHMS}}</span>
+        库存{{presell.productInfo.invetory}}
+        手机号：<input type="number" ng-model="presell.phoneNumber">
+        数量：<input type="number" ng-model="presell.goodsCount">
+        <button ng-show="!presell.soldout && presell.leftSaleStartTime > 0">离开抢还剩{{presell.leftSaleStartTime | timeToDHMS}}</button>
+        <button ng-show="!presell.soldout && presell.leftSaleStartTime <= 0" id="payBtn" ng-click="presell.submitOrder()">立即抢购</button>
+        <button ng-show="presell.soldout">已下架</button>
+        <br>
+        presell.soldout: {{presell.soldout}}
+        <br>
+        presell.leftSaleStartTime: {{presell.leftSaleStartTime}}
+        <br>
+        presell.leftSaleEndTime: {{presell.leftSaleEndTime}}
+    </div>
+</div>

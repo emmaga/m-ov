@@ -54,10 +54,10 @@
                     self.setParams('code', code);
 
                     /* 获取cleartoken（clear_session）和openid
-                 * wx注册
-                 * 获取项目及会员信息
-                 * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
-                 */
+                     * wx注册
+                     * 获取项目及会员信息
+                     * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
+                     */
                     if (self.getParams('clear_session')) {
                         self._readystate = false;
                         self.WXConfigJSSDK();
@@ -155,7 +155,7 @@
                     // http://www.cnblogs.com/sunshq/p/4171490.html
                     self.noncestr = Math.random().toString(36).substr(2);
                     self.timestamp = new Date().getTime() + '';
-
+                    
                     var data = {
                         "clear_session": self.getParams('clear_session'),
                         "appid": self.getParams('appid'),
@@ -178,12 +178,14 @@
                                     timestamp: self.timestamp, // 必填，生成签名的时间戳
                                     nonceStr: self.noncestr, // 必填，生成签名的随机串
                                     signature: data.data.signature, // 必填，签名，见附录1
-                                    jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation', 'addCard', 'chooseCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                                    jsApiList: [
+                                        'hideMenuItems', 'showAllNonBaseMenuItem', 'chooseWXPay', 'openLocation', 
+                                        'getLocation', 'addCard', 'chooseCard', 'onMenuShareTimeline', 'onMenuShareAppMessage'
+                                    ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                                 });
                                 wx.ready(function () {
                                     // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
                                     // 禁用“分享给好友”，“分享到朋友圈”, "在Safari中打开", "邮件","复制链接","分享到QQ","分享到QQ空间"
-                                    self._wxreadystate = true;
                                     wx.hideMenuItems({
                                         menuList: [
                                             'menuItem:share:appMessage',
@@ -195,6 +197,7 @@
                                             'menuItem:share:QZone'
                                         ]
                                     });
+                                    self._wxreadystate = true;
                                 });
 
                             } else if (data.data.rescode == '401') {
@@ -2714,8 +2717,8 @@
 
                     //开始生成订单
                     $ionicLoading.show({
-                        template: '...'
-                    });
+                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })  
                     // 支付按钮变为不可点击，防止多次点击
                     document.getElementById('payBtn').disabled = true;
 
@@ -3745,5 +3748,212 @@
                 }
             }
         ])
+        
+        // 预售商品
+        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG) {
+                var self = this;
 
+                self.beforeInit = function () {
+                    console.log('beforeInit')
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+
+                self.init = function () {
+                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                        alert('商品号or店铺号无，出错')
+                        return
+                    }
+                    self.presellLoop = null
+                    self.paid = util.getSearchParams('paid')
+                    self.shopInfo = {}
+                    self.productInfo = {}
+                    wx.ready(function () {
+                        wx.showAllNonBaseMenuItem();
+                    })
+                    self.getProductInfo()
+                }
+
+                self.loop = function () {
+                    if(location.hash.indexOf("#/presell") === -1) {
+                        $timeout.cancel(self.presellLoop)
+                    }
+                    // 已下架
+                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate) - new Date()) < 0) {
+                        self.soldout = true
+                        $timeout.cancel(self.presellLoop)
+                    } else {
+                        console.log(self.productInfo)
+                        self.leftSaleStartTime = new Date(self.productInfo.saleStartDate) - new Date()
+                        self.leftSaleEndTime = new Date(self.productInfo.saleEndDate) - new Date()
+                        self.presellLoop = $timeout(function() {
+                            self.loop()
+                        }, 1000)
+                    }
+                }
+
+                self.wxregistShare = function () {
+                    var appid = util.getSearchParams('appid')
+                    var mch_appid = util.getSearchParams('mch_appid')
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var uid = util.getParams('userid')
+                    var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    wx.onMenuShareTimeline({
+                        title: 'test2', // 分享标题
+                        link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: '', // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    wx.onMenuShareAppMessage({
+                        title: 'test22', // 分享标题
+                        desc: '', // 分享描述
+                        link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: '', // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                }
+
+                self.getProductInfo = function () {
+                    var productId = util.getSearchParams('gid')
+                    // var deferred = $q.defer();
+                    var data = JSON.stringify({
+                        clear_session: $scope.root.getParams('clear_session'),
+                        action: 'getProductDetail',
+                        lang: 'zh-CN',
+                        productId: productId
+                    })
+                    $ionicLoading.show({
+                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })  
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('fxshopinfo', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.shopInfo = data.shopInfo
+                            self.productInfo = data.data.product
+                            // deferred.resolve();
+                            self.wxregistShare()
+                            self.loop()
+                        }
+                        else {
+                            alert(data.rescode + ' ' + data.errInfo);
+                            // deferred.reject();
+                        }
+                    }, function errorCallback (response) {
+                        alert('连接服务器出错');
+                    }).finally(function (value) {
+                        $ionicLoading.hide()
+                    });
+                    // return deferred.promise;
+                }
+
+                self.submitOrder = function () {
+
+                    //开始生成订单
+                    $ionicLoading.show({
+                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })  
+                    // 支付按钮变为不可点击，防止多次点击
+                    document.getElementById('payBtn').disabled = true;
+                    var data = {
+                        "action": "newShopOrder",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": 'zh-CN',
+                        "shopID": Number(util.getSearchParams('sid')),
+                        "agentUserID": util.getSearchParams('puid') == null ? -1 : Number(util.getSearchParams('puid')),
+                        "agentUserAccountID": util.getSearchParams('puaid') == null ? -1 : Number(util.getSearchParams('puaid')),
+                        "goodsList": [
+                            {
+                                "shopGoodsID": Number(util.getSearchParams('gid')),
+                                "goodsCount": self.goodsCount
+                            }
+                        ],
+                        "delivery": {
+                            "deliverWay": "bySelf",
+                            "contactName": "",
+                            "mobile": self.phoneNumber + ''
+                        }
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', ''),
+                        data: data
+                    })
+                        .then(function successCallback (data, status, headers, config) {
+                            //订单生成成功
+                            if (data.data.rescode == '200') {
+                                // 支付
+                                self.pay(data.data.orderID);
+                            }
+                            //订单生成失败
+                            else {
+                                alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                                $ionicLoading.hide();
+                                // 支付按钮变为可点击
+                                document.getElementById('payBtn').disabled = false;
+                            }
+                        }, function errorCallback (data, status, headers, config) {
+                            alert('连接服务器出错');
+                            $ionicLoading.hide();
+                            // 支付按钮变为可点击
+                            document.getElementById('payBtn').disabled = false;
+                        })
+                        //订单生成结束
+                        .finally(function (value) {
+                            // $ionicLoading.hide();
+                            // // 支付按钮变为可点击
+                            // document.getElementById('payBtn').disabled = false;
+                        });
+                }
+
+                self.pay = function (orderId) {
+                    var jumpUrl, compID;
+                    console.log(PAY_CONFIG)
+                    if (PAY_CONFIG.test) {
+                        jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                        compID = PAY_CONFIG.testConfig.compID
+                    } else {
+                        jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                        compID = PAY_CONFIG.onlineConfig.compID
+                    }
+                    // 等待支付
+                    // 支付按钮变为不可点击，防止多次点击
+                    document.getElementById('payBtn').disabled = true
+                    // window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                    //     'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/presellPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var puid = util.getSearchParams('puid') == null ? -1 : util.getSearchParams('puid')
+                    var puaid = util.getSearchParams('puaid') == null ? -1 : util.getSearchParams('puaid')
+                    var uid = util.getSearchParams('uid') == null ? -1 : util.getSearchParams('uid')
+                    var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                        'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay%3Fsid%3D' + sid + '%26gid%3D' + gid + '%26puid%3D' + puid + '%26puaid%3D' + puaid + '%26uid%3D' + uid + '%26uaid%3D' + uaid + '%23/presellPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                }
+            }
+        ])
 })();
