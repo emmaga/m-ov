@@ -23,11 +23,11 @@
         <h3>{{presell.productInfo.title}}</h3>
 
         <!-- 门店名称 -->
-        <p style="color: rgb(36,104,190); margin: 0">{{presell.shopInfo.ShopName['zh-CN']}}</p>
+        <p ng-init="presell.showShopInfo=0" ng-click="presell.showShopInfo=(presell.showShopInfo==0)? 1 : 0" style="color: rgb(36,104,190); margin: 0">{{presell.shopInfo.ShopName['zh-CN']}}</p>
     </div>
 
     <!-- 门店二维码 -->
-    <div class="item item-divider item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
+    <div ng-show="presell.showShopInfo==1" class="item item-divider item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
         <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
         <h2>长按识别二维码关注公众号</h2>
         <p style="white-space: normal; text-overflow: initial;">
@@ -96,13 +96,6 @@
                         {{presell.shopInfo.ContactTelephone}}
                     </a>
                 </p>
-
-                <!-- <button  class="button button-positive button-full button-outline" ng-click="presell.map()">
-                    <i class="icon ion-ios-location-outline"></i>&nbsp;查看位置
-                </button>
-                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button button-positive button-full button-outline">
-                    <i class="icon ion-ios-telephone-outline"></i>&nbsp;联系酒店
-                </a> -->
             </div>
             <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
                 <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
