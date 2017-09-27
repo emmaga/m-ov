@@ -45,7 +45,7 @@
                 <h2 style="font-size: 24px;">{{presell.productInfo.name}}</h2>  
             </div>
             <br>
-            <p style="padding: 10px;">{{presell.productInfo.intro}}</p>
+            <p style="padding: 10px;" ng-bind-html="presell.productInfo.intro"></p>
         </div>
     </div>
 
@@ -85,14 +85,16 @@
                 <h2 style="font-size: 24px;">联系我们</h2>
             </div>
             <div class="padding">
-
-                {{presell.soldout}}
-                {{presell.leftSaleStartTime}}
-                {{presell.leftSaleStartTime}}
-
-                酒店地址：{{presell.shopInfo.ContactAdress}}
-
-                {{presell.shopInfo.ContactName}}电话：<a tel="{{presell.shopInfo.ContactTelephone}}">{{presell.shopInfo.ContactTelephone}}</a>
+                <h4>
+                    {{presell.shopInfo.ContactName}}
+                </h4>
+                <p>酒店地址：{{presell.shopInfo.ContactAdress}}
+                    <!-- <br>联系电话： -->
+                    <!-- <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}">{{presell.shopInfo.ContactTelephone}}</a> -->
+                </p>
+                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button button-outline icon-left ion-telephone-outline button-positive">
+                    {{presell.shopInfo.ContactTelephone}}
+                </a>
             </div>
             <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
                 <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
@@ -111,7 +113,7 @@
 
     <!-- 底栏 下单购买按钮 -->
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style=" background: #fff;">
-        <p style="text-decoration: line-through; flex-grow: 0.5; padding: 10px; padding-top: 13px;">
+        <p ng-show="!presell.soldout && presell.leftSaleStartTime <= 0"  style="text-decoration: line-through; flex-grow: 0.5; padding: 10px; padding-top: 13px;">
             门市价:&nbsp;{{presell.productInfo.pricePub}}元
         </p>
         <button class="button button-energized" ng-show="!presell.soldout && presell.leftSaleStartTime > 0">
