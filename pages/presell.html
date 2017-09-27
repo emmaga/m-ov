@@ -12,7 +12,7 @@
             <b style="color: rgb(255,60,30);">下单</b>
             成功后，您将获得
             <b style="color: rgb(255,60,30); font-size: 1.2em">￥{{presell.productInfo.commission-0 | fenToYuan}}元</b>
-            现金奖励，24小时内发放至您的微信零钱包。成功订单越多，奖励越多。
+            现金奖励，1天内发放至微信零钱包。订单越多，奖励越多。
         </small>
     </div>
 
@@ -63,7 +63,9 @@
             <div ng-repeat="img in presell.productInfo.imgSrc track by $index">
                 <img ng-show="$index==0 || $index==1 || presell.showallimg==1" width="100%" ng-src="{{img}}" />
             </div>
-            <button ng-show="presell.showallimg!=1" ng-click="presell.showallimg=1">点击查看更多</button>
+            <div class="padding" ng-show="presell.showallimg!=1">
+                <button class="button button-outline button-full button-positive" ng-click="presell.showallimg=1">查看更多图片</button>
+            </div>
         </div>
     </ng-show>
 
@@ -77,20 +79,20 @@
             </div>
             
             <h5 style="color: rgb(255,60,30);">有效期</h5>
-            <p>
+            <p style="padding: 10px;  padding-top: 0px;">
                 {{presell.productInfo.useStartDate.slice(0,10)}}-{{presell.productInfo.useEndDate.slice(0,10)}}
             </p>
             <ng-show ng-show="presell.productInfo.buyNotes != ''">
                 <h5 style="color: rgb(255,60,30);">购买规则</h5>
-                <p ng-bind-html="presell.productInfo.buyNotes" style="padding: 10px;"></p>
+                <p ng-bind-html="presell.productInfo.buyNotes" style="padding: 10px;  padding-top: 0px;"></p>
             </ng-show>
             <ng-show ng-show="presell.productInfo.useNotes != ''">
                 <h5 style="color: rgb(255,60,30);">使用规则</h5>
-                <p ng-bind-html="presell.productInfo.useNotes" style="padding: 10px;"></p>
+                <p ng-bind-html="presell.productInfo.useNotes" style="padding: 10px;  padding-top: 0px;"></p>
             </ng-show>
             <ng-show ng-show="presell.productInfo.warmNotes != ''">
                 <h5 style="color: rgb(255,60,30);">温馨提示</h5>
-                <p ng-bind-html="presell.productInfo.warmNotes" style="padding: 10px;"></p>
+                <p ng-bind-html="presell.productInfo.warmNotes" style="padding: 10px;  padding-top: 0px;"></p>
             </ng-show>
         </div>
     </div>
