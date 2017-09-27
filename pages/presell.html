@@ -74,18 +74,21 @@
             <div class="item">
                 <h2 style="font-size: 24px;">购买须知</h2>
             </div>
-            有效期
-            {{presell.productInfo.useStartDate.slice(0,10)}}-{{presell.productInfo.useEndDate.slice(0,10)}}
+            
+            <h5 style="color: rgb(255,60,30);">有效期</h5>
+            <p>
+                {{presell.productInfo.useStartDate.slice(0,10)}}-{{presell.productInfo.useEndDate.slice(0,10)}}
+            </p>
             <ng-show ng-show="presell.productInfo.buyNotes != ''">
-                购买规则
+                <h5 style="color: rgb(255,60,30);">购买规则</h5>
                 <p ng-bind-html="presell.productInfo.buyNotes" style="padding: 10px;"></p>
             </ng-show>
             <ng-show ng-show="presell.productInfo.useNotes != ''">
-                使用规则
+                <h5 style="color: rgb(255,60,30);">使用规则</h5>
                 <p ng-bind-html="presell.productInfo.useNotes" style="padding: 10px;"></p>
             </ng-show>
             <ng-show ng-show="presell.productInfo.warmNotes != ''">
-                温馨提示
+                <h5 style="color: rgb(255,60,30);">温馨提示</h5>
                 <p ng-bind-html="presell.productInfo.warmNotes" style="padding: 10px;"></p>
             </ng-show>
         </div>
