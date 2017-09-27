@@ -60,9 +60,10 @@
             <div class="item">
                 <h2 style="font-size: 24px;">产品图片</h2>
             </div>
-            <div ng-repeat="img in presell.productInfo.imgSrc">
-                <img width="100%" ng-src="{{img}}" />
+            <div ng-repeat="img in presell.productInfo.imgSrc track by $index">
+                <img ng-show="$index==0 || $index==1 || presell.showallimg==1" width="100%" ng-src="{{img}}" />
             </div>
+            <button ng-show="presell.showallimg!=1" ng-click="presell.showallimg=1">点击查看更多</button>
         </div>
     </ng-show>
 
