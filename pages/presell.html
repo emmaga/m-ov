@@ -11,7 +11,7 @@
             分享该产品，您的朋友
             <b style="color: rgb(255,60,30);">消费</b>
             成功后，您将获得
-            <b style="color: rgb(255,60,30); font-size: 1.2em">￥{{presell.productInfo.commission}}元</b>
+            <b style="color: rgb(255,60,30); font-size: 1.2em">￥{{presell.productInfo.commission-0 | fenToYuan}}元</b>
             现金奖励。次日发放至您的微信零钱包。
         </small>
     </div>
@@ -72,7 +72,7 @@
             <div class="item">
                 <h2 style="font-size: 24px;">购买须知</h2>
             </div>
-            <p style="padding: 10px;">{{presell.productInfo.buyNotes}}</p>
+            <p ng-bind-html="presell.productInfo.buyNotes" style="padding: 10px;"></p>
         </div>
     </div>
     <div class="item item-divider"></div>
@@ -88,13 +88,21 @@
                 <h4>
                     {{presell.shopInfo.ContactName}}
                 </h4>
-                <p>酒店地址：{{presell.shopInfo.ContactAdress}}
-                    <!-- <br>联系电话： -->
-                    <!-- <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}">icon-left ion-ios-telephone{{presell.shopInfo.ContactTelephone}}</a> -->
+                <p style="line-height: 1.6">酒店地址：
+                    <a ng-click="presell.map()" ><i class="icon ion-ios-location" style="color: rgb(36,104,190); font-size: 22px;"></i>{{presell.shopInfo.ContactAdress}} </a>
+                    <br>联系电话：
+                    <a style="text-decoration: none" ng-href="tel:{{presell.shopInfo.ContactTelephone}}">
+                        <i class="icon ion-ios-telephone" style="color: rgb(36,104,190); font-size: 22px;"></i>
+                        {{presell.shopInfo.ContactTelephone}}
+                    </a>
                 </p>
-                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button  button-positive button-full">
-                    联系电话：{{presell.shopInfo.ContactTelephone}}
-                </a>
+
+                <!-- <button  class="button button-positive button-full button-outline" ng-click="presell.map()">
+                    <i class="icon ion-ios-location-outline"></i>&nbsp;查看位置
+                </button>
+                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button button-positive button-full button-outline">
+                    <i class="icon ion-ios-telephone-outline"></i>&nbsp;联系酒店
+                </a> -->
             </div>
             <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
                 <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
@@ -133,18 +141,18 @@
     <!-- 底栏 下单购买按钮 -->
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style=" background: #fff;">
         <p ng-show="!presell.soldout && presell.leftSaleStartTime <= 0"  style="text-decoration: line-through; flex-grow: 0.5; padding: 10px; padding-top: 13px;">
-            门市价:&nbsp;{{presell.productInfo.pricePub}}元
+            门市价:&nbsp;{{presell.productInfo.pricePub-0|fenToYuan}}元
         </p>
         <button class="button button-energized" style="color:rgb(51,51,21);" ng-show="!presell.soldout && presell.leftSaleStartTime > 0">
-            <span style="text-decoration: line-through;">门市价:&nbsp;{{presell.productInfo.pricePub}}元</span>
-            &nbsp;<b>抢购价：￥{{presell.productInfo.price}}</b>
+            <span style="text-decoration: line-through;">门市价:&nbsp;{{presell.productInfo.pricePub-0|fenToYuan}}元</span>
+            &nbsp;<b>抢购价：￥{{presell.productInfo.price-0|fenToYuan}}</b>
         </button>
         <button class="button button-assertive"  ng-show="!presell.soldout && presell.leftSaleStartTime <= 0" id="payBtn" ng-click="presell.submitOrder()">
-            ￥{{presell.productInfo.price}}&nbsp;
+            ￥{{presell.productInfo.price-0|fenToYuan}}&nbsp;
             立即抢购
         </button>
         <button class="button"  ng-show="presell.soldout">
-            <!-- ￥{{presell.productInfo.pricePub}}&nbsp; -->
+            <!-- ￥{{presell.productInfo.pricePub-0|fenToYuan}}&nbsp; -->
             已下架
         </button>
     </div>
@@ -170,6 +178,7 @@
         presell.leftSaleStartTime: {{presell.leftSaleStartTime}}
         presell.leftSaleEndTime: {{presell.leftSaleEndTime}}
          -->
+         
     </div>
 
 

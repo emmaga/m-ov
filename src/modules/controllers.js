@@ -3807,7 +3807,7 @@
                     wx.onMenuShareTimeline({
                         title: self.productInfo.title, // 分享标题
                         link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        desc: self.productInfo.GoodsShareDesc,
+                        desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
                         success: function () { 
                             // 用户确认分享后执行的回调函数
@@ -3820,7 +3820,7 @@
                         title: self.productInfo.title, // 分享标题
                         desc: '', // 分享描述
                         link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        desc: self.productInfo.GoodsShareDesc,
+                        desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -3854,6 +3854,7 @@
                         if (data.rescode == '200') {
                             self.shopInfo = data.shopInfo
                             self.productInfo = data.data.product
+                            self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
                             // deferred.resolve();
                             self.wxregistShare()
                             self.loop()
@@ -3953,6 +3954,17 @@
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
                     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
                         'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay%3Fsid%3D' + sid + '%26gid%3D' + gid + '%26puid%3D' + puid + '%26puaid%3D' + puaid + '%26uid%3D' + uid + '%26uaid%3D' + uaid + '%23/presellPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                }
+
+                self.map = function () {
+                    wx.openLocation({
+                        latitude: self.shopInfo.ContactDimension - 0, // 纬度，浮点数，范围为90 ~ -90
+                        longitude: self.shopInfo.ContactLongitude - 0, // 经度，浮点数，范围为180 ~ -180。
+                        name: decodeURI(encodeURI(self.shopInfo.ShopName['zh-CN'])), // 位置名
+                        address: decodeURI(encodeURI(self.shopInfo.ContactAdress)), // 地址详情说明
+                        scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                        infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                    });
                 }
             }
         ])
