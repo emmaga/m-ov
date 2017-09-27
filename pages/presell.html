@@ -89,11 +89,14 @@
                     {{presell.shopInfo.ContactName}}
                 </h4>
                 <p>酒店地址：{{presell.shopInfo.ContactAdress}}
-                    <!-- <br>联系电话： -->
-                    <!-- <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}">icon-left ion-ios-telephone{{presell.shopInfo.ContactTelephone}}</a> -->
+                    <br>联系电话：
+                    <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}">{{presell.shopInfo.ContactTelephone}}</a>
                 </p>
-                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button  button-positive button-full">
-                    联系电话：{{presell.shopInfo.ContactTelephone}}
+                <button  class="button button-positive button-full" ng-click="presell.map()">
+                    <i class="icon ion-ios-location"></i>&nbsp;查看位置
+                </button>
+                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button button-positive button-full button-outline">
+                    <i class="icon ion-ios-telephone-outline"></i>&nbsp;联系酒店
                 </a>
             </div>
             <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
@@ -170,7 +173,7 @@
         presell.leftSaleStartTime: {{presell.leftSaleStartTime}}
         presell.leftSaleEndTime: {{presell.leftSaleEndTime}}
          -->
-         <button ng-click="presell.map()">位置</button><br><br><br>
+         
     </div>
 
 
