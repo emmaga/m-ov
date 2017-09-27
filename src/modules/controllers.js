@@ -3856,6 +3856,8 @@
                             self.shopInfo = data.shopInfo
                             self.productInfo = data.data.product
                             self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
+                            self.productInfo.useNotes = JSON.parse(self.productInfo.useNotes)['zh-CN']
+                            self.productInfo.warmNotes = JSON.parse(self.productInfo.warmNotes)['zh-CN']
                             // deferred.resolve();
                             self.wxregistShare()
                             self.loop()
