@@ -45,24 +45,26 @@
                 <h2 style="font-size: 24px;">{{presell.productInfo.name}}</h2>  
             </div>
             <br>
-            <p style="padding: 10px;" ng-bind-html="presell.productInfo.intro"></p>
+            <p ng-show="presell.productInfo.intro != ''" style="padding: 10px;" ng-bind-html="presell.productInfo.intro"></p>
         </div>
     </div>
 
     <!-- html图文 -->
     <div ng-bind-html="presell.productInfo.htmlIntro|unsafe"></div>
        
-    <div class="item item-divider"></div>
+    <ng-show ng-show="presell.productInfo.imgSrc.length > 0">
+        <div class="item item-divider"></div>
 
-    <!-- 多图 -->
-    <div class="list" style="margin-bottom: -5px; padding-bottom: 0;">
-        <div class="item">
-            <h2 style="font-size: 24px;">产品图片</h2>
+        <!-- 多图 -->
+        <div class="list" style="margin-bottom: -5px; padding-bottom: 0;">
+            <div class="item">
+                <h2 style="font-size: 24px;">产品图片</h2>
+            </div>
+            <div ng-repeat="img in presell.productInfo.imgSrc">
+                <img width="100%" ng-src="{{img}}" />
+            </div>
         </div>
-        <div ng-repeat="img in presell.productInfo.imgSrc">
-            <img width="100%" ng-src="{{img}}" />
-        </div>
-    </div>
+    </ng-show>
 
     <div class="item item-divider"></div>
 
@@ -72,7 +74,20 @@
             <div class="item">
                 <h2 style="font-size: 24px;">购买须知</h2>
             </div>
-            <p ng-bind-html="presell.productInfo.buyNotes" style="padding: 10px;"></p>
+            有效期
+            {{presell.productInfo.useStartDate.slice(0,10)}}-{{presell.productInfo.useEndDate.slice(0,10)}}
+            <ng-show ng-show="presell.productInfo.buyNotes != ''">
+                购买规则
+                <p ng-bind-html="presell.productInfo.buyNotes" style="padding: 10px;"></p>
+            </ng-show>
+            <ng-show ng-show="presell.productInfo.useNotes != ''">
+                使用规则
+                <p ng-bind-html="presell.productInfo.useNotes" style="padding: 10px;"></p>
+            </ng-show>
+            <ng-show ng-show="presell.productInfo.warmNotes != ''">
+                温馨提示
+                <p ng-bind-html="presell.productInfo.warmNotes" style="padding: 10px;"></p>
+            </ng-show>
         </div>
     </div>
     <div class="item item-divider"></div>
