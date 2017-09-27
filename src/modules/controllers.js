@@ -3805,9 +3805,10 @@
                     var uid = util.getParams('userid')
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
                     wx.onMenuShareTimeline({
-                        title: 'test2', // 分享标题
+                        title: self.productInfo.title, // 分享标题
                         link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: '', // 分享图标
+                        desc: self.productInfo.GoodsShareDesc,
+                        imgUrl: self.productInfo.img, // 分享图标
                         success: function () { 
                             // 用户确认分享后执行的回调函数
                         },
@@ -3816,10 +3817,11 @@
                         }
                     });
                     wx.onMenuShareAppMessage({
-                        title: 'test22', // 分享标题
+                        title: self.productInfo.title, // 分享标题
                         desc: '', // 分享描述
                         link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        imgUrl: '', // 分享图标
+                        desc: self.productInfo.GoodsShareDesc,
+                        imgUrl: self.productInfo.img, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () { 
