@@ -94,7 +94,7 @@
 
 
     <!-- 联系我们 -->
-    <div class="padding">
+    <div class="padding" style="padding-bottom: 0;">
         <div class="list mod-inset-forms">
             <div class="item">
                 <h2 style="font-size: 24px;">联系我们</h2>
@@ -120,11 +120,13 @@
                 </p>
             </div>
         </div>
+
+
     </div>
 
     <!-- 底部支持信息 -->
     <div class="item item-divider">
-        <p>由清鹤科技提供技术支持</p>
+        <p style="text-align: center; padding-top: 10px; padding-bottom: 80px;">由清鹤科技提供技术支持</p>
     </div>
 
     <!-- 开抢倒计时 -->
@@ -168,30 +170,6 @@
             <!-- ￥{{presell.productInfo.pricePub-0|fenToYuan}}&nbsp; -->
             已下架
         </button>
-    </div>
-
-
-
-
-
-    <!-- 弹窗 -->
-    <div class="atc-content mod-has-header">
-        
-
-
-        <!-- 订单 -->
-        手机号：<input type="number" ng-model="presell.phoneNumber">
-        数量：<input type="number" ng-model="presell.goodsCount">
-
-
-
-        <!-- 下单按钮
-
-        presell.soldout: {{presell.soldout}}
-        presell.leftSaleStartTime: {{presell.leftSaleStartTime}}
-        presell.leftSaleEndTime: {{presell.leftSaleEndTime}}
-         -->
-         
     </div>
 
 
