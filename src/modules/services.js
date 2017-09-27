@@ -96,6 +96,13 @@
           }  
       },
       /**
+       * 获取search参数
+       */
+      'getSearchParams': function (paramsName) {
+        var match = RegExp('[?&]' + paramsName + '=([^&]*)').exec(window.location.search)
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '))
+      },
+      /**
        * 获取state参数
        */
       'getStateParams': function (paramsName) {
