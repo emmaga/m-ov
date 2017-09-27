@@ -97,6 +97,10 @@
                     url: '/wxMemberCard',
                     templateUrl: 'pages/wxMemberCard.html'
                 })
+                .state('presell', {
+                    url: '/presell',
+                    templateUrl: 'pages/presell.html'
+                })
         }])
 
         // 每次页面跳转完成时触发
