@@ -45,7 +45,7 @@
                 <h2 style="font-size: 24px;">{{presell.productInfo.name}}</h2>  
             </div>
             <br>
-            <p style="padding: 10px;">{{presell.productInfo.intro}}</p>
+            <p style="padding: 10px;" ng-bind-html="presell.productInfo.intro"></p>
         </div>
     </div>
 
@@ -76,14 +76,39 @@
         </div>
     </div>
     <div class="item item-divider"></div>
+
+
     <!-- 联系我们 -->
     <div class="padding">
         <div class="list mod-inset-forms">
             <div class="item">
                 <h2 style="font-size: 24px;">联系我们</h2>
             </div>
-            <p style="padding: 10px;">{{presell.productInfo.buyNotes}}</p>
+            <div class="padding">
+                <h4>
+                    {{presell.shopInfo.ContactName}}
+                </h4>
+                <p>酒店地址：{{presell.shopInfo.ContactAdress}}
+                    <!-- <br>联系电话： -->
+                    <!-- <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}">icon-left ion-ios-telephone{{presell.shopInfo.ContactTelephone}}</a> -->
+                </p>
+                <a ng-href="tel:{{presell.shopInfo.ContactTelephone}}" class="button  button-positive button-full">
+                    联系电话：{{presell.shopInfo.ContactTelephone}}
+                </a>
+            </div>
+            <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
+                <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
+                <h2>长按识别二维码关注公众号</h2>
+                <p style="white-space: normal; text-overflow: initial;">
+                    可查看已购预售商品、提前进行消费预订、可获知最新会员优惠
+                </p>
+            </div>
         </div>
+    </div>
+
+    <!-- 开抢倒计时 -->
+    <div ng-show="!presell.soldout && presell.leftSaleStartTime > 0" style="position: fixed; bottom: 44px; width: 100%; height: 31px; padding: 5px 10px; background: rgba(11,11,11,.8); color:#fff; z-index: 100; text-align: center;">
+        <small>离开抢还剩{{presell.leftSaleStartTime | timeToDHMS}}</small>
     </div>
 
     <!-- 结束倒计时 -->
@@ -93,19 +118,19 @@
 
     <!-- 底栏 下单购买按钮 -->
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style=" background: #fff;">
-        <p style="text-decoration: line-through; flex-grow: 0.5; padding: 10px; padding-top: 13px;">
+        <p ng-show="!presell.soldout && presell.leftSaleStartTime <= 0"  style="text-decoration: line-through; flex-grow: 0.5; padding: 10px; padding-top: 13px;">
             门市价:&nbsp;{{presell.productInfo.pricePub}}元
         </p>
-        <button class="button button-energized" ng-show="!presell.soldout && presell.leftSaleStartTime > 0">
-            ￥{{presell.productInfo.pricePub}}&nbsp;
-            离开抢还剩{{presell.leftSaleStartTime | timeToDHMS}}
+        <button class="button button-energized" style="color:rgb(51,51,21);" ng-show="!presell.soldout && presell.leftSaleStartTime > 0">
+            <span style="text-decoration: line-through;">门市价:&nbsp;{{presell.productInfo.pricePub}}元</span>
+            &nbsp;<b>抢购价：￥{{presell.productInfo.pricePub}}</b>
         </button>
         <button class="button button-assertive"  ng-show="!presell.soldout && presell.leftSaleStartTime <= 0" id="payBtn" ng-click="presell.submitOrder()">
             ￥{{presell.productInfo.pricePub}}&nbsp;
             立即抢购
         </button>
         <button class="button"  ng-show="presell.soldout">
-            ￥{{presell.productInfo.pricePub}}&nbsp;
+            <!-- ￥{{presell.productInfo.pricePub}}&nbsp; -->
             已下架
         </button>
     </div>

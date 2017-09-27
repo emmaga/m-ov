@@ -3785,13 +3785,12 @@
                         $timeout.cancel(self.presellLoop)
                     }
                     // 已下架
-                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate) - new Date()) < 0) {
+                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
                         self.soldout = true
                         $timeout.cancel(self.presellLoop)
                     } else {
-                        console.log(self.productInfo)
-                        self.leftSaleStartTime = new Date(self.productInfo.saleStartDate) - new Date()
-                        self.leftSaleEndTime = new Date(self.productInfo.saleEndDate) - new Date()
+                        self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
+                        self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
                         self.presellLoop = $timeout(function() {
                             self.loop()
                         }, 1000)
