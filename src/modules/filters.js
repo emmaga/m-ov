@@ -83,6 +83,24 @@
     }
   }])
 
+  .filter("orderStatus2",['$filter', function($filter){
+      return function(orderStatus){
+          var flag;
+          switch (orderStatus){
+              case 'WAITPAY':
+                  flag = '待支付';
+                  break;
+              case 'ACCEPT':
+                  flag = '已支付';
+                  break;
+              case 'COMPLETED':
+                  flag = '已使用';
+                  break;
+          }
+          return flag;
+      }
+  }])
+
   .filter("dateTimeToTimestamp", function() {
     return function(dateTime) {
       var d = new Date(dateTime);

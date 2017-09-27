@@ -1,0 +1,79 @@
+<div ng-controller="advanceOrderInfoController as shopOrderInfo" ng-init="shopOrderInfo.beforeInit()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">预售券信息</h1>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
+    </div>
+    <div class=" mod-has-header">
+        <div class="item mod-no-border-top">
+            <div class="row">
+                <p class="col mod-no-padding">券号:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.OrderNum}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">下单日期:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.dealTime}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">下单手机:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.mobile}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">支付总额:</p>
+                <p class="col mod-no-padding col-75">
+                    ¥ {{shopOrderInfo.detail.totalPri | fenToYuan}}
+                </p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">有效期:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.productList[0].UseStartDate.slice(0,-9)}} - {{shopOrderInfo.detail.productList[0].UseEndDate.slice(0,-9)}}</p>
+            </div>
+            <div class="row">
+                <p class="col mod-no-padding">{{'orderStatus'|translate}}:</p>
+                <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.Status | orderStatus2}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="item item-divider"></div>
+    <div class="list padding mod-inset-forms mod-list">
+        <div class="item item-thumbnail-left mod-no-side-border"  ng-repeat="product in shopOrderInfo.detail.productList">
+            <div ng-click="shopOrderInfo.gotoProduct()">
+                <div class="full-image mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{product.img}});"></div>
+                <h2>{{product.GoodsName}}</h2>
+                <p>单价: ￥{{product.price | fenToYuan}}</p>
+                <p>数量: {{product.GoodsNum}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="item item-divider">
+        <label>套餐说明：</label>
+    </div>
+    <div class="item">
+        <p ng-bind-html="shopOrderInfo.detail.productList[0].GoodsIntro | unsafe" style="white-space:normal;"></p>
+    </div>
+    <div class="item item-divider">
+        <label>使用规则：</label>
+    </div>
+    <div class="item">
+        <p ng-bind-html="shopOrderInfo.UseNotes['zh-CN'] | unsafe" style="white-space:normal;"></p>
+    </div>
+    <div class="item">
+        <div class="row">
+            <p class="col mod-no-padding">酒店名称:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.productList[0].HotelContactName}}</p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">联系地址:</p>
+            <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.productList[0].HotelContactAdress}}</p>
+        </div>
+        <div class="row">
+            <p class="col mod-no-padding">联系电话:</p>
+            <p class="col mod-no-padding col-75"><a ng-href="tel:{{shopOrderInfo.detail.productList[0].HotelContactTelephone}}">{{shopOrderInfo.detail.productList[0].HotelContactTelephone}}</a></p>
+        </div>
+    </div>
+
+    <!-- <div class="item item-divider" style="{{ !shopOrderInfo.showCancelBtn ? 'height: calc(100vh - 477px); ' : ''}}"> -->
+    <div class="item item-divider" style="min-height: calc(100vh - 410px)">
+        <!-- 继续购物按钮 有bug 没有标注商城标识 -->
+        <a class="button button-block button-positive" ng-click="shopOrderInfo.gotoProduct()">再下一单</a>
+    </div>
+</div>

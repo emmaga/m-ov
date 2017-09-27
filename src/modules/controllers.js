@@ -155,7 +155,7 @@
                     // http://www.cnblogs.com/sunshq/p/4171490.html
                     self.noncestr = Math.random().toString(36).substr(2);
                     self.timestamp = new Date().getTime() + '';
-                    
+
                     var data = {
                         "clear_session": self.getParams('clear_session'),
                         "appid": self.getParams('appid'),
@@ -3774,10 +3774,36 @@
                     self.paid = util.getSearchParams('paid')
                     self.shopInfo = {}
                     self.productInfo = {}
+                    self.orderActive=false
+                    self.goodsCount=1
                     wx.ready(function () {
                         wx.showAllNonBaseMenuItem();
                     })
                     self.getProductInfo()
+                }
+
+                self.orderShow=function () {
+                    self.orderActive=true;
+                }
+
+                self.orderHide=function () {
+                    self.orderActive=false
+                }
+
+                self.plusOne = function (index) {
+                    self.goodsCount += 1;
+                    self.countTotalPrice();
+                }
+
+                self.minusOne = function (index) {
+                    if (self.goodsCount >= 2) {
+                        self.goodsCount -= 1;
+                        self.countTotalPrice();
+                    }
+                }
+
+                self.countTotalPrice = function () {
+                    self.totalPrice = self.goodsCount*self.productInfo.price;
                 }
 
                 self.loop = function () {
@@ -3818,7 +3844,6 @@
                     });
                     wx.onMenuShareAppMessage({
                         title: self.productInfo.title, // 分享标题
-                        desc: '', // 分享描述
                         link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
@@ -3854,7 +3879,10 @@
                         if (data.rescode == '200') {
                             self.shopInfo = data.shopInfo
                             self.productInfo = data.data.product
+                            self.countTotalPrice()
                             self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
+                            self.productInfo.useNotes = JSON.parse(self.productInfo.useNotes)['zh-CN']
+                            self.productInfo.warmNotes = JSON.parse(self.productInfo.warmNotes)['zh-CN']
                             // deferred.resolve();
                             self.wxregistShare()
                             self.loop()
@@ -3872,7 +3900,10 @@
                 }
 
                 self.submitOrder = function () {
-
+                    if(!self.phoneNumber) {
+                        alert('请输入手机号')
+                        return;
+                    }
                     //开始生成订单
                     $ionicLoading.show({
                        template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
@@ -3964,6 +3995,140 @@
                         address: decodeURI(encodeURI(self.shopInfo.ContactAdress)), // 地址详情说明
                         scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
                         infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                    });
+                }
+            }
+        ])
+
+        // 预售订单列表页面
+        .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
+            function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
+                console.log('shopOrderListController')
+                var self = this;
+                self.beforeInit = function () {
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+                self.init = function () {
+                    self.date=new Date('2018-1-1 16:48:37')
+                    // 遮罩层 bool
+                    self.showLoadingBool = {};
+
+                    self.search();
+                }
+                self.search = function () {
+                    // 发送请求之前，遮罩层
+                    self.showLoadingBool.searchBool = false;
+                    loadingService(self.showLoadingBool)
+                    var data = {
+                        "action": "shopOrderList",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                    }
+
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', 'shopOrderList'),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.orderLists = data.data.data;
+                        console.log(data.data.data)
+                        self.orderListNum = data.data.data.length;
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    }, function errorCallback (data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
+
+                }
+                self.nextState = function (id) {
+                    $state.go('advanceOrderInfo', {orderId: id})
+                }
+            }
+        ])
+
+        // 预售订单详情页面
+        .controller('advanceOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG','BACKEND_CONFIG', 'util',
+            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG,BACKEND_CONFIG, util) {
+                console.log('shopOrderInfoController')
+
+                var self = this;
+                self.beforeInit = function () {
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+                self.init = function () {
+                    self.orderId = $stateParams.orderId;
+                    self.showLoadingBool = {};
+                    self.showLoadingBool.searchBool = false;
+                    self.showCancelBtn = false;
+                    self.showPayBtn = false;
+                    self.search();
+                }
+
+                self.gotoShop = function () {
+                    $state.go('shopHome2', {shopId: self.shopId});
+                }
+
+                // 跳转至详情页
+                self.gotoProduct=function(){
+                    var appid=util.getSearchParams('appid');
+                    var mchAppID=self.mchAppID
+                    var puid=self.AgentUserID
+                    var puaid=self.AgentUserAccountID
+                    var url= BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mchAppID+'&puid='+puid+'&puaid='+puaid+'&uid=-1&uaid=-1&sid='+self.shopId+'&gid='+self.goodId
+                    console.error(url)
+                    window.location.href = url
+                }
+
+                self.search = function () {
+                    self.showLoadingBool.searchBool = false;
+                    loadingService(self.showLoadingBool);
+
+                    var data = {
+                        "action": "getOrderDetail",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "orderID": self.orderId - 0
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', 'shopOrderInfo'),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.detail = data.data.data.detail;
+                        self.UseNotes=JSON.parse(self.detail.productList[0].UseNotes)
+                        var s = self.detail.Status;
+                        var d = self.detail.deliverWay;
+                        self.shopId = self.detail.ShopID;
+                        self.goodId = self.detail.productList[0].GoodsID;
+                        self.AgentUserID=self.detail.AgentUserID
+                        self.AgentUserAccountID=self.detail.AgentUserAccountID
+
+                        self.showPayBtn = (s == 'WAITPAY');
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
+                        self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
+                        self.showLoadingBool.searchBool = true;
+                        self.mchAppID=self.detail.mchAppID
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback (data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
                     });
                 }
             }
