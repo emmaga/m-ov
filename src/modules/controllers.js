@@ -3855,6 +3855,7 @@
                         if (data.rescode == '200') {
                             self.shopInfo = data.shopInfo
                             self.productInfo = data.data.product
+                            self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
                             // deferred.resolve();
                             self.wxregistShare()
                             self.loop()
