@@ -9,10 +9,10 @@
         <i class="icon ion-speakerphone" style="position: absolute; top: 10px; left: 10px; color: rgb(255,60,30);"></i>
         <small style="padding: 0; margin: 0;">
             分享该产品，您的朋友
-            <b style="color: rgb(255,60,30);">消费</b>
+            <b style="color: rgb(255,60,30);">下单</b>
             成功后，您将获得
             <b style="color: rgb(255,60,30); font-size: 1.2em">￥{{presell.productInfo.commission-0 | fenToYuan}}元</b>
-            现金奖励。次日发放至您的微信零钱包。
+            现金奖励，24小时内发放至您的微信零钱包。成功订单越多，奖励越多。
         </small>
     </div>
 
@@ -31,7 +31,7 @@
         <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
         <h2>长按识别二维码关注公众号</h2>
         <p style="white-space: normal; text-overflow: initial;">
-            可查看已购预售商品、提前进行消费预订、可获知最新会员优惠
+            可查订单、预约消费、获得最新会员优惠
         </p>
     </div>
 
@@ -105,6 +105,11 @@
                 </p>
             </div>
         </div>
+    </div>
+
+    <!-- 底部支持信息 -->
+    <div class="item item-divider">
+        <p>由清鹤科技提供技术支持</p>
     </div>
 
     <!-- 开抢倒计时 -->
