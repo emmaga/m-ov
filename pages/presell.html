@@ -76,13 +76,31 @@
         </div>
     </div>
     <div class="item item-divider"></div>
+
+
     <!-- 联系我们 -->
     <div class="padding">
         <div class="list mod-inset-forms">
             <div class="item">
                 <h2 style="font-size: 24px;">联系我们</h2>
             </div>
-            <p style="padding: 10px;">{{presell.productInfo.buyNotes}}</p>
+            <div class="padding">
+
+                {{presell.soldout}}
+                {{presell.leftSaleStartTime}}
+                {{presell.leftSaleStartTime}}
+
+                酒店地址：{{presell.shopInfo.ContactAdress}}
+
+                {{presell.shopInfo.ContactName}}电话：<a tel="{{presell.shopInfo.ContactTelephone}}">{{presell.shopInfo.ContactTelephone}}</a>
+            </div>
+            <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
+                <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
+                <h2>长按识别二维码关注公众号</h2>
+                <p style="white-space: normal; text-overflow: initial;">
+                    可查看已购预售商品、提前进行消费预订、可获知最新会员优惠
+                </p>
+            </div>
         </div>
     </div>
 
