@@ -3749,8 +3749,8 @@
         ])
         
         // 预售商品
-        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG',
-            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG) {
+        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
                 var self = this;
 
                 self.beforeInit = function () {
@@ -3830,9 +3830,10 @@
                     var gid = util.getSearchParams('gid')
                     var uid = util.getParams('userid')
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
                     wx.onMenuShareTimeline({
                         title: self.productInfo.title, // 分享标题
-                        link: 'http://openvod.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
                         success: function () { 
@@ -3844,7 +3845,7 @@
                     });
                     wx.onMenuShareAppMessage({
                         title: self.productInfo.title, // 分享标题
-                        link: 'http://openvod.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
