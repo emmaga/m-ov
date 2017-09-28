@@ -3832,7 +3832,7 @@
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
                     wx.onMenuShareTimeline({
                         title: self.productInfo.title, // 分享标题
-                        link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: 'http://openvod.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
                         success: function () { 
@@ -3844,7 +3844,7 @@
                     });
                     wx.onMenuShareAppMessage({
                         title: self.productInfo.title, // 分享标题
-                        link: 'http://openvoddev.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        link: 'http://openvod.cleartv.cn/backend_wx/v1/fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
@@ -4001,8 +4001,8 @@
         ])
 
         // 预售订单列表页面
-        .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'backendUrl',
-            function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, backendUrl) {
+        .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'BACKEND_CONFIG','backendUrl',
+            function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService,BACKEND_CONFIG, backendUrl) {
                 console.log('shopOrderListController')
                 var self = this;
                 self.beforeInit = function () {

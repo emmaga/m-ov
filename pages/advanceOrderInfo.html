@@ -44,11 +44,13 @@
             </div>
         </div>
     </div>
-    <div class="item item-divider">
-        <label>套餐说明：</label>
-    </div>
-    <div class="item">
-        <p ng-bind-html="shopOrderInfo.detail.productList[0].GoodsIntro | unsafe" style="white-space:normal;"></p>
+    <div ng-show="shopOrderInfo.detail.productList[0].GoodsIntro!==''">
+        <div class="item item-divider">
+            <label>套餐说明：</label>
+        </div>
+        <div class="item">
+            <p ng-bind-html="shopOrderInfo.detail.productList[0].GoodsIntro | unsafe" style="white-space:normal;"></p>
+        </div>
     </div>
     <div class="item item-divider">
         <label>使用规则：</label>
