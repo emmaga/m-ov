@@ -27,6 +27,16 @@
     };
   })
 
+  .filter("timeToDHMS", function() {
+    return function(t) {
+      var day = Math.floor(t / 24 / 60 / 60 / 1000)
+      var hour = Math.floor((t-day*24*3600*1000) /60/60/1000)
+      var min = Math.floor((t-day*24*3600*1000-hour*3600*1000)/60/1000)
+      var s = Math.floor((t-day*24*3600*1000-hour*3600*1000-min*60*1000)/1000)
+      return (day + '天' + hour + '小时' + min + '分' + s + '秒')
+    };
+  })
+
   .filter("orderStatus",['$filter', function($filter){
     return function(orderStatus, deliverWay){
       console.log(deliverWay)
@@ -73,6 +83,27 @@
     }
   }])
 
+  .filter("orderStatus2",['$filter', function($filter){
+      return function(orderStatus){
+          var flag;
+          switch (orderStatus){
+              case 'WAITPAY':
+                  flag = '待支付';
+                  break;
+              case 'ACCEPT':
+                  flag = '已支付';
+                  break;
+              case 'CANCELED':
+                  flag = '已取消';
+                  break;
+              case 'COMPLETED':
+                  flag = '已使用';
+                  break;
+          }
+          return flag;
+      }
+  }])
+
   .filter("dateTimeToTimestamp", function() {
     return function(dateTime) {
       var d = new Date(dateTime);
@@ -106,5 +137,7 @@
       };
   }])
 
-
+  .filter('unsafe', ['$sce', function($sce) {
+      return $sce.trustAsHtml;
+  }])
 })();

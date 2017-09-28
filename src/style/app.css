@@ -1050,3 +1050,67 @@ small {
 .ball-wrap .ball.drop .inner {
     /*animation: dropTop 1s;*/
 }
+
+.warning {
+    color: #FF3C1E;
+}
+.presell-container img{
+    max-width: 100%;
+}
+.presell-container.hideScroll{
+    height: 100vh;
+    overflow: hidden;
+}
+.presell-container .cover{
+    position: relative;
+}
+.presell-container .cover img{
+    display: block;
+}
+.presell-container .use-time{
+    position: absolute;
+    box-sizing: border-box;
+    padding-right: 10px;
+    text-align: right;
+    width: 100%;
+    bottom:0;
+    left: 0;
+    background: rgba(0,0,0,0.3);
+    line-height: 2;
+    color: #fff;
+}
+.order-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: #f5f5f5;
+    z-index: 999;
+    display: none;
+}
+
+.order-mask .close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: #999;
+    font-size: 40px;
+}
+
+.order-mask.active {
+    display: block;
+}
+
+.order-mask .order-title {
+    padding: 20px;
+    font-size: 16px;
+}
+
+.order-mask .order-info, .order-mask .order-payinfo {
+    background: #fff;
+}
+
+.order-mask .button-bar {
+    background: #fff;
+}

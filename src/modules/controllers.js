@@ -54,10 +54,10 @@
                     self.setParams('code', code);
 
                     /* 获取cleartoken（clear_session）和openid
-                 * wx注册
-                 * 获取项目及会员信息
-                 * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
-                 */
+                     * wx注册
+                     * 获取项目及会员信息
+                     * 如果本地存储中有用户信息不需要和服务器交互，不然则问服务器要数据
+                     */
                     if (self.getParams('clear_session')) {
                         self._readystate = false;
                         self.WXConfigJSSDK();
@@ -178,12 +178,14 @@
                                     timestamp: self.timestamp, // 必填，生成签名的时间戳
                                     nonceStr: self.noncestr, // 必填，生成签名的随机串
                                     signature: data.data.signature, // 必填，签名，见附录1
-                                    jsApiList: ['hideMenuItems', 'chooseWXPay', 'openLocation', 'getLocation', 'addCard', 'chooseCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                                    jsApiList: [
+                                        'hideMenuItems', 'showAllNonBaseMenuItem', 'chooseWXPay', 'openLocation', 
+                                        'getLocation', 'addCard', 'chooseCard', 'onMenuShareTimeline', 'onMenuShareAppMessage'
+                                    ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                                 });
                                 wx.ready(function () {
                                     // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
                                     // 禁用“分享给好友”，“分享到朋友圈”, "在Safari中打开", "邮件","复制链接","分享到QQ","分享到QQ空间"
-                                    self._wxreadystate = true;
                                     wx.hideMenuItems({
                                         menuList: [
                                             'menuItem:share:appMessage',
@@ -195,6 +197,7 @@
                                             'menuItem:share:QZone'
                                         ]
                                     });
+                                    self._wxreadystate = true;
                                 });
 
                             } else if (data.data.rescode == '401') {
@@ -2714,8 +2717,8 @@
 
                     //开始生成订单
                     $ionicLoading.show({
-                        template: '...'
-                    });
+                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })  
                     // 支付按钮变为不可点击，防止多次点击
                     document.getElementById('payBtn').disabled = true;
 
@@ -3744,5 +3747,391 @@
                 }
             }
         ])
+        
+        // 预售商品
+        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
+                var self = this;
 
+                self.beforeInit = function () {
+                    console.log('beforeInit')
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+
+                self.init = function () {
+                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                        alert('商品号or店铺号无，出错')
+                        return
+                    }
+                    self.presellLoop = null
+                    self.paid = util.getSearchParams('paid')
+                    self.shopInfo = {}
+                    self.productInfo = {}
+                    self.orderActive=false
+                    self.goodsCount=1
+                    wx.ready(function () {
+                        wx.showAllNonBaseMenuItem();
+                    })
+                    self.getProductInfo()
+                }
+
+                self.orderShow=function () {
+                    self.orderActive=true;
+                }
+
+                self.orderHide=function () {
+                    self.orderActive=false
+                }
+
+                self.plusOne = function (index) {
+                    self.goodsCount += 1;
+                    self.countTotalPrice();
+                }
+
+                self.minusOne = function (index) {
+                    if (self.goodsCount >= 2) {
+                        self.goodsCount -= 1;
+                        self.countTotalPrice();
+                    }
+                }
+
+                self.countTotalPrice = function () {
+                    self.totalPrice = self.goodsCount*self.productInfo.price;
+                }
+
+                self.loop = function () {
+                    if(location.hash.indexOf("#/presell") === -1) {
+                        $timeout.cancel(self.presellLoop)
+                    }
+                    // 已下架
+                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
+                        self.soldout = true
+                        $timeout.cancel(self.presellLoop)
+                    } else {
+                        self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
+                        self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
+                        self.presellLoop = $timeout(function() {
+                            self.loop()
+                        }, 1000)
+                    }
+                }
+
+                self.wxregistShare = function () {
+                    var appid = util.getSearchParams('appid')
+                    var mch_appid = util.getSearchParams('mch_appid')
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var uid = util.getParams('userid')
+                    var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
+                    wx.onMenuShareTimeline({
+                        title: self.productInfo.title, // 分享标题
+                        link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        desc: self.productInfo.shareDesc,
+                        imgUrl: self.productInfo.img, // 分享图标
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                    wx.onMenuShareAppMessage({
+                        title: self.productInfo.title, // 分享标题
+                        link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        desc: self.productInfo.shareDesc,
+                        imgUrl: self.productInfo.img, // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () { 
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () { 
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                }
+
+                self.getProductInfo = function () {
+                    var productId = util.getSearchParams('gid')
+                    // var deferred = $q.defer();
+                    var data = JSON.stringify({
+                        clear_session: $scope.root.getParams('clear_session'),
+                        action: 'getProductDetail',
+                        lang: 'zh-CN',
+                        productId: productId
+                    })
+                    $ionicLoading.show({
+                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })  
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('fxshopinfo', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.shopInfo = data.shopInfo
+                            self.productInfo = data.data.product
+                            self.countTotalPrice()
+                            self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
+                            self.productInfo.useNotes = JSON.parse(self.productInfo.useNotes)['zh-CN']
+                            self.productInfo.warmNotes = JSON.parse(self.productInfo.warmNotes)['zh-CN']
+                            // deferred.resolve();
+                            self.wxregistShare()
+                            self.loop()
+                        }
+                        else {
+                            alert(data.rescode + ' ' + data.errInfo);
+                            // deferred.reject();
+                        }
+                    }, function errorCallback (response) {
+                        alert('连接服务器出错');
+                    }).finally(function (value) {
+                        $ionicLoading.hide()
+                    });
+                    // return deferred.promise;
+                }
+
+                self.submitOrder = function () {
+                    if(!self.phoneNumber) {
+                        alert('请输入手机号')
+                        return;
+                    }
+                    //开始生成订单
+                    $ionicLoading.show({
+                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })  
+                    // 支付按钮变为不可点击，防止多次点击
+                    document.getElementById('payBtn').disabled = true;
+                    var data = {
+                        "action": "newShopOrder",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": 'zh-CN',
+                        "shopID": Number(util.getSearchParams('sid')),
+                        "agentUserID": util.getSearchParams('puid') == null ? -1 : Number(util.getSearchParams('puid')),
+                        "agentUserAccountID": util.getSearchParams('puaid') == null ? -1 : Number(util.getSearchParams('puaid')),
+                        "goodsList": [
+                            {
+                                "shopGoodsID": Number(util.getSearchParams('gid')),
+                                "goodsCount": self.goodsCount
+                            }
+                        ],
+                        "delivery": {
+                            "deliverWay": "bySelf",
+                            "contactName": "",
+                            "mobile": self.phoneNumber + ''
+                        }
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', ''),
+                        data: data
+                    })
+                        .then(function successCallback (data, status, headers, config) {
+                            //订单生成成功
+                            if (data.data.rescode == '200') {
+                                // 支付
+                                self.pay(data.data.orderID);
+                            }
+                            //订单生成失败
+                            else {
+                                alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                                $ionicLoading.hide();
+                                // 支付按钮变为可点击
+                                document.getElementById('payBtn').disabled = false;
+                            }
+                        }, function errorCallback (data, status, headers, config) {
+                            alert('连接服务器出错');
+                            $ionicLoading.hide();
+                            // 支付按钮变为可点击
+                            document.getElementById('payBtn').disabled = false;
+                        })
+                        //订单生成结束
+                        .finally(function (value) {
+                            // $ionicLoading.hide();
+                            // // 支付按钮变为可点击
+                            // document.getElementById('payBtn').disabled = false;
+                        });
+                }
+
+                self.pay = function (orderId) {
+                    var jumpUrl, compID;
+                    console.log(PAY_CONFIG)
+                    if (PAY_CONFIG.test) {
+                        jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                        compID = PAY_CONFIG.testConfig.compID
+                    } else {
+                        jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                        compID = PAY_CONFIG.onlineConfig.compID
+                    }
+                    // 等待支付
+                    // 支付按钮变为不可点击，防止多次点击
+                    document.getElementById('payBtn').disabled = true
+                    // window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                    //     'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/presellPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var puid = util.getSearchParams('puid') == null ? -1 : util.getSearchParams('puid')
+                    var puaid = util.getSearchParams('puaid') == null ? -1 : util.getSearchParams('puaid')
+                    var uid = util.getSearchParams('uid') == null ? -1 : util.getSearchParams('uid')
+                    var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                        'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay%3Fsid%3D' + sid + '%26gid%3D' + gid + '%26puid%3D' + puid + '%26puaid%3D' + puaid + '%26uid%3D' + uid + '%26uaid%3D' + uaid + '%23/presellPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                }
+
+                self.map = function () {
+                    wx.openLocation({
+                        latitude: self.shopInfo.ContactDimension - 0, // 纬度，浮点数，范围为90 ~ -90
+                        longitude: self.shopInfo.ContactLongitude - 0, // 经度，浮点数，范围为180 ~ -180。
+                        name: decodeURI(encodeURI(self.shopInfo.ShopName['zh-CN'])), // 位置名
+                        address: decodeURI(encodeURI(self.shopInfo.ContactAdress)), // 地址详情说明
+                        scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                        infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                    });
+                }
+            }
+        ])
+
+        // 预售订单列表页面
+        .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'BACKEND_CONFIG','backendUrl',
+            function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService,BACKEND_CONFIG, backendUrl) {
+                console.log('shopOrderListController')
+                var self = this;
+                self.beforeInit = function () {
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+                self.init = function () {
+                    self.date=new Date('2018-1-1 16:48:37')
+                    // 遮罩层 bool
+                    self.showLoadingBool = {};
+
+                    self.search();
+                }
+                self.search = function () {
+                    // 发送请求之前，遮罩层
+                    self.showLoadingBool.searchBool = false;
+                    loadingService(self.showLoadingBool)
+                    var data = {
+                        "action": "shopOrderList",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                    }
+
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', 'shopOrderList'),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.orderLists = data.data.data;
+                        console.log(data.data.data)
+                        self.orderListNum = data.data.data.length;
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    }, function errorCallback (data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    });
+
+                }
+                self.nextState = function (id) {
+                    $state.go('advanceOrderInfo', {orderId: id})
+                }
+            }
+        ])
+
+        // 预售订单详情页面
+        .controller('advanceOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG','BACKEND_CONFIG', 'util',
+            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG,BACKEND_CONFIG, util) {
+                console.log('shopOrderInfoController')
+
+                var self = this;
+                self.beforeInit = function () {
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+                self.init = function () {
+                    self.orderId = $stateParams.orderId;
+                    self.showLoadingBool = {};
+                    self.showLoadingBool.searchBool = false;
+                    self.showCancelBtn = false;
+                    self.showPayBtn = false;
+                    self.search();
+                }
+
+                self.gotoShop = function () {
+                    $state.go('shopHome2', {shopId: self.shopId});
+                }
+
+                // 跳转至详情页
+                self.gotoProduct=function(){
+                    var appid=util.getSearchParams('appid');
+                    var mchAppID=self.mchAppID
+                    var puid=self.AgentUserID
+                    var puaid=self.AgentUserAccountID
+                    var url= BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mchAppID+'&puid='+puid+'&puaid='+puaid+'&uid=-1&uaid=-1&sid='+self.shopId+'&gid='+self.goodId
+                    console.error(url)
+                    window.location.href = url
+                }
+
+                self.search = function () {
+                    self.showLoadingBool.searchBool = false;
+                    loadingService(self.showLoadingBool);
+
+                    var data = {
+                        "action": "getOrderDetail",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": $translate.proposedLanguage() || $translate.use(),
+                        "orderID": self.orderId - 0
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', 'shopOrderInfo'),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.detail = data.data.data.detail;
+                        self.UseNotes=JSON.parse(self.detail.productList[0].UseNotes)
+                        var s = self.detail.Status;
+                        var d = self.detail.deliverWay;
+                        self.shopId = self.detail.ShopID;
+                        self.goodId = self.detail.productList[0].GoodsID;
+                        self.AgentUserID=self.detail.AgentUserID
+                        self.AgentUserAccountID=self.detail.AgentUserAccountID
+
+                        self.showPayBtn = (s == 'WAITPAY');
+                        self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
+                        self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
+                        self.showLoadingBool.searchBool = true;
+                        self.mchAppID=self.detail.mchAppID
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback (data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    });
+                }
+            }
+        ])
 })();
