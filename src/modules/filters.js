@@ -33,7 +33,7 @@
       var hour = Math.floor((t-day*24*3600*1000) /60/60/1000)
       var min = Math.floor((t-day*24*3600*1000-hour*3600*1000)/60/1000)
       var s = Math.floor((t-day*24*3600*1000-hour*3600*1000-min*60*1000)/1000)
-      return (day + '天' + hour + '小时' + min + '分' + s + '秒')
+      return ('<i>'+day+'</i>' + '天' + '<i>'+hour+'</i>' + '小时' +'<i>'+ min+'</i>' + '分' +'<i>'+ s+'</i>' + '秒')
     };
   })
 

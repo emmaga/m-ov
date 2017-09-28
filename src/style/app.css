@@ -1057,6 +1057,14 @@ small {
 .presell-container img{
     max-width: 100%;
 }
+.presell-container .strong{
+    color: rgb(255,60,30); font-size: 1.2em
+}
+
+.presell-container .countdown i{
+    color: rgb(255,60,30);font-size: 1.2em; font-weight: bold;
+}
+
 .presell-container.hideScroll{
     height: 100vh;
     overflow: hidden;
