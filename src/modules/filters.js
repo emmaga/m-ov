@@ -93,6 +93,9 @@
               case 'ACCEPT':
                   flag = '已支付';
                   break;
+              case 'CANCELED':
+                  flag = '已取消';
+                  break;
               case 'COMPLETED':
                   flag = '已使用';
                   break;
