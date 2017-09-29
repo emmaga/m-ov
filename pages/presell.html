@@ -11,7 +11,7 @@
             分享该产品，您的朋友
             <b style="color: rgb(255,60,30);">下单</b>
             成功后，您将获得
-            <b style="color: rgb(255,60,30); font-size: 1.2em">￥{{presell.productInfo.commission-0 | fenToYuan}}元</b>
+            <b style="color: rgb(255,60,30); font-size: 1.2em">￥{{presell.productInfo.commission-0 | fenToYuan}}</b>
             现金奖励，即时发放至微信零钱包。订单越多，奖励越多。
         </small>
     </div>
@@ -31,7 +31,7 @@
         <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
         <h2>长按识别二维码关注公众号</h2>
         <p style="white-space: normal; text-overflow: initial;">
-            可查订单、预约消费、获得最新会员优惠
+            可查订单、预约班车、获得最新会员优惠
         </p>
     </div>
 
@@ -125,12 +125,14 @@
                     </a>
                 </p>
             </div>
-            <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important;">
+            <div class="item item-thumbnail-left" style="padding-left: 97px !important; padding-top: 12px !important; margin: 0 -10px">
                 <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 120px;" />
-                <h2>长按识别二维码关注公众号</h2>
-                <p style="white-space: normal; text-overflow: initial;">
-                    可查订单、预约消费、获得最新会员优惠
-                </p>
+                <div>
+                    <h2>长按识别二维码关注公众号</h2>
+                    <p style="white-space: normal; text-overflow: initial;">
+                        可查订单、预约班车、获得最新会员优惠
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -159,7 +161,7 @@
             <i class="icon ion-heart" style="color: rgb(255,60,30)"></i>&nbsp;
             您已购买此商品
         </h3>
-        <p>查看订单请长按二维码关注公众号</p>
+        <p>查看订单，预约班车，获取更多优惠<br>请长按二维码关注公众号</p>
         <br>
         <img ng-src="{{presell.shopInfo.QrCodeURL}}" style="width: 180px; border-radius: 3px; margin-bottom: 2rem;" /><br>
         <a ng-click="presell.paid=0" style="width: 180px;color: #fff;">知道了</a>
@@ -168,11 +170,11 @@
 
     <!-- 底栏 下单购买按钮 -->
     <div class="button-bar bar-footer mod-fixed mod-fixed-bottom " style=" background: #fff;">
-        <p ng-show="!presell.soldout && presell.leftSaleStartTime <= 0"  style="text-decoration: line-through; flex-grow: 0.5; padding: 10px; padding-top: 13px;">
-            门市价:&nbsp;{{presell.productInfo.pricePub-0|fenToYuan}}元
+        <p ng-show="!presell.soldout && presell.leftSaleStartTime <= 0"  style="text-decoration: line-through; flex-grow: 0.3; padding: 10px; padding-top: 13px;">
+            门市价:&nbsp;￥{{presell.productInfo.pricePub-0|fenToYuan}}
         </p>
         <button class="button button-energized" style="color:rgb(51,51,21);" ng-show="!presell.soldout && presell.leftSaleStartTime > 0">
-            <span style="text-decoration: line-through;">门市价:&nbsp;{{presell.productInfo.pricePub-0|fenToYuan}}元</span>
+            <span style="text-decoration: line-through;">门市价:&nbsp;￥{{presell.productInfo.pricePub-0|fenToYuan}}</span>
             &nbsp;<b>抢购价：￥{{presell.productInfo.price-0|fenToYuan}}</b>
         </button>
         <button class="button button-assertive" ng-show="!presell.soldout && presell.leftSaleStartTime <= 0" id="payBtn"
