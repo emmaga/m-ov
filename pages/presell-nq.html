@@ -17,9 +17,9 @@
         <!-- 大标题 -->
         <h3>{{presell.productInfo.title}}</h3>
         <!-- 标签 -->
-        <div class="tags" style="margin-bottom: 10px">
-            <span ng-class="tag.color" ng-repeat="tag in presell.tagObjList">{{tag.name}}</span>
-        </div>
+        <!--<div class="tags" style="margin-bottom: 10px">-->
+            <!--<span ng-class="tag.color" ng-repeat="tag in presell.tagObjList">{{tag.name}}</span>-->
+        <!--</div>-->
         <!-- 门店名称 -->
         <p ng-init="presell.showShopInfo=0" ng-click="presell.showShopInfo=(presell.showShopInfo==0)? 1 : 0" style="color: rgb(36,104,190); margin: 0">{{presell.shopInfo.ContactName}}官方直销</p>
     </div>
@@ -140,16 +140,16 @@
     <div class="item item-divider"></div>
 
     <!-- 点评 -->
-    <div class="padding" style="padding-bottom: 0;">
-        <div class="list mod-inset-forms">
-            <div class="item">
-                <h2 style="font-size: 24px;">携程用户点评</h2>
-            </div>
-            <div class="padding">
-                <img src="{{presell.comment}}" width="100%">
-            </div>
-        </div>
-    </div>
+    <!--<div class="padding" style="padding-bottom: 0;">-->
+        <!--<div class="list mod-inset-forms">-->
+            <!--<div class="item">-->
+                <!--<h2 style="font-size: 24px;">携程用户点评</h2>-->
+            <!--</div>-->
+            <!--<div class="padding">-->
+                <!--<img src="{{presell.comment}}" width="100%">-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <!-- 底部支持信息 -->
     <div class="item item-divider">
@@ -220,12 +220,32 @@
                    ng-class="{disabled:((presell.productInfo.saleNumByOne - presell.goodsCount) <= 0)}"
                    ng-click="presell.plusOne()"></a>
             </div>
+            <!--姓名-->
             <div class="item item-input mod-short">
-                <div class="input-label">下单手机</div>
+                <div class="input-label">姓名</div>
+                <input type="text" name="user" pattern="[\u4e00-\u9fa5]{2,}" required placeholder="{{'required'|translate}}">
+            </div>
+            <div ng-show="orderDetail.user.$dirty && orderDetail.user.$invalid" class="warning item-input">
+                <div class="input-label"></div>请输入2个及以上汉字
+            </div>
+            <!--手机-->
+            <div class="item item-input mod-short">
+                <div class="input-label">手机</div>
                 <input type="text" name="tel" pattern="[0-9]{11,}" ng-model="presell.phoneNumber" required
                        placeholder="{{'required'|translate}}">
             </div>
             <div ng-show="orderForm.tel.$invalid && presell.submitted" required class="item-input mod-short warning">
+                <div class="input-label"></div>
+                请输入正确的手机号
+            </div>
+
+            <!--收货地址-->
+            <div class="item item-input mod-short">
+                <div class="input-label">收货地址</div>
+                <input type="text" name="adress" ng-model="presell.phoneNumber" required
+                       placeholder="{{'required'|translate}}">
+            </div>
+            <div ng-show="orderForm.adress.$invalid && presell.submitted" required class="item-input mod-short warning">
                 <div class="input-label"></div>
                 请输入正确的手机号
             </div>

@@ -1054,9 +1054,43 @@ small {
 .warning {
     color: #FF3C1E;
 }
+.presell-container .img-intro p{
+    line-height: 1.4;
+    padding: 0;
+}
 .presell-container img{
     max-width: 100%;
 }
+.presell-container .tags span{
+    display: inline-block;
+    border: 1px solid #ffc900;
+    margin-right:5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    font-size:12px;
+    padding:3px 5px;
+}
+.presell-container .tags span.yellow{
+    border-color:#ffc900;
+    color: #ffc900;
+}
+.presell-container .tags span.red{
+    border-color:#fa2800;
+    color: #fa2800;
+}
+.presell-container .tags span.green{
+    border-color:#33cd5f;
+    color: #33cd5f;
+}
+.presell-container .tags span.pink{
+    border-color:#6b46e5;
+    color: #6b46e5;
+}
+.presell-container .tags span.blue{
+    border-color:#0c60ee;
+    color: #0c60ee;
+}
+
 .presell-container .strong{
     color: rgb(255,60,30); font-size: 1.2em
 }

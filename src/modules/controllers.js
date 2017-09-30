@@ -179,7 +179,7 @@
                                     nonceStr: self.noncestr, // 必填，生成签名的随机串
                                     signature: data.data.signature, // 必填，签名，见附录1
                                     jsApiList: [
-                                        'hideMenuItems', 'showAllNonBaseMenuItem', 'chooseWXPay', 'openLocation', 
+                                        'hideMenuItems', 'showAllNonBaseMenuItem', 'chooseWXPay', 'openLocation',
                                         'getLocation', 'addCard', 'chooseCard', 'onMenuShareTimeline', 'onMenuShareAppMessage'
                                     ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                                 });
@@ -2430,7 +2430,7 @@
                     $scope.shopCartList = new Array();
                     self.totalPrice = 0;
                     self.bill = {}
-                    self.address={}
+                    self.address = {}
                     self.bill.type = 0  // 发票类型，0为个人，1为公司
                     //watch shopCartList
                     $scope.$watch('shopCartList', function () {
@@ -2441,9 +2441,9 @@
                     // watch shopCartList.selectedDeType
                     $scope.$watch('shopCartList.selectedDeType', function (val) {
                         if (val == 'homeDelivery') {
-                            self.address.address=''
-                        }else{
-                            self.address.address=self.expressAddress
+                            self.address.address = ''
+                        } else {
+                            self.address.address = self.expressAddress
                         }
                         self.changeDeliveryWay();
                         self.countTotalPrice();
@@ -2698,9 +2698,9 @@
                                 self.deType = getDeTye($scope.shopCartList);
                                 self.selectAll(); // 默认选上所有的物品
                                 if ($scope.shopCartList.selectedDeType == 'homeDelivery') {
-                                    self.address.address=''
-                                }else{
-                                    self.address.address=self.expressAddress
+                                    self.address.address = ''
+                                } else {
+                                    self.address.address = self.expressAddress
                                 }
                             }
                             else {
@@ -2717,8 +2717,8 @@
 
                     //开始生成订单
                     $ionicLoading.show({
-                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
-                    })  
+                        template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })
                     // 支付按钮变为不可点击，防止多次点击
                     document.getElementById('payBtn').disabled = true;
 
@@ -3747,10 +3747,10 @@
                 }
             }
         ])
-        
+
         // 预售商品
-        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
-            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
+        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG', 'BACKEND_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG, BACKEND_CONFIG) {
                 var self = this;
 
                 self.beforeInit = function () {
@@ -3766,7 +3766,7 @@
                 }
 
                 self.init = function () {
-                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                    if (util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
                         alert('商品号or店铺号无，出错')
                         return
                     }
@@ -3774,20 +3774,53 @@
                     self.paid = util.getSearchParams('paid')
                     self.shopInfo = {}
                     self.productInfo = {}
-                    self.orderActive=false
-                    self.goodsCount=1
+                    self.orderActive = false
+                    self.goodsCount = 1
+                    self.submitted=false
                     wx.ready(function () {
                         wx.showAllNonBaseMenuItem();
                     })
                     self.getProductInfo()
+
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var projectInfo = util.getParams('projectInfo')
+                    var project=projectInfo.project
+                    var tagList;
+                    console.error(project,sid,gid)
+                    // 测试商品 id 1
+                    if (project == 'test' && sid == 1 && gid == 1) {
+                        tagList = ['官方直销', '迪士尼网红酒店', '周末节假日通用', '可转赠', '超长有效期']
+                        self.comment = 'http://mres.cleartv.cn/default/e9745cdcd2b3d8715eb1345ddedd2719_150668300375.jpg';
+                    }else if(project == 'test' && sid == 1 && gid == 1){
+
+                    }
+
+                    setTag (tagList);
+                    function setTag (list) {
+                        var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
+                        var count = 0;
+
+                        self.tagObjList = []
+                        R.forEach(function (i) {
+                            if (count >= tagColor.length) {
+                                count = 0
+                            }
+                            var obj = {};
+                            obj.name = i;
+                            obj.color = tagColor[count];
+                            self.tagObjList.push(obj)
+                            count++
+                        })(list)
+                    }
                 }
 
-                self.orderShow=function () {
-                    self.orderActive=true;
+                self.orderShow = function () {
+                    self.orderActive = true;
                 }
 
-                self.orderHide=function () {
-                    self.orderActive=false
+                self.orderHide = function () {
+                    self.orderActive = false
                 }
 
                 self.plusOne = function (index) {
@@ -3803,21 +3836,21 @@
                 }
 
                 self.countTotalPrice = function () {
-                    self.totalPrice = self.goodsCount*self.productInfo.price;
+                    self.totalPrice = self.goodsCount * self.productInfo.price;
                 }
 
                 self.loop = function () {
-                    if(location.hash.indexOf("#/presell") === -1) {
+                    if (location.hash.indexOf("#/presell") === -1) {
                         $timeout.cancel(self.presellLoop)
                     }
                     // 已下架
-                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
+                    if (self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
                         self.soldout = true
                         $timeout.cancel(self.presellLoop)
                     } else {
                         self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
                         self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
-                        self.presellLoop = $timeout(function() {
+                        self.presellLoop = $timeout(function () {
                             self.loop()
                         }, 1000)
                     }
@@ -3830,16 +3863,16 @@
                     var gid = util.getSearchParams('gid')
                     var uid = util.getParams('userid')
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
-                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
+                    var shareLink = BACKEND_CONFIG.serverUrl + 'fxredirect?ht_appid=' + appid + '&mch_appid=' + mch_appid + '&puid=' + uid + '&puaid=' + uaid + '&uid=-1&uaid=-1&sid=' + sid + '&gid=' + gid
                     wx.onMenuShareTimeline({
                         title: self.productInfo.title, // 分享标题
                         link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                         desc: self.productInfo.shareDesc,
                         imgUrl: self.productInfo.img, // 分享图标
-                        success: function () { 
+                        success: function () {
                             // 用户确认分享后执行的回调函数
                         },
-                        cancel: function () { 
+                        cancel: function () {
                             // 用户取消分享后执行的回调函数
                         }
                     });
@@ -3850,10 +3883,10 @@
                         imgUrl: self.productInfo.img, // 分享图标
                         type: '', // 分享类型,music、video或link，不填默认为link
                         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                        success: function () { 
+                        success: function () {
                             // 用户确认分享后执行的回调函数
                         },
-                        cancel: function () { 
+                        cancel: function () {
                             // 用户取消分享后执行的回调函数
                         }
                     });
@@ -3869,8 +3902,8 @@
                         productId: productId
                     })
                     $ionicLoading.show({
-                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
-                    })  
+                        template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })
                     $http({
                         method: 'POST',
                         url: backendUrl('fxshopinfo', ''),
@@ -3901,14 +3934,14 @@
                 }
 
                 self.submitOrder = function () {
-                    if(!self.phoneNumber) {
-                        alert('请输入手机号')
+                    self.submitted=true;
+                    if (!self.phoneNumber) {
                         return;
                     }
                     //开始生成订单
                     $ionicLoading.show({
-                       template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
-                    })  
+                        template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })
                     // 支付按钮变为不可点击，防止多次点击
                     document.getElementById('payBtn').disabled = true;
                     var data = {
@@ -4002,8 +4035,8 @@
         ])
 
         // 预售订单列表页面
-        .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'BACKEND_CONFIG','backendUrl',
-            function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService,BACKEND_CONFIG, backendUrl) {
+        .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'BACKEND_CONFIG', 'backendUrl',
+            function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, BACKEND_CONFIG, backendUrl) {
                 console.log('shopOrderListController')
                 var self = this;
                 self.beforeInit = function () {
@@ -4017,7 +4050,7 @@
                     }
                 }
                 self.init = function () {
-                    self.date=new Date('2018-1-1 16:48:37')
+                    self.date = new Date('2018-1-1 16:48:37')
                     // 遮罩层 bool
                     self.showLoadingBool = {};
 
@@ -4057,8 +4090,8 @@
         ])
 
         // 预售订单详情页面
-        .controller('advanceOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG','BACKEND_CONFIG', 'util',
-            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG,BACKEND_CONFIG, util) {
+        .controller('advanceOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'BACKEND_CONFIG', 'util',
+            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, BACKEND_CONFIG, util) {
                 console.log('shopOrderInfoController')
 
                 var self = this;
@@ -4086,12 +4119,12 @@
                 }
 
                 // 跳转至详情页
-                self.gotoProduct=function(){
-                    var appid=util.getSearchParams('appid');
-                    var mchAppID=self.mchAppID
-                    var puid=self.AgentUserID
-                    var puaid=self.AgentUserAccountID
-                    var url= BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mchAppID+'&puid='+puid+'&puaid='+puaid+'&uid=-1&uaid=-1&sid='+self.shopId+'&gid='+self.goodId
+                self.gotoProduct = function () {
+                    var appid = util.getSearchParams('appid');
+                    var mchAppID = self.mchAppID
+                    var puid = self.AgentUserID
+                    var puaid = self.AgentUserAccountID
+                    var url = BACKEND_CONFIG.serverUrl + 'fxredirect?ht_appid=' + appid + '&mch_appid=' + mchAppID + '&puid=' + puid + '&puaid=' + puaid + '&uid=-1&uaid=-1&sid=' + self.shopId + '&gid=' + self.goodId
                     console.error(url)
                     window.location.href = url
                 }
@@ -4113,19 +4146,19 @@
                         data: data
                     }).then(function successCallback (data, status, headers, config) {
                         self.detail = data.data.data.detail;
-                        self.UseNotes=JSON.parse(self.detail.productList[0].UseNotes)
+                        self.UseNotes = JSON.parse(self.detail.productList[0].UseNotes)
                         var s = self.detail.Status;
                         var d = self.detail.deliverWay;
                         self.shopId = self.detail.ShopID;
                         self.goodId = self.detail.productList[0].GoodsID;
-                        self.AgentUserID=self.detail.AgentUserID
-                        self.AgentUserAccountID=self.detail.AgentUserAccountID
+                        self.AgentUserID = self.detail.AgentUserID
+                        self.AgentUserAccountID = self.detail.AgentUserAccountID
 
                         self.showPayBtn = (s == 'WAITPAY');
                         self.showCancelBtn = (s == 'WAITPAY' || s == 'WAITAPPROVAL');
                         self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
                         self.showLoadingBool.searchBool = true;
-                        self.mchAppID=self.detail.mchAppID
+                        self.mchAppID = self.detail.mchAppID
                         loadingService(self.showLoadingBool);
                     }, function errorCallback (data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;

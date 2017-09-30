@@ -101,6 +101,10 @@
                     url: '/presell',
                     templateUrl: 'pages/presell.html'
                 })
+                .state('presell-nq', {
+                    url: '/presell-nq',
+                    templateUrl: 'pages/presell-nq.html'
+                })
                 .state('advanceOrderList', {
                     url: '/advanceOrderList',
                     templateUrl: 'pages/advanceOrderList.html'
