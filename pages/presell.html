@@ -1,5 +1,5 @@
 <div ng-controller="presellController as presell" ng-init="presell.beforeInit()" class="presell-container" ng-class="{'hideScroll':presell.orderActive}">
-<!--
+<!-- 
 {{presell.productInfo.
     {{presell.shopInfo.
  -->
@@ -12,13 +12,15 @@
         </div>
     </div>
 
-
     <div class="padding">
         <!-- 大标题 -->
         <h3>{{presell.productInfo.title}}</h3>
-        <!-- 标签 -->
         <div class="tags" style="margin-bottom: 10px">
-            <span ng-class="tag.color" ng-repeat="tag in presell.tagObjList">{{tag.name}}</span>
+            <span class="pink">官方直销</span>
+            <span class="red">迪士尼网红酒店</span>
+            <span class="yellow">周末节假日通用</span>
+            <span class="blue">可转赠</span>
+            <span class="green">超长有效期</span>
         </div>
         <!-- 门店名称 -->
         <p ng-init="presell.showShopInfo=0" ng-click="presell.showShopInfo=(presell.showShopInfo==0)? 1 : 0" style="color: rgb(36,104,190); margin: 0">{{presell.shopInfo.ContactName}}官方直销</p>
@@ -39,12 +41,12 @@
         <span class="use-time">有效时间：{{presell.productInfo.useStartDate.slice(0,-9)}} 至 {{presell.productInfo.useEndDate.slice(0,-9)}}</span>
     </div>
 
-
+    
     <!-- 详情介绍 -->
     <div class="padding">
         <div class="list mod-inset-forms">
             <div class="item">
-                <h2 style="font-size: 24px;">{{presell.productInfo.name}}</h2>
+                <h2 style="font-size: 24px;">{{presell.productInfo.name}}</h2>  
             </div>
             <br>
             <p ng-show="presell.productInfo.intro != ''" style="padding: 10px;" ng-bind-html="presell.productInfo.intro"></p>
@@ -52,11 +54,11 @@
     </div>
 
     <!-- html图文 -->
-    <div class="padding img-intro">
+    <div class="padding" class="img-intro">
         <div ng-bind-html="presell.productInfo.htmlIntro|unsafe"></div>
     </div>
 
-
+       
     <ng-show ng-show="presell.productInfo.imgSrc.length > 0">
         <div class="item item-divider"></div>
 
@@ -82,7 +84,7 @@
             <div class="item">
                 <h2 style="font-size: 24px;">购买须知</h2>
             </div>
-
+            
             <h5 style="color: rgb(255,60,30);">有效期</h5>
             <p style="padding: 10px;  padding-top: 0px;">
                 {{presell.productInfo.useStartDate.slice(0,10)}} 至 {{presell.productInfo.useEndDate.slice(0,10)}}
@@ -146,7 +148,7 @@
                 <h2 style="font-size: 24px;">携程用户点评</h2>
             </div>
             <div class="padding">
-                <img src="{{presell.comment}}" width="100%">
+                <img src="http://mres.cleartv.cn/default/e9745cdcd2b3d8715eb1345ddedd2719_150668300375.jpg" width="100%">
             </div>
         </div>
     </div>
@@ -167,8 +169,8 @@
     </div>
 
     <!-- 已经支付关注提示 -->
-    <div ng-show="presell.paid" style="position: fixed; top: 0px; width: 100%; height: 100%; padding:10px; padding-top: 25%; background: rgba(21,21,21,.96); color:#fff; z-index: 100; text-align: center;">
-
+    <div ng-show="presell.paid==1" style="position: fixed; top: 0px; width: 100%; height: 100%; padding:10px; padding-top: 25%; background: rgba(21,21,21,.96); color:#fff; z-index: 100; text-align: center;">
+        
         <h3 style="color: #fff">
             <i class="icon ion-heart" style="color: rgb(255,60,30)"></i>&nbsp;
             您已购买此商品
@@ -225,7 +227,7 @@
                 <input type="text" name="tel" pattern="[0-9]{11,}" ng-model="presell.phoneNumber" required
                        placeholder="{{'required'|translate}}">
             </div>
-            <div ng-show="orderForm.tel.$invalid && presell.submitted" required class="item-input mod-short warning">
+            <div ng-show="orderForm.tel.$dirty && orderForm.tel.$invalid" required class="item-input mod-short warning">
                 <div class="input-label"></div>
                 请输入正确的手机号
             </div>

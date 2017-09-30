@@ -101,10 +101,6 @@
                     url: '/presell',
                     templateUrl: 'pages/presell.html'
                 })
-                .state('presell-nq', {
-                    url: '/presell-nq',
-                    templateUrl: 'pages/presell-nq.html'
-                })
                 .state('advanceOrderList', {
                     url: '/advanceOrderList',
                     templateUrl: 'pages/advanceOrderList.html'
@@ -112,6 +108,18 @@
                 .state('advanceOrderInfo', {
                     url: '/advanceOrderInfo?orderId',
                     templateUrl: 'pages/advanceOrderInfo.html'
+                })
+                .state('presellgoods', {
+                    url: '/presellgoods',
+                    templateUrl: 'pages/presellGoods/presellGoods.html'
+                })
+                .state('presellOrderList', {
+                    url: '/presellOrderList',
+                    templateUrl: 'pages/presellGoods/advanceOrderList.html'
+                })
+                .state('presellOrderInfo', {
+                    url: '/presellOrderInfo?orderId',
+                    templateUrl: 'pages/presellGoods/advanceOrderInfo.html'
                 })
         }])
 

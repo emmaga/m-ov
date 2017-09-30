@@ -3749,8 +3749,8 @@
         ])
 
         // 预售商品
-        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG', 'BACKEND_CONFIG',
-            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG, BACKEND_CONFIG) {
+        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
                 var self = this;
 
                 self.beforeInit = function () {
@@ -3766,7 +3766,7 @@
                 }
 
                 self.init = function () {
-                    if (util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
                         alert('商品号or店铺号无，出错')
                         return
                     }
@@ -3774,53 +3774,20 @@
                     self.paid = util.getSearchParams('paid')
                     self.shopInfo = {}
                     self.productInfo = {}
-                    self.orderActive = false
-                    self.goodsCount = 1
-                    self.submitted=false
+                    self.orderActive=false
+                    self.goodsCount=1
                     wx.ready(function () {
                         wx.showAllNonBaseMenuItem();
                     })
                     self.getProductInfo()
-
-                    var sid = util.getSearchParams('sid')
-                    var gid = util.getSearchParams('gid')
-                    var projectInfo = util.getParams('projectInfo')
-                    var project=projectInfo.project
-                    var tagList;
-                    console.error(project,sid,gid)
-                    // 测试商品 id 1
-                    if (project == 'test' && sid == 1 && gid == 1) {
-                        tagList = ['官方直销', '迪士尼网红酒店', '周末节假日通用', '可转赠', '超长有效期']
-                        self.comment = 'http://mres.cleartv.cn/default/e9745cdcd2b3d8715eb1345ddedd2719_150668300375.jpg';
-                    }else if(project == 'test' && sid == 1 && gid == 1){
-
-                    }
-
-                    setTag (tagList);
-                    function setTag (list) {
-                        var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
-                        var count = 0;
-
-                        self.tagObjList = []
-                        R.forEach(function (i) {
-                            if (count >= tagColor.length) {
-                                count = 0
-                            }
-                            var obj = {};
-                            obj.name = i;
-                            obj.color = tagColor[count];
-                            self.tagObjList.push(obj)
-                            count++
-                        })(list)
-                    }
                 }
 
-                self.orderShow = function () {
-                    self.orderActive = true;
+                self.orderShow=function () {
+                    self.orderActive=true;
                 }
 
-                self.orderHide = function () {
-                    self.orderActive = false
+                self.orderHide=function () {
+                    self.orderActive=false
                 }
 
                 self.plusOne = function (index) {
@@ -3836,21 +3803,21 @@
                 }
 
                 self.countTotalPrice = function () {
-                    self.totalPrice = self.goodsCount * self.productInfo.price;
+                    self.totalPrice = self.goodsCount*self.productInfo.price;
                 }
 
                 self.loop = function () {
-                    if (location.hash.indexOf("#/presell") === -1) {
+                    if(location.hash.indexOf("#/presell") === -1) {
                         $timeout.cancel(self.presellLoop)
                     }
                     // 已下架
-                    if (self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
+                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
                         self.soldout = true
                         $timeout.cancel(self.presellLoop)
                     } else {
                         self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
                         self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
-                        self.presellLoop = $timeout(function () {
+                        self.presellLoop = $timeout(function() {
                             self.loop()
                         }, 1000)
                     }
@@ -3863,33 +3830,35 @@
                     var gid = util.getSearchParams('gid')
                     var uid = util.getParams('userid')
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
-                    var shareLink = BACKEND_CONFIG.serverUrl + 'fxredirect?ht_appid=' + appid + '&mch_appid=' + mch_appid + '&puid=' + uid + '&puaid=' + uaid + '&uid=-1&uaid=-1&sid=' + sid + '&gid=' + gid
-                    wx.onMenuShareTimeline({
-                        title: self.productInfo.title, // 分享标题
-                        link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        desc: self.productInfo.shareDesc,
-                        imgUrl: self.productInfo.img, // 分享图标
-                        success: function () {
-                            // 用户确认分享后执行的回调函数
-                        },
-                        cancel: function () {
-                            // 用户取消分享后执行的回调函数
-                        }
-                    });
-                    wx.onMenuShareAppMessage({
-                        title: self.productInfo.title, // 分享标题
-                        link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        desc: self.productInfo.shareDesc,
-                        imgUrl: self.productInfo.img, // 分享图标
-                        type: '', // 分享类型,music、video或link，不填默认为link
-                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                        success: function () {
-                            // 用户确认分享后执行的回调函数
-                        },
-                        cancel: function () {
-                            // 用户取消分享后执行的回调函数
-                        }
-                    });
+                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
+                    wx.ready(function () {
+                        wx.onMenuShareTimeline({
+                            title: self.productInfo.title, // 分享标题
+                            link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            desc: self.productInfo.shareDesc,
+                            imgUrl: self.productInfo.img, // 分享图标
+                            success: function () {
+                                // 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                // 用户取消分享后执行的回调函数
+                            }
+                        });
+                        wx.onMenuShareAppMessage({
+                            title: self.productInfo.title, // 分享标题
+                            link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            desc: self.productInfo.shareDesc,
+                            imgUrl: self.productInfo.img, // 分享图标
+                            type: '', // 分享类型,music、video或link，不填默认为link
+                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                            success: function () {
+                                // 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                // 用户取消分享后执行的回调函数
+                            }
+                        });
+                    })
                 }
 
                 self.getProductInfo = function () {
@@ -3934,8 +3903,8 @@
                 }
 
                 self.submitOrder = function () {
-                    self.submitted=true;
-                    if (!self.phoneNumber) {
+                    if(!self.phoneNumber) {
+                        alert('请输入手机号')
                         return;
                     }
                     //开始生成订单
@@ -4034,6 +4003,263 @@
             }
         ])
 
+        // 南青预售商品
+        .controller('presellNqController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
+                var self = this;
+
+                self.beforeInit = function () {
+                    console.log('beforeInit')
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+
+                self.init = function () {
+                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                        alert('商品号or店铺号无，出错')
+                        return
+                    }
+                    self.presellLoop = null
+                    self.paid = util.getSearchParams('paid')
+                    self.shopInfo = {}
+                    self.productInfo = {}
+                    self.orderActive=false
+                    self.goodsCount=1
+                    wx.ready(function () {
+                        wx.showAllNonBaseMenuItem();
+                    })
+                    self.getProductInfo()
+                }
+
+                self.orderShow=function () {
+                    self.orderActive=true;
+                }
+
+                self.orderHide=function () {
+                    self.orderActive=false
+                }
+
+                self.plusOne = function (index) {
+                    self.goodsCount += 1;
+                    self.countTotalPrice();
+                }
+
+                self.minusOne = function (index) {
+                    if (self.goodsCount >= 2) {
+                        self.goodsCount -= 1;
+                        self.countTotalPrice();
+                    }
+                }
+
+                self.countTotalPrice = function () {
+                    self.totalPrice = self.goodsCount*self.productInfo.price;
+                }
+
+                self.loop = function () {
+                    if(location.hash.indexOf("#/presell") === -1) {
+                        $timeout.cancel(self.presellLoop)
+                    }
+                    // 已下架
+                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
+                        self.soldout = true
+                        $timeout.cancel(self.presellLoop)
+                    } else {
+                        self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
+                        self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
+                        self.presellLoop = $timeout(function() {
+                            self.loop()
+                        }, 1000)
+                    }
+                }
+
+                self.wxregistShare = function () {
+                    var appid = util.getSearchParams('appid')
+                    var mch_appid = util.getSearchParams('mch_appid')
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var uid = util.getParams('userid')
+                    var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?gtype=goods&ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
+                    wx.ready(function () {
+                        wx.onMenuShareTimeline({
+                            title: self.productInfo.title, // 分享标题
+                            link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            desc: self.productInfo.shareDesc,
+                            imgUrl: self.productInfo.img, // 分享图标
+                            success: function () {
+                                // 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                // 用户取消分享后执行的回调函数
+                            }
+                        });
+                        wx.onMenuShareAppMessage({
+                            title: self.productInfo.title, // 分享标题
+                            link: shareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            desc: self.productInfo.shareDesc,
+                            imgUrl: self.productInfo.img, // 分享图标
+                            type: '', // 分享类型,music、video或link，不填默认为link
+                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                            success: function () {
+                                // 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                // 用户取消分享后执行的回调函数
+                            }
+                        });
+                    })
+                }
+
+                self.getProductInfo = function () {
+                    var productId = util.getSearchParams('gid')
+                    // var deferred = $q.defer();
+                    var data = JSON.stringify({
+                        clear_session: $scope.root.getParams('clear_session'),
+                        action: 'getProductDetail',
+                        lang: 'zh-CN',
+                        productId: productId
+                    })
+                    $ionicLoading.show({
+                        template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })
+                    $http({
+                        method: 'POST',
+                        url: backendUrl('fxshopinfo', ''),
+                        data: data
+                    }).then(function successCallback (response) {
+                        var data = response.data;
+                        if (data.rescode == '200') {
+                            self.shopInfo = data.shopInfo
+                            self.productInfo = data.data.product
+                            self.countTotalPrice()
+                            self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
+                            self.productInfo.useNotes = JSON.parse(self.productInfo.useNotes)['zh-CN']
+                            self.productInfo.warmNotes = JSON.parse(self.productInfo.warmNotes)['zh-CN']
+                            // deferred.resolve();
+                            self.wxregistShare()
+                            self.loop()
+                        }
+                        else {
+                            alert(data.rescode + ' ' + data.errInfo);
+                            // deferred.reject();
+                        }
+                    }, function errorCallback (response) {
+                        alert('连接服务器出错');
+                    }).finally(function (value) {
+                        $ionicLoading.hide()
+                    });
+                    // return deferred.promise;
+                }
+
+                self.submitOrder = function () {
+                    self.submitted=true;
+                    if (!self.contactName || !self.phoneNumber || !self.address) {
+                        return;
+                    }
+
+                    //开始生成订单
+                    $ionicLoading.show({
+                        template: '<ion-spinner icon="dots" class="mod-spinner-page"></ion-spinner>'
+                    })
+                    // 支付按钮变为不可点击，防止多次点击
+                    document.getElementById('payBtn').disabled = true;
+                    var data = {
+                        "action": "newShopOrder",
+                        "clear_session": $scope.root.getParams('clear_session'),
+                        "lang": 'zh-CN',
+                        "shopID": Number(util.getSearchParams('sid')),
+                        "agentUserID": util.getSearchParams('puid') == null ? -1 : Number(util.getSearchParams('puid')),
+                        "agentUserAccountID": util.getSearchParams('puaid') == null ? -1 : Number(util.getSearchParams('puaid')),
+                        "goodsList": [
+                            {
+                                "shopGoodsID": Number(util.getSearchParams('gid')),
+                                "goodsCount": self.goodsCount
+                            }
+                        ],
+                        "delivery": {
+                            "deliverWay": "express",
+                            "contactName": self.contactName,
+                            "mobile": self.phoneNumber + '',
+                            "address":self.address
+                        }
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('fxshoporder', ''),
+                        data: data
+                    })
+                        .then(function successCallback (data, status, headers, config) {
+                            //订单生成成功
+                            if (data.data.rescode == '200') {
+                                // 支付
+                                self.pay(data.data.orderID);
+                            }
+                            //订单生成失败
+                            else {
+                                alert($filter('translate')('serverError') + ' ' + data.data.errInfo);
+                                $ionicLoading.hide();
+                                // 支付按钮变为可点击
+                                document.getElementById('payBtn').disabled = false;
+                            }
+                        }, function errorCallback (data, status, headers, config) {
+                            alert('连接服务器出错');
+                            $ionicLoading.hide();
+                            // 支付按钮变为可点击
+                            document.getElementById('payBtn').disabled = false;
+                        })
+                        //订单生成结束
+                        .finally(function (value) {
+                            // $ionicLoading.hide();
+                            // // 支付按钮变为可点击
+                            // document.getElementById('payBtn').disabled = false;
+                        });
+                }
+
+                self.pay = function (orderId) {
+                    var jumpUrl, compID;
+                    console.log(PAY_CONFIG)
+                    if (PAY_CONFIG.test) {
+                        jumpUrl = PAY_CONFIG.testConfig.jumpUrl
+                        compID = PAY_CONFIG.testConfig.compID
+                    } else {
+                        jumpUrl = PAY_CONFIG.onlineConfig.jumpUrl
+                        compID = PAY_CONFIG.onlineConfig.compID
+                    }
+                    // 等待支付
+                    // 支付按钮变为不可点击，防止多次点击
+                    document.getElementById('payBtn').disabled = true
+                    // window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                    //     'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay/%23/presellPay' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                    var sid = util.getSearchParams('sid')
+                    var gid = util.getSearchParams('gid')
+                    var puid = util.getSearchParams('puid') == null ? -1 : util.getSearchParams('puid')
+                    var puaid = util.getSearchParams('puaid') == null ? -1 : util.getSearchParams('puaid')
+                    var uid = util.getSearchParams('uid') == null ? -1 : util.getSearchParams('uid')
+                    var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
+                    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+                        'appid=' + util.getSearchParams('mch_appid') + '&redirect_uri=' + jumpUrl + '/jumpPay%3Fsid%3D' + sid + '%26gid%3D' + gid + '%26puid%3D' + puid + '%26puaid%3D' + puaid + '%26uid%3D' + uid + '%26uaid%3D' + uaid + '%23/presellPayGoods' + '&response_type=code&scope=snsapi_base&state=oldappid,' + $scope.root.getParams('appid') + ';oid,' + (orderId - 0) + ';ocs,' + util.getParams('clear_session') + '&component_appid=' + compID + '#wechat_redirect'
+                }
+
+                self.map = function () {
+                    wx.openLocation({
+                        latitude: self.shopInfo.ContactDimension - 0, // 纬度，浮点数，范围为90 ~ -90
+                        longitude: self.shopInfo.ContactLongitude - 0, // 经度，浮点数，范围为180 ~ -180。
+                        name: decodeURI(encodeURI(self.shopInfo.ShopName['zh-CN'])), // 位置名
+                        address: decodeURI(encodeURI(self.shopInfo.ContactAdress)), // 地址详情说明
+                        scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                        infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                    });
+                }
+            }
+        ])
+
         // 预售订单列表页面
         .controller('advanceOrderListController', ['$http', '$scope', '$filter', '$stateParams', '$state', '$timeout', '$translate', 'loadingService', 'BACKEND_CONFIG', 'backendUrl',
             function ($http, $scope, $filter, $stateParams, $state, $timeout, $translate, loadingService, BACKEND_CONFIG, backendUrl) {
@@ -4086,6 +4312,11 @@
                 self.nextState = function (id) {
                     $state.go('advanceOrderInfo', {orderId: id})
                 }
+
+                // 南清
+                self.nextState2 = function (id) {
+                    $state.go('presellOrderInfo', {orderId: id})
+                }
             }
         ])
 
@@ -4125,6 +4356,17 @@
                     var puid = self.AgentUserID
                     var puaid = self.AgentUserAccountID
                     var url = BACKEND_CONFIG.serverUrl + 'fxredirect?ht_appid=' + appid + '&mch_appid=' + mchAppID + '&puid=' + puid + '&puaid=' + puaid + '&uid=-1&uaid=-1&sid=' + self.shopId + '&gid=' + self.goodId
+                    console.error(url)
+                    window.location.href = url
+                }
+
+                // 跳转至详情页
+                self.gotoProduct2 = function () {
+                    var appid = util.getSearchParams('appid');
+                    var mchAppID = self.mchAppID
+                    var puid = self.AgentUserID
+                    var puaid = self.AgentUserAccountID
+                    var url = BACKEND_CONFIG.serverUrl + 'fxredirect?gtype=goods&ht_appid=' + appid + '&mch_appid=' + mchAppID + '&puid=' + puid + '&puaid=' + puaid + '&uid=-1&uaid=-1&sid=' + self.shopId + '&gid=' + self.goodId
                     console.error(url)
                     window.location.href = url
                 }
