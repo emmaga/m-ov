@@ -96,6 +96,9 @@
               case 'CANCELED':
                   flag = '已取消';
                   break;
+              case 'DELIVERING':
+                  flag = '已发货';
+                  break;
               case 'COMPLETED':
                   flag = '已使用';
                   break;
