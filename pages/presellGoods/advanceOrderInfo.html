@@ -25,8 +25,8 @@
                 <p class="col mod-no-padding">手机:</p>
                 <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.mobile}}</p>
             </div>
-            <div class="row">
-                <p class="col mod-no-padding">收货方式:</p>
+            <div class="row" ng-show="shopOrderInfo.detail.deliverWay!=='bySelf'">
+                <p class="col mod-no-padding">收货地址:</p>
                 <p class="col mod-no-padding col-75">{{shopOrderInfo.detail.address}}</p>
             </div>
             <div class="row">

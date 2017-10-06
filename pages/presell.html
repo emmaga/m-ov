@@ -16,11 +16,7 @@
         <!-- 大标题 -->
         <h3>{{presell.productInfo.title}}</h3>
         <div class="tags" style="margin-bottom: 10px">
-            <span class="pink">官方直销</span>
-            <span class="red">迪士尼网红酒店</span>
-            <span class="yellow">周末节假日通用</span>
-            <span class="blue">可转赠</span>
-            <span class="green">超长有效期</span>
+            <span ng-class="tag.color" ng-repeat="tag in presell.tagObjList">{{tag.name}}</span>
         </div>
         <!-- 门店名称 -->
         <p ng-init="presell.showShopInfo=0" ng-click="presell.showShopInfo=(presell.showShopInfo==0)? 1 : 0" style="color: rgb(36,104,190); margin: 0">{{presell.shopInfo.ContactName}}官方直销</p>
@@ -138,17 +134,16 @@
 
 
     </div>
-
-    <div class="item item-divider"></div>
+    <div class="item item-divider" ng-show="presell.comment"></div>
 
     <!-- 点评 -->
-    <div class="padding" style="padding-bottom: 0;">
+    <div class="padding" style="padding-bottom: 0;" ng-show="presell.comment">
         <div class="list mod-inset-forms">
             <div class="item">
-                <h2 style="font-size: 24px;">携程用户点评</h2>
+                <h2 style="font-size: 24px;">用户点评</h2>
             </div>
             <div class="padding">
-                <img src="http://mres.cleartv.cn/default/e9745cdcd2b3d8715eb1345ddedd2719_150668300375.jpg" width="100%">
+                <img ng-src="{{presell.comment}}" width="100%">
             </div>
         </div>
     </div>
