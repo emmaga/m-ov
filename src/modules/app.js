@@ -109,6 +109,18 @@
                     url: '/advanceOrderInfo?orderId',
                     templateUrl: 'pages/advanceOrderInfo.html'
                 })
+                .state('presellgoods', {
+                    url: '/presellgoods',
+                    templateUrl: 'pages/presellGoods/presellGoods.html'
+                })
+                .state('presellOrderList', {
+                    url: '/presellOrderList',
+                    templateUrl: 'pages/presellGoods/advanceOrderList.html'
+                })
+                .state('presellOrderInfo', {
+                    url: '/presellOrderInfo?orderId',
+                    templateUrl: 'pages/presellGoods/advanceOrderInfo.html'
+                })
         }])
 
         // 每次页面跳转完成时触发

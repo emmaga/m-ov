@@ -1,0 +1,32 @@
+<div ng-controller="advanceOrderListController as sol" ng-init="sol.beforeInit()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">特惠订单</h1>
+        <!-- <button class="button button-icon icon ion-navicon" ng-click="root.showMainMenu(true)"></button> -->
+    </div>
+    <div class="list mod-has-header">
+        <div ng-repeat="order in sol.orderLists" >
+            <div class="item item-divider">
+                <p>{{order.DeliveryType=='bySelf'?'券号':'订单号'}}
+                    #{{order.OrderNum}} {{order.GoodsName}}</p>
+            </div>
+            <div class="item item-thumbnail-left mod-no-side-border" ng-click="sol.nextState2(order.ID)" >
+                <div ng-repeat="goods in order.GoodsList track by $index" class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{goods.img}});"></div>
+                <!-- 订单状态 -->
+                <span class="item-note">
+                    <p>{{order.Status | orderStatus2}}</p>
+                </span>
+                <h2>商品名：{{order.GoodsList[0].GoodsName}}</h2>
+                <p>份数：{{order.GoodsList[0].GoodsNum}}</p>
+                <p>下单日期：{{order.CreateTime}}</p>
+                <p ng-show="order.DeliveryType=='bySelf'">有效日期：{{order.GoodsList[0].UseEndDate.slice(0,-9)}} - {{order.GoodsList[0].UseStartDate.slice(0,-9)}}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查无结果 -->
+    <div ng-show="sol.showLoadingBool.searchBool==true && sol.orderListNum ==0 " style="text-align: center; padding-top: 30%; opacity: 0.5">
+        <h1><i class="icon ion-sad-outline"></i></h1>
+        <h3>{{'noResults' | translate}}</h3>
+    </div>
+
+</div>
