@@ -3785,42 +3785,42 @@
                     var gid = util.getSearchParams('gid')
                     var projectInfo = util.getParams('projectInfo')
                     var project=projectInfo.project
-                    var tagList;
+                    // var tagList;
                     // console.error(project,sid,gid)
                     // 测试商品 id 1
                     // nanqinghuameida 92 129
                     // luan 92 129
-                    if(project == 'nanqinghuameida' && sid == 93 && gid == 136){
-                        tagList = ['国庆特惠','国际四星酒店','限量']
-                        self.comment = 'http://mres.cleartv.cn/default/51cedca8eb5c89a545c29ae92b58645c_150677455103.jpg';
-                    }else if(project == 'nanqinghuameida' && sid == 93 && gid == 137){
-                        tagList = ['官方特享', '国际四星品牌','仅限国庆']
-                        self.comment = 'http://mres.cleartv.cn/default/5fd51eb9c4a47f078512fa64b4313052_150677557025.jpg';
-                    }else if(project == 'luan' && sid == 92 && gid == 129){
-                        tagList = ['官方直销', '迪士尼网红酒店', '周末节假日通用', '可转赠', '超长有效期']
-                        self.comment = 'http://mres.cleartv.cn/default/e9745cdcd2b3d8715eb1345ddedd2719_150668300375.jpg';
-                    }else{
-                        tagList = ['官方直销', '周末节假日通用']
-                        self.comment = '';
-                    }
-
-                    setTag (tagList);
-                    function setTag (list) {
-                        var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
-                        var count = 0;
-
-                        self.tagObjList = []
-                        R.forEach(function (i) {
-                            if (count >= tagColor.length) {
-                                count = 0
-                            }
-                            var obj = {};
-                            obj.name = i;
-                            obj.color = tagColor[count];
-                            self.tagObjList.push(obj)
-                            count++
-                        })(list)
-                    }
+                    // if(project == 'nanqinghuameida' && sid == 93 && gid == 136){
+                    //     tagList = ['国庆特惠','国际四星酒店','限量']
+                    //     self.comment = 'http://mres.cleartv.cn/default/51cedca8eb5c89a545c29ae92b58645c_150677455103.jpg';
+                    // }else if(project == 'nanqinghuameida' && sid == 93 && gid == 137){
+                    //     tagList = ['官方特享', '国际四星品牌','仅限国庆']
+                    //     self.comment = 'http://mres.cleartv.cn/default/5fd51eb9c4a47f078512fa64b4313052_150677557025.jpg';
+                    // }else if(project == 'luan' && sid == 92 && gid == 129){
+                    //     tagList = ['官方直销', '迪士尼网红酒店', '周末节假日通用', '可转赠', '超长有效期']
+                    //     self.comment = 'http://mres.cleartv.cn/default/e9745cdcd2b3d8715eb1345ddedd2719_150668300375.jpg';
+                    // }else{
+                    //     tagList = ['官方直销', '周末节假日通用']
+                    //     self.comment = '';
+                    // }
+                    //
+                    // setTag (tagList);
+                    // function setTag (list) {
+                    //     var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
+                    //     var count = 0;
+                    //
+                    //     self.tagObjList = []
+                    //     R.forEach(function (i) {
+                    //         if (count >= tagColor.length) {
+                    //             count = 0
+                    //         }
+                    //         var obj = {};
+                    //         obj.name = i;
+                    //         obj.color = tagColor[count];
+                    //         self.tagObjList.push(obj)
+                    //         count++
+                    //     })(list)
+                    // }
                 }
 
                 self.orderShow=function () {
@@ -3923,6 +3923,16 @@
                         if (data.rescode == '200') {
                             self.shopInfo = data.shopInfo
                             self.productInfo = data.data.product
+                            self.commentImg = data.data.product.commentImg
+
+                            var tagList = data.data.product.categoryList,tags=[];
+                            R.forEach(function(item){
+                                tags.push(item.ShopGoodsCategoryName['zh-CN'])
+                            })(tagList)
+
+                            // 设置彩色标签
+                            setTag (tags);
+
                             self.countTotalPrice()
                             self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
                             self.productInfo.useNotes = JSON.parse(self.productInfo.useNotes)['zh-CN']
@@ -4041,11 +4051,27 @@
                         infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                     });
                 }
+
+                function setTag (list) {
+                    var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
+                    var count = 0;
+                    self.tagObjList = []
+                    R.forEach(function (i) {
+                        if (count >= tagColor.length) {
+                            count = 0
+                        }
+                        var obj = {};
+                        obj.name = i;
+                        obj.color = tagColor[count];
+                        self.tagObjList.push(obj)
+                        count++
+                    })(list)
+                }
             }
         ])
 
-        // 南青预售商品
-        .controller('presellNqController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
+        // 预售快递商品
+        .controller('presellGoodsController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
             function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
                 var self = this;
 
@@ -4178,6 +4204,16 @@
                         if (data.rescode == '200') {
                             self.shopInfo = data.shopInfo
                             self.productInfo = data.data.product
+                            self.commentImg = data.data.product.commentImg
+
+                            var tagList = data.data.product.categoryList,tags=[];
+                            R.forEach(function(item){
+                                tags.push(item.ShopGoodsCategoryName['zh-CN'])
+                            })(tagList)
+
+                            // 设置彩色标签
+                            setTag (tags);
+
                             self.countTotalPrice()
                             self.productInfo.buyNotes = JSON.parse(self.productInfo.buyNotes)['zh-CN']
                             self.productInfo.useNotes = JSON.parse(self.productInfo.useNotes)['zh-CN']
@@ -4297,6 +4333,22 @@
                         scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
                         infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
                     });
+                }
+
+                function setTag (list) {
+                    var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
+                    var count = 0;
+                    self.tagObjList = []
+                    R.forEach(function (i) {
+                        if (count >= tagColor.length) {
+                            count = 0
+                        }
+                        var obj = {};
+                        obj.name = i;
+                        obj.color = tagColor[count];
+                        self.tagObjList.push(obj)
+                        count++
+                    })(list)
                 }
             }
         ])
