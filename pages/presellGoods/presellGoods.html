@@ -1,4 +1,4 @@
-<div ng-controller="presellNqController as presell" ng-init="presell.beforeInit()" class="presell-container" ng-class="{'hideScroll':presell.orderActive}">
+<div ng-controller="presellGoodsController as presell" ng-init="presell.beforeInit()" class="presell-container" ng-class="{'hideScroll':presell.orderActive}">
 <!--
 {{presell.productInfo.
     {{presell.shopInfo.
@@ -17,9 +17,7 @@
         <h3>{{presell.productInfo.title}}</h3>
         <!-- 标签 -->
         <div class="tags" style="margin-bottom: 10px">
-            <span class="pink">官方正品</span>
-            <span class="red">海外直邮</span>
-            <span class="yellow">十一热促</span>
+            <span ng-class="tag.color" ng-repeat="tag in presell.tagObjList">{{tag.name}}</span>
         </div>
         <!-- 门店名称 -->
         <p ng-init="presell.showShopInfo=0" ng-click="presell.showShopInfo=(presell.showShopInfo==0)? 1 : 0" style="color: rgb(36,104,190); margin: 0">{{presell.shopInfo.ContactName}}酒店优生活商城</p>
@@ -131,16 +129,16 @@
     </div>
 
     <!-- 点评 -->
-    <!--<div class="padding" style="padding-bottom: 0;">-->
-        <!--<div class="list mod-inset-forms">-->
-            <!--<div class="item">-->
-                <!--<h2 style="font-size: 24px;">携程用户点评</h2>-->
-            <!--</div>-->
-            <!--<div class="padding">-->
-                <!--<img src="{{presell.comment}}" width="100%">-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="padding" style="padding-bottom: 0;" ng-show="presell.commentImg">
+        <div class="list mod-inset-forms">
+            <div class="item">
+                <h2 style="font-size: 24px;">用户点评</h2>
+            </div>
+            <div class="padding">
+                <img ng-src="{{presell.commentImg}}" width="100%">
+            </div>
+        </div>
+    </div>
 
     <!-- 底部支持信息 -->
     <div class="item item-divider">
