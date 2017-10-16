@@ -30,7 +30,7 @@
                     templateUrl: 'pages/bookRoomList.html'
                 })
                 .state('bookRoomList', {
-                    url: '/bookRoomList/?hotelId&checkIn&checkOut',
+                    url: '/bookRoomList/?hotelId&checkIn&checkOut&ticketCate',
                     templateUrl: 'pages/bookRoomList.html'
                 })
                 .state('hotelInfo', {
@@ -120,6 +120,10 @@
                 .state('presellOrderInfo', {
                     url: '/presellOrderInfo?orderId',
                     templateUrl: 'pages/presellGoods/advanceOrderInfo.html'
+                })
+                .state('ticketCategory', {
+                    url: '/ticketCategory',
+                    templateUrl: 'pages/ticketCategory.html'
                 })
         }])
 
