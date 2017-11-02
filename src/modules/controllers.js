@@ -437,6 +437,7 @@
                     self.hotelId = $stateParams.hotelId ? $stateParams.hotelId : $scope.root.getParams('state');
                     self.checkIn = $stateParams.checkIn ? $stateParams.checkIn - 0 : new Date().getTime();
                     self.checkOut = $stateParams.checkOut ? $stateParams.checkOut - 0 : new Date().getTime() + 24 * 60 * 60 * 1000;
+                    self.ticketCate = $stateParams.ticketCate ? $stateParams.ticketCate : null;
 
                     // 酒店天数
                     self.stayDays = util.countDay(self.checkIn, self.checkOut);
@@ -540,6 +541,7 @@
                         "lang": $translate.proposedLanguage() || $translate.use(),
 
                         "hotelId": self.hotelId - 0,
+                        "TicketCategoryID": self.ticketCate,
                         // 假数据
                         // "hotelId": 1,
                         "bookStartDate": $filter('date')(self.checkIn - 0, 'yyyy-MM-dd'),
@@ -3749,8 +3751,8 @@
         ])
 
         // 预售商品
-        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
-            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
+        .controller('presellController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG', 'BACKEND_CONFIG',
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG, BACKEND_CONFIG) {
                 var self = this;
 
                 self.beforeInit = function () {
@@ -3766,7 +3768,7 @@
                 }
 
                 self.init = function () {
-                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                    if (util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
                         alert('商品号or店铺号无，出错')
                         return
                     }
@@ -3774,8 +3776,8 @@
                     self.paid = util.getSearchParams('paid')
                     self.shopInfo = {}
                     self.productInfo = {}
-                    self.orderActive=false
-                    self.goodsCount=1
+                    self.orderActive = false
+                    self.goodsCount = 1
                     wx.ready(function () {
                         wx.showAllNonBaseMenuItem();
                     })
@@ -3784,7 +3786,7 @@
                     var sid = util.getSearchParams('sid')
                     var gid = util.getSearchParams('gid')
                     var projectInfo = util.getParams('projectInfo')
-                    var project=projectInfo.project
+                    var project = projectInfo.project
                     // var tagList;
                     // console.error(project,sid,gid)
                     // 测试商品 id 1
@@ -3805,6 +3807,7 @@
                     // }
                     //
                     // setTag (tagList);
+
                     // function setTag (list) {
                     //     var tagColor = ['pink', 'red', 'yellow', 'blue', 'green']
                     //     var count = 0;
@@ -3823,12 +3826,12 @@
                     // }
                 }
 
-                self.orderShow=function () {
-                    self.orderActive=true;
+                self.orderShow = function () {
+                    self.orderActive = true;
                 }
 
-                self.orderHide=function () {
-                    self.orderActive=false
+                self.orderHide = function () {
+                    self.orderActive = false
                 }
 
                 self.plusOne = function (index) {
@@ -3844,21 +3847,21 @@
                 }
 
                 self.countTotalPrice = function () {
-                    self.totalPrice = self.goodsCount*self.productInfo.price;
+                    self.totalPrice = self.goodsCount * self.productInfo.price;
                 }
 
                 self.loop = function () {
-                    if(location.hash.indexOf("#/presell") === -1) {
+                    if (location.hash.indexOf("#/presell") === -1) {
                         $timeout.cancel(self.presellLoop)
                     }
                     // 已下架
-                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
+                    if (self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
                         self.soldout = true
                         $timeout.cancel(self.presellLoop)
                     } else {
                         self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
                         self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
-                        self.presellLoop = $timeout(function() {
+                        self.presellLoop = $timeout(function () {
                             self.loop()
                         }, 1000)
                     }
@@ -3871,7 +3874,7 @@
                     var gid = util.getSearchParams('gid')
                     var uid = util.getParams('userid')
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
-                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
+                    var shareLink = BACKEND_CONFIG.serverUrl + 'fxredirect?ht_appid=' + appid + '&mch_appid=' + mch_appid + '&puid=' + uid + '&puaid=' + uaid + '&uid=-1&uaid=-1&sid=' + sid + '&gid=' + gid
                     wx.ready(function () {
                         wx.onMenuShareTimeline({
                             title: self.productInfo.title, // 分享标题
@@ -3954,7 +3957,7 @@
                 }
 
                 self.submitOrder = function () {
-                    if(!self.phoneNumber) {
+                    if (!self.phoneNumber) {
                         alert('请输入手机号')
                         return;
                     }
@@ -4072,7 +4075,7 @@
 
         // 预售快递商品
         .controller('presellGoodsController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$ionicLoading', '$timeout', '$q', 'backendUrl', 'util', 'PAY_CONFIG','BACKEND_CONFIG',
-            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG,BACKEND_CONFIG) {
+            function ($http, $scope, $state, $filter, $stateParams, $ionicLoading, $timeout, $q, backendUrl, util, PAY_CONFIG, BACKEND_CONFIG) {
                 var self = this;
 
                 self.beforeInit = function () {
@@ -4088,7 +4091,7 @@
                 }
 
                 self.init = function () {
-                    if(util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
+                    if (util.getSearchParams('gid') == null || util.getSearchParams('sid') == null) {
                         alert('商品号or店铺号无，出错')
                         return
                     }
@@ -4096,20 +4099,20 @@
                     self.paid = util.getSearchParams('paid')
                     self.shopInfo = {}
                     self.productInfo = {}
-                    self.orderActive=false
-                    self.goodsCount=1
+                    self.orderActive = false
+                    self.goodsCount = 1
                     wx.ready(function () {
                         wx.showAllNonBaseMenuItem();
                     })
                     self.getProductInfo()
                 }
 
-                self.orderShow=function () {
-                    self.orderActive=true;
+                self.orderShow = function () {
+                    self.orderActive = true;
                 }
 
-                self.orderHide=function () {
-                    self.orderActive=false
+                self.orderHide = function () {
+                    self.orderActive = false
                 }
 
                 self.plusOne = function (index) {
@@ -4125,21 +4128,21 @@
                 }
 
                 self.countTotalPrice = function () {
-                    self.totalPrice = self.goodsCount*self.productInfo.price;
+                    self.totalPrice = self.goodsCount * self.productInfo.price;
                 }
 
                 self.loop = function () {
-                    if(location.hash.indexOf("#/presell") === -1) {
+                    if (location.hash.indexOf("#/presell") === -1) {
                         $timeout.cancel(self.presellLoop)
                     }
                     // 已下架
-                    if(self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
+                    if (self.productInfo.invetory <= 0 || (new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()) < 0) {
                         self.soldout = true
                         $timeout.cancel(self.presellLoop)
                     } else {
                         self.leftSaleStartTime = new Date(self.productInfo.saleStartDate.replace(/-/g, "/")) - new Date()
                         self.leftSaleEndTime = new Date(self.productInfo.saleEndDate.replace(/-/g, "/")) - new Date()
-                        self.presellLoop = $timeout(function() {
+                        self.presellLoop = $timeout(function () {
                             self.loop()
                         }, 1000)
                     }
@@ -4152,7 +4155,7 @@
                     var gid = util.getSearchParams('gid')
                     var uid = util.getParams('userid')
                     var uaid = util.getSearchParams('uaid') == null ? -1 : util.getSearchParams('uaid')
-                    var shareLink = BACKEND_CONFIG.serverUrl+'fxredirect?gtype=goods&ht_appid='+appid+'&mch_appid='+mch_appid+'&puid='+uid+'&puaid='+uaid+'&uid=-1&uaid=-1&sid='+sid+'&gid='+gid
+                    var shareLink = BACKEND_CONFIG.serverUrl + 'fxredirect?gtype=goods&ht_appid=' + appid + '&mch_appid=' + mch_appid + '&puid=' + uid + '&puaid=' + uaid + '&uid=-1&uaid=-1&sid=' + sid + '&gid=' + gid
                     wx.ready(function () {
                         wx.onMenuShareTimeline({
                             title: self.productInfo.title, // 分享标题
@@ -4235,7 +4238,7 @@
                 }
 
                 self.submitOrder = function () {
-                    self.submitted=true;
+                    self.submitted = true;
                     if (!self.contactName || !self.phoneNumber || !self.address) {
                         return;
                     }
@@ -4263,7 +4266,7 @@
                             "deliverWay": "express",
                             "contactName": self.contactName,
                             "mobile": self.phoneNumber + '',
-                            "address":self.address
+                            "address": self.address
                         }
                     }
                     data = JSON.stringify(data);
@@ -4414,6 +4417,7 @@
         ])
 
         // 预售订单详情页面
+
         .controller('advanceOrderInfoController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'BACKEND_CONFIG', 'util',
             function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, BACKEND_CONFIG, util) {
                 console.log('shopOrderInfoController')
@@ -4494,6 +4498,61 @@
                         self.delivering = (s == 'DELIVERING' || (s == 'ACCEPT' && d == 'bySelf'));
                         self.showLoadingBool.searchBool = true;
                         self.mchAppID = self.detail.mchAppID
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback (data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    });
+                }
+            }
+        ])
+
+        // 门票分类
+        .controller('ticketCategoryController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'BACKEND_CONFIG', 'util',
+            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, BACKEND_CONFIG, util) {
+                console.log('shopOrderInfoController')
+
+                var self = this;
+                self.beforeInit = function () {
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+                self.init = function () {
+                    self.orderId = $stateParams.orderId;
+                    self.showLoadingBool = {};
+                    self.showLoadingBool.searchBool = false;
+                    self.showCancelBtn = false;
+                    self.showPayBtn = false;
+                    self.search();
+                    if (util.getStateParams('hotelId')) {
+                        self.hotelId = util.getStateParams('hotelId')
+                    } else {
+                        alert('缺少hotelId')
+                    }
+                }
+
+                self.search = function () {
+                    self.showLoadingBool.searchBool = false;
+                    loadingService(self.showLoadingBool);
+
+                    var data = {
+                        "action": "getList",
+                        "clear_session": $scope.root.getParams('clear_session')
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('ticketcategory', ''),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.cateList = data.data.data
+                        self.showLoadingBool.searchBool = true;
                         loadingService(self.showLoadingBool);
                     }, function errorCallback (data, status, headers, config) {
                         self.showLoadingBool.searchBool = true;

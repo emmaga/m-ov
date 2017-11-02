@@ -1,0 +1,13 @@
+<div ng-controller="ticketCategoryController as ticketCate" ng-init="ticketCate.beforeInit()">
+    <div class="bar bar-header bar-light mod-fixed">
+        <h1 class="title">景点分类</h1>
+    </div>
+    <div class="list mod-has-header" style="margin-bottom: 0">
+        <a class="item item-thumbnail-left mod-no-side-border" ui-sref="bookRoomList({hotelId:ticketCate.hotelId,ticketCate:item.ID})" ng-repeat="item in ticketCate.cateList">
+            <!--<img src="{{item.PicURL}}">-->
+            <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url({{item.PicURL}});"></div>
+            <h2>{{item.Name}}</h2>
+            <p>{{item.Description}}</p>
+        </a>
+    </div>
+</div>
