@@ -121,6 +121,14 @@
                     url: '/presellOrderInfo?orderId',
                     templateUrl: 'pages/presellGoods/advanceOrderInfo.html'
                 })
+                .state('ticketCategory', {
+                    url: '/ticketCategory',
+                    templateUrl: 'pages/ticketCategory.html'
+                })
+                .state('groupCustomer', {
+                    url: '/groupCustomer',
+                    templateUrl: 'pages/groupCustomer.html'
+                })
         }])
 
         // 每次页面跳转完成时触发

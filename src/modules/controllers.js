@@ -857,7 +857,8 @@
                         }
 
                         self.priceList = self.room.PriceInfo.PriceList;
-
+                        self.minOrderQuantity=self.room.MinOrderQuantity==0?1:self.room.MinOrderQuantity
+                        self.roomNumber=self.minOrderQuantity
                         // 单价
                         self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                         // // 房间数 最多 可选
@@ -946,7 +947,7 @@
                 // 更改房间数
                 self.modifyRoomNum = function (num) {
                     if (num < 0) {
-                        if (self.roomNumber == 1) {
+                        if (self.roomNumber == self.minOrderQuantity) {
                             return;
                         } else {
                             self.roomNumber -= 1;
@@ -4502,4 +4503,86 @@
                 }
             }
         ])
+
+        // 门票分类
+        .controller('ticketCategoryController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'BACKEND_CONFIG', 'util',
+            function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, BACKEND_CONFIG, util) {
+                console.log('shopOrderInfoController')
+
+                var self = this;
+                self.beforeInit = function () {
+                    if ($scope.root._readystate) {
+                        self.init();
+                    }
+                    else {
+                        $timeout(function () {
+                            self.beforeInit();
+                        }, 50);
+                    }
+                }
+                self.init = function () {
+                    self.orderId = $stateParams.orderId;
+                    self.showLoadingBool = {};
+                    self.showLoadingBool.searchBool = false;
+                    self.showCancelBtn = false;
+                    self.showPayBtn = false;
+                    self.search();
+                    if (util.getStateParams('hotelId')) {
+                        self.hotelId = util.getStateParams('hotelId')
+                    } else {
+                        alert('缺少hotelId')
+                    }
+                }
+
+                self.search = function () {
+                    self.showLoadingBool.searchBool = false;
+                    loadingService(self.showLoadingBool);
+
+                    var data = {
+                        "action": "getList",
+                        "clear_session": $scope.root.getParams('clear_session')
+                    }
+                    data = JSON.stringify(data);
+                    $http({
+                        method: $filter('ajaxMethod')(),
+                        url: backendUrl('ticketcategory', ''),
+                        data: data
+                    }).then(function successCallback (data, status, headers, config) {
+                        self.cateList = data.data.data
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool);
+                    }, function errorCallback (data, status, headers, config) {
+                        self.showLoadingBool.searchBool = true;
+                        loadingService(self.showLoadingBool)
+                    });
+                }
+            }
+        ])
+
+
+        // 团客分类
+        .controller('groupCustomerController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'BACKEND_CONFIG', 'util',
+        function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, BACKEND_CONFIG, util) {
+            console.log('groupCustomerController')
+
+            var self = this;
+            self.beforeInit = function () {
+                if ($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function () {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
+            self.init = function () {
+                
+            }
+
+            self.search = function () {
+                
+            }
+        }
+    ])
 })();
