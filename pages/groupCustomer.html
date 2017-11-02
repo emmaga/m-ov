@@ -1,0 +1,20 @@
+<!-- 鹿安专用 -->
+<div ng-controller="groupCustomerController as vm" ng-init="vm.beforeInit()">
+    <div class="bar bar-header bar-light mod-fixed" style="border-bottom:1px solid #ddd">
+        <h1 class="title">请选择</h1>
+    </div>
+    <div class="list mod-has-header" style="margin-bottom: 0">
+        <!-- 鹿安酒店ID -->
+        <a class="item item-thumbnail-left mod-no-side-border" ui-sref="bookRoomList({hotelId:32})"> 
+            <!--<img src="{{item.PicURL}}">-->
+            <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url(dist/img/room.png);"></div>
+            <h2 style="margin-top: 26px; font-size: 26px;">团客订房</h2>
+        </a>
+
+        <a class="item item-thumbnail-left mod-no-side-border" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6794da9bbcb25912&redirect_uri=http://openvod.cleartv.cn/wx/bus/index.html&response_type=code&scope=snsapi_userinfo&state=1&component_appid=wx5bfdc86d4b702418#wechat_redirect">
+            <!--<img src="{{item.PicURL}}">-->
+            <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url(dist/img/bus.png);"></div>
+            <h2 style="margin-top: 26px; font-size: 26px;">班车预订</h2>
+        </a>
+    </div>
+</div>
