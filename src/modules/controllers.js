@@ -859,7 +859,8 @@
                         }
 
                         self.priceList = self.room.PriceInfo.PriceList;
-
+                        self.minOrderQuantity=self.room.MinOrderQuantity==0?1:self.room.MinOrderQuantity
+                        self.roomNumber=self.minOrderQuantity
                         // 单价
                         self.roomPriPerDay = self.roomBookPrcFun(self.priceList);
                         // // 房间数 最多 可选
@@ -948,7 +949,7 @@
                 // 更改房间数
                 self.modifyRoomNum = function (num) {
                     if (num < 0) {
-                        if (self.roomNumber == 1) {
+                        if (self.roomNumber == self.minOrderQuantity) {
                             return;
                         } else {
                             self.roomNumber -= 1;
@@ -4561,4 +4562,31 @@
                 }
             }
         ])
+
+
+        // 团客分类
+        .controller('groupCustomerController', ['$http', '$scope', '$filter', '$state', '$stateParams', '$timeout', '$ionicLoading', '$translate', 'loadingService', 'backendUrl', 'PAY_CONFIG', 'BACKEND_CONFIG', 'util',
+        function ($http, $scope, $filter, $state, $stateParams, $timeout, $ionicLoading, $translate, loadingService, backendUrl, PAY_CONFIG, BACKEND_CONFIG, util) {
+            console.log('groupCustomerController')
+
+            var self = this;
+            self.beforeInit = function () {
+                if ($scope.root._readystate) {
+                    self.init();
+                }
+                else {
+                    $timeout(function () {
+                        self.beforeInit();
+                    }, 50);
+                }
+            }
+            self.init = function () {
+                
+            }
+
+            self.search = function () {
+                
+            }
+        }
+    ])
 })();

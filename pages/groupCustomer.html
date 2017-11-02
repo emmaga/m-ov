@@ -1,0 +1,18 @@
+<div ng-controller="groupCustomerController as vm" ng-init="vm.beforeInit()">
+    <div class="bar bar-header bar-light mod-fixed" style="border-bottom:1px solid #ddd">
+        <h1 class="title">请选择</h1>
+    </div>
+    <div class="list mod-has-header" style="margin-bottom: 0">
+        <a class="item item-thumbnail-left mod-no-side-border" ui-sref="bookRoomList({hotelId:1})">
+            <!--<img src="{{item.PicURL}}">-->
+            <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url(dist/img/room.png);"></div>
+            <h2 style="margin-top: 26px; font-size: 26px;">团客订房</h2>
+        </a>
+
+        <a class="item item-thumbnail-left mod-no-side-border" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxeae127ff98a4c844&redirect_uri=http://openvoddev.cleartv.cn/wx/bus/index.html&response_type=code&scope=snsapi_base&state=4&component_appid=wxc6e8a3fab4f25a4f#wechat_redirect">
+            <!--<img src="{{item.PicURL}}">-->
+            <div class="mod-cover mod-radius mod-img-in-thumbnail" style="background-image: url(dist/img/bus.png);"></div>
+            <h2 style="margin-top: 26px; font-size: 26px;">班车预订</h2>
+        </a>
+    </div>
+</div>
